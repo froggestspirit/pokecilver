@@ -1665,6 +1665,11 @@ void __gb_step_cpu(struct gb_s *gb)
 	#define LD_bc_A	do {__gb_write(gb, gb->cpu_reg.bc, gb->cpu_reg.a);} while(0)
 	#define LD_de_A	do {__gb_write(gb, gb->cpu_reg.de, gb->cpu_reg.a);} while(0)
 
+	#define LD_BC(x)	do {gb->cpu_reg.bc = x;} while(0)
+	#define LD_DE(x)	do {gb->cpu_reg.de = x;} while(0)
+	#define LD_HL(x)	do {gb->cpu_reg.hl = x;} while(0)
+	#define LD_SP(x)	do {gb->cpu_reg.sp = x;} while(0)
+
 	#define IF0_C(x)	do {if(gb->cpu_reg.f_bits.c){ x; }} while(0)
 	#define IF0_NC(x)	do {if(!gb->cpu_reg.f_bits.c){ x; }} while(0)
 	#define IF0_Z(x)	do {if(gb->cpu_reg.f_bits.z){ x; }} while(0)
@@ -1708,6 +1713,38 @@ void __gb_step_cpu(struct gb_s *gb)
 	#define CALL_Z(x)	do {IF2_Z(CALL(x));} while(0)
 	#define CALL_NZ(x)	do {IF2_NZ(CALL(x));} while(0)
 
+	#define INC_FLAGS(x)	do {gb->cpu_reg.f_bits.z = (x == 0x00);\
+								gb->cpu_reg.f_bits.n = 0;\
+								gb->cpu_reg.f_bits.h = ((x & 0x0F) == 0x00);} while(0)
+	#define INC_A	do {gb->cpu_reg.a++; INC_FLAGS(gb->cpu_reg.a);} while(0)
+	#define INC_B	do {gb->cpu_reg.b++; INC_FLAGS(gb->cpu_reg.b);} while(0)
+	#define INC_C	do {gb->cpu_reg.c++; INC_FLAGS(gb->cpu_reg.c);} while(0)
+	#define INC_D	do {gb->cpu_reg.d++; INC_FLAGS(gb->cpu_reg.d);} while(0)
+	#define INC_E	do {gb->cpu_reg.e++; INC_FLAGS(gb->cpu_reg.e);} while(0)
+	#define INC_H	do {gb->cpu_reg.h++; INC_FLAGS(gb->cpu_reg.h);} while(0)
+	#define INC_L	do {gb->cpu_reg.l++; INC_FLAGS(gb->cpu_reg.l);} while(0)
+	#define INC_hl	do {uint8_t temp = _hl_ + 1; INC_FLAGS(temp); __gb_write(gb, gb->cpu_reg.hl, temp);} while(0)
+	#define INC_BC	do {gb->cpu_reg.bc++;} while(0)
+	#define INC_DE	do {gb->cpu_reg.de++;} while(0)
+	#define INC_HL	do {gb->cpu_reg.hl++;} while(0)
+	#define INC_SP	do {gb->cpu_reg.sp++;} while(0)
+	
+	#define DEC_FLAGS(x)	do {gb->cpu_reg.f_bits.z = (x == 0x00);\
+								gb->cpu_reg.f_bits.n = 1;\
+								gb->cpu_reg.f_bits.h = ((x & 0x0F) == 0x0F);} while(0)
+	#define DEC_A	do {gb->cpu_reg.a--; DEC_FLAGS(gb->cpu_reg.a);} while(0)
+	#define DEC_B	do {gb->cpu_reg.b--; DEC_FLAGS(gb->cpu_reg.b);} while(0)
+	#define DEC_C	do {gb->cpu_reg.c--; DEC_FLAGS(gb->cpu_reg.c);} while(0)
+	#define DEC_D	do {gb->cpu_reg.d--; DEC_FLAGS(gb->cpu_reg.d);} while(0)
+	#define DEC_E	do {gb->cpu_reg.e--; DEC_FLAGS(gb->cpu_reg.e);} while(0)
+	#define DEC_H	do {gb->cpu_reg.h--; DEC_FLAGS(gb->cpu_reg.h);} while(0)
+	#define DEC_L	do {gb->cpu_reg.l--; DEC_FLAGS(gb->cpu_reg.l);} while(0)
+	#define DEC_hl	do {uint8_t temp = _hl_ - 1; DEC_FLAGS(temp); __gb_write(gb, gb->cpu_reg.hl, temp);} while(0)
+	#define DEC_BC	do {gb->cpu_reg.bc--;} while(0)
+	#define DEC_DE	do {gb->cpu_reg.de--;} while(0)
+	#define DEC_HL	do {gb->cpu_reg.hl--;} while(0)
+	#define DEC_SP	do {gb->cpu_reg.sp--;} while(0)
+	
 	if(gb->cpu_reg.pc == 0x18) gb->gb_frame = 1;
 	/* Obtain opcode */
 	opcode = (gb->gb_halt ? 0x00 : __gb_read(gb, gb->cpu_reg.pc++));
@@ -1720,36 +1757,12 @@ void __gb_step_cpu(struct gb_s *gb)
 	case 0x00: /* NOP */
 		break;
 
-	case 0x01: /* LD BC, imm */
-		ld16(bc, imm16);
-		break;
-
-	case 0x02: /* LD (BC), A */
-		__gb_write(gb, gb->cpu_reg.bc, gb->cpu_reg.a);
-		break;
-
-	case 0x03: /* INC BC */
-		gb->cpu_reg.bc++;
-		break;
-
-	case 0x04: /* INC B */
-		gb->cpu_reg.b++;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.b == 0x00);
-		gb->cpu_reg.f_bits.n = 0;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.b & 0x0F) == 0x00);
-		break;
-
-	case 0x05: /* DEC B */
-		gb->cpu_reg.b--;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.b == 0x00);
-		gb->cpu_reg.f_bits.n = 1;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.b & 0x0F) == 0x0F);
-		break;
-
-	case 0x06: /* LD B, imm */
-		LD_B(imm8);
-		break;
-
+	case 0x01:	LD_BC(imm16);	break;
+	case 0x02:	LD_bc_A;	break;
+	case 0x03:	INC_BC;	break;
+	case 0x04:	INC_B;	break;
+	case 0x05:	DEC_B;	break;
+	case 0x06:	LD_B(imm8);	break;
 	case 0x07: /* RLCA */
 		gb->cpu_reg.a = (gb->cpu_reg.a << 1) | (gb->cpu_reg.a >> 7);
 		gb->cpu_reg.f_bits.z = 0;
@@ -1778,32 +1791,11 @@ void __gb_step_cpu(struct gb_s *gb)
 		break;
 	}
 
-	case 0x0A: /* LD A, (BC) */
-		ld(a, _bc_);
-		break;
-
-	case 0x0B: /* DEC BC */
-		gb->cpu_reg.bc--;
-		break;
-
-	case 0x0C: /* INC C */
-		gb->cpu_reg.c++;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.c == 0x00);
-		gb->cpu_reg.f_bits.n = 0;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.c & 0x0F) == 0x00);
-		break;
-
-	case 0x0D: /* DEC C */
-		gb->cpu_reg.c--;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.c == 0x00);
-		gb->cpu_reg.f_bits.n = 1;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.c & 0x0F) == 0x0F);
-		break;
-
-	case 0x0E: /* LD C, imm */
-		ld(c, imm8);
-		break;
-
+	case 0x0A:	LD_A_bc;	break;
+	case 0x0B:	DEC_BC;	break;
+	case 0x0C:	INC_C;	break;
+	case 0x0D:	DEC_C;	break;
+	case 0x0E:	LD_C(imm8);	break;
 	case 0x0F: /* RRCA */
 		gb->cpu_reg.f_bits.c = gb->cpu_reg.a & 0x01;
 		gb->cpu_reg.a = (gb->cpu_reg.a >> 1) | (gb->cpu_reg.a << 7);
@@ -1812,40 +1804,16 @@ void __gb_step_cpu(struct gb_s *gb)
 		gb->cpu_reg.f_bits.h = 0;
 		break;
 
-	case 0x10: /* STOP */
-		//gb->gb_halt = 1;
-		break;
-
-	case 0x11: /* LD DE, imm */
-		ld16(de, imm16);
-		break;
-
-	case 0x12: /* LD (DE), A */
-		__gb_write(gb, gb->cpu_reg.de, gb->cpu_reg.a);
-		break;
-
+	case 0x10: /* STOP */	break;
+	case 0x11:	LD_DE(imm16);	break;
+	case 0x12:	LD_de_A;	break;
 	case 0x13: /* INC DE */
 		gb->cpu_reg.de++;
 		break;
 
-	case 0x14: /* INC D */
-		gb->cpu_reg.d++;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.d == 0x00);
-		gb->cpu_reg.f_bits.n = 0;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.d & 0x0F) == 0x00);
-		break;
-
-	case 0x15: /* DEC D */
-		gb->cpu_reg.d--;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.d == 0x00);
-		gb->cpu_reg.f_bits.n = 1;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.d & 0x0F) == 0x0F);
-		break;
-
-	case 0x16: /* LD D, imm */
-		ld(d, imm8);
-		break;
-
+	case 0x14:	INC_D;	break;
+	case 0x15:	DEC_D;	break;
+	case 0x16:	LD_D(imm8);	break;
 	case 0x17: /* RLA */
 	{
 		uint8_t temp = gb->cpu_reg.a;
@@ -1869,32 +1837,11 @@ void __gb_step_cpu(struct gb_s *gb)
 		break;
 	}
 
-	case 0x1A: /* LD A, (DE) */
-		ld(a, _de_);
-		break;
-
-	case 0x1B: /* DEC DE */
-		gb->cpu_reg.de--;
-		break;
-
-	case 0x1C: /* INC E */
-		gb->cpu_reg.e++;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.e == 0x00);
-		gb->cpu_reg.f_bits.n = 0;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.e & 0x0F) == 0x00);
-		break;
-
-	case 0x1D: /* DEC E */
-		gb->cpu_reg.e--;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.e == 0x00);
-		gb->cpu_reg.f_bits.n = 1;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.e & 0x0F) == 0x0F);
-		break;
-
-	case 0x1E: /* LD E, imm */
-		ld(e, imm8);
-		break;
-
+	case 0x1A:	LD_A_de;	break;
+	case 0x1B:	DEC_DE;	break;
+	case 0x1C:	INC_E;	break;
+	case 0x1D:	DEC_E;	break;
+	case 0x1E:	LD_E(imm8);	break;
 	case 0x1F: /* RRA */
 	{
 		uint8_t temp = gb->cpu_reg.a;
@@ -1907,29 +1854,11 @@ void __gb_step_cpu(struct gb_s *gb)
 	}
 
 	case 0x20:	JR_NZ(imm8);	break;
-	case 0x21: /* LD HL, imm */
-		ld16(hl, imm16);
-		break;
-
+	case 0x21:	LD_HL(imm16);	break;
 	case 0x22:	LD_hli_A;	break;
-	case 0x23: /* INC HL */
-		gb->cpu_reg.hl++;
-		break;
-
-	case 0x24: /* INC H */
-		gb->cpu_reg.h++;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.h == 0x00);
-		gb->cpu_reg.f_bits.n = 0;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.h & 0x0F) == 0x00);
-		break;
-
-	case 0x25: /* DEC H */
-		gb->cpu_reg.h--;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.h == 0x00);
-		gb->cpu_reg.f_bits.n = 1;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.h & 0x0F) == 0x0F);
-		break;
-
+	case 0x23:	INC_HL;	break;
+	case 0x24:	INC_H;	break;
+	case 0x25:	DEC_H;	break;
 	case 0x26:	LD_H(imm8);	break;
 	case 0x27: /* DAA */
 	{
@@ -1963,7 +1892,6 @@ void __gb_step_cpu(struct gb_s *gb)
 	}
 
 	case 0x28:	JR_Z(imm8);	break;
-
 	case 0x29: /* ADD HL, HL */
 	{
 		uint_fast32_t temp = gb->cpu_reg.hl + gb->cpu_reg.hl;
@@ -1975,24 +1903,9 @@ void __gb_step_cpu(struct gb_s *gb)
 	}
 
 	case 0x2A:	LD_A_hli;	break;
-	case 0x2B: /* DEC HL */
-		gb->cpu_reg.hl--;
-		break;
-
-	case 0x2C: /* INC L */
-		gb->cpu_reg.l++;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.l == 0x00);
-		gb->cpu_reg.f_bits.n = 0;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.l & 0x0F) == 0x00);
-		break;
-
-	case 0x2D: /* DEC L */
-		gb->cpu_reg.l--;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.l == 0x00);
-		gb->cpu_reg.f_bits.n = 1;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.l & 0x0F) == 0x0F);
-		break;
-
+	case 0x2B:	DEC_HL;	break;
+	case 0x2C:	INC_L;	break;
+	case 0x2D:	DEC_L;	break;
 	case 0x2E:	LD_L(imm8);	break;
 	case 0x2F: /* CPL */
 		gb->cpu_reg.a = ~gb->cpu_reg.a;
@@ -2001,40 +1914,14 @@ void __gb_step_cpu(struct gb_s *gb)
 		break;
 
 	case 0x30:	JR_NC(imm8);	break;
-
-	case 0x31: /* LD SP, imm */
-		ld16(sp, imm16);
-		break;
-
-	case 0x32: /* LD (HL-), A */
-		__gb_write(gb, gb->cpu_reg.hl, gb->cpu_reg.a);
-		gb->cpu_reg.hl--;
-		break;
-
+	case 0x31:	LD_SP(imm16);	break;
+	case 0x32:	LD_hld_A;	break;
 	case 0x33: /* INC SP */
 		gb->cpu_reg.sp++;
 		break;
 
-	case 0x34: /* INC (HL) */
-	{
-		uint8_t temp = __gb_read(gb, gb->cpu_reg.hl) + 1;
-		gb->cpu_reg.f_bits.z = (temp == 0x00);
-		gb->cpu_reg.f_bits.n = 0;
-		gb->cpu_reg.f_bits.h = ((temp & 0x0F) == 0x00);
-		__gb_write(gb, gb->cpu_reg.hl, temp);
-		break;
-	}
-
-	case 0x35: /* DEC (HL) */
-	{
-		uint8_t temp = __gb_read(gb, gb->cpu_reg.hl) - 1;
-		gb->cpu_reg.f_bits.z = (temp == 0x00);
-		gb->cpu_reg.f_bits.n = 1;
-		gb->cpu_reg.f_bits.h = ((temp & 0x0F) == 0x0F);
-		__gb_write(gb, gb->cpu_reg.hl, temp);
-		break;
-	}
-
+	case 0x34:	INC_hl;	break;
+	case 0x35:	DEC_hl;	break;
 	case 0x36:	LD_hl(imm8);	break;
 	case 0x37: /* SCF */
 		gb->cpu_reg.f_bits.n = 0;
@@ -2043,7 +1930,6 @@ void __gb_step_cpu(struct gb_s *gb)
 		break;
 
 	case 0x38:	JR_C(imm8);	break;
-
 	case 0x39: /* ADD HL, SP */
 	{
 		uint_fast32_t temp = gb->cpu_reg.hl + gb->cpu_reg.sp;
@@ -2056,24 +1942,9 @@ void __gb_step_cpu(struct gb_s *gb)
 	}
 
 	case 0x3A:	LD_A_hld;	break;
-	case 0x3B: /* DEC SP */
-		gb->cpu_reg.sp--;
-		break;
-
-	case 0x3C: /* INC A */
-		gb->cpu_reg.a++;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.a == 0x00);
-		gb->cpu_reg.f_bits.n = 0;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.a & 0x0F) == 0x00);
-		break;
-
-	case 0x3D: /* DEC A */
-		gb->cpu_reg.a--;
-		gb->cpu_reg.f_bits.z = (gb->cpu_reg.a == 0x00);
-		gb->cpu_reg.f_bits.n = 1;
-		gb->cpu_reg.f_bits.h = ((gb->cpu_reg.a & 0x0F) == 0x0F);
-		break;
-
+	case 0x3B:	DEC_SP;	break;
+	case 0x3C:	INC_A;	break;
+	case 0x3D:	DEC_A;	break;
 	case 0x3E:	LD_A(imm8);	break;
 	case 0x3F: /* CCF */
 		gb->cpu_reg.f_bits.n = 0;
@@ -2801,17 +2672,11 @@ void __gb_step_cpu(struct gb_s *gb)
 		break;
 
 	case 0xC0:	RET_NZ;	break;
-	case 0xC1: /* POP BC */
-		POP_BC;
-		break;
-
+	case 0xC1:	POP_BC;	break;
 	case 0xC2:	JP_NZ(imm16);	break;
 	case 0xC3:	JP(imm16);	break;
 	case 0xC4:	CALL_NZ(imm16);	break;
-	case 0xC5: /* PUSH BC */
-		PUSH_BC;
-		break;
-
+	case 0xC5:	PUSH_BC;	break;
 	case 0xC6: /* ADD A, imm */
 	{
 		/* Taken from SameBoy, which is released under MIT Licence. */
@@ -2952,12 +2817,8 @@ void __gb_step_cpu(struct gb_s *gb)
 		gb->cpu_reg.a = __gb_read(gb, 0xFF00 | gb->cpu_reg.c);
 		break;
 
-	case 0xF3: /* DI */
-		gb->gb_ime = 0;
-		break;
-
+	case 0xF3:	/* DI */	break;
 	case 0xF5:	PUSH_AF;	break;
-
 	case 0xF6: /* OR imm */
 		gb->cpu_reg.a = gb->cpu_reg.a | __gb_read(gb, gb->cpu_reg.pc++);
 		gb->cpu_reg.f_bits.z = (gb->cpu_reg.a == 0x00);
@@ -2992,10 +2853,7 @@ void __gb_step_cpu(struct gb_s *gb)
 		break;
 	}
 
-	case 0xFB: /* EI */
-		gb->gb_ime = 1;
-		break;
-
+	case 0xFB:	/* EI */	break;
 	case 0xFE: /* CP imm */
 	{
 		uint8_t temp_8 = __gb_read(gb, gb->cpu_reg.pc++);
@@ -3431,11 +3289,3 @@ void gb_init_lcd(struct gb_s *gb,
 	return;
 }
 #endif
-
-void ld(uint8_t *dest, uint8_t value){
-    *dest = value;
-}
-
-void ld16(uint16_t *dest, uint16_t value){
-    *dest = value;
-}
