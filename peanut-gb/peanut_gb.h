@@ -1007,19 +1007,6 @@ uint8_t __gb_execute_cb(struct gb_s *gb)
 	uint8_t writeback = 1;
 
 	inst_cycles = 8;
-	/* Add an additional 8 cycles to these sets of instructions. */
-	switch(cbop & 0xC7)
-	{
-	case 0x06:
-	case 0x86:
-    	case 0xC6:
-		inst_cycles += 8;
-    	break;
-    	case 0x46:
-		inst_cycles += 4;
-    	break;
-	}
-
 	switch(r)
 	{
 	case 0:
@@ -1467,72 +1454,6 @@ void __gb_draw_line(struct gb_s *gb)
 void __gb_step_cpu(struct gb_s *gb)
 {
 	uint8_t opcode, inst_cycles;
-	static const uint8_t op_cycles[0x100] =
-	{
-		/* *INDENT-OFF* */
-		/*0 1 2  3  4  5  6  7  8  9  A  B  C  D  E  F	*/
-		4,12, 8, 8, 4, 4, 8, 4,20, 8, 8, 8, 4, 4, 8, 4,	/* 0x00 */
-		4,12, 8, 8, 4, 4, 8, 4,12, 8, 8, 8, 4, 4, 8, 4,	/* 0x10 */
-		8,12, 8, 8, 4, 4, 8, 4, 8, 8, 8, 8, 4, 4, 8, 4,	/* 0x20 */
-		8,12, 8, 8,12,12,12, 4, 8, 8, 8, 8, 4, 4, 8, 4,	/* 0x30 */
-		4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,	/* 0x40 */
-		4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,	/* 0x50 */
-		4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,	/* 0x60 */
-		8, 8, 8, 8, 8, 8, 4, 8, 4, 4, 4, 4, 4, 4, 8, 4,	/* 0x70 */
-		4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,	/* 0x80 */
-		4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,	/* 0x90 */
-		4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,	/* 0xA0 */
-		4, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 4, 4, 8, 4,	/* 0xB0 */
-		8,12,12,16,12,16, 8,16, 8,16,12, 8,12,24, 8,16,	/* 0xC0 */
-		8,12,12, 0,12,16, 8,16, 8,16,12, 0,12, 0, 8,16,	/* 0xD0 */
-		12,12,8, 0, 0,16, 8,16,16, 4,16, 0, 0, 0, 8,16,	/* 0xE0 */
-		12,12,8, 4, 0,16, 8,16,12, 8,16, 4, 0, 0, 8,16	/* 0xF0 */
-		/* *INDENT-ON* */
-	};
-
-	/* Handle interrupts */
-	/*if((gb->gb_ime || gb->gb_halt) &&
-			(gb->gb_reg.IF & gb->gb_reg.IE & ANY_INTR))
-	{
-		gb->gb_halt = 0;
-
-		if(gb->gb_ime)
-		{
-			// Disable interrupts
-			gb->gb_ime = 0;
-
-			// Push Program Counter
-			__gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.pc >> 8);
-			__gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.pc & 0xFF);
-
-			// Call interrupt handler if required.
-			if(gb->gb_reg.IF & gb->gb_reg.IE & VBLANK_INTR)
-			{
-				gb->cpu_reg.pc = VBLANK_INTR_ADDR;
-				gb->gb_reg.IF ^= VBLANK_INTR;
-			}
-			else if(gb->gb_reg.IF & gb->gb_reg.IE & LCDC_INTR)
-			{
-				gb->cpu_reg.pc = LCDC_INTR_ADDR;
-				gb->gb_reg.IF ^= LCDC_INTR;
-			}
-			else if(gb->gb_reg.IF & gb->gb_reg.IE & TIMER_INTR)
-			{
-				gb->cpu_reg.pc = TIMER_INTR_ADDR;
-				gb->gb_reg.IF ^= TIMER_INTR;
-			}
-			else if(gb->gb_reg.IF & gb->gb_reg.IE & SERIAL_INTR)
-			{
-				gb->cpu_reg.pc = SERIAL_INTR_ADDR;
-				gb->gb_reg.IF ^= SERIAL_INTR;
-			}
-			else if(gb->gb_reg.IF & gb->gb_reg.IE & CONTROL_INTR)
-			{
-				gb->cpu_reg.pc = CONTROL_INTR_ADDR;
-				gb->gb_reg.IF ^= CONTROL_INTR;
-			}
-		}
-	}*/
 
 	#define imm8 __gb_read(gb, gb->cpu_reg.pc++)
 	#define imm16 __gb_read(gb, gb->cpu_reg.pc++) + (__gb_read(gb, gb->cpu_reg.pc++) << 8)
@@ -1972,10 +1893,244 @@ void __gb_step_cpu(struct gb_s *gb)
 							gb->cpu_reg.f_bits.h = ((gb->cpu_reg.sp & 0xF) + (offset & 0xF) > 0xF) ? 1 : 0;\
 							gb->cpu_reg.f_bits.c = ((gb->cpu_reg.sp & 0xFF) + (offset & 0xFF) > 0xFF) ? 1 : 0;} while(0)
 
+
+	// CB Prefixed opcodes
+	#define RLC_(x)	do {uint8_t temp, val;\
+						temp = val = x;\
+						val = (val << 1);\
+						val |= gb->cpu_reg.f_bits.c;\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						gb->cpu_reg.f_bits.c = (temp >> 7);\
+						x = val;} while(0)
+	#define RLC_B	do {RLC_(gb->cpu_reg.b);} while(0)
+	#define RLC_C	do {RLC_(gb->cpu_reg.c);} while(0)
+	#define RLC_D	do {RLC_(gb->cpu_reg.d);} while(0)
+	#define RLC_E	do {RLC_(gb->cpu_reg.e);} while(0)
+	#define RLC_H	do {RLC_(gb->cpu_reg.h);} while(0)
+	#define RLC_L	do {RLC_(gb->cpu_reg.l);} while(0)
+	#define RLC_hl	do {uint8_t temp, val;\
+						temp = val = __gb_read(gb, gb->cpu_reg.hl);\
+						val = (val << 1);\
+						val |= gb->cpu_reg.f_bits.c;\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						gb->cpu_reg.f_bits.c = (temp >> 7);\
+						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
+	#define RLC_A	do {RLC_(gb->cpu_reg.a);} while(0)
+
+	#define RL_(x)	do {uint8_t temp, val;\
+						temp = val = x;\
+						val = (val << 1);\
+						val |= (temp >> 7);\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						gb->cpu_reg.f_bits.c = (temp >> 7);\
+						x = val;} while(0)
+	#define RL_B	do {RL_(gb->cpu_reg.b);} while(0)
+	#define RL_C	do {RL_(gb->cpu_reg.c);} while(0)
+	#define RL_D	do {RL_(gb->cpu_reg.d);} while(0)
+	#define RL_E	do {RL_(gb->cpu_reg.e);} while(0)
+	#define RL_H	do {RL_(gb->cpu_reg.h);} while(0)
+	#define RL_L	do {RL_(gb->cpu_reg.l);} while(0)
+	#define RL_hl	do {uint8_t temp, val;\
+						temp = val = __gb_read(gb, gb->cpu_reg.hl);\
+						val = (val << 1);\
+						val |= (temp >> 7);\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						gb->cpu_reg.f_bits.c = (temp >> 7);\
+						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
+	#define RL_A	do {RL_(gb->cpu_reg.a);} while(0)
+
+	#define RRC_(x)	do {uint8_t temp, val;\
+						temp = val = x;\
+						val = (val >> 1);\
+						val |= (gb->cpu_reg.f_bits.c << 7);\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						gb->cpu_reg.f_bits.c = (temp & 0x01);\
+						x = val;} while(0)
+	#define RRC_B	do {RRC_(gb->cpu_reg.b);} while(0)
+	#define RRC_C	do {RRC_(gb->cpu_reg.c);} while(0)
+	#define RRC_D	do {RRC_(gb->cpu_reg.d);} while(0)
+	#define RRC_E	do {RRC_(gb->cpu_reg.e);} while(0)
+	#define RRC_H	do {RRC_(gb->cpu_reg.h);} while(0)
+	#define RRC_L	do {RRC_(gb->cpu_reg.l);} while(0)
+	#define RRC_hl	do {uint8_t temp, val;\
+						temp = val = __gb_read(gb, gb->cpu_reg.hl);\
+						val = (val >> 1);\
+						val |= (gb->cpu_reg.f_bits.c << 7);\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						gb->cpu_reg.f_bits.c = (temp & 0x01);\
+						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
+	#define RRC_A	do {RRC_(gb->cpu_reg.a);} while(0)
+
+	#define RR_(x)	do {uint8_t temp, val;\
+						temp = val = x;\
+						val = (val >> 1);\
+						val |= (temp << 7);\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						gb->cpu_reg.f_bits.c = (temp & 0x01);\
+						x = val;} while(0)
+	#define RR_B	do {RR_(gb->cpu_reg.b);} while(0)
+	#define RR_C	do {RR_(gb->cpu_reg.c);} while(0)
+	#define RR_D	do {RR_(gb->cpu_reg.d);} while(0)
+	#define RR_E	do {RR_(gb->cpu_reg.e);} while(0)
+	#define RR_H	do {RR_(gb->cpu_reg.h);} while(0)
+	#define RR_L	do {RR_(gb->cpu_reg.l);} while(0)
+	#define RR_hl	do {uint8_t temp, val;\
+						temp = val = __gb_read(gb, gb->cpu_reg.hl);\
+						val = (val >> 1);\
+						val |= (temp << 7);\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						gb->cpu_reg.f_bits.c = (temp & 0x01);\
+						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
+	#define RR_A	do {RR_(gb->cpu_reg.a);} while(0)
+
+	#define SLA_(x)	do {uint8_t val = x;\
+						gb->cpu_reg.f_bits.c = (val >> 7);\
+						val = val << 1;\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						x = val;} while(0)
+	#define SLA_B	do {SLA_(gb->cpu_reg.b);} while(0)
+	#define SLA_C	do {SLA_(gb->cpu_reg.c);} while(0)
+	#define SLA_D	do {SLA_(gb->cpu_reg.d);} while(0)
+	#define SLA_E	do {SLA_(gb->cpu_reg.e);} while(0)
+	#define SLA_H	do {SLA_(gb->cpu_reg.h);} while(0)
+	#define SLA_L	do {SLA_(gb->cpu_reg.l);} while(0)
+	#define SLA_hl	do {uint8_t val = __gb_read(gb, gb->cpu_reg.hl);\
+						gb->cpu_reg.f_bits.c = (val >> 7);\
+						val = val << 1;\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
+	#define SLA_A	do {SLA_(gb->cpu_reg.a);} while(0)
+
+	#define SRA_(x)	do {uint8_t val = x;\
+						gb->cpu_reg.f_bits.c = val & 0x01;\
+						val = (val >> 1) | (val & 0x80);\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						x = val;} while(0)
+	#define SRA_B	do {SRA_(gb->cpu_reg.b);} while(0)
+	#define SRA_C	do {SRA_(gb->cpu_reg.c);} while(0)
+	#define SRA_D	do {SRA_(gb->cpu_reg.d);} while(0)
+	#define SRA_E	do {SRA_(gb->cpu_reg.e);} while(0)
+	#define SRA_H	do {SRA_(gb->cpu_reg.h);} while(0)
+	#define SRA_L	do {SRA_(gb->cpu_reg.l);} while(0)
+	#define SRA_hl	do {uint8_t val = __gb_read(gb, gb->cpu_reg.hl);\
+						gb->cpu_reg.f_bits.c = val & 0x01;\
+						val = (val >> 1) | (val & 0x80);\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
+	#define SRA_A	do {SRA_(gb->cpu_reg.a);} while(0)
+
+	#define SWAP_(x)	do {uint8_t val = x;\
+							uint8_t temp = (val >> 4) & 0x0F;\
+							temp |= (val << 4) & 0xF0;\
+							val = temp;\
+							gb->cpu_reg.f_bits.z = (val == 0x00);\
+							gb->cpu_reg.f_bits.n = 0;\
+							gb->cpu_reg.f_bits.h = 0;\
+							gb->cpu_reg.f_bits.c = 0;\
+							x = val;} while(0)
+	#define SWAP_B	do {SWAP_(gb->cpu_reg.b);} while(0)
+	#define SWAP_C	do {SWAP_(gb->cpu_reg.c);} while(0)
+	#define SWAP_D	do {SWAP_(gb->cpu_reg.d);} while(0)
+	#define SWAP_E	do {SWAP_(gb->cpu_reg.e);} while(0)
+	#define SWAP_H	do {SWAP_(gb->cpu_reg.h);} while(0)
+	#define SWAP_L	do {SWAP_(gb->cpu_reg.l);} while(0)
+	#define SWAP_hl	do {uint8_t val = __gb_read(gb, gb->cpu_reg.hl);\
+						uint8_t temp = (val >> 4) & 0x0F;\
+						temp |= (val << 4) & 0xF0;\
+						val = temp;\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						gb->cpu_reg.f_bits.c = 0;\
+						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
+	#define SWAP_A	do {SWAP_(gb->cpu_reg.a);} while(0)
+
+	#define SRL_(x)	do {uint8_t val = x;\
+						gb->cpu_reg.f_bits.c = val & 0x01;\
+						val = val >> 1;\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						x = val;} while(0)
+	#define SRL_B	do {SRL_(gb->cpu_reg.b);} while(0)
+	#define SRL_C	do {SRL_(gb->cpu_reg.c);} while(0)
+	#define SRL_D	do {SRL_(gb->cpu_reg.d);} while(0)
+	#define SRL_E	do {SRL_(gb->cpu_reg.e);} while(0)
+	#define SRL_H	do {SRL_(gb->cpu_reg.h);} while(0)
+	#define SRL_L	do {SRL_(gb->cpu_reg.l);} while(0)
+	#define SRL_hl	do {uint8_t val = __gb_read(gb, gb->cpu_reg.hl);\
+						gb->cpu_reg.f_bits.c = val & 0x01;\
+						val = val >> 1;\
+						gb->cpu_reg.f_bits.z = (val == 0x00);\
+						gb->cpu_reg.f_bits.n = 0;\
+						gb->cpu_reg.f_bits.h = 0;\
+						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
+	#define SRL_A	do {SRL_(gb->cpu_reg.a);} while(0)
+
+	#define BIT_(x, bit)	do {uint8_t val = x;\
+							gb->cpu_reg.f_bits.z = !((val >> bit) & 0x1);\
+							gb->cpu_reg.f_bits.n = 0;\
+							gb->cpu_reg.f_bits.h = 1;} while(0)
+	#define BIT_B(bit)	do {BIT_(gb->cpu_reg.b, bit);} while(0)
+	#define BIT_C(bit)	do {BIT_(gb->cpu_reg.c, bit);} while(0)
+	#define BIT_D(bit)	do {BIT_(gb->cpu_reg.d, bit);} while(0)
+	#define BIT_E(bit)	do {BIT_(gb->cpu_reg.e, bit);} while(0)
+	#define BIT_H(bit)	do {BIT_(gb->cpu_reg.h, bit);} while(0)
+	#define BIT_L(bit)	do {BIT_(gb->cpu_reg.l, bit);} while(0)
+	#define BIT_hl(bit)	do {BIT_(__gb_read(gb, gb->cpu_reg.hl), bit);} while(0)
+	#define BIT_A(bit)	do {BIT_(gb->cpu_reg.a, bit);} while(0)
+
+	#define RES_(x, bit)	do {x &= (0xFE << bit) | (0xFF >> (8 - bit));} while(0)
+	#define RES_B(bit)	do {RES_(gb->cpu_reg.b, bit);} while(0)
+	#define RES_C(bit)	do {RES_(gb->cpu_reg.c, bit);} while(0)
+	#define RES_D(bit)	do {RES_(gb->cpu_reg.d, bit);} while(0)
+	#define RES_E(bit)	do {RES_(gb->cpu_reg.e, bit);} while(0)
+	#define RES_H(bit)	do {RES_(gb->cpu_reg.h, bit);} while(0)
+	#define RES_L(bit)	do {RES_(gb->cpu_reg.l, bit);} while(0)
+	#define RES_hl(bit)	do {uint8_t val = __gb_read(gb, gb->cpu_reg.hl);\
+							val &= (0xFE << bit) | (0xFF >> (8 - bit));\
+							__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
+	#define RES_A(bit)	do {RES_(gb->cpu_reg.a, bit);} while(0)
+
+	#define SET_(x, bit)	do {x |= (0x1 << bit);} while(0)
+	#define SET_B(bit)	do {SET_(gb->cpu_reg.b, bit);} while(0)
+	#define SET_C(bit)	do {SET_(gb->cpu_reg.c, bit);} while(0)
+	#define SET_D(bit)	do {SET_(gb->cpu_reg.d, bit);} while(0)
+	#define SET_E(bit)	do {SET_(gb->cpu_reg.e, bit);} while(0)
+	#define SET_H(bit)	do {SET_(gb->cpu_reg.h, bit);} while(0)
+	#define SET_L(bit)	do {SET_(gb->cpu_reg.l, bit);} while(0)
+	#define SET_hl(bit)	do {uint8_t val = __gb_read(gb, gb->cpu_reg.hl);\
+							val |= (0x1 << bit);\
+							__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
+	#define SET_A(bit)	do {SET_(gb->cpu_reg.a, bit);} while(0)
+
 	if(gb->cpu_reg.pc == 0x18) gb->gb_frame = 1;
 	/* Obtain opcode */
 	opcode = (gb->gb_halt ? 0x00 : __gb_read(gb, gb->cpu_reg.pc++));
-	inst_cycles = op_cycles[opcode];
 
 
 	/* Execute opcode */
@@ -2185,7 +2340,269 @@ void __gb_step_cpu(struct gb_s *gb)
 	case 0xC9:	RET;	break;
 	case 0xCA:	JP_Z(imm16);	break;
 	case 0xCB: /* CB INST */
-		inst_cycles = __gb_execute_cb(gb);
+		uint8_t op = __gb_read(gb, gb->cpu_reg.pc++);
+		switch(op){
+		case 0x00:	RLC_B;	break;
+		case 0x01:	RLC_C;	break;
+		case 0x02:	RLC_D;	break;
+		case 0x03:	RLC_E;	break;
+		case 0x04:	RLC_H;	break;
+		case 0x05:	RLC_L;	break;
+		case 0x06:	RLC_hl;	break;
+		case 0x07:	RLC_A;	break;
+		case 0x08:	RRC_B;	break;
+		case 0x09:	RRC_C;	break;
+		case 0x0A:	RRC_D;	break;
+		case 0x0B:	RRC_E;	break;
+		case 0x0C:	RRC_H;	break;
+		case 0x0D:	RRC_L;	break;
+		case 0x0E:	RRC_hl;	break;
+		case 0x0F:	RRC_A;	break;
+		case 0x10:	RL_B;	break;
+		case 0x11:	RL_C;	break;
+		case 0x12:	RL_D;	break;
+		case 0x13:	RL_E;	break;
+		case 0x14:	RL_H;	break;
+		case 0x15:	RL_L;	break;
+		case 0x16:	RL_hl;	break;
+		case 0x17:	RL_A;	break;
+		case 0x18:	RR_B;	break;
+		case 0x19:	RR_C;	break;
+		case 0x1A:	RR_D;	break;
+		case 0x1B:	RR_E;	break;
+		case 0x1C:	RR_H;	break;
+		case 0x1D:	RR_L;	break;
+		case 0x1E:	RR_hl;	break;
+		case 0x1F:	RR_A;	break;
+		/*case 0x20:	SLA_B;	break;
+		case 0x21:	SLA_C;	break;
+		case 0x22:	SLA_D;	break;
+		case 0x23:	SLA_E;	break;
+		case 0x24:	SLA_H;	break;
+		case 0x25:	SLA_L;	break;
+		case 0x26:	SLA_hl;	break;
+		case 0x27:	SLA_A;	break;
+		case 0x28:	SRA_B;	break;
+		case 0x29:	SRA_C;	break;
+		case 0x2A:	SRA_D;	break;
+		case 0x2B:	SRA_E;	break;
+		case 0x2C:	SRA_H;	break;
+		case 0x2D:	SRA_L;	break;
+		case 0x2E:	SRA_hl;	break;
+		case 0x2F:	SRA_A;	break;
+		case 0x30:	SWAP_B;	break;
+		case 0x31:	SWAP_C;	break;
+		case 0x32:	SWAP_D;	break;
+		case 0x33:	SWAP_E;	break;
+		case 0x34:	SWAP_H;	break;
+		case 0x35:	SWAP_L;	break;
+		case 0x36:	SWAP_hl;	break;
+		case 0x37:	SWAP_A;	break;
+		case 0x38:	SRL_B;	break;
+		case 0x39:	SRL_C;	break;
+		case 0x3A:	SRL_D;	break;
+		case 0x3B:	SRL_E;	break;
+		case 0x3C:	SRL_H;	break;
+		case 0x3D:	SRL_L;	break;
+		case 0x3E:	SRL_hl;	break;
+		case 0x3F:	SRL_A;	break;
+		case 0x40:	BIT_B(0);	break;
+		case 0x41:	BIT_C(0);	break;
+		case 0x42:	BIT_D(0);	break;
+		case 0x43:	BIT_E(0);	break;
+		case 0x44:	BIT_H(0);	break;
+		case 0x45:	BIT_L(0);	break;
+		case 0x46:	BIT_hl(0);	break;
+		case 0x47:	BIT_A(0);	break;
+		case 0x48:	BIT_B(1);	break;
+		case 0x49:	BIT_C(1);	break;
+		case 0x4A:	BIT_D(1);	break;
+		case 0x4B:	BIT_E(1);	break;
+		case 0x4C:	BIT_H(1);	break;
+		case 0x4D:	BIT_L(1);	break;
+		case 0x4E:	BIT_hl(1);	break;
+		case 0x4F:	BIT_A(1);	break;
+		case 0x50:	BIT_B(2);	break;
+		case 0x51:	BIT_C(2);	break;
+		case 0x52:	BIT_D(2);	break;
+		case 0x53:	BIT_E(2);	break;
+		case 0x54:	BIT_H(2);	break;
+		case 0x55:	BIT_L(2);	break;
+		case 0x56:	BIT_hl(2);	break;
+		case 0x57:	BIT_A(2);	break;
+		case 0x58:	BIT_B(3);	break;
+		case 0x59:	BIT_C(3);	break;
+		case 0x5A:	BIT_D(3);	break;
+		case 0x5B:	BIT_E(3);	break;
+		case 0x5C:	BIT_H(3);	break;
+		case 0x5D:	BIT_L(3);	break;
+		case 0x5E:	BIT_hl(3);	break;
+		case 0x5F:	BIT_A(3);	break;
+		case 0x60:	BIT_B(4);	break;
+		case 0x61:	BIT_C(4);	break;
+		case 0x62:	BIT_D(4);	break;
+		case 0x63:	BIT_E(4);	break;
+		case 0x64:	BIT_H(4);	break;
+		case 0x65:	BIT_L(4);	break;
+		case 0x66:	BIT_hl(4);	break;
+		case 0x67:	BIT_A(4);	break;
+		case 0x68:	BIT_B(5);	break;
+		case 0x69:	BIT_C(5);	break;
+		case 0x6A:	BIT_D(5);	break;
+		case 0x6B:	BIT_E(5);	break;
+		case 0x6C:	BIT_H(5);	break;
+		case 0x6D:	BIT_L(5);	break;
+		case 0x6E:	BIT_hl(5);	break;
+		case 0x6F:	BIT_A(5);	break;
+		case 0x70:	BIT_B(6);	break;
+		case 0x71:	BIT_C(6);	break;
+		case 0x72:	BIT_D(6);	break;
+		case 0x73:	BIT_E(6);	break;
+		case 0x74:	BIT_H(6);	break;
+		case 0x75:	BIT_L(6);	break;
+		case 0x76:	BIT_hl(6);	break;
+		case 0x77:	BIT_A(6);	break;
+		case 0x78:	BIT_B(7);	break;
+		case 0x79:	BIT_C(7);	break;
+		case 0x7A:	BIT_D(7);	break;
+		case 0x7B:	BIT_E(7);	break;
+		case 0x7C:	BIT_H(7);	break;
+		case 0x7D:	BIT_L(7);	break;
+		case 0x7E:	BIT_hl(7);	break;
+		case 0x7F:	BIT_A(7);	break;
+		case 0x80:	SET_B(0);	break;
+		case 0x81:	SET_C(0);	break;
+		case 0x82:	SET_D(0);	break;
+		case 0x83:	SET_E(0);	break;
+		case 0x84:	SET_H(0);	break;
+		case 0x85:	SET_L(0);	break;
+		case 0x86:	SET_hl(0);	break;
+		case 0x87:	SET_A(0);	break;
+		case 0x88:	SET_B(1);	break;
+		case 0x89:	SET_C(1);	break;
+		case 0x8A:	SET_D(1);	break;
+		case 0x8B:	SET_E(1);	break;
+		case 0x8C:	SET_H(1);	break;
+		case 0x8D:	SET_L(1);	break;
+		case 0x8E:	SET_hl(1);	break;
+		case 0x8F:	SET_A(1);	break;
+		case 0x90:	SET_B(2);	break;
+		case 0x91:	SET_C(2);	break;
+		case 0x92:	SET_D(2);	break;
+		case 0x93:	SET_E(2);	break;
+		case 0x94:	SET_H(2);	break;
+		case 0x95:	SET_L(2);	break;
+		case 0x96:	SET_hl(2);	break;
+		case 0x97:	SET_A(2);	break;
+		case 0x98:	SET_B(3);	break;
+		case 0x99:	SET_C(3);	break;
+		case 0x9A:	SET_D(3);	break;
+		case 0x9B:	SET_E(3);	break;
+		case 0x9C:	SET_H(3);	break;
+		case 0x9D:	SET_L(3);	break;
+		case 0x9E:	SET_hl(3);	break;
+		case 0x9F:	SET_A(3);	break;
+		case 0xA0:	SET_B(4);	break;
+		case 0xA1:	SET_C(4);	break;
+		case 0xA2:	SET_D(4);	break;
+		case 0xA3:	SET_E(4);	break;
+		case 0xA4:	SET_H(4);	break;
+		case 0xA5:	SET_L(4);	break;
+		case 0xA6:	SET_hl(4);	break;
+		case 0xA7:	SET_A(4);	break;
+		case 0xA8:	SET_B(5);	break;
+		case 0xA9:	SET_C(5);	break;
+		case 0xAA:	SET_D(5);	break;
+		case 0xAB:	SET_E(5);	break;
+		case 0xAC:	SET_H(5);	break;
+		case 0xAD:	SET_L(5);	break;
+		case 0xAE:	SET_hl(5);	break;
+		case 0xAF:	SET_A(5);	break;
+		case 0xB0:	SET_B(6);	break;
+		case 0xB1:	SET_C(6);	break;
+		case 0xB2:	SET_D(6);	break;
+		case 0xB3:	SET_E(6);	break;
+		case 0xB4:	SET_H(6);	break;
+		case 0xB5:	SET_L(6);	break;
+		case 0xB6:	SET_hl(6);	break;
+		case 0xB7:	SET_A(6);	break;
+		case 0xB8:	SET_B(7);	break;
+		case 0xB9:	SET_C(7);	break;
+		case 0xBA:	SET_D(7);	break;
+		case 0xBB:	SET_E(7);	break;
+		case 0xBC:	SET_H(7);	break;
+		case 0xBD:	SET_L(7);	break;
+		case 0xBE:	SET_hl(7);	break;
+		case 0xBF:	SET_A(7);	break;
+		case 0xC0:	RES_B(0);	break;
+		case 0xC1:	RES_C(0);	break;
+		case 0xC2:	RES_D(0);	break;
+		case 0xC3:	RES_E(0);	break;
+		case 0xC4:	RES_H(0);	break;
+		case 0xC5:	RES_L(0);	break;
+		case 0xC6:	RES_hl(0);	break;
+		case 0xC7:	RES_A(0);	break;
+		case 0xC8:	RES_B(1);	break;
+		case 0xC9:	RES_C(1);	break;
+		case 0xCA:	RES_D(1);	break;
+		case 0xCB:	RES_E(1);	break;
+		case 0xCC:	RES_H(1);	break;
+		case 0xCD:	RES_L(1);	break;
+		case 0xCE:	RES_hl(1);	break;
+		case 0xCF:	RES_A(1);	break;
+		case 0xD0:	RES_B(2);	break;
+		case 0xD1:	RES_C(2);	break;
+		case 0xD2:	RES_D(2);	break;
+		case 0xD3:	RES_E(2);	break;
+		case 0xD4:	RES_H(2);	break;
+		case 0xD5:	RES_L(2);	break;
+		case 0xD6:	RES_hl(2);	break;
+		case 0xD7:	RES_A(2);	break;
+		case 0xD8:	RES_B(3);	break;
+		case 0xD9:	RES_C(3);	break;
+		case 0xDA:	RES_D(3);	break;
+		case 0xDB:	RES_E(3);	break;
+		case 0xDC:	RES_H(3);	break;
+		case 0xDD:	RES_L(3);	break;
+		case 0xDE:	RES_hl(3);	break;
+		case 0xDF:	RES_A(3);	break;
+		case 0xE0:	RES_B(4);	break;
+		case 0xE1:	RES_C(4);	break;
+		case 0xE2:	RES_D(4);	break;
+		case 0xE3:	RES_E(4);	break;
+		case 0xE4:	RES_H(4);	break;
+		case 0xE5:	RES_L(4);	break;
+		case 0xE6:	RES_hl(4);	break;
+		case 0xE7:	RES_A(4);	break;
+		case 0xE8:	RES_B(5);	break;
+		case 0xE9:	RES_C(5);	break;
+		case 0xEA:	RES_D(5);	break;
+		case 0xEB:	RES_E(5);	break;
+		case 0xEC:	RES_H(5);	break;
+		case 0xED:	RES_L(5);	break;
+		case 0xEE:	RES_hl(5);	break;
+		case 0xEF:	RES_A(5);	break;
+		case 0xF0:	RES_B(6);	break;
+		case 0xF1:	RES_C(6);	break;
+		case 0xF2:	RES_D(6);	break;
+		case 0xF3:	RES_E(6);	break;
+		case 0xF4:	RES_H(6);	break;
+		case 0xF5:	RES_L(6);	break;
+		case 0xF6:	RES_hl(6);	break;
+		case 0xF7:	RES_A(6);	break;
+		case 0xF8:	RES_B(7);	break;
+		case 0xF9:	RES_C(7);	break;
+		case 0xFA:	RES_D(7);	break;
+		case 0xFB:	RES_E(7);	break;
+		case 0xFC:	RES_H(7);	break;
+		case 0xFD:	RES_L(7);	break;
+		case 0xFE:	RES_hl(7);	break;
+		case 0xFF:	RES_A(7);	break;*/
+		default:
+			gb->cpu_reg.pc--;
+			__gb_execute_cb(gb);
+			break;
+		}
 		break;
 	case 0xCC:	CALL_Z(imm16);	break;
 	case 0xCD:	CALL(imm16);	break;
