@@ -5,6 +5,7 @@ This is an attempt at a PC port of Pokemon Gold and Silver. It is currently not 
 The goal is to get assets to load from outside files, and to be able to rewrite parts of the game in C.
 
 Milestones
+
     -1 line macros of all opcodes
 
 ## See also
