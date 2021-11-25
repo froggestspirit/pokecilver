@@ -1895,201 +1895,278 @@ void __gb_step_cpu(struct gb_s *gb)
 
 
 	// CB Prefixed opcodes
-	#define RLC_(x)	do {uint8_t temp, val;\
-						temp = val = x;\
-						val = (val << 1);\
-						val |= gb->cpu_reg.f_bits.c;\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						gb->cpu_reg.f_bits.c = (temp >> 7);\
-						x = val;} while(0)
-	#define RLC_B	do {RLC_(gb->cpu_reg.b);} while(0)
-	#define RLC_C	do {RLC_(gb->cpu_reg.c);} while(0)
-	#define RLC_D	do {RLC_(gb->cpu_reg.d);} while(0)
-	#define RLC_E	do {RLC_(gb->cpu_reg.e);} while(0)
-	#define RLC_H	do {RLC_(gb->cpu_reg.h);} while(0)
-	#define RLC_L	do {RLC_(gb->cpu_reg.l);} while(0)
-	#define RLC_hl	do {uint8_t temp, val;\
-						temp = val = __gb_read(gb, gb->cpu_reg.hl);\
-						val = (val << 1);\
-						val |= gb->cpu_reg.f_bits.c;\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						gb->cpu_reg.f_bits.c = (temp >> 7);\
-						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
-	#define RLC_A	do {RLC_(gb->cpu_reg.a);} while(0)
+	#define ROT_FLAG(val, carry)	do {gb->cpu_reg.f_bits.z = (val == 0x00);\
+										gb->cpu_reg.f_bits.n = 0;\
+										gb->cpu_reg.f_bits.h = 0;\
+										gb->cpu_reg.f_bits.c = carry;} while(0)
 
-	#define RL_(x)	do {uint8_t temp, val;\
-						temp = val = x;\
-						val = (val << 1);\
-						val |= (temp >> 7);\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						gb->cpu_reg.f_bits.c = (temp >> 7);\
-						x = val;} while(0)
-	#define RL_B	do {RL_(gb->cpu_reg.b);} while(0)
-	#define RL_C	do {RL_(gb->cpu_reg.c);} while(0)
-	#define RL_D	do {RL_(gb->cpu_reg.d);} while(0)
-	#define RL_E	do {RL_(gb->cpu_reg.e);} while(0)
-	#define RL_H	do {RL_(gb->cpu_reg.h);} while(0)
-	#define RL_L	do {RL_(gb->cpu_reg.l);} while(0)
-	#define RL_hl	do {uint8_t temp, val;\
-						temp = val = __gb_read(gb, gb->cpu_reg.hl);\
-						val = (val << 1);\
-						val |= (temp >> 7);\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						gb->cpu_reg.f_bits.c = (temp >> 7);\
-						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
-	#define RL_A	do {RL_(gb->cpu_reg.a);} while(0)
+	#define RL_B	do {uint8_t carry = (gb->cpu_reg.b >> 7);\
+						gb->cpu_reg.b <<= 1;\
+						gb->cpu_reg.b += gb->cpu_reg.f_bits.c;\
+						ROT_FLAG(gb->cpu_reg.b, carry);} while(0)
+	#define RL_C	do {uint8_t carry = (gb->cpu_reg.c >> 7);\
+						gb->cpu_reg.c <<= 1;\
+						gb->cpu_reg.c += gb->cpu_reg.f_bits.c;\
+						ROT_FLAG(gb->cpu_reg.c, carry);} while(0)
+	#define RL_D	do {uint8_t carry = (gb->cpu_reg.d >> 7);\
+						gb->cpu_reg.d <<= 1;\
+						gb->cpu_reg.d += gb->cpu_reg.f_bits.c;\
+						ROT_FLAG(gb->cpu_reg.d, carry);} while(0)
+	#define RL_E	do {uint8_t carry = (gb->cpu_reg.e >> 7);\
+						gb->cpu_reg.e <<= 1;\
+						gb->cpu_reg.e += gb->cpu_reg.f_bits.c;\
+						ROT_FLAG(gb->cpu_reg.e, carry);} while(0)
+	#define RL_H	do {uint8_t carry = (gb->cpu_reg.h >> 7);\
+						gb->cpu_reg.h <<= 1;\
+						gb->cpu_reg.h += gb->cpu_reg.f_bits.c;\
+						ROT_FLAG(gb->cpu_reg.h, carry);} while(0)
+	#define RL_L	do {uint8_t carry = (gb->cpu_reg.l >> 7);\
+						gb->cpu_reg.l <<= 1;\
+						gb->cpu_reg.l += gb->cpu_reg.f_bits.c;\
+						ROT_FLAG(gb->cpu_reg.l, carry);} while(0)
+	#define RL_A	do {uint8_t carry = (gb->cpu_reg.a >> 7);\
+						gb->cpu_reg.a <<= 1;\
+						gb->cpu_reg.a += gb->cpu_reg.f_bits.c;\
+						ROT_FLAG(gb->cpu_reg.a, carry);} while(0)
+	#define RL_hl	do {uint8_t temp = __gb_read(gb, gb->cpu_reg.hl);\
+						uint8_t carry = (temp >> 7);\
+						temp <<= 1;\
+						temp += gb->cpu_reg.f_bits.c;\
+						ROT_FLAG(temp, carry);\
+						__gb_write(gb, gb->cpu_reg.hl, temp);} while(0)
 
-	#define RRC_(x)	do {uint8_t temp, val;\
-						temp = val = x;\
-						val = (val >> 1);\
-						val |= (gb->cpu_reg.f_bits.c << 7);\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						gb->cpu_reg.f_bits.c = (temp & 0x01);\
-						x = val;} while(0)
-	#define RRC_B	do {RRC_(gb->cpu_reg.b);} while(0)
-	#define RRC_C	do {RRC_(gb->cpu_reg.c);} while(0)
-	#define RRC_D	do {RRC_(gb->cpu_reg.d);} while(0)
-	#define RRC_E	do {RRC_(gb->cpu_reg.e);} while(0)
-	#define RRC_H	do {RRC_(gb->cpu_reg.h);} while(0)
-	#define RRC_L	do {RRC_(gb->cpu_reg.l);} while(0)
-	#define RRC_hl	do {uint8_t temp, val;\
-						temp = val = __gb_read(gb, gb->cpu_reg.hl);\
-						val = (val >> 1);\
-						val |= (gb->cpu_reg.f_bits.c << 7);\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						gb->cpu_reg.f_bits.c = (temp & 0x01);\
-						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
-	#define RRC_A	do {RRC_(gb->cpu_reg.a);} while(0)
+	#define RLC_B	do {uint8_t carry = (gb->cpu_reg.b >> 7);\
+						gb->cpu_reg.b <<= 1;\
+						gb->cpu_reg.b += carry;\
+						ROT_FLAG(gb->cpu_reg.b, carry);} while(0)
+	#define RLC_C	do {uint8_t carry = (gb->cpu_reg.c >> 7);\
+						gb->cpu_reg.c <<= 1;\
+						gb->cpu_reg.c += carry;\
+						ROT_FLAG(gb->cpu_reg.c, carry);} while(0)
+	#define RLC_D	do {uint8_t carry = (gb->cpu_reg.d >> 7);\
+						gb->cpu_reg.d <<= 1;\
+						gb->cpu_reg.d += carry;\
+						ROT_FLAG(gb->cpu_reg.d, carry);} while(0)
+	#define RLC_E	do {uint8_t carry = (gb->cpu_reg.e >> 7);\
+						gb->cpu_reg.e <<= 1;\
+						gb->cpu_reg.e += carry;\
+						ROT_FLAG(gb->cpu_reg.e, carry);} while(0)
+	#define RLC_H	do {uint8_t carry = (gb->cpu_reg.h >> 7);\
+						gb->cpu_reg.h <<= 1;\
+						gb->cpu_reg.h += carry;\
+						ROT_FLAG(gb->cpu_reg.h, carry);} while(0)
+	#define RLC_L	do {uint8_t carry = (gb->cpu_reg.l >> 7);\
+						gb->cpu_reg.l <<= 1;\
+						gb->cpu_reg.l += carry;\
+						ROT_FLAG(gb->cpu_reg.l, carry);} while(0)
+	#define RLC_A	do {uint8_t carry = (gb->cpu_reg.a >> 7);\
+						gb->cpu_reg.a <<= 1;\
+						gb->cpu_reg.a += carry;\
+						ROT_FLAG(gb->cpu_reg.a, carry);} while(0)
+	#define RLC_hl	do {uint8_t temp = __gb_read(gb, gb->cpu_reg.hl);\
+						uint8_t carry = (temp >> 7);\
+						temp <<= 1;\
+						temp += carry;\
+						ROT_FLAG(temp, carry);\
+						__gb_write(gb, gb->cpu_reg.hl, temp);} while(0)
 
-	#define RR_(x)	do {uint8_t temp, val;\
-						temp = val = x;\
-						val = (val >> 1);\
-						val |= (temp << 7);\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						gb->cpu_reg.f_bits.c = (temp & 0x01);\
-						x = val;} while(0)
-	#define RR_B	do {RR_(gb->cpu_reg.b);} while(0)
-	#define RR_C	do {RR_(gb->cpu_reg.c);} while(0)
-	#define RR_D	do {RR_(gb->cpu_reg.d);} while(0)
-	#define RR_E	do {RR_(gb->cpu_reg.e);} while(0)
-	#define RR_H	do {RR_(gb->cpu_reg.h);} while(0)
-	#define RR_L	do {RR_(gb->cpu_reg.l);} while(0)
-	#define RR_hl	do {uint8_t temp, val;\
-						temp = val = __gb_read(gb, gb->cpu_reg.hl);\
-						val = (val >> 1);\
-						val |= (temp << 7);\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						gb->cpu_reg.f_bits.c = (temp & 0x01);\
-						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
-	#define RR_A	do {RR_(gb->cpu_reg.a);} while(0)
+	#define RR_B	do {uint8_t carry = (gb->cpu_reg.b & 1);\
+						gb->cpu_reg.b >>= 1;\
+						gb->cpu_reg.b += (gb->cpu_reg.f_bits.c << 7);\
+						ROT_FLAG(gb->cpu_reg.b, carry);} while(0)
+	#define RR_C	do {uint8_t carry = (gb->cpu_reg.c & 1);\
+						gb->cpu_reg.c >>= 1;\
+						gb->cpu_reg.c += (gb->cpu_reg.f_bits.c << 7);\
+						ROT_FLAG(gb->cpu_reg.c, carry);} while(0)
+	#define RR_D	do {uint8_t carry = (gb->cpu_reg.d & 1);\
+						gb->cpu_reg.d >>= 1;\
+						gb->cpu_reg.d += (gb->cpu_reg.f_bits.c << 7);\
+						ROT_FLAG(gb->cpu_reg.d, carry);} while(0)
+	#define RR_E	do {uint8_t carry = (gb->cpu_reg.e & 1);\
+						gb->cpu_reg.e >>= 1;\
+						gb->cpu_reg.e += (gb->cpu_reg.f_bits.c << 7);\
+						ROT_FLAG(gb->cpu_reg.e, carry);} while(0)
+	#define RR_H	do {uint8_t carry = (gb->cpu_reg.h & 1);\
+						gb->cpu_reg.h >>= 1;\
+						gb->cpu_reg.h += (gb->cpu_reg.f_bits.c << 7);\
+						ROT_FLAG(gb->cpu_reg.h, carry);} while(0)
+	#define RR_L	do {uint8_t carry = (gb->cpu_reg.l & 1);\
+						gb->cpu_reg.l >>= 1;\
+						gb->cpu_reg.l += (gb->cpu_reg.f_bits.c << 7);\
+						ROT_FLAG(gb->cpu_reg.l, carry);} while(0)
+	#define RR_A	do {uint8_t carry = (gb->cpu_reg.a & 1);\
+						gb->cpu_reg.a >>= 1;\
+						gb->cpu_reg.a += (gb->cpu_reg.f_bits.c << 7);\
+						ROT_FLAG(gb->cpu_reg.a, carry);} while(0)
+	#define RR_hl	do {uint8_t temp = __gb_read(gb, gb->cpu_reg.hl);\
+						uint8_t carry = (temp & 1);\
+						temp >>= 1;\
+						temp += (gb->cpu_reg.f_bits.c << 7);\
+						ROT_FLAG(temp, carry);\
+						__gb_write(gb, gb->cpu_reg.hl, temp);} while(0)
 
-	#define SLA_(x)	do {uint8_t val = x;\
-						gb->cpu_reg.f_bits.c = (val >> 7);\
-						val = val << 1;\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						x = val;} while(0)
-	#define SLA_B	do {SLA_(gb->cpu_reg.b);} while(0)
-	#define SLA_C	do {SLA_(gb->cpu_reg.c);} while(0)
-	#define SLA_D	do {SLA_(gb->cpu_reg.d);} while(0)
-	#define SLA_E	do {SLA_(gb->cpu_reg.e);} while(0)
-	#define SLA_H	do {SLA_(gb->cpu_reg.h);} while(0)
-	#define SLA_L	do {SLA_(gb->cpu_reg.l);} while(0)
-	#define SLA_hl	do {uint8_t val = __gb_read(gb, gb->cpu_reg.hl);\
-						gb->cpu_reg.f_bits.c = (val >> 7);\
-						val = val << 1;\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
-	#define SLA_A	do {SLA_(gb->cpu_reg.a);} while(0)
+	#define RRC_B	do {uint8_t carry = (gb->cpu_reg.b & 1);\
+						gb->cpu_reg.b >>= 1;\
+						gb->cpu_reg.b += (carry << 7);\
+						ROT_FLAG(gb->cpu_reg.b, carry);} while(0)
+	#define RRC_C	do {uint8_t carry = (gb->cpu_reg.c & 1);\
+						gb->cpu_reg.c >>= 1;\
+						gb->cpu_reg.c += (carry << 7);\
+						ROT_FLAG(gb->cpu_reg.c, carry);} while(0)
+	#define RRC_D	do {uint8_t carry = (gb->cpu_reg.d & 1);\
+						gb->cpu_reg.d >>= 1;\
+						gb->cpu_reg.d += (carry << 7);\
+						ROT_FLAG(gb->cpu_reg.d, carry);} while(0)
+	#define RRC_E	do {uint8_t carry = (gb->cpu_reg.e & 1);\
+						gb->cpu_reg.e >>= 1;\
+						gb->cpu_reg.e += (carry << 7);\
+						ROT_FLAG(gb->cpu_reg.e, carry);} while(0)
+	#define RRC_H	do {uint8_t carry = (gb->cpu_reg.h & 1);\
+						gb->cpu_reg.h >>= 1;\
+						gb->cpu_reg.h += (carry << 7);\
+						ROT_FLAG(gb->cpu_reg.h, carry);} while(0)
+	#define RRC_L	do {uint8_t carry = (gb->cpu_reg.l & 1);\
+						gb->cpu_reg.l >>= 1;\
+						gb->cpu_reg.l += (carry << 7);\
+						ROT_FLAG(gb->cpu_reg.l, carry);} while(0)
+	#define RRC_A	do {uint8_t carry = (gb->cpu_reg.a & 1);\
+						gb->cpu_reg.a >>= 1;\
+						gb->cpu_reg.a += (carry << 7);\
+						ROT_FLAG(gb->cpu_reg.a, carry);} while(0)
+	#define RRC_hl	do {uint8_t temp = __gb_read(gb, gb->cpu_reg.hl);\
+						uint8_t carry = (temp & 1);\
+						temp >>= 1;\
+						temp += (carry << 7);\
+						ROT_FLAG(temp, carry);\
+						__gb_write(gb, gb->cpu_reg.hl, temp);} while(0)
 
-	#define SRA_(x)	do {uint8_t val = x;\
-						gb->cpu_reg.f_bits.c = val & 0x01;\
-						val = (val >> 1) | (val & 0x80);\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						x = val;} while(0)
-	#define SRA_B	do {SRA_(gb->cpu_reg.b);} while(0)
-	#define SRA_C	do {SRA_(gb->cpu_reg.c);} while(0)
-	#define SRA_D	do {SRA_(gb->cpu_reg.d);} while(0)
-	#define SRA_E	do {SRA_(gb->cpu_reg.e);} while(0)
-	#define SRA_H	do {SRA_(gb->cpu_reg.h);} while(0)
-	#define SRA_L	do {SRA_(gb->cpu_reg.l);} while(0)
-	#define SRA_hl	do {uint8_t val = __gb_read(gb, gb->cpu_reg.hl);\
-						gb->cpu_reg.f_bits.c = val & 0x01;\
-						val = (val >> 1) | (val & 0x80);\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
-	#define SRA_A	do {SRA_(gb->cpu_reg.a);} while(0)
+	#define SLA_B	do {uint8_t carry = (gb->cpu_reg.b >> 7);\
+						gb->cpu_reg.b <<= 1;\
+						ROT_FLAG(gb->cpu_reg.b, carry);} while(0)
+	#define SLA_C	do {uint8_t carry = (gb->cpu_reg.c >> 7);\
+						gb->cpu_reg.c <<= 1;\
+						ROT_FLAG(gb->cpu_reg.c, carry);} while(0)
+	#define SLA_D	do {uint8_t carry = (gb->cpu_reg.d >> 7);\
+						gb->cpu_reg.d <<= 1;\
+						ROT_FLAG(gb->cpu_reg.d, carry);} while(0)
+	#define SLA_E	do {uint8_t carry = (gb->cpu_reg.e >> 7);\
+						gb->cpu_reg.e <<= 1;\
+						ROT_FLAG(gb->cpu_reg.e, carry);} while(0)
+	#define SLA_H	do {uint8_t carry = (gb->cpu_reg.h >> 7);\
+						gb->cpu_reg.h <<= 1;\
+						ROT_FLAG(gb->cpu_reg.h, carry);} while(0)
+	#define SLA_L	do {uint8_t carry = (gb->cpu_reg.l >> 7);\
+						gb->cpu_reg.l <<= 1;\
+						ROT_FLAG(gb->cpu_reg.l, carry);} while(0)
+	#define SLA_A	do {uint8_t carry = (gb->cpu_reg.a >> 7);\
+						gb->cpu_reg.a <<= 1;\
+						ROT_FLAG(gb->cpu_reg.a, carry);} while(0)
+	#define SLA_hl	do {uint8_t temp = __gb_read(gb, gb->cpu_reg.hl);\
+						uint8_t carry = (temp >> 7);\
+						temp <<= 1;\
+						ROT_FLAG(temp, carry);\
+						__gb_write(gb, gb->cpu_reg.hl, temp);} while(0)
 
-	#define SWAP_(x)	do {uint8_t val = x;\
-							uint8_t temp = (val >> 4) & 0x0F;\
-							temp |= (val << 4) & 0xF0;\
-							val = temp;\
-							gb->cpu_reg.f_bits.z = (val == 0x00);\
-							gb->cpu_reg.f_bits.n = 0;\
-							gb->cpu_reg.f_bits.h = 0;\
-							gb->cpu_reg.f_bits.c = 0;\
-							x = val;} while(0)
-	#define SWAP_B	do {SWAP_(gb->cpu_reg.b);} while(0)
-	#define SWAP_C	do {SWAP_(gb->cpu_reg.c);} while(0)
-	#define SWAP_D	do {SWAP_(gb->cpu_reg.d);} while(0)
-	#define SWAP_E	do {SWAP_(gb->cpu_reg.e);} while(0)
-	#define SWAP_H	do {SWAP_(gb->cpu_reg.h);} while(0)
-	#define SWAP_L	do {SWAP_(gb->cpu_reg.l);} while(0)
+	#define SRA_B	do {uint8_t carry = (gb->cpu_reg.b & 1);\
+						gb->cpu_reg.b >>= 1;\
+						gb->cpu_reg.b += ((gb->cpu_reg.b << 1) & 0x80);\
+						ROT_FLAG(gb->cpu_reg.b, carry);} while(0)
+	#define SRA_C	do {uint8_t carry = (gb->cpu_reg.c & 1);\
+						gb->cpu_reg.c >>= 1;\
+						gb->cpu_reg.c += ((gb->cpu_reg.c << 1) & 0x80);\
+						ROT_FLAG(gb->cpu_reg.c, carry);} while(0)
+	#define SRA_D	do {uint8_t carry = (gb->cpu_reg.d & 1);\
+						gb->cpu_reg.d >>= 1;\
+						gb->cpu_reg.d += ((gb->cpu_reg.d << 1) & 0x80);\
+						ROT_FLAG(gb->cpu_reg.d, carry);} while(0)
+	#define SRA_E	do {uint8_t carry = (gb->cpu_reg.e & 1);\
+						gb->cpu_reg.e >>= 1;\
+						gb->cpu_reg.e += ((gb->cpu_reg.e << 1) & 0x80);\
+						ROT_FLAG(gb->cpu_reg.e, carry);} while(0)
+	#define SRA_H	do {uint8_t carry = (gb->cpu_reg.h & 1);\
+						gb->cpu_reg.h >>= 1;\
+						gb->cpu_reg.h += ((gb->cpu_reg.h << 1) & 0x80);\
+						ROT_FLAG(gb->cpu_reg.h, carry);} while(0)
+	#define SRA_L	do {uint8_t carry = (gb->cpu_reg.l & 1);\
+						gb->cpu_reg.l >>= 1;\
+						gb->cpu_reg.l += ((gb->cpu_reg.l << 1) & 0x80);\
+						ROT_FLAG(gb->cpu_reg.l, carry);} while(0)
+	#define SRA_A	do {uint8_t carry = (gb->cpu_reg.a & 1);\
+						gb->cpu_reg.a >>= 1;\
+						gb->cpu_reg.a += ((gb->cpu_reg.a << 1) & 0x80);\
+						ROT_FLAG(gb->cpu_reg.a, carry);} while(0)
+	#define SRA_hl	do {uint8_t temp = __gb_read(gb, gb->cpu_reg.hl);\
+						uint8_t carry = (temp & 1);\
+						temp >>= 1;\
+						temp += ((temp << 1) & 0x80);\
+						ROT_FLAG(temp, carry);\
+						__gb_write(gb, gb->cpu_reg.hl, temp);} while(0)
+
+	#define SWAP_FLAGS(x)	do {gb->cpu_reg.f_bits.z = (x == 0x00);\
+								gb->cpu_reg.f_bits.n = 0;\
+								gb->cpu_reg.f_bits.h = 0;\
+								gb->cpu_reg.f_bits.c = 0;} while(0)
+	#define SWAP_B	do {uint8_t temp = (gb->cpu_reg.b << 4);\
+						gb->cpu_reg.b >>= 4;\
+						gb->cpu_reg.b |= temp;\
+						SWAP_FLAGS(gb->cpu_reg.b);} while(0)
+	#define SWAP_C	do {uint8_t temp = (gb->cpu_reg.c << 4);\
+						gb->cpu_reg.c >>= 4;\
+						gb->cpu_reg.c |= temp;\
+						SWAP_FLAGS(gb->cpu_reg.c);} while(0)
+	#define SWAP_D	do {uint8_t temp = (gb->cpu_reg.d << 4);\
+						gb->cpu_reg.d >>= 4;\
+						gb->cpu_reg.d |= temp;\
+						SWAP_FLAGS(gb->cpu_reg.d);} while(0)
+	#define SWAP_E	do {uint8_t temp = (gb->cpu_reg.e << 4);\
+						gb->cpu_reg.e >>= 4;\
+						gb->cpu_reg.e |= temp;\
+						SWAP_FLAGS(gb->cpu_reg.e);} while(0)
+	#define SWAP_H	do {uint8_t temp = (gb->cpu_reg.h << 4);\
+						gb->cpu_reg.h >>= 4;\
+						gb->cpu_reg.h |= temp;\
+						SWAP_FLAGS(gb->cpu_reg.h);} while(0)
+	#define SWAP_L	do {uint8_t temp = (gb->cpu_reg.l << 4);\
+						gb->cpu_reg.l >>= 4;\
+						gb->cpu_reg.l |= temp;\
+						SWAP_FLAGS(gb->cpu_reg.l);} while(0)
+	#define SWAP_A	do {uint8_t temp = (gb->cpu_reg.a << 4);\
+						gb->cpu_reg.a >>= 4;\
+						gb->cpu_reg.a |= temp;\
+						SWAP_FLAGS(gb->cpu_reg.a);} while(0)
 	#define SWAP_hl	do {uint8_t val = __gb_read(gb, gb->cpu_reg.hl);\
-						uint8_t temp = (val >> 4) & 0x0F;\
-						temp |= (val << 4) & 0xF0;\
-						val = temp;\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						gb->cpu_reg.f_bits.c = 0;\
+						uint8_t temp = (val << 4);\
+						val >>= 4;\
+						val |= temp;\
+						SWAP_FLAGS(val);\
 						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
-	#define SWAP_A	do {SWAP_(gb->cpu_reg.a);} while(0)
 
-	#define SRL_(x)	do {uint8_t val = x;\
-						gb->cpu_reg.f_bits.c = val & 0x01;\
-						val = val >> 1;\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						x = val;} while(0)
-	#define SRL_B	do {SRL_(gb->cpu_reg.b);} while(0)
-	#define SRL_C	do {SRL_(gb->cpu_reg.c);} while(0)
-	#define SRL_D	do {SRL_(gb->cpu_reg.d);} while(0)
-	#define SRL_E	do {SRL_(gb->cpu_reg.e);} while(0)
-	#define SRL_H	do {SRL_(gb->cpu_reg.h);} while(0)
-	#define SRL_L	do {SRL_(gb->cpu_reg.l);} while(0)
-	#define SRL_hl	do {uint8_t val = __gb_read(gb, gb->cpu_reg.hl);\
-						gb->cpu_reg.f_bits.c = val & 0x01;\
-						val = val >> 1;\
-						gb->cpu_reg.f_bits.z = (val == 0x00);\
-						gb->cpu_reg.f_bits.n = 0;\
-						gb->cpu_reg.f_bits.h = 0;\
-						__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
-	#define SRL_A	do {SRL_(gb->cpu_reg.a);} while(0)
+	#define SRL_B	do {uint8_t carry = (gb->cpu_reg.b & 1);\
+						gb->cpu_reg.b >>= 1;\
+						ROT_FLAG(gb->cpu_reg.b, carry);} while(0)
+	#define SRL_C	do {uint8_t carry = (gb->cpu_reg.c & 1);\
+						gb->cpu_reg.c >>= 1;\
+						ROT_FLAG(gb->cpu_reg.c, carry);} while(0)
+	#define SRL_D	do {uint8_t carry = (gb->cpu_reg.d & 1);\
+						gb->cpu_reg.d >>= 1;\
+						ROT_FLAG(gb->cpu_reg.d, carry);} while(0)
+	#define SRL_E	do {uint8_t carry = (gb->cpu_reg.e & 1);\
+						gb->cpu_reg.e >>= 1;\
+						ROT_FLAG(gb->cpu_reg.e, carry);} while(0)
+	#define SRL_H	do {uint8_t carry = (gb->cpu_reg.h & 1);\
+						gb->cpu_reg.h >>= 1;\
+						ROT_FLAG(gb->cpu_reg.h, carry);} while(0)
+	#define SRL_L	do {uint8_t carry = (gb->cpu_reg.l & 1);\
+						gb->cpu_reg.l >>= 1;\
+						ROT_FLAG(gb->cpu_reg.l, carry);} while(0)
+	#define SRL_A	do {uint8_t carry = (gb->cpu_reg.a & 1);\
+						gb->cpu_reg.a >>= 1;\
+						ROT_FLAG(gb->cpu_reg.a, carry);} while(0)
+	#define SRL_hl	do {uint8_t temp = __gb_read(gb, gb->cpu_reg.hl);\
+						uint8_t carry = (temp & 1);\
+						temp >>= 1;\
+						ROT_FLAG(temp, carry);\
+						__gb_write(gb, gb->cpu_reg.hl, temp);} while(0)
 
 	#define BIT_(x, bit)	do {uint8_t val = x;\
 							gb->cpu_reg.f_bits.z = !((val >> bit) & 0x1);\
@@ -2101,32 +2178,32 @@ void __gb_step_cpu(struct gb_s *gb)
 	#define BIT_E(bit)	do {BIT_(gb->cpu_reg.e, bit);} while(0)
 	#define BIT_H(bit)	do {BIT_(gb->cpu_reg.h, bit);} while(0)
 	#define BIT_L(bit)	do {BIT_(gb->cpu_reg.l, bit);} while(0)
-	#define BIT_hl(bit)	do {BIT_(__gb_read(gb, gb->cpu_reg.hl), bit);} while(0)
 	#define BIT_A(bit)	do {BIT_(gb->cpu_reg.a, bit);} while(0)
+	#define BIT_hl(bit)	do {BIT_(__gb_read(gb, gb->cpu_reg.hl), bit);} while(0)
 
 	#define RES_(x, bit)	do {x &= (0xFE << bit) | (0xFF >> (8 - bit));} while(0)
-	#define RES_B(bit)	do {RES_(gb->cpu_reg.b, bit);} while(0)
-	#define RES_C(bit)	do {RES_(gb->cpu_reg.c, bit);} while(0)
-	#define RES_D(bit)	do {RES_(gb->cpu_reg.d, bit);} while(0)
-	#define RES_E(bit)	do {RES_(gb->cpu_reg.e, bit);} while(0)
-	#define RES_H(bit)	do {RES_(gb->cpu_reg.h, bit);} while(0)
-	#define RES_L(bit)	do {RES_(gb->cpu_reg.l, bit);} while(0)
+	#define RES_B(bit)	do {gb->cpu_reg.b &= ((1 << bit) ^ 0xFF);} while(0)
+	#define RES_C(bit)	do {gb->cpu_reg.c &= ((1 << bit) ^ 0xFF);} while(0)
+	#define RES_D(bit)	do {gb->cpu_reg.d &= ((1 << bit) ^ 0xFF);} while(0)
+	#define RES_E(bit)	do {gb->cpu_reg.e &= ((1 << bit) ^ 0xFF);} while(0)
+	#define RES_H(bit)	do {gb->cpu_reg.h &= ((1 << bit) ^ 0xFF);} while(0)
+	#define RES_L(bit)	do {gb->cpu_reg.l &= ((1 << bit) ^ 0xFF);} while(0)
+	#define RES_A(bit)	do {gb->cpu_reg.a &= ((1 << bit) ^ 0xFF);} while(0)
 	#define RES_hl(bit)	do {uint8_t val = __gb_read(gb, gb->cpu_reg.hl);\
-							val &= (0xFE << bit) | (0xFF >> (8 - bit));\
+							val &= ((1 << bit) ^ 0xFF);\
 							__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
-	#define RES_A(bit)	do {RES_(gb->cpu_reg.a, bit);} while(0)
 
 	#define SET_(x, bit)	do {x |= (0x1 << bit);} while(0)
-	#define SET_B(bit)	do {SET_(gb->cpu_reg.b, bit);} while(0)
-	#define SET_C(bit)	do {SET_(gb->cpu_reg.c, bit);} while(0)
-	#define SET_D(bit)	do {SET_(gb->cpu_reg.d, bit);} while(0)
-	#define SET_E(bit)	do {SET_(gb->cpu_reg.e, bit);} while(0)
-	#define SET_H(bit)	do {SET_(gb->cpu_reg.h, bit);} while(0)
-	#define SET_L(bit)	do {SET_(gb->cpu_reg.l, bit);} while(0)
+	#define SET_B(bit)	do {gb->cpu_reg.b |= (1 << bit);} while(0)
+	#define SET_C(bit)	do {gb->cpu_reg.c |= (1 << bit);} while(0)
+	#define SET_D(bit)	do {gb->cpu_reg.d |= (1 << bit);} while(0)
+	#define SET_E(bit)	do {gb->cpu_reg.e |= (1 << bit);} while(0)
+	#define SET_H(bit)	do {gb->cpu_reg.h |= (1 << bit);} while(0)
+	#define SET_L(bit)	do {gb->cpu_reg.l |= (1 << bit);} while(0)
+	#define SET_A(bit)	do {gb->cpu_reg.a |= (1 << bit);} while(0)
 	#define SET_hl(bit)	do {uint8_t val = __gb_read(gb, gb->cpu_reg.hl);\
 							val |= (0x1 << bit);\
 							__gb_write(gb, gb->cpu_reg.hl, val);} while(0)
-	#define SET_A(bit)	do {SET_(gb->cpu_reg.a, bit);} while(0)
 
 	if(gb->cpu_reg.pc == 0x18) gb->gb_frame = 1;
 	/* Obtain opcode */
@@ -2374,7 +2451,7 @@ void __gb_step_cpu(struct gb_s *gb)
 		case 0x1D:	RR_L;	break;
 		case 0x1E:	RR_hl;	break;
 		case 0x1F:	RR_A;	break;
-		/*case 0x20:	SLA_B;	break;
+		case 0x20:	SLA_B;	break;
 		case 0x21:	SLA_C;	break;
 		case 0x22:	SLA_D;	break;
 		case 0x23:	SLA_E;	break;
@@ -2597,11 +2674,7 @@ void __gb_step_cpu(struct gb_s *gb)
 		case 0xFC:	SET_H(7);	break;
 		case 0xFD:	SET_L(7);	break;
 		case 0xFE:	SET_hl(7);	break;
-		case 0xFF:	SET_A(7);	break;*/
-		default:
-			gb->cpu_reg.pc--;
-			__gb_execute_cb(gb);
-			break;
+		case 0xFF:	SET_A(7);	break;
 		}
 		break;
 	case 0xCC:	CALL_Z(imm16);	break;
