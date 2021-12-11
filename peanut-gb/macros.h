@@ -161,14 +161,18 @@
 #define JP_NZ(x)	do {IF2_NZ(JP(x));} while(0)
 #define JP_hl	do {gb->cpu_reg.pc = gb->cpu_reg.hl;} while(0)
 
-#define CALL(x)	do {uint16_t dest = x;\
+#define _CALL(x)	do {uint16_t dest = x;\
                     PUSH_PC;\
                     gb->cpu_reg.pc = dest;} while(0)
-#define CALL_C(x)	do {IF2_C(CALL(x));} while(0)
-#define CALL_NC(x)	do {IF2_NC(CALL(x));} while(0)
-#define CALL_Z(x)	do {IF2_Z(CALL(x));} while(0)
-#define CALL_NZ(x)	do {IF2_NZ(CALL(x));} while(0)
-#define RST(x)	do {CALL(x & 0x38);} while(0)
+#define CALL(x)	do {uint16_t dest = x;\
+                    PUSH_PC;\
+                    gb->cpu_reg.pc = dest;\
+                    return -dest;} while(0)
+#define CALL_C(x)	do {IF2_C(_CALL(x));} while(0)
+#define CALL_NC(x)	do {IF2_NC(_CALL(x));} while(0)
+#define CALL_Z(x)	do {IF2_Z(_CALL(x));} while(0)
+#define CALL_NZ(x)	do {IF2_NZ(_CALL(x));} while(0)
+#define RST(x)	do {_CALL(x & 0x38);} while(0)
 
 #define INC_FLAGS(x)	do {gb->cpu_reg.f_bits.z = (x == 0x00);\
                             gb->cpu_reg.f_bits.n = 0;\

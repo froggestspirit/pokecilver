@@ -1463,7 +1463,9 @@ void __gb_step_cpu(struct gb_s *gb)
 	if(gb->cpu_reg.pc == 0x18) gb->gb_frame = 1;
 	if(gb->cpu_reg.pc < 0x8000){
 		if(func[gb->cpu_reg.pc + ((gb->selected_rom_bank - 1) * ROM_BANK_SIZE)] != NULL){
-			gb->cpu_reg.pc = func[gb->cpu_reg.pc + ((gb->selected_rom_bank - 1) * ROM_BANK_SIZE)](gb);
+			int result = func[gb->cpu_reg.pc + ((gb->selected_rom_bank - 1) * ROM_BANK_SIZE)](gb);
+			if(result == -1) RET;
+			if(result >= 0) gb->cpu_reg.pc = result;
 			if(gb->cpu_reg.pc == 0x18) gb->gb_frame = 1;
 		}
 	}
@@ -1678,7 +1680,7 @@ void __gb_step_cpu(struct gb_s *gb)
 	case 0xC9:	RET;	break;
 	case 0xCA:	JP_Z(imm16);	break;
 	case 0xCC:	CALL_Z(imm16);	break;
-	case 0xCD:	CALL(imm16);	break;
+	case 0xCD:	_CALL(imm16);	break;
 	case 0xCE:	ADC_A(imm8);	break;
 	case 0xCF:	RST(0x08);	break;  // RST
 	case 0xD0:	RET_NC;	break;
