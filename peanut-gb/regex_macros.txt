@@ -1,0 +1,24 @@
+;
+//
+
+\$
+0x
+
+\n\txor a
+\n\tXOR_A_A;
+
+\n\tldh \[([a-z].*)\], a
+\n\tLD_addr_A($1);
+
+\n\tld \[([a-z].*)\], a
+\n\tLD_addr_A($1);
+
+\n\tei
+\n\t// ei
+
+\n\tdi
+\n\t// di
+
+\n\tset ([0-9a-z].*), \[hl\]
+\n\tSET_hl($1);
+

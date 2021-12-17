@@ -1,5 +1,6 @@
 #include "peanut_gb.h"
 #include "macros.h"
+#include "global.h"
 
 #define ROM_SIZE 0x200000
 
@@ -7,9 +8,6 @@
 extern struct gb_s;
 
 int (*func[ROM_SIZE])(struct gb_s *gb);
-
-#define hCGB 0xffe8
-#define TRUE 1
 
 int _Start(struct gb_s *gb){
 	CP_A(0x11);
