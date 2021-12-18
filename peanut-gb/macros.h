@@ -1,3 +1,5 @@
+#include "../C/funcmap.h"
+
 #define IF_C	if(gb->cpu_reg.f_bits.c)
 #define IF_NC	if(!gb->cpu_reg.f_bits.c)
 #define IF_Z	if(gb->cpu_reg.f_bits.z)
@@ -755,3 +757,27 @@
 #define SET_hl(bit)	do {uint8_t val = __gb_read(gb, gb->cpu_reg.hl);\
                         val |= (0x1 << bit);\
                         __gb_write(gb, gb->cpu_reg.hl, val);} while(0)
+
+
+// Pokegold macros
+
+#define BANK(x)	(x >> 14)
+#define HIGH(x)	((x >> 8) & 0xFF)
+#define LOW(x)	(x & 0xFF)
+
+#define FARCALL(x)	do {uint32_t val = x;\
+                        LD_A(BANK(val));\
+                        LD_HL(val & 0x7FFF);\
+                        CALL(aFarCall);} while(0)
+#define CALLFAR(x)	do {uint32_t val = x;\
+                        LD_HL(val & 0x7FFF);\
+                        LD_A(BANK(val));\
+                        CALL(aFarCall);} while(0)
+#define HOMECALL(x)	do {uint32_t val = x;\
+                        LD_A_addr(hROMBank);\
+                        PUSH_AF;\
+                        LD_A(BANK(val));\
+                        CALL(aBankswitch);\
+                        CALL(val & 0x7FFF);\
+                        POP_AF;\
+                        CALL(aBankswitch);} while(0)

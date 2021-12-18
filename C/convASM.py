@@ -4,6 +4,8 @@ import time
 
 
 currentFunc = ""
+funcList = []
+funcRet = False
 
 def parse_line(string):
     if not string:
@@ -14,7 +16,7 @@ def parse_line(string):
     if comment:
         comment = f"  // {comment}"
     string = string.split(";")
-    asm = string[0][1:].replace("$", "0x")
+    asm = string[0][1:].replace("$", "0x").replace("%", "0b")
     if asm:
         return f"\t{parse_asm(asm)}", comment
     return asm, comment
@@ -22,41 +24,51 @@ def parse_line(string):
 
 def parse_line_label(string):
     global currentFunc
+    global funcList
+    global funcRet
     comment = ""
     asm = ""
     string = string.split(";")
     if string[0].find("::") != -1:
-        if currentFunc != "":
-            asm = f"}}\n\n"
+        prevFunc = currentFunc
         currentFunc = string[0].split("::")[0]
+        funcList.append(currentFunc)
+        if prevFunc != "":
+            if not funcRet:
+                asm = f"\treturn a{currentFunc};\n"
+            asm = f"{asm}}}\n\n"
         asm = f"{asm}int {currentFunc}(struct gb_s *gb){{"
     elif len(string[0]) and string[0][0] == ".":
-        asm = f"\n_{string[0][1:].strip()}:"
+        asm = f"\n_{string[0][1:].replace(':', '').strip()}:"
     else:
         asm = f"{asm}{string[0]}"
+    funcRet = False
     if len(string) > 1:
         comment = f"  // {string[1]}"
     return asm, comment
 
 
 def parse_asm(asm):
+    global funcRet
     register = {"a": "_A",
-            "b": "_B",
-            "c": "_C",
-            "d": "_D",
-            "e": "_E",
-            "f": "_F",
-            "h": "_H",
-            "l": "_L",
-            "af": "_AF",
-            "bc": "_BC",
-            "de": "_DE",
-            "hl": "_HL",
-            "sp": "_SP",
-            "[bc]": "_bc",
-            "[de]": "_de",
-            "[hl]": "_hl",
-            "[sp]": "_sp"}
+                "b": "_B",
+                "c": "_C",
+                "d": "_D",
+                "e": "_E",
+                "f": "_F",
+                "h": "_H",
+                "l": "_L",
+                "af": "_AF",
+                "bc": "_BC",
+                "de": "_DE",
+                "hl": "_HL",
+                "sp": "_SP",
+                "[bc]": "_bc",
+                "[de]": "_de",
+                "[hl]": "_hl",
+                "[hli]": "_hli",
+                "[hld]": "_hld",
+                "[sp]": "_sp"}
     condition = {"c": "IF_C",
                 "nc": "IF_NC",
                 "z": "IF_Z",
@@ -93,6 +105,7 @@ def parse_asm(asm):
         cond = ""
         if asm[0] in condition:
             cond = f"{condition[asm[0]]} "
+        funcRet = True
         return f"{cond}return -1;"
     elif opcode in ("jp", "jr"):
         cond = ""
@@ -101,13 +114,16 @@ def parse_asm(asm):
             asm = asm[1:]
         if asm[0][0] == ".":
             return f"{cond}goto _{asm[0][1:]};"
-        return f"{cond}return {asm[0]}"
+        funcRet = True
+        return f"{cond}return a{asm[0]};"
     elif opcode in ("call", "rst"):
         cond = ""
         if asm[0] in condition:
             cond = f"{condition[asm[0]]} "
             asm = asm[1:]
-        return f"{cond}CALL({asm[0]});"
+        return f"{cond}CALL(a{asm[0]});"
+    elif opcode in ("callfar", "farcall", "homecall", "predef"):
+        return f"{opcode.upper()}(a{asm[0]});"
     elif opcode in ("add","adc","sub","sbc","and","or","xor","cp"):
         op = opcode.upper()
         if asm[0] in register:  # Register
@@ -127,6 +143,7 @@ def parse_asm(asm):
 
 def main():
     global currentFunc
+    global funcList
     parser = argparse.ArgumentParser()
     parser.add_argument("fileName")
     args = parser.parse_args()
@@ -146,6 +163,8 @@ def main():
     for ln, line in enumerate(asm):
         print(f"{line}{comment[ln]}".strip(" "))
     
+    for f in funcList:
+        print(f"func[a{f}] = {f};")
     return 0
 
 
