@@ -1,3 +1,7 @@
+#pragma once
+
+#include "../C/data/predef_pointers.h"
+
 #define NULL 0x0000
 #define aFarCall 0x0008
 #define aBankswitch 0x0010

@@ -3,8 +3,11 @@ import argparse
 import time
 
 
+funcMapFile = "funcmap.h"
+
 currentFunc = ""
 funcList = []
+funcsKnown = []
 funcRet = False
 
 def parse_line(string):
@@ -50,6 +53,8 @@ def parse_line_label(string):
 
 def parse_asm(asm):
     global funcRet
+    global currentFunc
+    global funcsKnown
     register = {"a": "_A",
                 "b": "_B",
                 "c": "_C",
@@ -69,16 +74,26 @@ def parse_asm(asm):
                 "[hli]": "_hli",
                 "[hld]": "_hld",
                 "[sp]": "_sp"}
-    condition = {"c": "IF_C",
-                "nc": "IF_NC",
-                "z": "IF_Z",
-                "nz": "IF_NZ"}
+    condition = {"c": "_C",
+                "nc": "_NC",
+                "z": "_Z",
+                "nz": "_NZ"}
     opcode = asm.split(" ", 1)
     asm = "?"
     if len(opcode) > 1:
         asm = opcode[1].split(",")
     opcode = opcode[0].lower()
     asm = list(i.strip(" ") for i in asm)
+    for i, curASM in enumerate(asm):
+        func = None
+        parts = curASM.split("(")
+        for p, part in enumerate(parts):
+            if part in ("BANK", "LOW", "HIGH"):
+                if f"a{parts[p + 1].split(')')[0]}" in funcsKnown:
+                    func = parts[p + 1].split(')')[0]
+        if func:
+            asm[i] = curASM.replace(func, f"a{func}")
+
     if opcode in ("ld", "ldh"):
         op = "LD"
         dest = "_addr"
@@ -101,29 +116,44 @@ def parse_asm(asm):
         return f"{opcode.upper()};"
     elif opcode in ("ei", "di"):
         return ""
-    elif opcode in ("ret"):
+    elif opcode in ("ret", "reti"):
         cond = ""
         if asm[0] in condition:
             cond = f"{condition[asm[0]]} "
         funcRet = True
-        return f"{cond}return -1;"
-    elif opcode in ("jp", "jr"):
+        return f"RET{cond};"
+    elif opcode in ("jr"):
         cond = ""
         if asm[0] in condition:
             cond = f"{condition[asm[0]]} "
             asm = asm[1:]
         if asm[0][0] == ".":
-            return f"{cond}goto _{asm[0][1:]};"
+            return f"JR{cond}(a{currentFunc}_{asm[0][1:]});"
         funcRet = True
-        return f"{cond}return a{asm[0]};"
-    elif opcode in ("call", "rst"):
+        return f"JR{cond}(a{asm[0]});"
+    elif opcode in ("jp"):
         cond = ""
         if asm[0] in condition:
             cond = f"{condition[asm[0]]} "
             asm = asm[1:]
-        return f"{cond}CALL(a{asm[0]});"
-    elif opcode in ("callfar", "farcall", "homecall", "predef"):
+        if asm[0][0] == ".":
+            return f"JP{cond}(a{currentFunc}_{asm[0][1:]});"
+        funcRet = True
+        return f"JP{cond}(a{asm[0]});"
+    elif opcode in ("call"):
+        cond = ""
+        if asm[0] in condition:
+            cond = f"{condition[asm[0]]} "
+            asm = asm[1:]
+        return f"CALL{cond}(a{asm[0]});"
+    elif opcode in ("rst"):
+        if f"a{asm[0]}" in funcsKnown:
+            return f"RST(a{asm[0]});"
+        return f"RST({asm[0]});"
+    elif opcode in ("callfar", "farcall", "homecall"):
         return f"{opcode.upper()}(a{asm[0]});"
+    elif opcode in ("lda_predef", "predef", "predef_jump"):
+        return f"{opcode.upper()}(p{asm[0]});"
     elif opcode in ("add","adc","sub","sbc","and","or","xor","cp"):
         op = opcode.upper()
         if asm[0] in register:  # Register
@@ -144,9 +174,14 @@ def parse_asm(asm):
 def main():
     global currentFunc
     global funcList
+    global funcsKnown
     parser = argparse.ArgumentParser()
     parser.add_argument("fileName")
     args = parser.parse_args()
+
+    with open(funcMapFile, "r") as inFile:
+        funcsFile = inFile.read().split("\n")
+    funcsKnown = list(i.split(" ")[1] for i in funcsFile if i[:7] == "#define")
 
     with open(args.fileName, "r") as inFile:
         asmFile = inFile.read().split("\n")
@@ -163,6 +198,8 @@ def main():
     for ln, line in enumerate(asm):
         print(f"{line}{comment[ln]}".strip(" "))
     
+
+    print(f"\n\n")
     for f in funcList:
         print(f"func[a{f}] = {f};")
     return 0

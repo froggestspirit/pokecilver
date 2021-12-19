@@ -18,13 +18,13 @@
 #define PUSH_AF do {__gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.a);\
                     __gb_write(gb, --gb->cpu_reg.sp,\
                     gb->cpu_reg.f_bits.z << 7 | gb->cpu_reg.f_bits.n << 6 |\
-                    gb->cpu_reg.f_bits.h << 5 | gb->cpu_reg.f_bits.c << 4);} while(0)
+                    gb->cpu_reg.f_bits.h << 5 | gb->cpu_reg.f_bits.c << 4); INC_PC(1)} while(0)
 #define PUSH_BC do {__gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.b);\
-                    __gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.c);} while(0)
+                    __gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.c); INC_PC(1)} while(0)
 #define PUSH_DE do {__gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.d);\
-                    __gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.e);} while(0)
+                    __gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.e); INC_PC(1)} while(0)
 #define PUSH_HL do {__gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.h);\
-                    __gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.l);} while(0)
+                    __gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.l); INC_PC(1)} while(0)
 #define PUSH_PC do {__gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.pc >> 8);\
                     __gb_write(gb, --gb->cpu_reg.sp, gb->cpu_reg.pc & 0xFF);} while(0)
 
@@ -33,13 +33,13 @@
                     gb->cpu_reg.f_bits.n = (temp_8 >> 6) & 1;\
                     gb->cpu_reg.f_bits.h = (temp_8 >> 5) & 1;\
                     gb->cpu_reg.f_bits.c = (temp_8 >> 4) & 1;\
-                    gb->cpu_reg.a = __gb_read(gb, gb->cpu_reg.sp++);} while(0)
+                    gb->cpu_reg.a = __gb_read(gb, gb->cpu_reg.sp++); INC_PC(1)} while(0)
 #define POP_BC	do {gb->cpu_reg.c = __gb_read(gb, gb->cpu_reg.sp++);\
-                    gb->cpu_reg.b = __gb_read(gb, gb->cpu_reg.sp++);} while(0)
+                    gb->cpu_reg.b = __gb_read(gb, gb->cpu_reg.sp++); INC_PC(1)} while(0)
 #define POP_DE	do {gb->cpu_reg.e = __gb_read(gb, gb->cpu_reg.sp++);\
-                    gb->cpu_reg.d = __gb_read(gb, gb->cpu_reg.sp++);} while(0)
+                    gb->cpu_reg.d = __gb_read(gb, gb->cpu_reg.sp++); INC_PC(1)} while(0)
 #define POP_HL	do {gb->cpu_reg.l = __gb_read(gb, gb->cpu_reg.sp++);\
-                    gb->cpu_reg.h = __gb_read(gb, gb->cpu_reg.sp++);} while(0)
+                    gb->cpu_reg.h = __gb_read(gb, gb->cpu_reg.sp++); INC_PC(1)} while(0)
 #define POP_PC	do {gb->cpu_reg.pc = __gb_read(gb, gb->cpu_reg.sp++)|\
                     (__gb_read(gb, gb->cpu_reg.sp++) << 8);} while(0)
 
@@ -135,52 +135,95 @@
 #define IF0_Z(x)	do {if(gb->cpu_reg.f_bits.z){ x; }} while(0)
 #define IF0_NZ(x)	do {if(!gb->cpu_reg.f_bits.z){ x; }} while(0)
 
-#define RET	do {POP_PC;} while(0)
-#define RETI	do {POP_PC;} while(0)
-#define RET_C	do {IF0_C(POP_PC);} while(0)
-#define RET_NC	do {IF0_NC(POP_PC);} while(0)
-#define RET_Z	do {IF0_Z(POP_PC);} while(0)
-#define RET_NZ	do {IF0_NZ(POP_PC);} while(0)
+#define RET	do {POP_PC; return -1;} while(0)
+#define RETI	do {POP_PC; return -1;} while(0)
+#define RET_C	do {INC_PC(1) IF0_C(POP_PC  return -1);} while(0)
+#define RET_NC	do {INC_PC(1) IF0_NC(POP_PC  return -1);} while(0)
+#define RET_Z	do {INC_PC(1) IF0_Z(POP_PC  return -1);} while(0)
+#define RET_NZ	do {INC_PC(1) IF0_NZ(POP_PC  return -1);} while(0)
+#define _RET	do {POP_PC;} while(0)
+#define _RETI	do {POP_PC;} while(0)
+#define _RET_C	do {IF0_C(POP_PC);} while(0)
+#define _RET_NC	do {IF0_NC(POP_PC);} while(0)
+#define _RET_Z	do {IF0_Z(POP_PC);} while(0)
+#define _RET_NZ	do {IF0_NZ(POP_PC);} while(0)
 
 #define IF1_C(x)	do {if(gb->cpu_reg.f_bits.c){ x; }else{ gb->cpu_reg.pc++;}} while(0)
 #define IF1_NC(x)	do {if(!gb->cpu_reg.f_bits.c){ x; }else{ gb->cpu_reg.pc++;}} while(0)
 #define IF1_Z(x)	do {if(gb->cpu_reg.f_bits.z){ x; }else{ gb->cpu_reg.pc++;}} while(0)
 #define IF1_NZ(x)	do {if(!gb->cpu_reg.f_bits.z){ x; }else{ gb->cpu_reg.pc++;}} while(0)
 
-#define JR(x)	do {gb->cpu_reg.pc += (int8_t)x;} while(0)
-#define JR_C(x)	do {IF1_C(JR(x));} while(0)
-#define JR_NC(x)	do {IF1_NC(JR(x));} while(0)
-#define JR_Z(x)	do {IF1_Z(JR(x));} while(0)
-#define JR_NZ(x)	do {IF1_NZ(JR(x));} while(0)
+#define JR(x)	do {gb->cpu_reg.pc = x; return -1;} while(0)
+#define JR_C(x)	do {INC_PC(2) IF1_C(JR(x));} while(0)
+#define JR_NC(x)	do {INC_PC(2) IF1_NC(JR(x));} while(0)
+#define JR_Z(x)	do {INC_PC(2) IF1_Z(JR(x));} while(0)
+#define JR_NZ(x)	do {INC_PC(2) IF1_NZ(JR(x));} while(0)
+#define _JR(x)	do {gb->cpu_reg.pc += (int8_t)x;} while(0)
+#define _JR_C(x)	do {IF1_C(_JR(x));} while(0)
+#define _JR_NC(x)	do {IF1_NC(_JR(x));} while(0)
+#define _JR_Z(x)	do {IF1_Z(_JR(x));} while(0)
+#define _JR_NZ(x)	do {IF1_NZ(_JR(x));} while(0)
 
 #define IF2_C(x)	do {if(gb->cpu_reg.f_bits.c){ x; }else{ gb->cpu_reg.pc += 2;}} while(0)
 #define IF2_NC(x)	do {if(!gb->cpu_reg.f_bits.c){ x; }else{ gb->cpu_reg.pc += 2;}} while(0)
 #define IF2_Z(x)	do {if(gb->cpu_reg.f_bits.z){ x; }else{ gb->cpu_reg.pc += 2;}} while(0)
 #define IF2_NZ(x)	do {if(!gb->cpu_reg.f_bits.z){ x; }else{ gb->cpu_reg.pc += 2;}} while(0)
 
-#define JP(x)	do {gb->cpu_reg.pc = x;} while(0)
-#define JP_C(x)	do {IF2_C(JP(x));} while(0)
-#define JP_NC(x)	do {IF2_NC(JP(x));} while(0)
-#define JP_Z(x)	do {IF2_Z(JP(x));} while(0)
-#define JP_NZ(x)	do {IF2_NZ(JP(x));} while(0)
-#define JP_hl	do {gb->cpu_reg.pc = gb->cpu_reg.hl;} while(0)
+#define JP(x)	do {gb->cpu_reg.pc = x; return -1;} while(0)
+#define JP_C(x)	do {INC_PC(3) IF2_C(JP(x));} while(0)
+#define JP_NC(x)	do {INC_PC(3) IF2_NC(JP(x));} while(0)
+#define JP_Z(x)	do {INC_PC(3) IF2_Z(JP(x));} while(0)
+#define JP_NZ(x)	do {INC_PC(3) IF2_NZ(JP(x));} while(0)
+#define JP_hl	do {gb->cpu_reg.pc = gb->cpu_reg.hl; return -1;} while(0)
+#define _JP(x)	do {gb->cpu_reg.pc = x;} while(0)
+#define _JP_C(x)	do {IF2_C(_JP(x));} while(0)
+#define _JP_NC(x)	do {IF2_NC(_JP(x));} while(0)
+#define _JP_Z(x)	do {IF2_Z(_JP(x));} while(0)
+#define _JP_NZ(x)	do {IF2_NZ(_JP(x));} while(0)
+#define _JP_hl	do {gb->cpu_reg.pc = gb->cpu_reg.hl;} while(0)
 
 #define _CALL(x)	do {uint16_t dest = x;\
                     PUSH_PC;\
                     gb->cpu_reg.pc = dest;} while(0)
-#define CALL(x)	do {uint16_t dest = x;\
+#define _CALL_C(x)	do {IF2_C(_CALL(x));} while(0)
+#define _CALL_NC(x)	do {IF2_NC(_CALL(x));} while(0)
+#define _CALL_Z(x)	do {IF2_Z(_CALL(x));} while(0)
+#define _CALL_NZ(x)	do {IF2_NZ(_CALL(x));} while(0)
+#define CALL(x)	do {INC_PC(3);\
+                    uint16_t dest = x;\
                     PUSH_PC;\
                     gb->cpu_reg.pc = dest;\
-                    return -dest;} while(0)
-#define CALL_C(x)	do {IF2_C(_CALL(x));} while(0)
-#define CALL_NC(x)	do {IF2_NC(_CALL(x));} while(0)
-#define CALL_Z(x)	do {IF2_Z(_CALL(x));} while(0)
-#define CALL_NZ(x)	do {IF2_NZ(_CALL(x));} while(0)
-#define RST(x)	do {_CALL(x & 0x38);} while(0)
+                    return -1;} while(0)
+#define CALL_C(x)	do {INC_PC(3);\
+                        IF2_C(uint16_t dest = x;\
+                        PUSH_PC;\
+                        gb->cpu_reg.pc = dest;\
+                        return -1;);} while(0)
+#define CALL_NC(x)	do {INC_PC(3);\
+                        IF2_NC(uint16_t dest = x;\
+                        PUSH_PC;\
+                        gb->cpu_reg.pc = dest;\
+                        return -1;);} while(0)
+#define CALL_Z(x)	do {INC_PC(3);\
+                        IF2_Z(uint16_t dest = x;\
+                        PUSH_PC;\
+                        gb->cpu_reg.pc = dest;\
+                        return -1;);} while(0)
+#define CALL_NZ(x)	do {INC_PC(3);\
+                        IF2_NZ(uint16_t dest = x;\
+                        PUSH_PC;\
+                        gb->cpu_reg.pc = dest;\
+                        return -1;);} while(0)
+#define RST(x)	do {INC_PC(1);\
+                    uint16_t dest = (x & 0x38);\
+                    PUSH_PC;\
+                    gb->cpu_reg.pc = dest;\
+                    return -1;} while(0)
+#define _RST(x)	do {_CALL(x & 0x38);} while(0)
 
 #define INC_FLAGS(x)	do {gb->cpu_reg.f_bits.z = (x == 0x00);\
                             gb->cpu_reg.f_bits.n = 0;\
-                            gb->cpu_reg.f_bits.h = ((x & 0x0F) == 0x00);} while(0)
+                            gb->cpu_reg.f_bits.h = ((x & 0x0F) == 0x00); INC_PC(1)} while(0)
 #define INC_A	do {gb->cpu_reg.a++; INC_FLAGS(gb->cpu_reg.a);} while(0)
 #define INC_B	do {gb->cpu_reg.b++; INC_FLAGS(gb->cpu_reg.b);} while(0)
 #define INC_C	do {gb->cpu_reg.c++; INC_FLAGS(gb->cpu_reg.c);} while(0)
@@ -189,14 +232,14 @@
 #define INC_H	do {gb->cpu_reg.h++; INC_FLAGS(gb->cpu_reg.h);} while(0)
 #define INC_L	do {gb->cpu_reg.l++; INC_FLAGS(gb->cpu_reg.l);} while(0)
 #define INC_hl	do {uint8_t temp = _hl_ + 1; INC_FLAGS(temp); __gb_write(gb, gb->cpu_reg.hl, temp);} while(0)
-#define INC_BC	do {gb->cpu_reg.bc++;} while(0)
-#define INC_DE	do {gb->cpu_reg.de++;} while(0)
-#define INC_HL	do {gb->cpu_reg.hl++;} while(0)
-#define INC_SP	do {gb->cpu_reg.sp++;} while(0)
+#define INC_BC	do {gb->cpu_reg.bc++; INC_PC(1)} while(0)
+#define INC_DE	do {gb->cpu_reg.de++; INC_PC(1)} while(0)
+#define INC_HL	do {gb->cpu_reg.hl++; INC_PC(1)} while(0)
+#define INC_SP	do {gb->cpu_reg.sp++; INC_PC(1)} while(0)
 
 #define DEC_FLAGS(x)	do {gb->cpu_reg.f_bits.z = (x == 0x00);\
                             gb->cpu_reg.f_bits.n = 1;\
-                            gb->cpu_reg.f_bits.h = ((x & 0x0F) == 0x0F);} while(0)
+                            gb->cpu_reg.f_bits.h = ((x & 0x0F) == 0x0F); INC_PC(1)} while(0)
 #define DEC_A	do {gb->cpu_reg.a--; DEC_FLAGS(gb->cpu_reg.a);} while(0)
 #define DEC_B	do {gb->cpu_reg.b--; DEC_FLAGS(gb->cpu_reg.b);} while(0)
 #define DEC_C	do {gb->cpu_reg.c--; DEC_FLAGS(gb->cpu_reg.c);} while(0)
@@ -205,17 +248,17 @@
 #define DEC_H	do {gb->cpu_reg.h--; DEC_FLAGS(gb->cpu_reg.h);} while(0)
 #define DEC_L	do {gb->cpu_reg.l--; DEC_FLAGS(gb->cpu_reg.l);} while(0)
 #define DEC_hl	do {uint8_t temp = _hl_ - 1; DEC_FLAGS(temp); __gb_write(gb, gb->cpu_reg.hl, temp);} while(0)
-#define DEC_BC	do {gb->cpu_reg.bc--;} while(0)
-#define DEC_DE	do {gb->cpu_reg.de--;} while(0)
-#define DEC_HL	do {gb->cpu_reg.hl--;} while(0)
-#define DEC_SP	do {gb->cpu_reg.sp--;} while(0)
+#define DEC_BC	do {gb->cpu_reg.bc--; INC_PC(1)} while(0)
+#define DEC_DE	do {gb->cpu_reg.de--; INC_PC(1)} while(0)
+#define DEC_HL	do {gb->cpu_reg.hl--; INC_PC(1)} while(0)
+#define DEC_SP	do {gb->cpu_reg.sp--; INC_PC(1)} while(0)
 
 #define ADD_(x)	do {uint16_t temp = gb->cpu_reg.a + x;\
                     gb->cpu_reg.f_bits.z = ((temp & 0xFF) == 0x00);\
                     gb->cpu_reg.f_bits.n = 0;\
                     gb->cpu_reg.f_bits.h = temp & 0x10 ? 1 : 0;\
                     gb->cpu_reg.f_bits.c = (temp & 0xFF00) ? 1 : 0;\
-                    gb->cpu_reg.a = (temp & 0xFF);} while(0)
+                    gb->cpu_reg.a = (temp & 0xFF); INC_PC(1)} while(0)
 #define ADD_A_A	do {ADD_(gb->cpu_reg.a);} while(0)
 #define ADD_A_B	do {ADD_(gb->cpu_reg.b);} while(0)
 #define ADD_A_C	do {ADD_(gb->cpu_reg.c);} while(0)
@@ -232,14 +275,14 @@
                         gb->cpu_reg.f_bits.h = ((gb->cpu_reg.a & 0xF) + (value & 0xF) > 0x0F) ? 1 : 0;\
                         gb->cpu_reg.f_bits.c = calc > 0xFF ? 1 : 0;\
                         gb->cpu_reg.f_bits.n = 0;\
-                        gb->cpu_reg.a = (uint8_t)calc;} while(0)
+                        gb->cpu_reg.a = (uint8_t)calc; INC_PC(2)} while(0)
 
 #define ADC_(x)	do {uint16_t temp = gb->cpu_reg.a + x + gb->cpu_reg.f_bits.c;\
                     gb->cpu_reg.f_bits.z = ((temp & 0xFF) == 0x00);\
                     gb->cpu_reg.f_bits.n = 0;\
                     gb->cpu_reg.f_bits.h = (gb->cpu_reg.a ^ x ^ temp) & 0x10 ? 1 : 0;\
                     gb->cpu_reg.f_bits.c = (temp & 0xFF00) ? 1 : 0;\
-                    gb->cpu_reg.a = (temp & 0xFF);} while(0)
+                    gb->cpu_reg.a = (temp & 0xFF); INC_PC(1)} while(0)
 #define ADC_A_A	do {ADC_(gb->cpu_reg.a);} while(0)
 #define ADC_A_B	do {ADC_(gb->cpu_reg.b);} while(0)
 #define ADC_A_C	do {ADC_(gb->cpu_reg.c);} while(0)
@@ -256,14 +299,14 @@
                         gb->cpu_reg.f_bits.z = gb->cpu_reg.a == 0 ? 1 : 0;\
                         gb->cpu_reg.f_bits.h = ((a & 0xF) + (value & 0xF) + carry > 0x0F) ? 1 : 0;\
                         gb->cpu_reg.f_bits.c = (((uint16_t) a) + ((uint16_t) value) + carry > 0xFF) ? 1 : 0;\
-                        gb->cpu_reg.f_bits.n = 0;} while(0)
+                        gb->cpu_reg.f_bits.n = 0; INC_PC(2)} while(0)
 
 #define SUB_(x)	do {uint16_t temp = gb->cpu_reg.a - x;\
                     gb->cpu_reg.f_bits.z = ((temp & 0xFF) == 0x00);\
                     gb->cpu_reg.f_bits.n = 1;\
                     gb->cpu_reg.f_bits.h = (gb->cpu_reg.a ^ x ^ temp) & 0x10 ? 1 : 0;\
                     gb->cpu_reg.f_bits.c = (temp & 0xFF00) ? 1 : 0;\
-                    gb->cpu_reg.a = (temp & 0xFF);} while(0)
+                    gb->cpu_reg.a = (temp & 0xFF); INC_PC(1)} while(0)
 #define SUB_A_A	do {SUB_(gb->cpu_reg.a);} while(0)
 #define SUB_A_B	do {SUB_(gb->cpu_reg.b);} while(0)
 #define SUB_A_C	do {SUB_(gb->cpu_reg.c);} while(0)
@@ -278,14 +321,14 @@
                         gb->cpu_reg.f_bits.n = 1;\
                         gb->cpu_reg.f_bits.h = (gb->cpu_reg.a ^ val ^ temp) & 0x10 ? 1 : 0;\
                         gb->cpu_reg.f_bits.c = (temp & 0xFF00) ? 1 : 0;\
-                        gb->cpu_reg.a = (temp & 0xFF);} while(0)
+                        gb->cpu_reg.a = (temp & 0xFF); INC_PC(2)} while(0)
 
 #define SBC_(x)	do {uint16_t temp = gb->cpu_reg.a - x - gb->cpu_reg.f_bits.c;\
                     gb->cpu_reg.f_bits.z = ((temp & 0xFF) == 0x00);\
                     gb->cpu_reg.f_bits.n = 1;\
                     gb->cpu_reg.f_bits.h = (gb->cpu_reg.a ^ x ^ temp) & 0x10 ? 1 : 0;\
                     gb->cpu_reg.f_bits.c = (temp & 0xFF00) ? 1 : 0;\
-                    gb->cpu_reg.a = (temp & 0xFF);} while(0)
+                    gb->cpu_reg.a = (temp & 0xFF); INC_PC(1)} while(0)
 #define SBC_A_A	do {SBC_(gb->cpu_reg.a);} while(0)
 #define SBC_A_B	do {SBC_(gb->cpu_reg.b);} while(0)
 #define SBC_A_C	do {SBC_(gb->cpu_reg.c);} while(0)
@@ -300,55 +343,70 @@
                         gb->cpu_reg.f_bits.n = 1;\
                         gb->cpu_reg.f_bits.h = (gb->cpu_reg.a ^ temp_8 ^ temp_16) & 0x10 ? 1 : 0;\
                         gb->cpu_reg.f_bits.c = (temp_16 & 0xFF00) ? 1 : 0;\
-                        gb->cpu_reg.a = (temp_16 & 0xFF);} while(0)
+                        gb->cpu_reg.a = (temp_16 & 0xFF); INC_PC(2)} while(0)
 
+#define AND_(x)	do {gb->cpu_reg.a = gb->cpu_reg.a & x;\
+                        gb->cpu_reg.f_bits.z = (gb->cpu_reg.a == 0x00);\
+                        gb->cpu_reg.f_bits.n = 0;\
+                        gb->cpu_reg.f_bits.h = 1;\
+                        gb->cpu_reg.f_bits.c = 0; INC_PC(1)} while(0)
+#define AND_A_A	do {AND_(gb->cpu_reg.a);} while(0)
+#define AND_A_B	do {AND_(gb->cpu_reg.b);} while(0)
+#define AND_A_C	do {AND_(gb->cpu_reg.c);} while(0)
+#define AND_A_D	do {AND_(gb->cpu_reg.d);} while(0)
+#define AND_A_E	do {AND_(gb->cpu_reg.e);} while(0)
+#define AND_A_H	do {AND_(gb->cpu_reg.h);} while(0)
+#define AND_A_L	do {AND_(gb->cpu_reg.l);} while(0)
+#define AND_A_hl	do {AND_(_hl_);} while(0)
 #define AND_A(x)	do {gb->cpu_reg.a = gb->cpu_reg.a & x;\
                         gb->cpu_reg.f_bits.z = (gb->cpu_reg.a == 0x00);\
                         gb->cpu_reg.f_bits.n = 0;\
                         gb->cpu_reg.f_bits.h = 1;\
-                        gb->cpu_reg.f_bits.c = 0;} while(0)
-#define AND_A_A	do {AND_A(gb->cpu_reg.a);} while(0)
-#define AND_A_B	do {AND_A(gb->cpu_reg.b);} while(0)
-#define AND_A_C	do {AND_A(gb->cpu_reg.c);} while(0)
-#define AND_A_D	do {AND_A(gb->cpu_reg.d);} while(0)
-#define AND_A_E	do {AND_A(gb->cpu_reg.e);} while(0)
-#define AND_A_H	do {AND_A(gb->cpu_reg.h);} while(0)
-#define AND_A_L	do {AND_A(gb->cpu_reg.l);} while(0)
-#define AND_A_hl	do {AND_A(_hl_);} while(0)
+                        gb->cpu_reg.f_bits.c = 0; INC_PC(2)} while(0)
 
+#define XOR_(x)	do {gb->cpu_reg.a = gb->cpu_reg.a ^ x;\
+                        gb->cpu_reg.f_bits.z = (gb->cpu_reg.a == 0x00);\
+                        gb->cpu_reg.f_bits.n = 0;\
+                        gb->cpu_reg.f_bits.h = 0;\
+                        gb->cpu_reg.f_bits.c = 0; INC_PC(1)} while(0)
+#define XOR_A_A	do {XOR_(gb->cpu_reg.a);} while(0)
+#define XOR_A_B	do {XOR_(gb->cpu_reg.b);} while(0)
+#define XOR_A_C	do {XOR_(gb->cpu_reg.c);} while(0)
+#define XOR_A_D	do {XOR_(gb->cpu_reg.d);} while(0)
+#define XOR_A_E	do {XOR_(gb->cpu_reg.e);} while(0)
+#define XOR_A_H	do {XOR_(gb->cpu_reg.h);} while(0)
+#define XOR_A_L	do {XOR_(gb->cpu_reg.l);} while(0)
+#define XOR_A_hl	do {XOR_(_hl_);} while(0)
 #define XOR_A(x)	do {gb->cpu_reg.a = gb->cpu_reg.a ^ x;\
                         gb->cpu_reg.f_bits.z = (gb->cpu_reg.a == 0x00);\
                         gb->cpu_reg.f_bits.n = 0;\
                         gb->cpu_reg.f_bits.h = 0;\
-                        gb->cpu_reg.f_bits.c = 0;} while(0)
-#define XOR_A_A	do {XOR_A(gb->cpu_reg.a);} while(0)
-#define XOR_A_B	do {XOR_A(gb->cpu_reg.b);} while(0)
-#define XOR_A_C	do {XOR_A(gb->cpu_reg.c);} while(0)
-#define XOR_A_D	do {XOR_A(gb->cpu_reg.d);} while(0)
-#define XOR_A_E	do {XOR_A(gb->cpu_reg.e);} while(0)
-#define XOR_A_H	do {XOR_A(gb->cpu_reg.h);} while(0)
-#define XOR_A_L	do {XOR_A(gb->cpu_reg.l);} while(0)
-#define XOR_A_hl	do {XOR_A(_hl_);} while(0)
+                        gb->cpu_reg.f_bits.c = 0; INC_PC(2)} while(0)
 
+#define OR_(x)	do {gb->cpu_reg.a = gb->cpu_reg.a | x;\
+                    gb->cpu_reg.f_bits.z = (gb->cpu_reg.a == 0x00);\
+                    gb->cpu_reg.f_bits.n = 0;\
+                    gb->cpu_reg.f_bits.h = 0;\
+                    gb->cpu_reg.f_bits.c = 0; INC_PC(1)} while(0)
+#define OR_A_A	do {OR_(gb->cpu_reg.a);} while(0)
+#define OR_A_B	do {OR_(gb->cpu_reg.b);} while(0)
+#define OR_A_C	do {OR_(gb->cpu_reg.c);} while(0)
+#define OR_A_D	do {OR_(gb->cpu_reg.d);} while(0)
+#define OR_A_E	do {OR_(gb->cpu_reg.e);} while(0)
+#define OR_A_H	do {OR_(gb->cpu_reg.h);} while(0)
+#define OR_A_L	do {OR_(gb->cpu_reg.l);} while(0)
+#define OR_A_hl	do {OR_(_hl_);} while(0)
 #define OR_A(x)	do {gb->cpu_reg.a = gb->cpu_reg.a | x;\
                     gb->cpu_reg.f_bits.z = (gb->cpu_reg.a == 0x00);\
                     gb->cpu_reg.f_bits.n = 0;\
                     gb->cpu_reg.f_bits.h = 0;\
-                    gb->cpu_reg.f_bits.c = 0;} while(0)
-#define OR_A_A	do {OR_A(gb->cpu_reg.a);} while(0)
-#define OR_A_B	do {OR_A(gb->cpu_reg.b);} while(0)
-#define OR_A_C	do {OR_A(gb->cpu_reg.c);} while(0)
-#define OR_A_D	do {OR_A(gb->cpu_reg.d);} while(0)
-#define OR_A_E	do {OR_A(gb->cpu_reg.e);} while(0)
-#define OR_A_H	do {OR_A(gb->cpu_reg.h);} while(0)
-#define OR_A_L	do {OR_A(gb->cpu_reg.l);} while(0)
-#define OR_A_hl	do {OR_A(_hl_);} while(0)
+                    gb->cpu_reg.f_bits.c = 0; INC_PC(2)} while(0)
 
 #define CP_(x)	do {uint16_t temp = gb->cpu_reg.a - x;\
                     gb->cpu_reg.f_bits.z = ((temp & 0xFF) == 0x00);\
                     gb->cpu_reg.f_bits.n = 1;\
                     gb->cpu_reg.f_bits.h = (gb->cpu_reg.a ^ x ^ temp) & 0x10 ? 1 : 0;\
-                    gb->cpu_reg.f_bits.c = (temp & 0xFF00) ? 1 : 0;} while(0)
+                    gb->cpu_reg.f_bits.c = (temp & 0xFF00) ? 1 : 0; INC_PC(1)} while(0)
 #define CP_A_A	do {CP_(gb->cpu_reg.a);} while(0)
 #define CP_A_B	do {CP_(gb->cpu_reg.b);} while(0)
 #define CP_A_C	do {CP_(gb->cpu_reg.c);} while(0)
@@ -362,7 +420,7 @@
                     gb->cpu_reg.f_bits.z = ((temp_16 & 0xFF) == 0x00);\
                     gb->cpu_reg.f_bits.n = 1;\
                     gb->cpu_reg.f_bits.h = ((gb->cpu_reg.a ^ temp_8 ^ temp_16) & 0x10) ? 1 : 0;\
-                    gb->cpu_reg.f_bits.c = (temp_16 & 0xFF00) ? 1 : 0;} while(0)
+                    gb->cpu_reg.f_bits.c = (temp_16 & 0xFF00) ? 1 : 0; INC_PC(2)} while(0)
 
 #define DAA	do {uint16_t a = gb->cpu_reg.a;\
                 if(gb->cpu_reg.f_bits.n){\
@@ -375,13 +433,13 @@
                 if((a & 0x100) == 0x100) gb->cpu_reg.f_bits.c = 1;\
                 gb->cpu_reg.a = a;\
                 gb->cpu_reg.f_bits.z = (gb->cpu_reg.a == 0);\
-                gb->cpu_reg.f_bits.h = 0;} while(0)
+                gb->cpu_reg.f_bits.h = 0; INC_PC(1)} while(0)
 
 #define ADD_HL_(x)	do {uint_fast32_t temp = gb->cpu_reg.hl + x;\
                         gb->cpu_reg.f_bits.n = 0;\
                         gb->cpu_reg.f_bits.h = (temp ^ gb->cpu_reg.hl ^ x) & 0x1000 ? 1 : 0;\
                         gb->cpu_reg.f_bits.c = (temp & 0xFFFF0000) ? 1 : 0;\
-                        gb->cpu_reg.hl = (temp & 0x0000FFFF);} while(0)
+                        gb->cpu_reg.hl = (temp & 0x0000FFFF); INC_PC(1)} while(0)
 #define ADD_HL_BC	do {ADD_HL_(gb->cpu_reg.bc);} while(0)
 #define ADD_HL_DE	do {ADD_HL_(gb->cpu_reg.de);} while(0)
 #define ADD_HL_HL	do {ADD_HL_(gb->cpu_reg.hl);} while(0)
@@ -389,24 +447,24 @@
                         gb->cpu_reg.f_bits.n = 0;\
                         gb->cpu_reg.f_bits.h = ((gb->cpu_reg.hl & 0xFFF) + (gb->cpu_reg.sp & 0xFFF)) & 0x1000 ? 1 : 0;\
                         gb->cpu_reg.f_bits.c = temp & 0x10000 ? 1 : 0;\
-                        gb->cpu_reg.hl = (uint16_t)temp;} while(0)
+                        gb->cpu_reg.hl = (uint16_t)temp; INC_PC(1)} while(0)
 #define ADD_SP(x)	do {int8_t offset = (int8_t) x;\
                         gb->cpu_reg.f_bits.z = 0;\
                         gb->cpu_reg.f_bits.n = 0;\
                         gb->cpu_reg.f_bits.h = ((gb->cpu_reg.sp & 0xF) + (offset & 0xF) > 0xF) ? 1 : 0;\
                         gb->cpu_reg.f_bits.c = ((gb->cpu_reg.sp & 0xFF) + (offset & 0xFF) > 0xFF);\
-                        gb->cpu_reg.sp += offset;} while(0)
+                        gb->cpu_reg.sp += offset; INC_PC(2)} while(0)
 
 #define SCF	do {gb->cpu_reg.f_bits.n = 0;\
                 gb->cpu_reg.f_bits.h = 0;\
-                gb->cpu_reg.f_bits.c = 1;} while(0)
+                gb->cpu_reg.f_bits.c = 1; INC_PC(1)} while(0)
 #define CCF	do {gb->cpu_reg.f_bits.n = 0;\
                 gb->cpu_reg.f_bits.h = 0;\
-                gb->cpu_reg.f_bits.c ^= 1;} while(0)
+                gb->cpu_reg.f_bits.c ^= 1; INC_PC(1)} while(0)
 
 #define CPL	do {gb->cpu_reg.a = ~gb->cpu_reg.a;\
                 gb->cpu_reg.f_bits.n = 1;\
-                gb->cpu_reg.f_bits.h = 1;} while(0)
+                gb->cpu_reg.f_bits.h = 1; INC_PC(1)} while(0)
 
 #define LD_addr_SP(x)	do {uint16_t temp = x;\
                             __gb_write(gb, temp++, gb->cpu_reg.sp & 0xFF);\
@@ -416,24 +474,24 @@
                     gb->cpu_reg.f_bits.z = 0;\
                     gb->cpu_reg.f_bits.n = 0;\
                     gb->cpu_reg.f_bits.h = 0;\
-                    gb->cpu_reg.f_bits.c = (gb->cpu_reg.a & 0x01);} while(0)
+                    gb->cpu_reg.f_bits.c = (gb->cpu_reg.a & 0x01); INC_PC(1)} while(0)
 #define RRCA	do {gb->cpu_reg.f_bits.c = gb->cpu_reg.a & 0x01;\
                     gb->cpu_reg.a = (gb->cpu_reg.a >> 1) | (gb->cpu_reg.a << 7);\
                     gb->cpu_reg.f_bits.z = 0;\
                     gb->cpu_reg.f_bits.n = 0;\
-                    gb->cpu_reg.f_bits.h = 0;} while(0)
+                    gb->cpu_reg.f_bits.h = 0; INC_PC(1)} while(0)
 #define RLA	do {uint8_t temp = gb->cpu_reg.a;\
                 gb->cpu_reg.a = (gb->cpu_reg.a << 1) | gb->cpu_reg.f_bits.c;\
                 gb->cpu_reg.f_bits.z = 0;\
                 gb->cpu_reg.f_bits.n = 0;\
                 gb->cpu_reg.f_bits.h = 0;\
-                gb->cpu_reg.f_bits.c = (temp >> 7) & 0x01;} while(0)
+                gb->cpu_reg.f_bits.c = (temp >> 7) & 0x01; INC_PC(1)} while(0)
 #define RRA	do {uint8_t temp = gb->cpu_reg.a;\
                 gb->cpu_reg.a = gb->cpu_reg.a >> 1 | (gb->cpu_reg.f_bits.c << 7);\
                 gb->cpu_reg.f_bits.z = 0;\
                 gb->cpu_reg.f_bits.n = 0;\
                 gb->cpu_reg.f_bits.h = 0;\
-                gb->cpu_reg.f_bits.c = temp & 0x1;} while(0)
+                gb->cpu_reg.f_bits.c = temp & 0x1; INC_PC(1)} while(0)
 
 #define LD_addr_A(x)	do {__gb_write(gb, x, gb->cpu_reg.a); INC_PC(3)} while(0)
 #define LD_A_addr(x)	do {gb->cpu_reg.a = __gb_read(gb, x); INC_PC(3)} while(0)
@@ -786,3 +844,9 @@
                         CALL(val & 0x7FFF);\
                         POP_AF;\
                         CALL(aBankswitch);} while(0)
+
+#define LDA_PREDEF(x)   do {LD_A(x);} while(0)
+#define PREDEF(x)   do {LDA_PREDEF(x);\
+                        CALL(aPredef);} while(0)
+#define PREDEF_JUMP(x)   do {LDA_PREDEF(x);\
+                            JP(aPredef);} while(0)

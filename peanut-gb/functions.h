@@ -13,20 +13,6 @@ extern struct gb_s;
 
 int (*func[ROM_SIZE])(struct gb_s *gb);
 
-/*int _Start(struct gb_s *gb){
-	CP_A(0x11);
-	IF_Z goto _cgb;
-	XOR_A_A;
-	goto _load;
-
-_cgb:
-	LD_A(TRUE);
-
-_load:
-	LD_addr_A(hCGB);
-    return 0x05D1;  // Function ends without a return, give it the address PC should be set to
-}*/
-
 int Reset(struct gb_s *gb){
 	CALL(aInitSound);  // call InitSound
 	XOR_A_A;  // xor a
@@ -40,15 +26,15 @@ int Reset(struct gb_s *gb){
 	LD_C(32);  // ld c, 32
 	CALL(aDelayFrames);  // call DelayFrames
 
-	return aInit;  // jr Init
+	JR(aInit);  // jr Init
 
 }
 
 int _Start(struct gb_s *gb){
 	CP_A(0x11);  // cp $11
-	IF_Z goto _cgb;  // jr z, .cgb
+	JR_Z (a_Start_cgb);  // jr z, .cgb
 	XOR_A_A;  // xor a ; FALSE
-	goto _load;  // jr .load
+	JR(a_Start_load);  // jr .load
 
 
 _cgb:
@@ -88,7 +74,7 @@ int Init(struct gb_s *gb){
 _wait:
 	LD_A(rLY);  // ldh a, [rLY]
 	CP_A(LY_VBLANK + 1);  // cp LY_VBLANK + 1
-	IF_NZ goto _wait;  // jr nz, .wait
+	JR_NZ (aInit_wait);  // jr nz, .wait
 
 	XOR_A_A;  // xor a
 	LD_addr_A(rLCDC);  // ldh [rLCDC], a
@@ -103,7 +89,7 @@ _ByteFill:
 	DEC_BC;  // dec bc
 	LD_A_B;  // ld a, b
 	OR_A_C;  // or c
-	IF_NZ goto _ByteFill;  // jr nz, .ByteFill
+	JR_NZ (aInit_ByteFill);  // jr nz, .ByteFill
 
 	LD_SP(wStackTop);  // ld sp, wStackTop
 
@@ -122,7 +108,7 @@ _ByteFill:
 	CALL(aClearSprites);  // call ClearSprites
 
 	LD_A(BANK(aWriteOAMDMACodeToHRAM));  // ld a, BANK(WriteOAMDMACodeToHRAM) ; aka BANK(GameInit)
-	CALL(aBankswitch);  // rst Bankswitch
+	RST(aBankswitch);  // rst Bankswitch
 
 	CALL(aWriteOAMDMACodeToHRAM);  // call WriteOAMDMACodeToHRAM
 
@@ -183,12 +169,12 @@ _ByteFill:
 
 	CALL(aDelayFrame);  // call DelayFrame
 
-	//PREDEF(aInitSGBBorder);  // predef InitSGBBorder
+	PREDEF(pInitSGBBorder);  // predef InitSGBBorder
 
 	CALL(aInitSound);  // call InitSound
 	XOR_A_A;  // xor a
 	LD_addr_A(wMapMusic);  // ld [wMapMusic], a
-	return aGameInit;  // jp GameInit
+	JP(aGameInit);  // jp GameInit
 
 }
 
@@ -196,13 +182,14 @@ int ClearVRAM(struct gb_s *gb){
 	LD_HL(VRAM_Begin);  // ld hl, VRAM_Begin
 	LD_BC(VRAM_End - VRAM_Begin);  // ld bc, VRAM_End - VRAM_Begin
 	XOR_A_A;  // xor a
-	return aByteFill;  // call ByteFill
+	CALL(aByteFill);  // call ByteFill
+	RET;  // ret
 
 }
 
 int BlankBGMap(struct gb_s *gb){
 	LD_A(" ");  // ld a, " "
-	return aFillBGMap;  // jr FillBGMap
+	JR(aFillBGMap);  // jr FillBGMap
 
 }
 
@@ -220,22 +207,21 @@ int FillBGMap(struct gb_s *gb){
 _loop:
 	LD_hli_A;  // ld [hli], a
 	DEC_E;  // dec e
-	IF_NZ goto _loop;  // jr nz, .loop
+	JR_NZ (aFillBGMap_loop);  // jr nz, .loop
 	DEC_D;  // dec d
-	IF_NZ goto _loop;  // jr nz, .loop
-	return -1;  // ret
+	JR_NZ (aFillBGMap_loop);  // jr nz, .loop
+	RET;  // ret
 
 }
 
 
-
 void init_function_pointers(){
     for(int i = 0; i < ROM_SIZE; i++) func[i] = NULL;
-	//func[aReset] = Reset;
-	//func[a_Start] = _Start;
-	//func[aInit] = Init;
-	//func[aClearVRAM] = ClearVRAM;
-	//func[aBlankBGMap] = BlankBGMap;
-	//func[aFillBGMap_l] = FillBGMap_l;
-	//func[aFillBGMap] = FillBGMap;
+	func[aReset] = Reset;
+	func[a_Start] = _Start;
+	func[aInit] = Init;
+	func[aClearVRAM] = ClearVRAM;
+	func[aBlankBGMap] = BlankBGMap;
+	func[aFillBGMap_l] = FillBGMap_l;
+	func[aFillBGMap] = FillBGMap;
 }
