@@ -2,6 +2,8 @@
 #include "macros.h"
 #include "global.h"
 
+#include "../C/constants/hardware_constants.h"
+#include "../C/constants/serial_constants.h"
 #include "../C/constants/wram_constants.h"
 
 #define ROM_SIZE 0x200000
@@ -119,7 +121,7 @@ _ByteFill:
 
 	CALL(aClearSprites);  // call ClearSprites
 
-	LD_A(BANK(WriteOAMDMACodeToHRAM));  // ld a, BANK(WriteOAMDMACodeToHRAM) ; aka BANK(GameInit)
+	LD_A(BANK(aWriteOAMDMACodeToHRAM));  // ld a, BANK(WriteOAMDMACodeToHRAM) ; aka BANK(GameInit)
 	CALL(aBankswitch);  // rst Bankswitch
 
 	CALL(aWriteOAMDMACodeToHRAM);  // call WriteOAMDMACodeToHRAM
@@ -194,8 +196,7 @@ int ClearVRAM(struct gb_s *gb){
 	LD_HL(VRAM_Begin);  // ld hl, VRAM_Begin
 	LD_BC(VRAM_End - VRAM_Begin);  // ld bc, VRAM_End - VRAM_Begin
 	XOR_A_A;  // xor a
-	CALL(aByteFill);  // call ByteFill
-	return -1;  // ret
+	return aByteFill;  // call ByteFill
 
 }
 
@@ -230,11 +231,11 @@ _loop:
 
 void init_function_pointers(){
     for(int i = 0; i < ROM_SIZE; i++) func[i] = NULL;
-	func[aReset] = Reset;
-	func[a_Start] = _Start;
-	func[aInit] = Init;
-	func[aClearVRAM] = ClearVRAM;
-	func[aBlankBGMap] = BlankBGMap;
-	func[aFillBGMap_l] = FillBGMap_l;
-	func[aFillBGMap] = FillBGMap;
+	//func[aReset] = Reset;
+	//func[a_Start] = _Start;
+	//func[aInit] = Init;
+	//func[aClearVRAM] = ClearVRAM;
+	//func[aBlankBGMap] = BlankBGMap;
+	//func[aFillBGMap_l] = FillBGMap_l;
+	//func[aFillBGMap] = FillBGMap;
 }
