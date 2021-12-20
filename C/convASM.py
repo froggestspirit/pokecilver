@@ -8,6 +8,7 @@ funcMapFile = "funcmap.h"
 currentFunc = ""
 funcList = []
 funcsKnown = []
+funcsKnownAddr = []
 funcRet = False
 
 def parse_line(string):
@@ -29,6 +30,8 @@ def parse_line_label(string):
     global currentFunc
     global funcList
     global funcRet
+    global funcsKnown
+    global funcsKnownAddr
     comment = ""
     asm = ""
     string = string.split(";")
@@ -42,7 +45,9 @@ def parse_line_label(string):
             asm = f"{asm}}}\n\n"
         asm = f"{asm}int {currentFunc}(struct gb_s *gb){{"
     elif len(string[0]) and string[0][0] == ".":
-        asm = f"\n_{string[0][1:].replace(':', '').strip()}:"
+        localLabel = string[0][1:].replace(':', '').strip()
+        localLabelID = funcsKnown.index(f"a{currentFunc}_{localLabel}")
+        asm = f"\n_{localLabel}:\n\tSET_PC({funcsKnownAddr[localLabelID]});"
     else:
         asm = f"{asm}{string[0]}"
     funcRet = False
@@ -124,11 +129,13 @@ def parse_asm(asm):
         return f"RET{cond};"
     elif opcode in ("jr"):
         cond = ""
+        preCond = ""
         if asm[0] in condition:
             cond = f"{condition[asm[0]]} "
+            preCond = "IF"
             asm = asm[1:]
         if asm[0][0] == ".":
-            return f"JR{cond}(a{currentFunc}_{asm[0][1:]});"
+            return f"{preCond}{cond} goto _{asm[0][1:]};"
         funcRet = True
         return f"JR{cond}(a{asm[0]});"
     elif opcode in ("jp"):
@@ -175,6 +182,7 @@ def main():
     global currentFunc
     global funcList
     global funcsKnown
+    global funcsKnownAddr
     parser = argparse.ArgumentParser()
     parser.add_argument("fileName")
     args = parser.parse_args()
@@ -182,6 +190,7 @@ def main():
     with open(funcMapFile, "r") as inFile:
         funcsFile = inFile.read().split("\n")
     funcsKnown = list(i.split(" ")[1] for i in funcsFile if i[:7] == "#define")
+    funcsKnownAddr = list(i.split(" ")[2] for i in funcsFile if i[:7] == "#define")
 
     with open(args.fileName, "r") as inFile:
         asmFile = inFile.read().split("\n")

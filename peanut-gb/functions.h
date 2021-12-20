@@ -1,10 +1,4 @@
 #include "peanut_gb.h"
-#include "macros.h"
-#include "global.h"
-
-#include "../C/constants/hardware_constants.h"
-#include "../C/constants/serial_constants.h"
-#include "../C/constants/wram_constants.h"
 
 #define ROM_SIZE 0x200000
 
@@ -12,6 +6,15 @@
 extern struct gb_s;
 
 int (*func[ROM_SIZE])(struct gb_s *gb);
+
+
+#include "macros.h"
+#include "global.h"
+
+#include "../C/constants/hardware_constants.h"
+#include "../C/constants/serial_constants.h"
+#include "../C/constants/wram_constants.h"
+
 
 int Reset(struct gb_s *gb){
 	CALL(aInitSound);  // call InitSound
@@ -32,16 +35,18 @@ int Reset(struct gb_s *gb){
 
 int _Start(struct gb_s *gb){
 	CP_A(0x11);  // cp $11
-	JR_Z (a_Start_cgb);  // jr z, .cgb
+	IF_Z  goto _cgb;  // jr z, .cgb
 	XOR_A_A;  // xor a ; FALSE
-	JR(a_Start_load);  // jr .load
+	 goto _load;  // jr .load
 
 
 _cgb:
+	SET_PC(0x05CD);
 	LD_A(TRUE);  // ld a, TRUE
 
 
 _load:
+	SET_PC(0x05CF);
 	LD_addr_A(hCGB);  // ldh [hCGB], a
 
 	return aInit;
@@ -72,9 +77,10 @@ int Init(struct gb_s *gb){
 
 
 _wait:
+	SET_PC(0x05F6);
 	LD_A(rLY);  // ldh a, [rLY]
 	CP_A(LY_VBLANK + 1);  // cp LY_VBLANK + 1
-	JR_NZ (aInit_wait);  // jr nz, .wait
+	IF_NZ  goto _wait;  // jr nz, .wait
 
 	XOR_A_A;  // xor a
 	LD_addr_A(rLCDC);  // ldh [rLCDC], a
@@ -84,12 +90,13 @@ _wait:
 	LD_BC(WRAM1_End - WRAM0_Begin);  // ld bc, WRAM1_End - WRAM0_Begin
 
 _ByteFill:
+	SET_PC(0x0605);
 	LD_hl(0);  // ld [hl], 0
 	INC_HL;  // inc hl
 	DEC_BC;  // dec bc
 	LD_A_B;  // ld a, b
 	OR_A_C;  // or c
-	JR_NZ (aInit_ByteFill);  // jr nz, .ByteFill
+	IF_NZ  goto _ByteFill;  // jr nz, .ByteFill
 
 	LD_SP(wStackTop);  // ld sp, wStackTop
 
@@ -205,11 +212,12 @@ int FillBGMap(struct gb_s *gb){
 	LD_L_E;  // ld l, e
 
 _loop:
+	SET_PC(0x06A2);
 	LD_hli_A;  // ld [hli], a
 	DEC_E;  // dec e
-	JR_NZ (aFillBGMap_loop);  // jr nz, .loop
+	IF_NZ  goto _loop;  // jr nz, .loop
 	DEC_D;  // dec d
-	JR_NZ (aFillBGMap_loop);  // jr nz, .loop
+	IF_NZ  goto _loop;  // jr nz, .loop
 	RET;  // ret
 
 }

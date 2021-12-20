@@ -1,11 +1,15 @@
 #include "../C/funcmap.h"
 
-#define INC_PC(x) gb->cpu_reg.pc+= x;
+#define SET_PC(x) gb->cpu_reg.pc = x;
+#define INC_PC(x) gb->cpu_reg.pc += x;
 
-#define IF_C	if(gb->cpu_reg.f_bits.c)
-#define IF_NC	if(!gb->cpu_reg.f_bits.c)
-#define IF_Z	if(gb->cpu_reg.f_bits.z)
-#define IF_NZ   if(!gb->cpu_reg.f_bits.z)
+//---- Only use these for the goto commands ----
+#define IF_C	INC_PC(2) if(gb->cpu_reg.f_bits.c)
+#define IF_NC	INC_PC(2) if(!gb->cpu_reg.f_bits.c)
+#define IF_Z	INC_PC(2) if(gb->cpu_reg.f_bits.z)
+#define IF_NZ   INC_PC(2) if(!gb->cpu_reg.f_bits.z)
+//----------------------------------------------
+
 #define imm8 __gb_read(gb, gb->cpu_reg.pc++)
 #define imm16 __gb_read(gb, gb->cpu_reg.pc++) + (__gb_read(gb, gb->cpu_reg.pc++) << 8)
 #define _bc_ __gb_read(gb, gb->cpu_reg.bc)
