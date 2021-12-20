@@ -1,3 +1,4 @@
+#pragma once
 // wLinkMode
 enum {
 	LINK_NULL = 0,    // 0

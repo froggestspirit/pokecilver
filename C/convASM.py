@@ -48,6 +48,10 @@ def parse_line_label(string):
         localLabel = string[0][1:].replace(':', '').strip()
         localLabelID = funcsKnown.index(f"a{currentFunc}_{localLabel}")
         asm = f"\n_{localLabel}:\n\tSET_PC({funcsKnownAddr[localLabelID]});"
+    elif string[0].split(" ")[0] == "rept":
+        asm = f"for(int rept = 0; rept < {string[0].split(' ')[1]}; rept++){{"
+    elif string[0].split(" ")[0] == "endr":
+        asm = "}"
     else:
         asm = f"{asm}{string[0]}"
     funcRet = False
@@ -100,13 +104,17 @@ def parse_asm(asm):
             asm[i] = curASM.replace(func, f"a{func}")
 
     if opcode in ("ld", "ldh"):
-        op = "LD"
+        op = opcode.upper()
         dest = "_addr"
         source = ""
         if asm[0] in register and asm[1] in register:  # Register into register
             return f"{op}{register[asm[0]]}{register[asm[1]]};"
         elif asm[0] in register:  # Non-register into register
-            return f"{op}{register[asm[0]]}({asm[1].strip('[]')});"
+            if "[" in asm[1]:
+                source = "_addr"
+            elif f"a{asm[1]}" in funcsKnown:
+                asm[1] = f"a{asm[1]}"
+            return f"{op}{register[asm[0]]}{source}({asm[1].strip('[]')});"
         elif asm[1] in register:  # register into address
             return f"{op}{dest}{register[asm[1]]}({asm[0].strip('[]')});"
         else:  # unknown
@@ -163,6 +171,8 @@ def parse_asm(asm):
         return f"{opcode.upper()}(p{asm[0]});"
     elif opcode in ("add","adc","sub","sbc","and","or","xor","cp"):
         op = opcode.upper()
+        if len(asm) == 2:
+            return f"{op}_HL{register[asm[1]]};"
         if asm[0] in register:  # Register
             return f"{op}_A{register[asm[0]]};"
         else:

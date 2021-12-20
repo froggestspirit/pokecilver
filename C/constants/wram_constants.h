@@ -1,3 +1,4 @@
+#pragma once
 // wInputType::
 #define AUTO_INPUT 0xff
 

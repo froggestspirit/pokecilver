@@ -1452,7 +1452,7 @@ void __gb_draw_line(struct gb_s *gb)
  * Internal function used to step the CPU.
  */
 
-#include "macros.h"
+#include "../C/macros.h"
 #include "functions.h"
 extern int (*func[ROM_SIZE])(struct gb_s *gb);
 
