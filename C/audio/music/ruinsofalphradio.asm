@@ -29,18 +29,18 @@ Music_RuinsOfAlphRadio_Ch1:
 .sub1:
 	octave 4
 	note G_, 1
-	note F#, 1
+	note Fs, 1
 	note G_, 1
-	note F#, 1
+	note Fs, 1
 	note C_, 8
 	sound_ret
 
 .sub2:
 	octave 4
 	note G_, 1
-	note F#, 1
+	note Fs, 1
 	note G_, 1
-	note F#, 1
+	note Fs, 1
 	note C_, 4
 	note G_, 1
 	octave 5
@@ -68,7 +68,7 @@ Music_RuinsOfAlphRadio_Ch3:
 .mainloop:
 	octave 2
 	note C_, 1
-	note C#, 1
+	note Cs, 1
 	note C_, 1
 	rest 16
 	sound_loop 0, .mainloop

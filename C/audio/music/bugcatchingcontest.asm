@@ -14,24 +14,24 @@ Music_BugCatchingContest_Ch1:
 	note_type 12, 11, 7
 	rest 8
 	octave 4
-	note C#, 1
+	note Cs, 1
 	rest 1
-	note C#, 3
+	note Cs, 3
 	rest 1
-	note C#, 1
-	note C#, 1
+	note Cs, 1
+	note Cs, 1
 	note D_, 1
 	rest 1
 	note D_, 3
 	rest 1
 	note D_, 1
 	note D_, 1
-	note D#, 1
+	note Ds, 1
 	rest 1
-	note D#, 3
+	note Ds, 3
 	rest 1
-	note D#, 1
-	note D#, 1
+	note Ds, 1
+	note Ds, 1
 	note E_, 1
 	rest 1
 	note E_, 3
@@ -98,7 +98,7 @@ Music_BugCatchingContest_Ch1:
 	sound_loop 3, .loop4
 	volume_envelope 10, 7
 	octave 4
-	note F#, 4
+	note Fs, 4
 	note A_, 4
 	rest 4
 	octave 3
@@ -122,24 +122,24 @@ Music_BugCatchingContest_Ch1:
 	note G_, 8
 	rest 4
 	octave 3
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	octave 4
 	note D_, 2
 	rest 2
 	octave 3
 	note A_, 2
-	note F#, 2
+	note Fs, 2
 	octave 4
-	note F#, 1
+	note Fs, 1
 	note G_, 1
-	note F#, 1
+	note Fs, 1
 	note G_, 1
-	note F#, 1
+	note Fs, 1
 	note G_, 1
-	note F#, 1
+	note Fs, 1
 	note G_, 1
-	note F#, 8
+	note Fs, 8
 	note D_, 2
 	rest 2
 	octave 3
@@ -154,32 +154,32 @@ Music_BugCatchingContest_Ch1:
 	octave 4
 	note B_, 2
 	rest 2
-	note G#, 2
+	note Gs, 2
 	note D_, 2
 	octave 3
 	note B_, 2
 	octave 4
 	note D_, 2
-	note G#, 2
+	note Gs, 2
 	note B_, 2
-	note C#, 2
+	note Cs, 2
 	rest 2
-	note C#, 6
+	note Cs, 6
 	rest 2
-	note C#, 2
-	note C#, 2
+	note Cs, 2
+	note Cs, 2
 	note D_, 2
 	rest 2
 	note D_, 6
 	rest 2
 	note D_, 2
 	note D_, 2
-	note D#, 2
+	note Ds, 2
 	rest 2
-	note D#, 6
+	note Ds, 6
 	rest 2
-	note D#, 2
-	note D#, 2
+	note Ds, 2
+	note Ds, 2
 	note E_, 2
 	rest 2
 	note E_, 6
@@ -232,9 +232,9 @@ Music_BugCatchingContest_Ch2:
 	note A_, 1
 	rest 1
 	octave 2
-	note G#, 2
+	note Gs, 2
 	octave 3
-	note G#, 1
+	note Gs, 1
 	rest 1
 	octave 2
 	note G_, 2
@@ -260,30 +260,30 @@ Music_BugCatchingContest_Ch2:
 	octave 2
 	note A_, 2
 	octave 4
-	note C#, 1
+	note Cs, 1
 	rest 1
 	octave 2
 	note E_, 2
 	octave 4
-	note C#, 1
+	note Cs, 1
 	rest 1
 	octave 2
 	note D_, 2
 	octave 3
-	note F#, 1
+	note Fs, 1
 	rest 1
 	octave 1
 	note A_, 2
 	octave 3
-	note F#, 1
+	note Fs, 1
 	rest 1
 	octave 1
 	note B_, 2
 	octave 3
-	note F#, 1
+	note Fs, 1
 	rest 1
 	octave 2
-	note D#, 2
+	note Ds, 2
 	octave 3
 	note A_, 1
 	rest 1
@@ -292,7 +292,7 @@ Music_BugCatchingContest_Ch2:
 	octave 5
 	note D_, 1
 	rest 1
-	note C#, 2
+	note Cs, 2
 	note D_, 1
 	rest 1
 	octave 4
@@ -301,7 +301,7 @@ Music_BugCatchingContest_Ch2:
 	octave 5
 	note D_, 1
 	rest 1
-	note C#, 2
+	note Cs, 2
 	note D_, 1
 	rest 1
 	octave 4
@@ -309,11 +309,11 @@ Music_BugCatchingContest_Ch2:
 	rest 2
 	octave 5
 	note D_, 4
-	note F#, 2
+	note Fs, 2
 	note E_, 2
 	note D_, 1
 	rest 1
-	note C#, 2
+	note Cs, 2
 	note D_, 1
 	rest 1
 	note E_, 1
@@ -332,22 +332,22 @@ Music_BugCatchingContest_Ch2:
 	octave 2
 	note D_, 2
 	octave 3
-	note F#, 1
+	note Fs, 1
 	rest 1
 	octave 1
 	note A_, 2
 	octave 3
-	note F#, 1
+	note Fs, 1
 	rest 1
 	octave 1
 	note B_, 2
 	octave 3
-	note F#, 1
+	note Fs, 1
 	rest 1
 	octave 2
-	note C#, 2
+	note Cs, 2
 	octave 3
-	note F#, 1
+	note Fs, 1
 	rest 1
 	octave 2
 	note E_, 2
@@ -360,12 +360,12 @@ Music_BugCatchingContest_Ch2:
 	note G_, 1
 	rest 1
 	octave 2
-	note C#, 2
+	note Cs, 2
 	octave 3
 	note G_, 1
 	rest 1
 	octave 2
-	note D#, 2
+	note Ds, 2
 	octave 3
 	note G_, 1
 	rest 1
@@ -396,22 +396,22 @@ Music_BugCatchingContest_Ch3:
 	rest 1
 	note C_, 1
 	note C_, 1
-	note C#, 1
+	note Cs, 1
 	rest 1
-	note C#, 3
+	note Cs, 3
 	rest 1
-	note C#, 1
-	note C#, 1
+	note Cs, 1
+	note Cs, 1
 .mainloop:
 	note_type 12, 1, 4
-	note F#, 5
+	note Fs, 5
 	rest 1
-	note F#, 1
+	note Fs, 1
 	note G_, 1
 	note A_, 4
 	octave 5
 	note D_, 4
-	note C#, 2
+	note Cs, 2
 	volume_envelope 1, 0
 	note E_, 1
 	note G_, 1
@@ -422,23 +422,23 @@ Music_BugCatchingContest_Ch3:
 	note_type 6, 2, 0
 	octave 6
 	note E_, 1
-	note F#, 1
+	note Fs, 1
 	note E_, 1
-	note F#, 1
+	note Fs, 1
 	note E_, 1
-	note F#, 1
+	note Fs, 1
 	note E_, 1
-	note F#, 1
+	note Fs, 1
 	note E_, 8
 	volume_envelope 1, 4
 	octave 4
 	note E_, 10
 	rest 2
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 8
 	octave 5
-	note C#, 8
+	note Cs, 8
 	rest 4
 	volume_envelope 1, 0
 	note E_, 2
@@ -448,18 +448,18 @@ Music_BugCatchingContest_Ch3:
 	note E_, 2
 	note C_, 2
 	octave 6
-	note C#, 1
+	note Cs, 1
 	note D_, 1
-	note C#, 1
+	note Cs, 1
 	note D_, 1
-	note C#, 1
+	note Cs, 1
 	note D_, 1
-	note C#, 1
+	note Cs, 1
 	note D_, 1
-	note C#, 8
+	note Cs, 8
 	volume_envelope 1, 5
 	octave 5
-	note F#, 4
+	note Fs, 4
 	rest 4
 	note G_, 4
 	rest 4
@@ -468,17 +468,17 @@ Music_BugCatchingContest_Ch3:
 	octave 6
 	note D_, 4
 	rest 4
-	note C#, 12
+	note Cs, 12
 	octave 5
 	note B_, 2
 	octave 6
-	note C#, 2
+	note Cs, 2
 	octave 5
 	note B_, 4
 	rest 4
 	octave 6
 	note G_, 4
-	note F#, 4
+	note Fs, 4
 	rest 4
 	octave 5
 	note G_, 4
@@ -487,19 +487,19 @@ Music_BugCatchingContest_Ch3:
 	octave 6
 	note E_, 4
 	note D_, 4
-	note C#, 4
+	note Cs, 4
 	octave 5
 	note B_, 2
 	octave 6
-	note C#, 2
+	note Cs, 2
 	note D_, 4
 	rest 8
 	octave 5
 	note B_, 4
 	note A_, 4
 	rest 1
-	note D#, 1
-	note F#, 1
+	note Ds, 1
+	note Fs, 1
 	note A_, 1
 	octave 6
 	note C_, 8
@@ -522,15 +522,15 @@ Music_BugCatchingContest_Ch3:
 	rest 2
 	note D_, 2
 	rest 2
-	note F#, 2
+	note Fs, 2
 	rest 2
 	octave 2
 	note A_, 2
 	rest 2
 	octave 3
-	note F#, 2
+	note Fs, 2
 	rest 2
-	note D#, 2
+	note Ds, 2
 	rest 2
 	octave 4
 	note C_, 2
@@ -550,7 +550,7 @@ Music_BugCatchingContest_Ch3:
 	rest 2
 	note B_, 2
 	rest 2
-	note G#, 2
+	note Gs, 2
 	rest 2
 	note B_, 2
 	rest 2
@@ -577,12 +577,12 @@ Music_BugCatchingContest_Ch3:
 	rest 2
 	note C_, 2
 	note C_, 2
-	note C#, 2
+	note Cs, 2
 	rest 2
-	note C#, 6
+	note Cs, 6
 	rest 2
-	note C#, 2
-	note C#, 2
+	note Cs, 2
+	note Cs, 2
 	sound_loop 0, .mainloop
 
 Music_BugCatchingContest_Ch4:

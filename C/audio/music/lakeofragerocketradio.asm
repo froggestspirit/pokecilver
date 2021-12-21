@@ -15,9 +15,9 @@ Music_LakeOfRageRocketRadio_Ch1:
 	note_type 12, 10, 7
 	octave 7
 	note G_, 4
-	note F#, 4
+	note Fs, 4
 	note G_, 4
-	note F#, 4
+	note Fs, 4
 	rest 16
 	sound_loop 0, .mainloop
 

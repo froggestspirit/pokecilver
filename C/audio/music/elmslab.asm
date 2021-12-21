@@ -23,7 +23,7 @@ Music_ElmsLab_Ch1:
 	note C_, 8
 	volume_envelope 11, 2
 	octave 2
-	note A#, 2
+	note As, 2
 	note A_, 2
 	note G_, 2
 	octave 3
@@ -37,7 +37,7 @@ Music_ElmsLab_Ch1:
 .mainloop:
 	rest 2
 	note A_, 2
-	note G#, 2
+	note Gs, 2
 	note A_, 2
 	volume_envelope 11, 7
 	octave 4
@@ -52,7 +52,7 @@ Music_ElmsLab_Ch1:
 	volume_envelope 11, 5
 	octave 3
 	note A_, 2
-	note G#, 2
+	note Gs, 2
 	note A_, 2
 	note F_, 2
 	volume_envelope 11, 7
@@ -65,7 +65,7 @@ Music_ElmsLab_Ch1:
 	note G_, 4
 	volume_envelope 11, 5
 	note A_, 2
-	note G#, 2
+	note Gs, 2
 	note A_, 2
 	volume_envelope 11, 7
 	note F_, 4
@@ -90,7 +90,7 @@ Music_ElmsLab_Ch1:
 	volume_envelope 11, 4
 	note G_, 2
 	note A_, 2
-	note A#, 2
+	note As, 2
 	note A_, 2
 	volume_envelope 11, 2
 	note G_, 4
@@ -109,7 +109,7 @@ Music_ElmsLab_Ch1:
 	octave 3
 	note F_, 4
 	note D_, 2
-	note A#, 4
+	note As, 4
 	note A_, 4
 	volume_envelope 11, 4
 	note G_, 2
@@ -119,7 +119,7 @@ Music_ElmsLab_Ch1:
 	note A_, 6
 	volume_envelope 11, 7
 	note E_, 4
-	note A#, 2
+	note As, 2
 	note E_, 6
 	volume_envelope 11, 3
 	note F_, 2
@@ -142,20 +142,20 @@ Music_ElmsLab_Ch1:
 	note D_, 2
 	note C_, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	note A_, 2
 	volume_envelope 11, 7
-	note A#, 8
+	note As, 8
 	octave 4
 	note E_, 4
 	note D_, 4
 	note C_, 4
 	octave 3
-	note A#, 4
+	note As, 4
 	octave 4
 	note C_, 4
 	note D_, 4
-	note D#, 4
+	note Ds, 4
 	note E_, 4
 	volume_envelope 11, 4
 	octave 3
@@ -199,7 +199,7 @@ Music_ElmsLab_Ch2:
 	note C_, 8
 	volume_envelope 12, 3
 	octave 3
-	note A#, 2
+	note As, 2
 	note A_, 2
 	note G_, 2
 	note E_, 2
@@ -232,9 +232,9 @@ Music_ElmsLab_Ch2:
 	volume_envelope 12, 7
 	note D_, 6
 	volume_envelope 12, 3
-	note C#, 2
+	note Cs, 2
 	note D_, 2
-	note C#, 2
+	note Cs, 2
 	note D_, 2
 	note E_, 2
 	volume_envelope 12, 7
@@ -245,14 +245,14 @@ Music_ElmsLab_Ch2:
 	octave 3
 	note A_, 10
 	volume_envelope 12, 3
-	note A#, 2
-	note A#, 2
+	note As, 2
+	note As, 2
 	octave 4
 	note D_, 2
 	volume_envelope 12, 5
 	note C_, 4
 	octave 3
-	note A#, 6
+	note As, 6
 	volume_envelope 12, 3
 	octave 4
 	note C_, 2
@@ -284,9 +284,9 @@ Music_ElmsLab_Ch2:
 	note A_, 4
 	volume_envelope 12, 3
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 1
 	note F_, 2
 	volume_envelope 12, 7
@@ -315,9 +315,9 @@ Music_ElmsLab_Ch2:
 	volume_envelope 12, 4
 	note G_, 2
 	note F_, 2
-	note A#, 2
+	note As, 2
 	note A_, 2
-	note A#, 1
+	note As, 1
 	octave 5
 	note C_, 2
 	note D_, 5
@@ -327,13 +327,13 @@ Music_ElmsLab_Ch2:
 	volume_envelope 12, 7
 	note C_, 4
 	octave 4
-	note A#, 4
+	note As, 4
 	note A_, 4
 	note G_, 4
 	octave 5
 	note C_, 4
 	octave 4
-	note A#, 4
+	note As, 4
 	note A_, 4
 	note G_, 4
 	volume_envelope 11, 0
@@ -411,13 +411,13 @@ Music_ElmsLab_Ch3:
 	note D_, 2
 	note E_, 2
 	note F_, 2
-	note A#, 2
+	note As, 2
 	note D_, 2
-	note A#, 2
+	note As, 2
 	note F_, 2
-	note A#, 2
+	note As, 2
 	note D_, 2
-	note A#, 2
+	note As, 2
 	note G_, 2
 	octave 4
 	note C_, 2
@@ -432,7 +432,7 @@ Music_ElmsLab_Ch3:
 	octave 3
 	note E_, 2
 	note A_, 2
-	note A#, 2
+	note As, 2
 	octave 4
 	note D_, 2
 	octave 3
@@ -440,7 +440,7 @@ Music_ElmsLab_Ch3:
 	octave 4
 	note D_, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	octave 4
 	note D_, 2
 	octave 3
@@ -451,7 +451,7 @@ Music_ElmsLab_Ch3:
 	rest 2
 	note C_, 4
 	octave 3
-	note A#, 4
+	note As, 4
 	note G_, 4
 	note F_, 2
 	note A_, 2
@@ -462,11 +462,11 @@ Music_ElmsLab_Ch3:
 	note C_, 2
 	note A_, 2
 	note G_, 2
-	note A#, 2
+	note As, 2
 	note D_, 2
-	note A#, 2
+	note As, 2
 	note G_, 2
-	note A#, 2
+	note As, 2
 	note D_, 2
 	note A_, 2
 	note E_, 2
@@ -494,11 +494,11 @@ Music_ElmsLab_Ch3:
 	note C_, 2
 	note A_, 2
 	note G_, 2
-	note A#, 2
+	note As, 2
 	note D_, 2
-	note A#, 2
+	note As, 2
 	note G_, 2
-	note A#, 2
+	note As, 2
 	note A_, 2
 	note G_, 2
 	note C_, 4
@@ -507,7 +507,7 @@ Music_ElmsLab_Ch3:
 	note G_, 4
 	note E_, 4
 	note F_, 4
-	note F#, 4
+	note Fs, 4
 	note G_, 4
 	note F_, 2
 	note A_, 2

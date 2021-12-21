@@ -7,19 +7,19 @@
 
 
 int Reset(struct gb_s *gb){
-	CALL(aInitSound);  // call InitSound
+	CALL(mInitSound);  // call InitSound
 	XOR_A_A;  // xor a
 	LDH_addr_A(hMapAnims);  // ldh [hMapAnims], a
-	CALL(aClearPalettes);  // call ClearPalettes
+	CALL(mClearPalettes);  // call ClearPalettes
 	  // ei
 
 	LD_HL(wJoypadDisable);  // ld hl, wJoypadDisable
 	SET_hl(JOYPAD_DISABLE_SGB_TRANSFER_F);  // set JOYPAD_DISABLE_SGB_TRANSFER_F, [hl]
 
 	LD_C(32);  // ld c, 32
-	CALL(aDelayFrames);  // call DelayFrames
+	CALL(mDelayFrames);  // call DelayFrames
 
-	JR(aInit);  // jr Init
+	JR(mInit);  // jr Init
 
 }
 
@@ -39,7 +39,7 @@ _load:
 	SET_PC(0x05CF);
 	LDH_addr_A(hCGB);  // ldh [hCGB], a
 
-	return aInit;
+	return mInit;
 }
 
 int Init(struct gb_s *gb){
@@ -90,7 +90,7 @@ _ByteFill:
 
 	LD_SP(wStackTop);  // ld sp, wStackTop
 
-	CALL(aClearVRAM);  // call ClearVRAM
+	CALL(mClearVRAM);  // call ClearVRAM
 
 //  Clear HRAM
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
@@ -98,16 +98,16 @@ _ByteFill:
 	XOR_A_A;  // xor a
 	LD_HL(HRAM_Begin);  // ld hl, HRAM_Begin
 	LD_BC(HRAM_End - HRAM_Begin);  // ld bc, HRAM_End - HRAM_Begin
-	CALL(aByteFill);  // call ByteFill
+	CALL(mByteFill);  // call ByteFill
 	POP_AF;  // pop af
 	LDH_addr_A(hCGB);  // ldh [hCGB], a
 
-	CALL(aClearSprites);  // call ClearSprites
+	CALL(mClearSprites);  // call ClearSprites
 
 	LD_A(BANK(aWriteOAMDMACodeToHRAM));  // ld a, BANK(WriteOAMDMACodeToHRAM) ; aka BANK(GameInit)
-	RST(aBankswitch);  // rst Bankswitch
+	RST(mBankswitch);  // rst Bankswitch
 
-	CALL(aWriteOAMDMACodeToHRAM);  // call WriteOAMDMACodeToHRAM
+	CALL(mWriteOAMDMACodeToHRAM);  // call WriteOAMDMACodeToHRAM
 
 	XOR_A_A;  // xor a
 	LDH_addr_A(hMapAnims);  // ldh [hMapAnims], a
@@ -130,9 +130,9 @@ _ByteFill:
 	LDH_addr_A(hSerialConnectionStatus);  // ldh [hSerialConnectionStatus], a
 
 	LD_H(HIGH(vBGMap0));  // ld h, HIGH(vBGMap0)
-	CALL(aBlankBGMap);  // call BlankBGMap
+	CALL(mBlankBGMap);  // call BlankBGMap
 	LD_H(HIGH(vBGMap1));  // ld h, HIGH(vBGMap1)
-	CALL(aBlankBGMap);  // call BlankBGMap
+	CALL(mBlankBGMap);  // call BlankBGMap
 
 	CALLFAR(aInitCGBPals);  // callfar InitCGBPals
 
@@ -164,14 +164,14 @@ _ByteFill:
 	LDH_addr_A(rIE);  // ldh [rIE], a
 	  // ei
 
-	CALL(aDelayFrame);  // call DelayFrame
+	CALL(mDelayFrame);  // call DelayFrame
 
 	PREDEF(pInitSGBBorder);  // predef InitSGBBorder
 
-	CALL(aInitSound);  // call InitSound
+	CALL(mInitSound);  // call InitSound
 	XOR_A_A;  // xor a
 	LD_addr_A(wMapMusic);  // ld [wMapMusic], a
-	JP(aGameInit);  // jp GameInit
+	JP(mGameInit);  // jp GameInit
 
 }
 
@@ -179,14 +179,14 @@ int ClearVRAM(struct gb_s *gb){
 	LD_HL(VRAM_Begin);  // ld hl, VRAM_Begin
 	LD_BC(VRAM_End - VRAM_Begin);  // ld bc, VRAM_End - VRAM_Begin
 	XOR_A_A;  // xor a
-	CALL(aByteFill);  // call ByteFill
+	CALL(mByteFill);  // call ByteFill
 	RET;  // ret
 
 }
 
 int BlankBGMap(struct gb_s *gb){
 	LD_A(" ");  // ld a, " "
-	JR(aFillBGMap);  // jr FillBGMap
+	JR(mFillBGMap);  // jr FillBGMap
 
 }
 
@@ -194,7 +194,7 @@ int FillBGMap_l(struct gb_s *gb){  //  unreferenced
 	LD_A_L;  // ld a, l
 // ; fallthrough
 
-	return aFillBGMap;
+	return mFillBGMap;
 }
 
 int FillBGMap(struct gb_s *gb){
@@ -211,3 +211,4 @@ _loop:
 	RET;  // ret
 
 }
+

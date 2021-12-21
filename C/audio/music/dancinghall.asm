@@ -263,7 +263,7 @@ Music_DancingHall_Ch3:
 	note D_, 2
 	note E_, 2
 	note A_, 2
-	note A#, 1
+	note As, 1
 	note B_, 3
 	note_type 8, 1, 3
 	note A_, 1
@@ -284,7 +284,7 @@ Music_DancingHall_Ch3:
 	note A_, 1
 	note F_, 1
 	note_type 6, 1, 3
-	note D#, 1
+	note Ds, 1
 	note E_, 3
 	note D_, 4
 	octave 4

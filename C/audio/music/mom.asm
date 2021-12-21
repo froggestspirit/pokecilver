@@ -14,21 +14,21 @@ Music_Mom_Ch2:
 	note B_, 1
 	octave 4
 	note E_, 1
-	note G#, 1
+	note Gs, 1
 	note A_, 1
 	note B_, 8
 .mainloop:
 	note_type 12, 11, 1
 	rest 4
 	octave 3
-	note C#, 6
+	note Cs, 6
 	note D_, 4
 	note C_, 2
 	rest 2
-	note C#, 6
+	note Cs, 6
 	octave 2
 	note E_, 4
-	note A#, 2
+	note As, 2
 	note B_, 2
 	sound_loop 0, .mainloop
 
@@ -40,7 +40,7 @@ Music_Mom_Ch3:
 	note D_, 1
 	octave 2
 	note B_, 1
-	note G#, 1
+	note Gs, 1
 	note E_, 8
 	volume_envelope 2, 3
 .mainloop:
@@ -57,8 +57,8 @@ Music_Mom_Ch3:
 	note D_, 2
 	rest 2
 	octave 4
-	note F#, 8
-	note D#, 2
+	note Fs, 8
+	note Ds, 2
 	rest 2
 	octave 2
 	note A_, 2
@@ -72,7 +72,7 @@ Music_Mom_Ch3:
 	octave 4
 	note D_, 2
 	rest 6
-	note C#, 4
+	note Cs, 4
 	note D_, 2
 	rest 2
 	sound_loop 0, .mainloop

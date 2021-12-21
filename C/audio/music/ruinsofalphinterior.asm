@@ -22,26 +22,26 @@ Music_RuinsOfAlphInterior_Ch2:
 	octave 4
 	note C_, 4
 	octave 3
-	note A#, 4
+	note As, 4
 	octave 4
-	note C#, 2
-	note D#, 2
+	note Cs, 2
+	note Ds, 2
 	note C_, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	octave 4
 	note C_, 4
 	octave 3
-	note A#, 4
+	note As, 4
 	sound_loop 0, .mainloop
 
 Music_RuinsOfAlphInterior_Ch3:
 	note_type 12, 1, 0
 .mainloop:
 	octave 2
-	note G#, 2
+	note Gs, 2
 	octave 3
-	note C#, 2
+	note Cs, 2
 	note E_, 2
 	rest 10
 	sound_loop 0, .mainloop

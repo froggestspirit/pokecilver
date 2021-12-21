@@ -63,7 +63,7 @@ Music_PokemonLullaby_Ch2:
 	rest 10
 	octave 4
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	volume_envelope 11, 7
 	note E_, 12
@@ -87,7 +87,7 @@ Music_PokemonLullaby_Ch2:
 	volume_envelope 11, 5
 	note G_, 2
 	note G_, 2
-	note D#, 2
+	note Ds, 2
 	volume_envelope 11, 7
 	note E_, 14
 	volume_envelope 8, 7
@@ -99,7 +99,7 @@ Music_PokemonLullaby_Ch2:
 	note G_, 2
 	note G_, 2
 	volume_envelope 11, 7
-	note D#, 2
+	note Ds, 2
 	note E_, 16
 	rest 14
 	sound_loop 0, .mainloop

@@ -22,10 +22,10 @@ Music_Route36_Ch1:
 	note F_, 8
 	volume_envelope 11, 3
 	note F_, 6
-	note A#, 1
+	note As, 1
 	note A_, 1
 	volume_envelope 5, -5
-	note A#, 4
+	note As, 4
 .mainloop:
 	volume_envelope 11, 5
 	note F_, 4
@@ -35,11 +35,11 @@ Music_Route36_Ch1:
 	note E_, 2
 	note F_, 2
 	note A_, 2
-	note D#, 2
-	note A#, 4
+	note Ds, 2
+	note As, 4
 	note A_, 4
 	note G_, 2
-	note A#, 4
+	note As, 4
 	note F_, 4
 	note A_, 2
 	note G_, 2
@@ -48,12 +48,12 @@ Music_Route36_Ch1:
 	note F_, 2
 	note A_, 2
 	note G_, 2
-	note A#, 4
+	note As, 4
 	note A_, 4
 	octave 4
-	note D#, 4
+	note Ds, 4
 	octave 3
-	note A#, 2
+	note As, 2
 	volume_envelope 11, 6
 	octave 4
 	note F_, 10
@@ -62,24 +62,24 @@ Music_Route36_Ch1:
 	note F_, 2
 	note C_, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	octave 4
-	note D#, 4
+	note Ds, 4
 	note D_, 4
 	note C_, 2
 	octave 3
-	note A#, 4
+	note As, 4
 	volume_envelope 11, 4
 	note A_, 2
 	octave 4
 	note D_, 2
 	octave 3
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	octave 4
 	note D_, 2
 	octave 3
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	octave 4
 	note D_, 2
@@ -88,12 +88,12 @@ Music_Route36_Ch1:
 	note A_, 2
 	octave 4
 	note D_, 2
-	note F#, 2
+	note Fs, 2
 	octave 3
 	note A_, 2
 	octave 4
 	note D_, 2
-	note F#, 2
+	note Fs, 2
 	octave 3
 	note A_, 2
 	octave 4
@@ -119,7 +119,7 @@ Music_Route36_Ch1:
 	octave 2
 	note A_, 6
 	octave 3
-	note F#, 6
+	note Fs, 6
 	note E_, 4
 	note D_, 6
 	octave 2
@@ -127,16 +127,16 @@ Music_Route36_Ch1:
 	octave 3
 	note D_, 4
 	volume_envelope 11, 5
-	note F#, 6
+	note Fs, 6
 	note E_, 6
-	note C#, 4
+	note Cs, 4
 	note D_, 6
 	note A_, 6
 	note G_, 4
 	octave 2
 	note A_, 6
 	octave 3
-	note F#, 6
+	note Fs, 6
 	note D_, 4
 	note C_, 6
 	note G_, 6
@@ -149,7 +149,7 @@ Music_Route36_Ch1:
 	note E_, 2
 	note G_, 2
 	note A_, 2
-	note G#, 2
+	note Gs, 2
 	note A_, 2
 	octave 4
 	note D_, 6
@@ -160,7 +160,7 @@ Music_Route36_Ch1:
 	note D_, 6
 	stereo_panning FALSE, TRUE
 	volume_envelope 11, 5
-	note D#, 2
+	note Ds, 2
 	note E_, 2
 	sound_loop 0, .mainloop
 
@@ -199,9 +199,9 @@ Music_Route36_Ch2:
 	note A_, 2
 	note G_, 3
 	volume_envelope 12, 2
-	note D#, 1
+	note Ds, 1
 	volume_envelope 12, 7
-	note D#, 12
+	note Ds, 12
 	note C_, 10
 	volume_envelope 12, 4
 	octave 3
@@ -210,8 +210,8 @@ Music_Route36_Ch2:
 	note C_, 2
 	note F_, 2
 	volume_envelope 12, 2
-	note D#, 2
-	note D#, 1
+	note Ds, 2
+	note Ds, 1
 	note F_, 1
 	volume_envelope 12, 7
 	note G_, 12
@@ -222,11 +222,11 @@ Music_Route36_Ch2:
 	octave 5
 	note C_, 2
 	octave 4
-	note A#, 3
+	note As, 3
 	note A_, 1
 	volume_envelope 12, 7
 	note G_, 8
-	note A#, 4
+	note As, 4
 	volume_envelope 11, 0
 	note A_, 16
 	volume_envelope 11, 7
@@ -236,43 +236,43 @@ Music_Route36_Ch2:
 	octave 3
 	note A_, 6
 	note G_, 6
-	note F#, 4
+	note Fs, 4
 	note E_, 6
-	note F#, 6
+	note Fs, 6
 	note G_, 4
 	volume_envelope 11, 3
 	note A_, 2
-	note F#, 1
+	note Fs, 1
 	note A_, 1
 	volume_envelope 11, 7
 	octave 4
 	note D_, 12
 	volume_envelope 10, 4
 	octave 3
-	note F#, 2
+	note Fs, 2
 	note D_, 1
-	note F#, 1
+	note Fs, 1
 	volume_envelope 10, 7
 	note A_, 12
 	volume_envelope 12, 7
 	note A_, 6
 	note G_, 6
-	note F#, 4
+	note Fs, 4
 	note B_, 6
 	note A_, 6
 	note G_, 4
 	volume_envelope 12, 3
 	note A_, 2
-	note F#, 1
+	note Fs, 1
 	note A_, 1
 	volume_envelope 12, 7
 	octave 4
 	note D_, 12
 	volume_envelope 12, 3
 	octave 3
-	note F#, 2
+	note Fs, 2
 	note D_, 1
-	note F#, 1
+	note Fs, 1
 	volume_envelope 12, 7
 	note A_, 12
 	volume_envelope 12, 2
@@ -292,12 +292,12 @@ Music_Route36_Ch2:
 	volume_envelope 12, 7
 	octave 4
 	note C_, 8
-	note C#, 4
+	note Cs, 4
 	stereo_panning TRUE, TRUE
 	note D_, 6
 	note A_, 6
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	volume_envelope 11, 0
 	note D_, 4
 	volume_envelope 11, 7
@@ -305,7 +305,7 @@ Music_Route36_Ch2:
 	stereo_panning TRUE, FALSE
 	volume_envelope 12, 4
 	octave 3
-	note F#, 1
+	note Fs, 1
 	note G_, 1
 	note A_, 1
 	note B_, 1
@@ -324,16 +324,16 @@ Music_Route36_Ch3:
 	note C_, 2
 	note F_, 2
 	note C_, 2
-	note D#, 1
+	note Ds, 1
 	rest 3
-	note D#, 1
+	note Ds, 1
 	rest 1
 	octave 4
 	note F_, 4
 	octave 2
-	note A#, 2
+	note As, 2
 	octave 3
-	note D#, 2
+	note Ds, 2
 	note E_, 2
 .mainloop:
 	note F_, 4
@@ -343,11 +343,11 @@ Music_Route36_Ch3:
 	note F_, 2
 	note C_, 2
 	note G_, 4
-	note D#, 2
+	note Ds, 2
 	note G_, 4
-	note D#, 2
+	note Ds, 2
 	note G_, 2
-	note D#, 2
+	note Ds, 2
 	note F_, 4
 	note C_, 2
 	note F_, 4
@@ -355,28 +355,28 @@ Music_Route36_Ch3:
 	note F_, 2
 	note C_, 2
 	note G_, 4
-	note D#, 2
+	note Ds, 2
 	note G_, 4
-	note D#, 2
+	note Ds, 2
 	note G_, 2
-	note D#, 2
+	note Ds, 2
 	note A_, 4
 	note F_, 2
 	note A_, 4
 	note F_, 2
 	note A_, 2
 	note F_, 2
-	note A#, 4
+	note As, 4
 	note G_, 2
-	note A#, 4
+	note As, 4
 	note G_, 2
-	note A#, 2
+	note As, 2
 	note G_, 2
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 2
+	note Fs, 2
 	note D_, 2
 	note D_, 4
 	octave 2
@@ -390,11 +390,11 @@ Music_Route36_Ch3:
 	octave 2
 	note A_, 2
 	octave 3
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 2
+	note Fs, 2
 	note D_, 2
 	note G_, 4
 	note E_, 2
@@ -402,23 +402,23 @@ Music_Route36_Ch3:
 	note E_, 2
 	note G_, 2
 	note E_, 2
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 2
+	note Fs, 2
 	note D_, 2
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 4
+	note Fs, 4
 	note D_, 2
 	note E_, 2
 	note A_, 2
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 2
+	note Fs, 2
 	note D_, 2
 	note G_, 4
 	note E_, 2
@@ -426,17 +426,17 @@ Music_Route36_Ch3:
 	note E_, 2
 	note G_, 2
 	note E_, 2
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 2
+	note Fs, 2
 	note D_, 2
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 2
+	note Fs, 2
 	note D_, 2
 	note G_, 4
 	note C_, 2
@@ -452,7 +452,7 @@ Music_Route36_Ch3:
 	note G_, 2
 	note A_, 6
 	octave 4
-	note F#, 4
+	note Fs, 4
 	octave 3
 	note D_, 2
 	note A_, 2
@@ -460,10 +460,10 @@ Music_Route36_Ch3:
 	note D_, 2
 	note C_, 3
 	note E_, 1
-	note F#, 6
+	note Fs, 6
 	octave 3
 	note D_, 2
-	note D#, 2
+	note Ds, 2
 	note E_, 2
 	sound_loop 0, .mainloop
 

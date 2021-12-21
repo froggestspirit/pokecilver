@@ -41,7 +41,7 @@ Music_ContestResults_Ch1:
 	rest 2
 	note B_, 1
 	rest 3
-	note A#, 1
+	note As, 1
 	rest 3
 	note A_, 1
 	rest 3
@@ -88,7 +88,7 @@ Music_ContestResults_Ch2:
 	note F_, 1
 	rest 1
 	octave 2
-	note C#, 2
+	note Cs, 2
 	octave 3
 	note F_, 1
 	rest 1
@@ -112,7 +112,7 @@ Music_ContestResults_Ch2:
 	octave 2
 	note D_, 2
 	octave 3
-	note F#, 1
+	note Fs, 1
 	rest 1
 	octave 2
 	note G_, 2

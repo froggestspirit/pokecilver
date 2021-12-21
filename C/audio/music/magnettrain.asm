@@ -61,9 +61,9 @@ Music_MagnetTrain_Ch1:
 	note E_, 1
 	note C_, 1
 	note_type 6, 11, 7
-	note F#, 1
+	note Fs, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note_type 12, 11, 7
 	note D_, 16
@@ -115,36 +115,36 @@ Music_MagnetTrain_Ch3:
 	note C_, 1
 	octave 5
 	note G_, 1
-	note D#, 1
+	note Ds, 1
 	note C_, 1
 	note G_, 1
-	note D#, 1
+	note Ds, 1
 	note C_, 1
 	octave 4
 	note G_, 1
 	octave 5
-	note D#, 1
+	note Ds, 1
 	note C_, 1
 	octave 4
 	note G_, 1
-	note D#, 1
+	note Ds, 1
 	octave 5
 	note C_, 1
 	octave 4
 	note G_, 1
-	note D#, 1
+	note Ds, 1
 	note C_, 1
 	note G_, 1
-	note D#, 1
+	note Ds, 1
 	note C_, 1
 	octave 3
 	note G_, 1
 	octave 4
 	note C_, 1
-	note D#, 1
+	note Ds, 1
 	note G_, 1
 	note C_, 1
-	note D#, 1
+	note Ds, 1
 	note G_, 1
 	octave 5
 	note C_, 1
@@ -152,7 +152,7 @@ Music_MagnetTrain_Ch3:
 	note G_, 1
 	octave 5
 	note C_, 1
-	note D#, 1
+	note Ds, 1
 	note G_, 1
 	note C_, 1
 	octave 2

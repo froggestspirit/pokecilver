@@ -134,7 +134,7 @@ Music_PokeFluteChannel_Ch2:
 	note D_, 2
 	octave 2
 	note D_, 2
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	octave 3
 	note D_, 2
@@ -190,7 +190,7 @@ Music_PokeFluteChannel_Ch3:
 	note C_, 2
 	octave 5
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	octave 6
 	note C_, 4
@@ -202,7 +202,7 @@ Music_PokeFluteChannel_Ch3:
 	note G_, 2
 	note A_, 4
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 8
 	rest 4
 	sound_call .sub1

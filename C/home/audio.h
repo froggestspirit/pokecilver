@@ -1,10 +1,14 @@
 #include "../macros.h"
 #include "../global.h"
 
+#include "../constants/audio_constants.h"
+#include "../constants/gfx_constants.h"
 #include "../constants/hardware_constants.h"
+#include "../constants/map_constants.h"
+#include "../constants/music_constants.h"
 #include "../constants/serial_constants.h"
 #include "../constants/wram_constants.h"
-
+#define MON_CRY_LENGTH 6
 
 //  Audio interfaces.
 
@@ -20,7 +24,7 @@ int InitSound(struct gb_s *gb){
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
 
-	CALL(a_InitSound);  // call _InitSound
+	CALL(m_InitSound);  // call _InitSound
 
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
@@ -46,7 +50,7 @@ int UpdateSound(struct gb_s *gb){
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
 
-	CALL(a_UpdateSound);  // call _UpdateSound
+	CALL(m_UpdateSound);  // call _UpdateSound
 
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
@@ -93,13 +97,13 @@ int PlayMusic(struct gb_s *gb){
 	AND_A_A;  // and a
 	IF_Z  goto _nomusic;  // jr z, .nomusic
 
-	CALL(a_PlayMusic);  // call _PlayMusic
+	CALL(m_PlayMusic);  // call _PlayMusic
 	 goto _end;  // jr .end
 
 
 _nomusic:
 	SET_PC(0x3DAB);
-	CALL(a_InitSound);  // call _InitSound
+	CALL(m_InitSound);  // call _InitSound
 
 
 _end:
@@ -131,10 +135,10 @@ int PlayMusic2(struct gb_s *gb){
 
 	PUSH_DE;  // push de
 	LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
-	CALL(a_PlayMusic);  // call _PlayMusic
-	CALL(aDelayFrame);  // call DelayFrame
+	CALL(m_PlayMusic);  // call _PlayMusic
+	CALL(mDelayFrame);  // call DelayFrame
 	POP_DE;  // pop de
-	CALL(a_PlayMusic);  // call _PlayMusic
+	CALL(m_PlayMusic);  // call _PlayMusic
 
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
@@ -164,7 +168,7 @@ int PlayCry(struct gb_s *gb){
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
 
-	LD_HL(aPokemonCries);  // ld hl, PokemonCries
+	LD_HL(mPokemonCries);  // ld hl, PokemonCries
 for(int rept = 0; rept < MON_CRY_LENGTH; rept++){
 	ADD_HL_DE;  // add hl, de
 }
@@ -187,7 +191,7 @@ for(int rept = 0; rept < MON_CRY_LENGTH; rept++){
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
 
-	CALL(a_PlayCry);  // call _PlayCry
+	CALL(m_PlayCry);  // call _PlayCry
 
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
@@ -211,7 +215,7 @@ int PlaySFX(struct gb_s *gb){
 	PUSH_AF;  // push af
 
 // ; Is something already playing?
-	CALL(aCheckSFX);  // call CheckSFX
+	CALL(mCheckSFX);  // call CheckSFX
 	IF_NC  goto _play;  // jr nc, .play
 
 // ; Does it have priority?
@@ -230,7 +234,7 @@ _play:
 
 	LD_A_E;  // ld a, e
 	LD_addr_A(wCurSFX);  // ld [wCurSFX], a
-	CALL(a_PlaySFX);  // call _PlaySFX
+	CALL(m_PlaySFX);  // call _PlaySFX
 
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
@@ -248,8 +252,8 @@ _done:
 }
 
 int WaitPlaySFX(struct gb_s *gb){
-	CALL(aWaitSFX);  // call WaitSFX
-	CALL(aPlaySFX);  // call PlaySFX
+	CALL(mWaitSFX);  // call WaitSFX
+	CALL(mPlaySFX);  // call PlaySFX
 	RET;  // ret
 
 }
@@ -323,7 +327,7 @@ _loop:
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
 	DEC_A;  // dec a
-	CALL(aUpdateSound);  // call UpdateSound
+	CALL(mUpdateSound);  // call UpdateSound
 	 goto _loop;  // jr .loop
 
 }
@@ -334,7 +338,7 @@ int FadeToMapMusic(struct gb_s *gb){
 	PUSH_BC;  // push bc
 	PUSH_AF;  // push af
 
-	CALL(aGetMapMusic_MaybeSpecial);  // call GetMapMusic_MaybeSpecial
+	CALL(mGetMapMusic_MaybeSpecial);  // call GetMapMusic_MaybeSpecial
 	LD_A_addr(wMapMusic);  // ld a, [wMapMusic]
 	CP_A_E;  // cp e
 	IF_Z  goto _done;  // jr z, .done
@@ -365,19 +369,19 @@ int PlayMapMusic(struct gb_s *gb){
 	PUSH_BC;  // push bc
 	PUSH_AF;  // push af
 
-	CALL(aGetMapMusic_MaybeSpecial);  // call GetMapMusic_MaybeSpecial
+	CALL(mGetMapMusic_MaybeSpecial);  // call GetMapMusic_MaybeSpecial
 	LD_A_addr(wMapMusic);  // ld a, [wMapMusic]
 	CP_A_E;  // cp e
 	IF_Z  goto _done;  // jr z, .done
 
 	PUSH_DE;  // push de
 	LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
-	CALL(aPlayMusic);  // call PlayMusic
-	CALL(aDelayFrame);  // call DelayFrame
+	CALL(mPlayMusic);  // call PlayMusic
+	CALL(mDelayFrame);  // call DelayFrame
 	POP_DE;  // pop de
 	LD_A_E;  // ld a, e
 	LD_addr_A(wMapMusic);  // ld [wMapMusic], a
-	CALL(aPlayMusic);  // call PlayMusic
+	CALL(mPlayMusic);  // call PlayMusic
 
 
 _done:
@@ -403,19 +407,19 @@ int PlayMapMusicBike(struct gb_s *gb){
 	LD_A_addr(wPlayerState);  // ld a, [wPlayerState]
 	CP_A(PLAYER_BIKE);  // cp PLAYER_BIKE
 	IF_Z  goto _play;  // jr z, .play
-	CALL(aGetMapMusic_MaybeSpecial);  // call GetMapMusic_MaybeSpecial
+	CALL(mGetMapMusic_MaybeSpecial);  // call GetMapMusic_MaybeSpecial
 
 _play:
 	SET_PC(0x3ED6);
 	PUSH_DE;  // push de
 	LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
-	CALL(aPlayMusic);  // call PlayMusic
-	CALL(aDelayFrame);  // call DelayFrame
+	CALL(mPlayMusic);  // call PlayMusic
+	CALL(mDelayFrame);  // call DelayFrame
 	POP_DE;  // pop de
 
 	LD_A_E;  // ld a, e
 	LD_addr_A(wMapMusic);  // ld [wMapMusic], a
-	CALL(aPlayMusic);  // call PlayMusic
+	CALL(mPlayMusic);  // call PlayMusic
 
 	POP_AF;  // pop af
 	POP_BC;  // pop bc
@@ -428,12 +432,12 @@ _play:
 int TryRestartMapMusic(struct gb_s *gb){
 	LD_A_addr(wDontPlayMapMusicOnReload);  // ld a, [wDontPlayMapMusicOnReload]
 	AND_A_A;  // and a
-	JR_Z (aRestartMapMusic);  // jr z, RestartMapMusic
+	JR_Z (mRestartMapMusic);  // jr z, RestartMapMusic
 	XOR_A_A;  // xor a
 	LD_addr_A(wMapMusic);  // ld [wMapMusic], a
 	LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
-	CALL(aPlayMusic);  // call PlayMusic
-	CALL(aDelayFrame);  // call DelayFrame
+	CALL(mPlayMusic);  // call PlayMusic
+	CALL(mDelayFrame);  // call DelayFrame
 	XOR_A_A;  // xor a
 	LD_addr_A(wDontPlayMapMusicOnReload);  // ld [wDontPlayMapMusicOnReload], a
 	RET;  // ret
@@ -446,12 +450,12 @@ int RestartMapMusic(struct gb_s *gb){
 	PUSH_BC;  // push bc
 	PUSH_AF;  // push af
 	LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
-	CALL(aPlayMusic);  // call PlayMusic
-	CALL(aDelayFrame);  // call DelayFrame
+	CALL(mPlayMusic);  // call PlayMusic
+	CALL(mDelayFrame);  // call DelayFrame
 	LD_A_addr(wMapMusic);  // ld a, [wMapMusic]
 	LD_E_A;  // ld e, a
 	LD_D(0);  // ld d, 0
-	CALL(aPlayMusic);  // call PlayMusic
+	CALL(mPlayMusic);  // call PlayMusic
 	POP_AF;  // pop af
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
@@ -513,9 +517,9 @@ _ranking:
 }
 
 int GetMapMusic_MaybeSpecial(struct gb_s *gb){
-	CALL(aSpecialMapMusic);  // call SpecialMapMusic
+	CALL(mSpecialMapMusic);  // call SpecialMapMusic
 	RET_C ;  // ret c
-	CALL(aGetMapMusic);  // call GetMapMusic
+	CALL(mGetMapMusic);  // call GetMapMusic
 	RET;  // ret
 
 }

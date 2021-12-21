@@ -17,12 +17,12 @@ Music_IndigoPlateau_Ch1:
 	note D_, 4
 	sound_call .sub1
 	octave 3
-	note D#, 4
+	note Ds, 4
 	sound_call .sub1
 	octave 3
-	note D#, 4
+	note Ds, 4
 	sound_call .sub1
-	note A#, 4
+	note As, 4
 	sound_loop 0, .mainloop
 
 .sub1:
@@ -48,55 +48,55 @@ Music_IndigoPlateau_Ch2:
 	sound_call .sub1
 	note A_, 4
 	sound_call .sub1
-	note A#, 4
+	note As, 4
 	sound_call .sub1
 	note A_, 4
 	sound_call .sub1
-	note C#, 4
+	note Cs, 4
 	volume_envelope 12, 7
 	note A_, 6
 	note D_, 2
 	note G_, 2
-	note A#, 2
+	note As, 2
 	note A_, 8
 	volume_envelope 11, 0
 	note A_, 4
 	sound_call .sub1
-	note A#, 4
+	note As, 4
 	volume_envelope 12, 7
 	octave 4
 	note D_, 6
-	note D#, 2
+	note Ds, 2
 	note C_, 4
 	note D_, 8
 	volume_envelope 11, 0
 	octave 3
 	note A_, 4
 	sound_call .sub1
-	note C#, 4
+	note Cs, 4
 	volume_envelope 12, 7
 	octave 4
 	note C_, 6
 	octave 3
-	note A#, 2
+	note As, 2
 	note A_, 2
 	note G_, 2
-	note F#, 8
+	note Fs, 8
 	volume_envelope 11, 0
 	note A_, 4
 	sound_call .sub1
-	note A#, 4
+	note As, 4
 	volume_envelope 12, 7
 	octave 4
 	note D_, 6
-	note D#, 2
+	note Ds, 2
 	note F_, 4
-	note F#, 8
+	note Fs, 8
 	volume_envelope 11, 0
 	octave 3
 	note A_, 4
 	sound_call .sub1
-	note C#, 4
+	note Cs, 4
 	sound_loop 0, .mainloop
 
 .sub1:
@@ -128,7 +128,7 @@ Music_IndigoPlateau_Ch3:
 	note A_, 4
 	sound_call .sub1
 	octave 3
-	note F#, 4
+	note Fs, 4
 	sound_loop 0, .mainloop
 
 .sub1:

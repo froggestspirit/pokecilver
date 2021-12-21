@@ -15,124 +15,124 @@ Music_PokemonCenter_Ch1:
 	stereo_panning FALSE, TRUE
 	note_type 12, 8, 3
 	octave 3
-	note F#, 2
+	note Fs, 2
 	note F_, 2
-	note F#, 2
+	note Fs, 2
 	octave 4
 	note D_, 4
-	note C#, 2
+	note Cs, 2
 	octave 3
 	note B_, 2
 	note A_, 2
 	note B_, 2
 	note A_, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	note A_, 2
 	note A_, 2
 	note E_, 2
 	note A_, 2
 	octave 4
-	note C#, 4
+	note Cs, 4
 	octave 3
 	note B_, 2
 	note A_, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	note B_, 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	note D_, 2
-	note C#, 2
+	note Cs, 2
 	octave 3
 	note B_, 2
 	note A_, 2
-	note F#, 2
+	note Fs, 2
 	note F_, 2
-	note F#, 2
+	note Fs, 2
 	octave 4
 	note D_, 4
-	note C#, 2
+	note Cs, 2
 	octave 3
 	note B_, 2
 	note A_, 2
 	note B_, 2
 	note A_, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	note A_, 2
 	note A_, 2
 	note E_, 2
 	note A_, 2
 	octave 4
-	note C#, 4
+	note Cs, 4
 	octave 3
 	note B_, 2
 	note A_, 2
 	note G_, 2
 	note_type 12, 11, 4
-	note F#, 2
+	note Fs, 2
 	note E_, 2
 	note D_, 2
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	note A_, 2
 	note B_, 2
 	stereo_panning TRUE, FALSE
-	note F#, 2
+	note Fs, 2
 	note E_, 2
 	note D_, 4
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	note A_, 2
 	note B_, 2
 	note A_, 2
 	note G_, 4
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	note A_, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note E_, 4
-	note C#, 2
+	note Cs, 2
 	note D_, 2
 	note E_, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	note A_, 2
 	note B_, 2
 	note A_, 8
 	octave 4
 	note D_, 2
-	note C#, 2
+	note Cs, 2
 	octave 3
 	note B_, 4
 	note A_, 2
 	note B_, 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	note D_, 2
 	note E_, 2
 	note D_, 2
-	note C#, 4
+	note Cs, 4
 	octave 3
 	note B_, 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	note D_, 2
 	note E_, 2
-	note C#, 2
+	note Cs, 2
 	octave 3
 	note B_, 2
 	note A_, 4
@@ -142,11 +142,11 @@ Music_PokemonCenter_Ch1:
 	note G_, 2
 	note A_, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note E_, 2
 	note D_, 2
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	sound_loop 0, .mainloop
 
@@ -163,7 +163,7 @@ Music_PokemonCenter_Ch2:
 	stereo_panning TRUE, TRUE
 	sound_call .sub2
 	note D_, 2
-	note F#, 6
+	note Fs, 6
 	stereo_panning FALSE, TRUE
 	note_type 12, 10, 5
 	octave 3
@@ -186,34 +186,34 @@ Music_PokemonCenter_Ch2:
 	note E_, 4
 	note_type 12, 12, 6
 	octave 4
-	note F#, 8
+	note Fs, 8
 	note A_, 8
 	note G_, 2
 	note A_, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note E_, 8
-	note C#, 8
+	note Cs, 8
 	note E_, 8
-	note F#, 2
+	note Fs, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note E_, 2
 	note D_, 8
-	note F#, 8
+	note Fs, 8
 	note A_, 8
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	note A_, 2
 	note B_, 8
 	note A_, 4
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 8
-	note F#, 2
+	note Fs, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note E_, 2
 	note D_, 8
 	sound_loop 0, .mainloop
@@ -230,23 +230,23 @@ Music_PokemonCenter_Ch2:
 	volume_envelope 12, 3
 	note A_, 4
 	note G_, 4
-	note F#, 2
+	note Fs, 2
 	note E_, 2
-	note C#, 6
+	note Cs, 6
 	sound_ret
 
 .sub2:
 	note_type 12, 12, 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	octave 3
 	note A_, 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	volume_envelope 12, 3
-	note F#, 4
+	note Fs, 4
 	note E_, 4
-	note C#, 2
+	note Cs, 2
 	sound_ret
 
 Music_PokemonCenter_Ch3:
@@ -256,17 +256,17 @@ Music_PokemonCenter_Ch3:
 	octave 3
 	note D_, 1
 	rest 5
-	note F#, 1
+	note Fs, 1
 	rest 3
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note G_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	sound_call .sub1
 	sound_call .sub2
-	note F#, 1
+	note Fs, 1
 	rest 5
 	note A_, 1
 	rest 3
@@ -278,21 +278,21 @@ Music_PokemonCenter_Ch3:
 	rest 1
 	note D_, 1
 	rest 5
-	note F#, 1
+	note Fs, 1
 	rest 3
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note G_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	sound_call .sub1
 	sound_call .sub2
 	note D_, 1
 	rest 5
-	note F#, 1
+	note Fs, 1
 	rest 3
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note D_, 1
 	rest 1
@@ -318,13 +318,13 @@ Music_PokemonCenter_Ch3:
 	rest 3
 	note G_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 5
 	note A_, 1
 	rest 3
 	note A_, 1
 	rest 1
-	note G#, 1
+	note Gs, 1
 	rest 1
 	note A_, 1
 	rest 1
@@ -345,7 +345,7 @@ Music_PokemonCenter_Ch3:
 	rest 3
 	note G_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 5
 	note A_, 1
 	rest 3
@@ -382,7 +382,7 @@ Music_PokemonCenter_Ch3:
 	sound_ret
 
 .sub3:
-	note F#, 1
+	note Fs, 1
 	rest 5
 	note A_, 1
 	rest 3

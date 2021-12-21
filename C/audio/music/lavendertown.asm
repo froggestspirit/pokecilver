@@ -25,9 +25,9 @@ Music_LavenderTown_Ch1:
 	volume_envelope 4, 3
 	note D_, 2
 	volume_envelope 9, 3
-	note F#, 2
+	note Fs, 2
 	volume_envelope 4, 3
-	note F#, 2
+	note Fs, 2
 	volume_envelope 9, 3
 	note B_, 2
 	volume_envelope 4, 3
@@ -126,16 +126,16 @@ Music_LavenderTown_Ch1:
 	note A_, 2
 	note F_, 2
 	sound_loop 2, .loop1
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	octave 4
 	note C_, 2
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	note C_, 2
 	octave 3
 	note A_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	octave 4
 	note C_, 2
@@ -207,17 +207,17 @@ Music_LavenderTown_Ch1:
 	volume_envelope 4, 3
 	note B_, 2
 	volume_envelope 8, 3
-	note C#, 2
+	note Cs, 2
 	volume_envelope 4, 3
-	note C#, 2
+	note Cs, 2
 	volume_envelope 8, 3
 	note G_, 2
 	volume_envelope 4, 3
 	note G_, 2
 	volume_envelope 8, 3
-	note A#, 2
+	note As, 2
 	volume_envelope 4, 3
-	note A#, 2
+	note As, 2
 	volume_envelope 8, 3
 	note G_, 2
 	volume_envelope 4, 3
@@ -281,9 +281,9 @@ Music_LavenderTown_Ch2:
 	volume_envelope 6, 3
 	note B_, 2
 	volume_envelope 10, 3
-	note F#, 2
+	note Fs, 2
 	volume_envelope 6, 3
-	note F#, 2
+	note Fs, 2
 	sound_loop 3, .loop1
 	volume_envelope 10, 3
 	note C_, 2
@@ -306,10 +306,10 @@ Music_LavenderTown_Ch2:
 	volume_envelope 11, 5
 	sound_call .sub1
 	octave 2
-	note F#, 4
+	note Fs, 4
 	octave 3
 	note C_, 4
-	note F#, 4
+	note Fs, 4
 	note A_, 4
 	octave 2
 	note G_, 4
@@ -345,7 +345,7 @@ Music_LavenderTown_Ch2:
 	note F_, 16
 	note C_, 16
 	note F_, 16
-	note F#, 16
+	note Fs, 16
 	note G_, 16
 	octave 1
 	note G_, 8
@@ -376,9 +376,9 @@ Music_LavenderTown_Ch2:
 	note G_, 4
 	note F_, 4
 	note E_, 4
-	note C#, 4
+	note Cs, 4
 	octave 2
-	note A#, 4
+	note As, 4
 	note G_, 4
 	note F_, 4
 	octave 3
@@ -413,9 +413,9 @@ Music_LavenderTown_Ch3:
 	note F_, 4
 	note E_, 4
 	note B_, 4
-	note C#, 8
+	note Cs, 8
 	rest 2
-	note C#, 2
+	note Cs, 2
 	note D_, 2
 	note E_, 2
 	note F_, 10
@@ -445,9 +445,9 @@ Music_LavenderTown_Ch3:
 	note F_, 4
 	note E_, 4
 	note B_, 4
-	note C#, 8
+	note Cs, 8
 	rest 2
-	note C#, 2
+	note Cs, 2
 	note D_, 2
 	note E_, 2
 	note F_, 10
@@ -505,7 +505,7 @@ Music_LavenderTown_Ch3:
 	note B_, 2
 	octave 6
 	note C_, 4
-	note C#, 4
+	note Cs, 4
 	note D_, 12
 	note C_, 4
 	octave 5

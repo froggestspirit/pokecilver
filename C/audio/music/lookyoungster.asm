@@ -12,9 +12,9 @@ Music_LookYoungster_Ch1:
 	note_type 12, 10, 3
 	octave 3
 	note G_, 1
-	note G#, 1
+	note Gs, 1
 	note A_, 1
-	note A#, 1
+	note As, 1
 	volume_envelope 3, -6
 	note B_, 16
 	volume_envelope 12, 3
@@ -71,7 +71,7 @@ Music_LookYoungster_Ch2:
 	note B_, 1
 	octave 4
 	note C_, 1
-	note C#, 1
+	note Cs, 1
 	note D_, 1
 	volume_envelope 3, -6
 	note_type 12, 2, -6
@@ -82,7 +82,7 @@ Music_LookYoungster_Ch2:
 	rest 3
 	note F_, 4
 	rest 2
-	note F#, 6
+	note Fs, 6
 .mainloop:
 	duty_cycle 3
 	volume_envelope 11, 3
@@ -105,20 +105,20 @@ Music_LookYoungster_Ch2:
 	rest 1
 	volume_envelope 9, 7
 	duty_cycle 2
-	note D#, 1
+	note Ds, 1
 	note F_, 1
-	note D#, 1
+	note Ds, 1
 	note D_, 1
 	note C_, 1
 	rest 1
 	octave 3
-	note G#, 1
+	note Gs, 1
 	rest 3
 	note F_, 1
 	rest 1
 	note G_, 1
 	rest 1
-	note G#, 1
+	note Gs, 1
 	rest 1
 	duty_cycle 3
 	volume_envelope 11, 3
@@ -140,18 +140,18 @@ Music_LookYoungster_Ch2:
 	rest 1
 	duty_cycle 2
 	volume_envelope 9, 7
-	note G#, 1
-	note A#, 1
-	note G#, 1
+	note Gs, 1
+	note As, 1
+	note Gs, 1
 	note G_, 1
 	note F_, 1
 	rest 1
 	note C_, 1
 	rest 3
 	octave 3
-	note G#, 1
+	note Gs, 1
 	rest 1
-	note A#, 1
+	note As, 1
 	rest 1
 	octave 4
 	note C_, 1
@@ -194,7 +194,7 @@ Music_LookYoungster_Ch3:
 	rest 3
 	note D_, 4
 	rest 2
-	note G#, 6
+	note Gs, 6
 	volume_envelope 2, 5
 .mainloop:
 	octave 2
@@ -225,25 +225,25 @@ Music_LookYoungster_Ch3:
 	note F_, 1
 	rest 1
 	octave 3
-	note D#, 1
+	note Ds, 1
 	rest 1
 	octave 2
 	note F_, 1
 	rest 1
 	octave 3
-	note D#, 1
+	note Ds, 1
 	rest 1
 	octave 2
 	note F_, 1
 	rest 1
 	octave 3
-	note D#, 1
+	note Ds, 1
 	rest 1
 	octave 2
 	note F_, 1
 	rest 1
 	octave 3
-	note D#, 1
+	note Ds, 1
 	rest 1
 	octave 2
 	note G_, 1
@@ -270,26 +270,26 @@ Music_LookYoungster_Ch3:
 	note G_, 1
 	rest 1
 	octave 2
-	note G#, 1
+	note Gs, 1
 	rest 1
 	octave 3
-	note D#, 1
+	note Ds, 1
 	rest 1
 	octave 2
-	note G#, 1
+	note Gs, 1
 	rest 1
 	octave 3
-	note D#, 1
+	note Ds, 1
 	rest 1
 	octave 2
-	note G#, 1
+	note Gs, 1
 	rest 1
 	octave 3
-	note D#, 1
+	note Ds, 1
 	rest 1
 	note G_, 1
 	rest 1
-	note G#, 1
+	note Gs, 1
 	rest 1
 	sound_loop 0, .mainloop
 

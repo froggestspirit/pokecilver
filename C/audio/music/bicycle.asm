@@ -22,7 +22,7 @@ Music_Bicycle_Ch1:
 	volume_envelope 11, 6
 	note A_, 8
 	volume_envelope 11, 2
-	note F#, 2
+	note Fs, 2
 .mainloop:
 	stereo_panning FALSE, TRUE
 	volume_envelope 11, 2
@@ -30,9 +30,9 @@ Music_Bicycle_Ch1:
 	note G_, 2
 	note E_, 2
 	note E_, 2
-	note F#, 1
+	note Fs, 1
 	note E_, 1
-	note D#, 2
+	note Ds, 2
 	note D_, 2
 	note D_, 2
 	note E_, 2
@@ -49,25 +49,25 @@ Music_Bicycle_Ch1:
 	note C_, 2
 	note E_, 2
 	note E_, 2
-	note C#, 2
+	note Cs, 2
 	note E_, 2
-	note F#, 2
-	note E_, 2
-	note D_, 2
+	note Fs, 2
 	note E_, 2
 	note D_, 2
-	note C#, 2
+	note E_, 2
+	note D_, 2
+	note Cs, 2
 	note D_, 2
 	note D_, 2
-	note C#, 2
+	note Cs, 2
 	note D_, 2
 	note G_, 2
 	note G_, 2
 	note E_, 2
 	note E_, 2
-	note F#, 1
+	note Fs, 1
 	note E_, 1
-	note D#, 2
+	note Ds, 2
 	note D_, 2
 	note D_, 2
 	note E_, 2
@@ -77,7 +77,7 @@ Music_Bicycle_Ch1:
 	octave 2
 	note B_, 2
 	note B_, 2
-	note A#, 2
+	note As, 2
 	note B_, 2
 	octave 3
 	note C_, 2
@@ -88,17 +88,17 @@ Music_Bicycle_Ch1:
 	note E_, 2
 	note C_, 2
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	volume_envelope 8, 2
-	note F#, 2
+	note Fs, 2
 	volume_envelope 11, 2
 	note A_, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
-	note G#, 2
+	note Gs, 2
 	note A_, 2
 	stereo_panning TRUE, FALSE
 	volume_envelope 11, 6
@@ -109,22 +109,22 @@ Music_Bicycle_Ch1:
 	octave 3
 	note G_, 4
 	note A_, 4
-	note F#, 4
+	note Fs, 4
 	octave 4
 	note D_, 4
 	octave 3
-	note F#, 4
+	note Fs, 4
 	note G_, 4
 	note E_, 4
 	octave 4
 	note C_, 4
 	octave 3
 	note E_, 4
-	note F#, 4
+	note Fs, 4
 	note D_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
-	note G#, 2
+	note Gs, 2
 	note A_, 4
 	octave 4
 	note D_, 2
@@ -142,11 +142,11 @@ Music_Bicycle_Ch1:
 	note C_, 2
 	octave 3
 	note A_, 2
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	octave 4
 	note C_, 2
-	note F#, 2
+	note Fs, 2
 	note C_, 2
 	octave 3
 	note A_, 2
@@ -155,7 +155,7 @@ Music_Bicycle_Ch1:
 	note C_, 2
 	note E_, 2
 	note G_, 2
-	note G#, 2
+	note Gs, 2
 	note A_, 2
 	note B_, 2
 	octave 4
@@ -164,9 +164,9 @@ Music_Bicycle_Ch1:
 	octave 3
 	note A_, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
-	note G#, 2
+	note Gs, 2
 	note A_, 2
 	sound_loop 0, .mainloop
 
@@ -202,12 +202,12 @@ Music_Bicycle_Ch2:
 	note B_, 4
 	note G_, 4
 	note A_, 4
-	note F#, 4
+	note Fs, 4
 	volume_envelope 12, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	volume_envelope 12, 5
 	note D_, 8
 	volume_envelope 12, 4
@@ -218,22 +218,22 @@ Music_Bicycle_Ch2:
 	note B_, 2
 	note A_, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	note A_, 2
 	note G_, 2
 	volume_envelope 12, 5
-	note F#, 8
+	note Fs, 8
 	volume_envelope 12, 3
 	note B_, 4
 	note G_, 4
 	note A_, 4
-	note F#, 4
+	note Fs, 4
 	volume_envelope 12, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	volume_envelope 12, 5
 	note D_, 8
 	volume_envelope 12, 4
@@ -252,34 +252,34 @@ Music_Bicycle_Ch2:
 	note D_, 2
 	note E_, 2
 	volume_envelope 12, 7
-	note F#, 8
+	note Fs, 8
 	stereo_panning FALSE, TRUE
 	sound_call .sub1
-	note F#, 4
+	note Fs, 4
 	volume_envelope 12, 3
 	note A_, 2
 	note D_, 2
 	note E_, 2
 	note F_, 2
-	note F#, 4
+	note Fs, 4
 	volume_envelope 12, 7
 	sound_call .sub1
-	note F#, 4
+	note Fs, 4
 	volume_envelope 12, 3
 	note A_, 2
 	note B_, 2
 	note A_, 2
 	note G_, 2
-	note F#, 4
+	note Fs, 4
 	sound_loop 0, .mainloop
 
 .sub1:
 	note G_, 6
 	note B_, 6
 	note G_, 4
-	note F#, 6
+	note Fs, 6
 	note A_, 6
-	note F#, 4
+	note Fs, 4
 	note E_, 6
 	note G_, 6
 	note E_, 4
@@ -338,7 +338,7 @@ Music_Bicycle_Ch3:
 	rest 1
 	note G_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note A_, 1
 	rest 1
@@ -346,13 +346,13 @@ Music_Bicycle_Ch3:
 	rest 1
 	note A_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note D_, 1
 	rest 1
 	note E_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	sound_call .sub1
 	note E_, 1
@@ -367,7 +367,7 @@ Music_Bicycle_Ch3:
 	rest 1
 	note G_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note F_, 1
 	rest 1
@@ -387,7 +387,7 @@ Music_Bicycle_Ch3:
 	rest 1
 	note G_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note A_, 1
 	rest 1
@@ -422,7 +422,7 @@ Music_Bicycle_Ch3:
 	rest 1
 	note B_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note A_, 1
 	rest 1
@@ -430,7 +430,7 @@ Music_Bicycle_Ch3:
 	rest 1
 	note A_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note A_, 1
 	rest 1
@@ -454,7 +454,7 @@ Music_Bicycle_Ch3:
 	rest 1
 	note G_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note A_, 1
 	rest 1
@@ -462,7 +462,7 @@ Music_Bicycle_Ch3:
 	rest 1
 	note A_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	octave 4
 	note C_, 1

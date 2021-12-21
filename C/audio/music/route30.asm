@@ -205,7 +205,7 @@ Music_Route30_Ch2:
 	note D_, 1
 	note E_, 1
 	note F_, 1
-	note F#, 1
+	note Fs, 1
 .mainloop:
 	volume_envelope 12, 7
 	note G_, 10
@@ -292,7 +292,7 @@ Music_Route30_Ch2:
 	note G_, 8
 	volume_envelope 10, 7
 	octave 3
-	note F#, 2
+	note Fs, 2
 	sound_loop 0, .mainloop
 
 Music_Route30_Ch3:
@@ -350,7 +350,7 @@ Music_Route30_Ch3:
 	octave 2
 	note F_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note G_, 1
 	rest 1
@@ -416,7 +416,7 @@ Music_Route30_Ch3:
 	note E_, 2
 	octave 2
 	note F_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 1
 	rest 1
 	note B_, 2
@@ -447,7 +447,7 @@ Music_Route30_Ch3:
 	note G_, 2
 	octave 2
 	note G_, 2
-	note G#, 2
+	note Gs, 2
 	note A_, 1
 	rest 1
 	octave 3

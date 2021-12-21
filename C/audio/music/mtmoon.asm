@@ -23,52 +23,52 @@ Music_MtMoon_Ch2:
 	stereo_panning FALSE, TRUE
 .mainloop:
 	octave 4
-	note D#, 6
-	note C#, 6
+	note Ds, 6
+	note Cs, 6
 	octave 3
 	note B_, 2
 	octave 4
-	note C#, 2
-	note D#, 2
+	note Cs, 2
+	note Ds, 2
 	note G_, 2
-	note D#, 2
-	note C#, 6
+	note Ds, 2
+	note Cs, 6
 	octave 3
 	note B_, 2
 	octave 4
-	note C#, 2
-	note D#, 2
+	note Cs, 2
+	note Ds, 2
 	note G_, 2
-	note D#, 2
-	note C#, 6
+	note Ds, 2
+	note Cs, 6
 	octave 3
 	note B_, 2
-	note A#, 2
+	note As, 2
 	note B_, 6
 	octave 4
-	note C#, 10
-	note G#, 6
-	note F#, 6
+	note Cs, 10
+	note Gs, 6
+	note Fs, 6
 	note E_, 2
-	note F#, 2
-	note G#, 2
+	note Fs, 2
+	note Gs, 2
 	octave 5
 	note C_, 2
 	octave 4
-	note G#, 2
-	note F#, 6
+	note Gs, 2
+	note Fs, 6
 	note E_, 2
-	note F#, 2
-	note G#, 2
+	note Fs, 2
+	note Gs, 2
 	octave 5
 	note C_, 2
 	octave 4
-	note G#, 2
-	note F#, 6
+	note Gs, 2
+	note Fs, 6
 	note E_, 2
-	note D#, 2
+	note Ds, 2
 	note E_, 6
-	note F#, 6
+	note Fs, 6
 	note E_, 4
 	sound_loop 0, .mainloop
 
@@ -79,43 +79,43 @@ Music_MtMoon_Ch3:
 	octave 2
 	note B_, 2
 	octave 3
-	note D#, 2
+	note Ds, 2
 	note G_, 2
 	octave 2
 	note B_, 2
 	octave 3
-	note D#, 2
+	note Ds, 2
 	note G_, 2
 	octave 2
 	note B_, 2
 	octave 3
-	note D#, 2
+	note Ds, 2
 	sound_loop 3, .loop1
 	octave 2
 	note B_, 2
 	octave 3
-	note D#, 2
+	note Ds, 2
 	note G_, 2
 	octave 2
 	note B_, 2
 	octave 3
-	note D#, 2
+	note Ds, 2
 	note G_, 2
-	note D#, 2
+	note Ds, 2
 	note E_, 2
 .loop2:
 	note E_, 2
-	note G#, 2
+	note Gs, 2
 	octave 4
 	note C_, 2
 	octave 3
 	note E_, 2
-	note G#, 2
+	note Gs, 2
 	octave 4
 	note C_, 2
 	octave 3
 	note E_, 2
-	note G#, 2
+	note Gs, 2
 	sound_loop 4, .loop2
 	sound_loop 0, .mainloop
 

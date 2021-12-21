@@ -57,9 +57,9 @@ Music_LookBeauty_Ch1:
 	rest 3
 	note E_, 4
 	rest 4
-	note F#, 1
+	note Fs, 1
 	rest 5
-	note F#, 1
+	note Fs, 1
 	rest 3
 	note D_, 2
 	note D_, 1
@@ -68,10 +68,10 @@ Music_LookBeauty_Ch1:
 	note A_, 1
 	octave 3
 	note C_, 1
-	note D#, 1
-	note F#, 1
-	note D#, 1
-	note F#, 1
+	note Ds, 1
+	note Fs, 1
+	note Ds, 1
+	note Fs, 1
 	note A_, 1
 	octave 4
 	note C_, 1
@@ -92,15 +92,15 @@ Music_LookBeauty_Ch2:
 	octave 4
 	note B_, 1
 	rest 1
-	note A#, 1
+	note As, 1
 	rest 1
 	note A_, 1
 	rest 1
-	note G#, 1
+	note Gs, 1
 	rest 1
 	note G_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note F_, 1
 	rest 1
@@ -109,7 +109,7 @@ Music_LookBeauty_Ch2:
 	rest 1
 	note E_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	duty_cycle 3
 .mainloop:
@@ -118,12 +118,12 @@ Music_LookBeauty_Ch2:
 	note A_, 8
 	note B_, 8
 	note A_, 10
-	note G#, 1
+	note Gs, 1
 	rest 1
 	note A_, 1
 	rest 1
-	note G#, 2
-	note G#, 8
+	note Gs, 2
+	note Gs, 8
 	rest 2
 	note F_, 2
 	rest 2
@@ -136,7 +136,7 @@ Music_LookBeauty_Ch2:
 	volume_envelope 12, 5
 	vibrato 16, 2, 3
 	rest 1
-	note C#, 1
+	note Cs, 1
 	note D_, 16
 	note C_, 16
 	octave 4
@@ -150,7 +150,7 @@ Music_LookBeauty_Ch2:
 	rest 2
 	note A_, 6
 	rest 14
-	note F#, 8
+	note Fs, 8
 	note A_, 8
 	sound_loop 0, .mainloop
 
@@ -162,15 +162,15 @@ Music_LookBeauty_Ch3:
 	octave 5
 	note E_, 1
 	rest 1
-	note D#, 1
+	note Ds, 1
 	rest 1
 	note D_, 1
 	rest 1
-	note C#, 1
+	note Cs, 1
 	rest 1
 	octave 3
 	note D_, 7
-	note F#, 1
+	note Fs, 1
 .mainloop:
 	note G_, 4
 	octave 4
@@ -190,7 +190,7 @@ Music_LookBeauty_Ch3:
 	note G_, 2
 	note G_, 1
 	octave 4
-	note A#, 1
+	note As, 1
 	note B_, 1
 	rest 1
 	octave 3
@@ -226,15 +226,15 @@ Music_LookBeauty_Ch3:
 	note E_, 1
 	octave 4
 	note G_, 1
-	note G#, 1
+	note Gs, 1
 	rest 1
 	octave 3
 	note E_, 1
 	rest 1
 	octave 4
-	note F#, 1
+	note Fs, 1
 	rest 3
-	note G#, 2
+	note Gs, 2
 	rest 2
 	note B_, 2
 	octave 3

@@ -240,7 +240,7 @@ Music_LookKimonoGirl_Ch3:
 	note D_, 4
 	note E_, 8
 	note F_, 1
-	note F#, 1
+	note Fs, 1
 	note F_, 2
 	note D_, 4
 	note E_, 8

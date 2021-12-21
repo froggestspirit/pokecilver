@@ -45,7 +45,7 @@ Music_LookLass_Ch2:
 	note B_, 2
 	volume_envelope 9, 3
 	octave 3
-	note G#, 2
+	note Gs, 2
 	sound_loop 0, .mainloop
 
 Music_LookLass_Ch3:
@@ -53,48 +53,48 @@ Music_LookLass_Ch3:
 	rest 8
 	octave 6
 	note E_, 2
-	note D#, 2
-	note C#, 2
+	note Ds, 2
+	note Cs, 2
 	note C_, 2
 .mainloop:
 	octave 5
 	note B_, 2
 	rest 2
 	octave 6
-	note D#, 2
+	note Ds, 2
 	rest 2
 	note E_, 2
 	rest 2
-	note D#, 2
+	note Ds, 2
 	rest 2
-	note C#, 2
+	note Cs, 2
 	note C_, 2
 	octave 5
 	note B_, 2
 	note A_, 2
-	note G#, 2
+	note Gs, 2
 	note A_, 2
-	note A#, 2
+	note As, 2
 	octave 6
-	note C#, 2
+	note Cs, 2
 	octave 5
 	note B_, 2
 	rest 2
 	octave 6
-	note C#, 2
+	note Cs, 2
 	rest 2
 	octave 5
 	note B_, 2
 	rest 2
 	note A_, 2
 	rest 2
-	note G#, 2
-	note F#, 2
+	note Gs, 2
+	note Fs, 2
 	note E_, 2
-	note D#, 2
+	note Ds, 2
 	note E_, 2
-	note F#, 2
-	note G#, 2
+	note Fs, 2
+	note Gs, 2
 	note A_, 2
 	sound_loop 0, .mainloop
 

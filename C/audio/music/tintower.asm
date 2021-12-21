@@ -17,47 +17,47 @@ Music_TinTower_Ch1:
 	octave 3
 	note G_, 4
 	note C_, 4
-	note G#, 8
+	note Gs, 8
 	note G_, 4
 	note C_, 4
 	octave 2
-	note A#, 2
+	note As, 2
 	octave 3
 	note C_, 2
-	note C#, 2
+	note Cs, 2
 	octave 2
-	note A#, 2
+	note As, 2
 	octave 3
 	note G_, 4
 	note C_, 4
-	note G#, 4
+	note Gs, 4
 	note F_, 4
 	note G_, 4
 	octave 2
 	note G_, 4
 	octave 3
 	note G_, 6
-	note A#, 2
+	note As, 2
 	note G_, 2
 	note F_, 2
-	note C#, 2
+	note Cs, 2
 	note G_, 2
-	note G#, 8
+	note Gs, 8
 	note G_, 4
 	octave 4
 	note C_, 4
 	octave 3
-	note G#, 2
+	note Gs, 2
 	note G_, 2
 	note F_, 2
-	note G#, 2
+	note Gs, 2
 	note G_, 2
-	note C#, 2
+	note Cs, 2
 	octave 2
-	note A#, 2
+	note As, 2
 	octave 3
 	note G_, 2
-	note G#, 4
+	note Gs, 4
 	note F_, 4
 	note G_, 4
 	octave 2
@@ -73,15 +73,15 @@ Music_TinTower_Ch1:
 	volume_envelope 10, 7
 	note G_, 4
 	volume_envelope 10, 2
-	note G#, 4
-	note G#, 8
+	note Gs, 4
+	note Gs, 8
 	volume_envelope 10, 7
 	note G_, 4
 	volume_envelope 10, 2
-	note G#, 4
-	note G#, 8
+	note Gs, 4
+	note Gs, 8
 	volume_envelope 10, 7
-	note A#, 4
+	note As, 4
 	volume_envelope 10, 2
 	note G_, 4
 	note G_, 12
@@ -93,7 +93,7 @@ Music_TinTower_Ch1:
 	note G_, 8
 	volume_envelope 10, 5
 	octave 3
-	note A#, 4
+	note As, 4
 	sound_loop 0, .mainloop
 
 Music_TinTower_Ch2:
@@ -107,26 +107,26 @@ Music_TinTower_Ch2:
 	octave 4
 	note C_, 4
 	note C_, 4
-	note C#, 2
+	note Cs, 2
 	note C_, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	note C_, 4
 	note F_, 4
-	note C#, 4
+	note Cs, 4
 	octave 3
-	note A#, 4
+	note As, 4
 	octave 4
 	note C_, 4
 	note C_, 4
-	note C#, 2
+	note Cs, 2
 	note C_, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	note C_, 4
 	octave 3
 	note C_, 4
@@ -143,25 +143,25 @@ Music_TinTower_Ch2:
 	volume_envelope 11, 7
 	note C_, 4
 	volume_envelope 11, 2
-	note C#, 4
-	note C#, 8
+	note Cs, 4
+	note Cs, 8
 	volume_envelope 11, 7
 	note C_, 4
 	volume_envelope 11, 2
-	note C#, 4
-	note C#, 8
+	note Cs, 4
+	note Cs, 8
 	volume_envelope 11, 7
-	note D#, 4
+	note Ds, 4
 	volume_envelope 9, 0
 	stereo_panning TRUE, TRUE
 	note G_, 4
 	octave 4
 	note C_, 4
 	octave 3
-	note A#, 2
-	note G#, 2
+	note As, 2
+	note Gs, 2
 	note G_, 2
-	note G#, 2
+	note Gs, 2
 	note G_, 4
 	note C_, 4
 	note G_, 8
@@ -169,12 +169,12 @@ Music_TinTower_Ch2:
 	octave 4
 	note C_, 4
 	octave 3
-	note A#, 2
+	note As, 2
 	octave 4
 	note C_, 2
-	note C#, 2
+	note Cs, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	octave 4
 	note C_, 4
 	octave 3
@@ -182,7 +182,7 @@ Music_TinTower_Ch2:
 	octave 4
 	note C_, 6
 	volume_envelope 9, 5
-	note C#, 2
+	note Cs, 2
 	sound_loop 0, .mainloop
 
 Music_TinTower_Ch3:
@@ -194,20 +194,20 @@ Music_TinTower_Ch3:
 	rest 10
 	octave 2
 	note G_, 2
-	note G#, 2
-	note A#, 2
+	note Gs, 2
+	note As, 2
 	octave 3
 	note C_, 8
-	note C#, 8
+	note Cs, 8
 	note E_, 8
 	octave 2
-	note A#, 2
+	note As, 2
 	octave 3
 	note C_, 2
-	note C#, 2
-	note D#, 2
+	note Cs, 2
+	note Ds, 2
 	note C_, 8
-	note C#, 8
+	note Cs, 8
 	note E_, 8
 	octave 4
 	note C_, 8
@@ -221,16 +221,16 @@ Music_TinTower_Ch3:
 	note C_, 1
 	rest 7
 	note C_, 4
-	note C#, 1
+	note Cs, 1
 	rest 3
-	note C#, 1
+	note Cs, 1
 	rest 7
 	note C_, 4
-	note C#, 1
+	note Cs, 1
 	rest 3
-	note C#, 1
+	note Cs, 1
 	rest 7
-	note D#, 4
+	note Ds, 4
 	stereo_panning FALSE, TRUE
 	note C_, 1
 	rest 3
@@ -242,11 +242,11 @@ Music_TinTower_Ch3:
 	rest 3
 	stereo_panning TRUE, TRUE
 	octave 2
-	note A#, 2
+	note As, 2
 	octave 3
 	note C_, 2
-	note C#, 2
-	note D#, 2
+	note Cs, 2
+	note Ds, 2
 	stereo_panning FALSE, TRUE
 	note C_, 1
 	rest 3

@@ -21,7 +21,7 @@ Music_HallOfFame_Ch1:
 	note D_, 1
 	note E_, 1
 	note F_, 1
-	note F#, 1
+	note Fs, 1
 .mainloop:
 .loop1:
 	volume_envelope 9, 7
@@ -34,9 +34,9 @@ Music_HallOfFame_Ch1:
 	volume_envelope 7, 7
 	note E_, 8
 	volume_envelope 9, 7
-	note F#, 8
+	note Fs, 8
 	volume_envelope 7, 7
-	note F#, 8
+	note Fs, 8
 	volume_envelope 7, 7
 	note F_, 8
 	volume_envelope 5, 7
@@ -73,7 +73,7 @@ Music_HallOfFame_Ch2:
 	note F_, 2
 	note C_, 2
 	note F_, 2
-	note A#, 4
+	note As, 4
 	note A_, 4
 	note F_, 2
 	sound_loop 0, .mainloop
@@ -127,9 +127,9 @@ Music_HallOfFame_Ch3:
 	note G_, 4
 	note E_, 4
 	note G_, 4
-	note F#, 4
+	note Fs, 4
 	note A_, 4
-	note F#, 4
+	note Fs, 4
 	note A_, 4
 	note E_, 4
 	note G_, 4

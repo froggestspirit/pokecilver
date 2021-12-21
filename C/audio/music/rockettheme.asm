@@ -24,7 +24,7 @@ Music_RocketTheme_Ch1:
 	sound_call Music_LookRocket_Ch1.sub2
 	sound_call Music_LookRocket_Ch2.sub5
 	octave 4
-	note F#, 1
+	note Fs, 1
 	rest 1
 	volume_envelope 5, 3
 	sound_call Music_LookRocket_Ch1.sub3
@@ -39,80 +39,80 @@ Music_RocketTheme_Ch1:
 	sound_call .sub1
 	octave 4
 	note F_, 1
-	note F#, 3
+	note Fs, 3
 	note F_, 2
 	rest 2
-	note D#, 2
+	note Ds, 2
 	rest 2
 	note C_, 2
 	note D_, 2
-	note D#, 2
+	note Ds, 2
 	note C_, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	note G_, 2
-	note A#, 2
+	note As, 2
 	octave 4
 	note C_, 2
 	rest 4
 	note D_, 4
 	rest 4
-	note D#, 4
+	note Ds, 4
 	rest 4
-	note D#, 2
-	note F#, 2
+	note Ds, 2
+	note Fs, 2
 	sound_call .sub1
 	octave 3
-	note F#, 1
+	note Fs, 1
 	note G_, 3
 	note F_, 2
 	rest 2
-	note D#, 2
+	note Ds, 2
 	rest 2
 	note C_, 2
 	note D_, 2
-	note D#, 2
+	note Ds, 2
 	note C_, 2
 	octave 2
-	note A#, 2
+	note As, 2
 	note G_, 2
-	note A#, 2
+	note As, 2
 	octave 3
 	note C_, 2
 	rest 4
 	note D_, 4
 	rest 4
-	note D#, 4
+	note Ds, 4
 	note F_, 2
 	note E_, 2
-	note D#, 2
+	note Ds, 2
 	note D_, 2
 .loop1:
 	rest 4
 	note F_, 2
 	rest 14
-	note F#, 2
+	note Fs, 2
 	rest 10
 	sound_loop 3, .loop1
 	rest 4
 	note F_, 2
 	rest 14
-	note F#, 2
+	note Fs, 2
 	rest 2
-	note F#, 2
+	note Fs, 2
 	rest 2
-	note D#, 2
+	note Ds, 2
 	note C_, 2
 .loop2:
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	sound_loop 4, .loop2
 .loop3:
 	note G_, 2
-	note A#, 2
+	note As, 2
 	sound_loop 4, .loop3
 .loop4:
-	note G#, 2
+	note Gs, 2
 	note B_, 2
 	sound_loop 4, .loop4
 .loop5:
@@ -141,16 +141,16 @@ Music_RocketTheme_Ch1:
 	note G_, 2
 	rest 6
 	octave 4
-	note D#, 12
+	note Ds, 12
 	note D_, 8
 	octave 3
-	note A#, 2
+	note As, 2
 	rest 6
 	note G_, 2
 	rest 2
 	note A_, 2
 	rest 2
-	note A#, 2
+	note As, 2
 	rest 10
 	sound_ret
 
@@ -184,13 +184,13 @@ Music_RocketTheme_Ch2:
 	note A_, 1
 	vibrato 0, 0, 0
 	volume_envelope 11, 8
-	note A#, 14
+	note As, 14
 	vibrato 5, 2, 2
 	volume_envelope 11, 7
-	note A#, 5
+	note As, 5
 	vibrato 6, 6, 4
 	note_type 12, 11, 7
-	note A#, 12
+	note As, 12
 	rest 2
 	octave 5
 	note C_, 1
@@ -208,21 +208,21 @@ Music_RocketTheme_Ch2:
 	note_type 12, 11, 7
 	note C_, 12
 	octave 3
-	note A#, 1
+	note As, 1
 	note A_, 1
-	note G#, 1
+	note Gs, 1
 	note G_, 1
 	note_type 6, 11, 7
 	sound_call .sub2
 	octave 4
 	note D_, 1
-	note D#, 9
+	note Ds, 9
 	note D_, 1
-	note C#, 1
+	note Cs, 1
 	note C_, 12
 	note F_, 2
 	rest 2
-	note F#, 2
+	note Fs, 2
 	rest 2
 	sound_call .sub2
 	octave 3
@@ -233,7 +233,7 @@ Music_RocketTheme_Ch2:
 	rest 2
 	note D_, 2
 	rest 2
-	note D#, 8
+	note Ds, 8
 	rest 4
 	note D_, 2
 	rest 2
@@ -243,47 +243,47 @@ Music_RocketTheme_Ch2:
 	note B_, 1
 	octave 4
 	note C_, 15
-	note C#, 16
+	note Cs, 16
 	note D_, 16
-	note D#, 16
+	note Ds, 16
 	note E_, 2
-	note C#, 2
+	note Cs, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	note G_, 2
 	octave 4
 	note F_, 2
 	note D_, 2
 	octave 3
 	note B_, 2
-	note G#, 2
+	note Gs, 2
 	octave 4
-	note F#, 2
-	note D#, 2
+	note Fs, 2
+	note Ds, 2
 	note C_, 2
 	octave 3
 	note A_, 2
 	octave 4
 	note G_, 2
 	note E_, 2
-	note C#, 2
+	note Cs, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	octave 4
-	note G#, 2
+	note Gs, 2
 	note F_, 2
 	note D_, 2
 	octave 3
 	note B_, 2
 	octave 4
 	note A_, 2
-	note F#, 2
-	note D#, 2
+	note Fs, 2
+	note Ds, 2
 	note C_, 2
-	note A#, 2
+	note As, 2
 	note G_, 2
 	note E_, 2
-	note C#, 2
+	note Cs, 2
 	note B_, 4
 	octave 5
 	note C_, 2
@@ -295,26 +295,26 @@ Music_RocketTheme_Ch2:
 	rest 7
 	octave 4
 	note D_, 1
-	note D#, 2
+	note Ds, 2
 	rest 6
-	note D#, 2
+	note Ds, 2
 	rest 2
 	note C_, 2
 	rest 6
-	note F#, 12
+	note Fs, 12
 	note F_, 8
-	note D#, 2
+	note Ds, 2
 	rest 6
 	note C_, 2
 	rest 2
 	note D_, 2
 	rest 2
-	note D#, 2
+	note Ds, 2
 	rest 2
 	octave 3
-	note D#, 2
+	note Ds, 2
 	rest 2
-	note D#, 2
+	note Ds, 2
 	rest 2
 	sound_ret
 
@@ -323,9 +323,9 @@ Music_RocketTheme_Ch2:
 	note B_, 1
 	octave 4
 	note C_, 3
-	note D#, 4
+	note Ds, 4
 	note C_, 4
-	note F#, 8
+	note Fs, 8
 	note F_, 8
 	note C_, 4
 	sound_ret
@@ -365,16 +365,16 @@ Music_RocketTheme_Ch3:
 	rest 1
 	note C_, 1
 	rest 1
-	note C#, 1
+	note Cs, 1
 	rest 1
 	octave 4
-	note C#, 1
+	note Cs, 1
 	rest 1
 	octave 3
-	note A#, 1
+	note As, 1
 	note G_, 1
 	note E_, 1
-	note C#, 1
+	note Cs, 1
 	note D_, 1
 	rest 1
 	octave 4
@@ -385,20 +385,20 @@ Music_RocketTheme_Ch3:
 	rest 1
 	note D_, 1
 	rest 1
-	note D#, 1
+	note Ds, 1
 	rest 1
 	octave 4
-	note D#, 1
+	note Ds, 1
 	rest 1
 	note C_, 1
 	octave 3
 	note A_, 1
-	note F#, 1
-	note D#, 1
+	note Fs, 1
+	note Ds, 1
 	note E_, 1
 	rest 1
 	octave 4
-	note C#, 1
+	note Cs, 1
 	rest 1
 	octave 3
 	note F_, 1
@@ -407,10 +407,10 @@ Music_RocketTheme_Ch3:
 	note D_, 1
 	rest 1
 	octave 3
-	note F#, 1
+	note Fs, 1
 	rest 1
 	octave 4
-	note D#, 1
+	note Ds, 1
 	rest 1
 	octave 3
 	note G_, 1
@@ -419,7 +419,7 @@ Music_RocketTheme_Ch3:
 	note E_, 1
 	rest 1
 	octave 3
-	note G#, 1
+	note Gs, 1
 	rest 1
 	octave 4
 	note F_, 1
@@ -428,10 +428,10 @@ Music_RocketTheme_Ch3:
 	note A_, 1
 	rest 1
 	octave 4
-	note F#, 1
+	note Fs, 1
 	rest 1
 	octave 3
-	note A#, 1
+	note As, 1
 	rest 1
 	octave 4
 	note G_, 1
@@ -439,7 +439,7 @@ Music_RocketTheme_Ch3:
 	octave 3
 	note B_, 2
 	octave 4
-	note G#, 1
+	note Gs, 1
 	rest 1
 	sound_loop 0, .mainloop
 

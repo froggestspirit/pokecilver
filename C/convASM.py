@@ -41,12 +41,12 @@ def parse_line_label(string):
         funcList.append(currentFunc)
         if prevFunc != "":
             if not funcRet:
-                asm = f"\treturn a{currentFunc};\n"
+                asm = f"\treturn m{currentFunc};\n"
             asm = f"{asm}}}\n\n"
         asm = f"{asm}int {currentFunc}(struct gb_s *gb){{"
     elif len(string[0]) and string[0][0] == ".":
         localLabel = string[0][1:].replace(':', '').strip()
-        localLabelID = funcsKnown.index(f"a{currentFunc}_{localLabel}")
+        localLabelID = funcsKnown.index(f"{currentFunc}_{localLabel}")
         asm = f"\n_{localLabel}:\n\tSET_PC({funcsKnownAddr[localLabelID]});"
     elif string[0].split(" ")[0] == "rept":
         asm = f"for(int rept = 0; rept < {string[0].split(' ')[1]}; rept++){{"
@@ -98,7 +98,7 @@ def parse_asm(asm):
         parts = curASM.split("(")
         for p, part in enumerate(parts):
             if part in ("BANK", "LOW", "HIGH"):
-                if f"a{parts[p + 1].split(')')[0]}" in funcsKnown:
+                if f"{parts[p + 1].split(')')[0]}" in funcsKnown:
                     func = parts[p + 1].split(')')[0]
         if func:
             asm[i] = curASM.replace(func, f"a{func}")
@@ -112,8 +112,8 @@ def parse_asm(asm):
         elif asm[0] in register:  # Non-register into register
             if "[" in asm[1]:
                 source = "_addr"
-            elif f"a{asm[1]}" in funcsKnown:
-                asm[1] = f"a{asm[1]}"
+            elif f"{asm[1]}" in funcsKnown:
+                asm[1] = f"m{asm[1]}"
             return f"{op}{register[asm[0]]}{source}({asm[1].strip('[]')});"
         elif asm[1] in register:  # register into address
             return f"{op}{dest}{register[asm[1]]}({asm[0].strip('[]')});"
@@ -145,25 +145,25 @@ def parse_asm(asm):
         if asm[0][0] == ".":
             return f"{preCond}{cond} goto _{asm[0][1:]};"
         funcRet = True
-        return f"JR{cond}(a{asm[0]});"
+        return f"JR{cond}(m{asm[0]});"
     elif opcode in ("jp"):
         cond = ""
         if asm[0] in condition:
             cond = f"{condition[asm[0]]} "
             asm = asm[1:]
         if asm[0][0] == ".":
-            return f"JP{cond}(a{currentFunc}_{asm[0][1:]});"
+            return f"JP{cond}(m{currentFunc}_{asm[0][1:]});"
         funcRet = True
-        return f"JP{cond}(a{asm[0]});"
+        return f"JP{cond}(m{asm[0]});"
     elif opcode in ("call"):
         cond = ""
         if asm[0] in condition:
             cond = f"{condition[asm[0]]} "
             asm = asm[1:]
-        return f"CALL{cond}(a{asm[0]});"
+        return f"CALL{cond}(m{asm[0]});"
     elif opcode in ("rst"):
-        if f"a{asm[0]}" in funcsKnown:
-            return f"RST(a{asm[0]});"
+        if f"{asm[0]}" in funcsKnown:
+            return f"RST(m{asm[0]});"
         return f"RST({asm[0]});"
     elif opcode in ("callfar", "farcall", "homecall"):
         return f"{opcode.upper()}(a{asm[0]});"
@@ -199,8 +199,8 @@ def main():
 
     with open(funcMapFile, "r") as inFile:
         funcsFile = inFile.read().split("\n")
-    funcsKnown = list(i.split(" ")[1] for i in funcsFile if i[:7] == "#define")
-    funcsKnownAddr = list(i.split(" ")[2] for i in funcsFile if i[:7] == "#define")
+    funcsKnown = list(i.split(",")[0][8:] for i in funcsFile if i[:7] == "FUNCMAP")
+    funcsKnownAddr = list(i.split(",")[1].strip(" )") for i in funcsFile if i[:7] == "FUNCMAP")
 
     with open(args.fileName, "r") as inFile:
         asmFile = inFile.read().split("\n")

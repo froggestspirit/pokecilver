@@ -141,7 +141,7 @@ Music_LookSage_Ch3:
 	note F_, 1
 	note E_, 14
 	note G_, 1
-	note G#, 1
+	note Gs, 1
 .mainloop:
 	note A_, 12
 	note B_, 4
@@ -160,13 +160,13 @@ Music_LookSage_Ch3:
 	note F_, 8
 	note_type 6, 1, 0
 	note E_, 1
-	note D#, 1
+	note Ds, 1
 	note D_, 1
-	note C#, 1
+	note Cs, 1
 	note C_, 1
 	octave 5
 	note B_, 1
-	note A#, 1
+	note As, 1
 	note A_, 1
 	rest 4
 	octave 6
@@ -175,5 +175,5 @@ Music_LookSage_Ch3:
 	note_type 12, 1, 0
 	note E_, 14
 	note G_, 1
-	note G#, 1
+	note Gs, 1
 	sound_loop 0, .mainloop

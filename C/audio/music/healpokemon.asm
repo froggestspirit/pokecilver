@@ -31,7 +31,7 @@ Music_HealPokemon_Ch2:
 	note B_, 4
 	note B_, 4
 	note B_, 2
-	note G#, 2
+	note Gs, 2
 	note_type 12, 12, 4
 	octave 5
 	note E_, 8
@@ -45,7 +45,7 @@ Music_HealPokemon_Ch3:
 	note E_, 2
 	rest 2
 	note E_, 2
-	note G#, 2
+	note Gs, 2
 	note E_, 6
 	rest 2
 	sound_ret

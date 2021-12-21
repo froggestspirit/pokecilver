@@ -15,7 +15,7 @@ Music_TrainerVictory_Ch1:
 	note E_, 2
 	note E_, 2
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	volume_envelope 11, 6
 	note A_, 12
@@ -25,19 +25,19 @@ Music_TrainerVictory_Ch1:
 	volume_envelope 7, 2
 	sound_call .sub1
 	volume_envelope 5, 1
-	note C#, 2
+	note Cs, 2
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	note B_, 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	volume_envelope 7, 2
 	octave 3
 	note A_, 2
 	rest 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	note E_, 6
 	sound_loop 2, .loop1
 	sound_call .sub1
@@ -45,40 +45,40 @@ Music_TrainerVictory_Ch1:
 	rest 2
 	note F_, 2
 	note A_, 6
-	note A#, 2
+	note As, 2
 	rest 2
 	note G_, 2
-	note A#, 6
+	note As, 6
 .loop2:
 	volume_envelope 7, 2
 	octave 4
 	note D_, 2
-	note C#, 2
+	note Cs, 2
 	octave 3
 	note A_, 2
 	sound_loop 3, .loop2
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	octave 4
 	note D_, 2
 .loop3:
 	octave 4
-	note C#, 2
+	note Cs, 2
 	octave 3
 	note B_, 2
 	note A_, 2
 	sound_loop 3, .loop3
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	sound_loop 0, .mainloop
 
 .sub1:
 	octave 3
-	note F#, 2
+	note Fs, 2
 	rest 2
 	note D_, 2
-	note F#, 6
+	note Fs, 6
 	note G_, 2
 	rest 2
 	note E_, 2
@@ -96,7 +96,7 @@ Music_TrainerVictory_Ch2:
 	note A_, 2
 	note B_, 2
 	octave 5
-	note C#, 2
+	note Cs, 2
 	volume_envelope 13, 6
 	note D_, 12
 	stereo_panning TRUE, FALSE
@@ -104,13 +104,13 @@ Music_TrainerVictory_Ch2:
 .loop1:
 	note_type 8, 8, 2
 	sound_call .sub1
-	note F#, 2
+	note Fs, 2
 	rest 2
 	note G_, 2
 	note A_, 6
 	note E_, 2
 	rest 2
-	note F#, 2
+	note Fs, 2
 	note G_, 6
 	sound_loop 2, .loop1
 	sound_call .sub1
@@ -123,7 +123,7 @@ Music_TrainerVictory_Ch2:
 	note D_, 2
 	note G_, 6
 	note_type 12, 8, 8
-	note F#, 16
+	note Fs, 16
 	note E_, 16
 	sound_loop 0, .mainloop
 
@@ -153,21 +153,21 @@ Music_TrainerVictory_Ch3:
 	rest 1
 	note G_, 1
 	rest 1
-	note F#, 6
+	note Fs, 6
 	note D_, 2
-	note C#, 2
+	note Cs, 2
 	octave 2
 	note B_, 2
 .mainloop:
 .loop1:
 	sound_call .sub1
 	octave 3
-	note C#, 2
+	note Cs, 2
 	rest 2
-	note C#, 2
+	note Cs, 2
 	note A_, 2
-	note F#, 2
-	note C#, 2
+	note Fs, 2
+	note Cs, 2
 	octave 2
 	note A_, 2
 	rest 2
@@ -190,16 +190,16 @@ Music_TrainerVictory_Ch3:
 	octave 4
 	note D_, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	note G_, 2
 	note D_, 2
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	octave 4
 	note D_, 12
 	octave 3
 	note A_, 2
-	note F#, 2
+	note Fs, 2
 	note D_, 2
 	octave 2
 	note A_, 2
@@ -209,7 +209,7 @@ Music_TrainerVictory_Ch3:
 	note A_, 12
 	note G_, 2
 	note E_, 2
-	note C#, 2
+	note Cs, 2
 	sound_loop 0, .mainloop
 
 .sub1:
@@ -218,7 +218,7 @@ Music_TrainerVictory_Ch3:
 	rest 2
 	note A_, 2
 	octave 3
-	note F#, 2
+	note Fs, 2
 	note D_, 2
 	octave 2
 	note A_, 2

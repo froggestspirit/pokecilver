@@ -15,11 +15,11 @@ Music_PokemonChannel_Ch1:
 	octave 2
 	note B_, 1
 	rest 2
-	note F#, 1
+	note Fs, 1
 	note B_, 1
 	rest 1
 	octave 3
-	note F#, 4
+	note Fs, 4
 	duty_cycle 0
 	octave 2
 	note B_, 1
@@ -56,14 +56,14 @@ Music_PokemonChannel_Ch1:
 	note B_, 2
 	octave 4
 	note D_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 2
 	rest 2
-	note D#, 2
+	note Ds, 2
 	rest 2
 	note C_, 2
 	rest 2
-	note D#, 2
+	note Ds, 2
 	rest 2
 	rest 8
 	octave 3
@@ -108,14 +108,14 @@ Music_PokemonChannel_Ch2:
 	duty_cycle 0
 	octave 3
 	note G_, 4
-	note F#, 4
+	note Fs, 4
 	note E_, 2
 	rest 2
 	duty_cycle 3
 	octave 4
 	note B_, 2
 	rest 2
-	note A#, 2
+	note As, 2
 	rest 2
 	note B_, 8
 	octave 5
@@ -124,9 +124,9 @@ Music_PokemonChannel_Ch2:
 	note C_, 2
 	rest 2
 	octave 4
-	note A#, 2
+	note As, 2
 	rest 2
-	note G#, 2
+	note Gs, 2
 	rest 2
 	rest 8
 	note D_, 2
@@ -174,14 +174,14 @@ Music_PokemonChannel_Ch3:
 	rest 1
 	octave 3
 	note G_, 4
-	note G#, 1
+	note Gs, 1
 	rest 1
 	octave 4
 	note C_, 1
 	rest 1
-	note D#, 1
+	note Ds, 1
 	rest 1
-	note G#, 1
+	note Gs, 1
 	rest 1
 	note D_, 1
 	octave 3

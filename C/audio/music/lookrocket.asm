@@ -23,7 +23,7 @@ Music_LookRocket_Ch1:
 	sound_call .sub2
 	sound_call Music_LookRocket_Ch2.sub5
 	octave 4
-	note F#, 1
+	note Fs, 1
 	rest 1
 	volume_envelope 5, 3
 	sound_call .sub3
@@ -35,44 +35,44 @@ Music_LookRocket_Ch1:
 	sound_loop 0, .mainloop
 
 .sub1:
-	note D#, 1
+	note Ds, 1
 	rest 1
 	note D_, 1
 	rest 1
-	note C#, 1
+	note Cs, 1
 	rest 1
 	note C_, 1
 	rest 3
 	octave 2
 	note F_, 1
-	note G#, 1
+	note Gs, 1
 	note B_, 1
 	octave 3
 	note D_, 1
 	note F_, 1
-	note G#, 1
+	note Gs, 1
 	sound_ret
 
 .sub2:
 	rest 2
 	octave 3
-	note D#, 1
+	note Ds, 1
 	rest 5
-	note D#, 4
+	note Ds, 4
 	octave 2
 	note A_, 2
 	octave 3
-	note D#, 1
+	note Ds, 1
 	note F_, 1
-	note F#, 6
-	note D#, 1
+	note Fs, 6
+	note Ds, 1
 	rest 3
-	note F#, 1
+	note Fs, 1
 	rest 1
-	note D#, 1
+	note Ds, 1
 	rest 1
 	octave 4
-	note F#, 1
+	note Fs, 1
 	rest 1
 	sound_ret
 
@@ -113,11 +113,11 @@ Music_LookRocket_Ch2:
 	sound_loop 0, .mainloop
 
 .sub1:
-	note D#, 1
+	note Ds, 1
 	rest 1
 	note D_, 1
 	rest 1
-	note C#, 1
+	note Cs, 1
 	rest 1
 	note C_, 1
 	rest 3
@@ -129,22 +129,22 @@ Music_LookRocket_Ch2:
 .sub2:
 	rest 2
 	octave 4
-	note D#, 1
+	note Ds, 1
 	rest 5
 	note F_, 4
 	note C_, 1
 	note D_, 1
-	note D#, 1
+	note Ds, 1
 	note F_, 1
-	note F#, 6
-	note D#, 1
+	note Fs, 6
+	note Ds, 1
 	rest 3
-	note F#, 1
+	note Fs, 1
 	rest 1
-	note D#, 1
+	note Ds, 1
 	rest 1
 	octave 5
-	note D#, 1
+	note Ds, 1
 	rest 1
 	sound_ret
 
@@ -153,13 +153,13 @@ Music_LookRocket_Ch2:
 	octave 3
 	note F_, 1
 	rest 7
-	note F#, 1
+	note Fs, 1
 	rest 5
 	sound_ret
 
 .sub4:
 	volume_envelope 6, 3
-	note G#, 1
+	note Gs, 1
 	note F_, 1
 	note D_, 1
 	octave 2
@@ -167,17 +167,17 @@ Music_LookRocket_Ch2:
 	volume_envelope 10, 3
 	octave 3
 	note A_, 1
-	note F#, 1
-	note D#, 1
+	note Fs, 1
+	note Ds, 1
 	note C_, 1
 	volume_envelope 12, 3
-	note A#, 1
+	note As, 1
 	note G_, 1
 	note E_, 1
-	note C#, 1
+	note Cs, 1
 	volume_envelope 15, 3
 	note B_, 1
-	note G#, 1
+	note Gs, 1
 	note F_, 1
 	note D_, 1
 	sound_ret
@@ -188,10 +188,10 @@ Music_LookRocket_Ch2:
 	note G_, 1
 	rest 5
 	note A_, 8
-	note A#, 6
+	note As, 6
 	note A_, 1
 	rest 3
-	note A#, 1
+	note As, 1
 	rest 1
 	note A_, 1
 	rest 1
@@ -219,7 +219,7 @@ Music_LookRocket_Ch3:
 	octave 3
 	note F_, 1
 	rest 1
-	note G#, 1
+	note Gs, 1
 	rest 1
 	octave 4
 	note C_, 1
@@ -232,15 +232,15 @@ Music_LookRocket_Ch3:
 
 .sub2:
 	octave 2
-	note G#, 1
+	note Gs, 1
 	rest 1
 	octave 3
-	note G#, 1
+	note Gs, 1
 	rest 1
 	octave 2
-	note G#, 1
+	note Gs, 1
 	rest 1
-	note G#, 1
+	note Gs, 1
 	rest 1
 	note A_, 1
 	rest 1
@@ -249,14 +249,14 @@ Music_LookRocket_Ch3:
 	rest 1
 	note C_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	sound_ret
 
 .sub3:
 	volume_envelope 2, 4
 	octave 2
-	note G#, 1
+	note Gs, 1
 	rest 1
 	octave 3
 	note F_, 1
@@ -265,11 +265,11 @@ Music_LookRocket_Ch3:
 	note A_, 1
 	rest 1
 	octave 3
-	note F#, 1
+	note Fs, 1
 	rest 1
 	volume_envelope 1, 4
 	octave 2
-	note A#, 1
+	note As, 1
 	rest 1
 	octave 3
 	note G_, 1
@@ -278,7 +278,7 @@ Music_LookRocket_Ch3:
 	note B_, 1
 	rest 1
 	octave 3
-	note G#, 1
+	note Gs, 1
 	rest 1
 	sound_ret
 
@@ -299,7 +299,7 @@ Music_LookRocket_Ch3:
 	octave 3
 	note C_, 1
 	rest 1
-	note D#, 1
+	note Ds, 1
 	rest 1
 	note G_, 1
 	rest 1
@@ -315,7 +315,7 @@ Music_LookRocket_Ch3:
 	rest 1
 	note C_, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
 	note A_, 1
 	rest 1
@@ -323,24 +323,24 @@ Music_LookRocket_Ch3:
 
 .sub5:
 	octave 2
-	note G#, 1
+	note Gs, 1
 	rest 1
 	octave 3
-	note G#, 1
+	note Gs, 1
 	rest 1
 	octave 2
-	note G#, 1
+	note Gs, 1
 	rest 1
-	note G#, 1
+	note Gs, 1
 	rest 1
 	note A_, 1
 	rest 1
 	octave 3
 	note A_, 1
 	rest 1
-	note G#, 1
-	note F#, 1
-	note D#, 1
+	note Gs, 1
+	note Fs, 1
+	note Ds, 1
 	note C_, 1
 	sound_ret
 

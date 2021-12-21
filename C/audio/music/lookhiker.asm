@@ -14,21 +14,21 @@ Music_LookHiker_Ch1:
 	stereo_panning FALSE, TRUE
 	note_type 12, 6, 8
 	octave 3
-	note F#, 2
+	note Fs, 2
 	note F_, 2
-	note F#, 8
+	note Fs, 8
 .mainloop:
 	note D_, 2
-	note D#, 2
+	note Ds, 2
 	note E_, 2
 	note F_, 2
-	note F#, 2
+	note Fs, 2
 	rest 4
-	note F#, 2
+	note Fs, 2
 	rest 4
-	note F#, 2
+	note Fs, 2
 	rest 2
-	note F#, 2
+	note Fs, 2
 	rest 6
 	sound_loop 0, .mainloop
 
@@ -40,13 +40,13 @@ Music_LookHiker_Ch2:
 	note B_, 1
 	note B_, 5
 	octave 2
-	note F#, 1
-	note F#, 5
+	note Fs, 1
+	note Fs, 5
 	octave 1
 	note B_, 1
 	octave 2
 	note D_, 1
-	note F#, 1
+	note Fs, 1
 	note D_, 1
 	volume_envelope 10, 1
 .mainloop:
@@ -56,15 +56,15 @@ Music_LookHiker_Ch2:
 	octave 2
 	note D_, 1
 	note D_, 2
-	note F#, 1
-	note F#, 2
-	note A#, 1
-	note A#, 2
+	note Fs, 1
+	note Fs, 2
+	note As, 1
+	note As, 2
 	octave 1
 	note B_, 1
 	octave 2
 	note D_, 1
-	note F#, 1
+	note Fs, 1
 	note D_, 1
 	sound_loop 0, .mainloop
 
@@ -74,19 +74,19 @@ Music_LookHiker_Ch3:
 	note_type 12, 1, 4
 	octave 4
 	note B_, 2
-	note A#, 2
+	note As, 2
 	note B_, 8
 .mainloop:
 	octave 5
-	note D#, 2
+	note Ds, 2
 	note D_, 2
-	note C#, 2
+	note Cs, 2
 	note C_, 2
 	sound_call .sub1
 	note G_, 2
-	note G#, 2
+	note Gs, 2
 	note A_, 2
-	note A#, 2
+	note As, 2
 	sound_call .sub1
 	sound_loop 0, .mainloop
 

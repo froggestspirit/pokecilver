@@ -43,11 +43,11 @@ Music_PostCredits_Ch1:
 	note D_, 2
 	volume_envelope 9, 3
 	octave 2
-	note A#, 2
+	note As, 2
 	octave 3
 	note D_, 2
 	note G_, 2
-	note A#, 2
+	note As, 2
 	octave 4
 	note D_, 2
 	volume_envelope 7, 3
@@ -73,11 +73,11 @@ Music_PostCredits_Ch1:
 	note C_, 2
 	volume_envelope 9, 3
 	octave 2
-	note G#, 2
+	note Gs, 2
 	octave 3
 	note C_, 2
 	note F_, 2
-	note G#, 2
+	note Gs, 2
 	octave 4
 	note C_, 2
 	volume_envelope 7, 3
@@ -103,11 +103,11 @@ Music_PostCredits_Ch1:
 	note C_, 2
 	volume_envelope 9, 3
 	octave 2
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	octave 3
 	note D_, 2
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	volume_envelope 7, 3
 	note A_, 2
@@ -221,7 +221,7 @@ Music_PostCredits_Ch2:
 	volume_envelope 10, 3
 	note F_, 2
 	note E_, 2
-	note D#, 2
+	note Ds, 2
 	note E_, 2
 	note B_, 2
 	volume_envelope 7, 3

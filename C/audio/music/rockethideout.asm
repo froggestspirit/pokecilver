@@ -19,99 +19,99 @@ Music_RocketHideout_Ch1:
 	sound_loop 4, .loop1
 .loop2:
 	octave 2
-	note D#, 2
+	note Ds, 2
 	rest 2
-	note A#, 4
+	note As, 4
 	note A_, 2
 	rest 6
-	note D#, 2
-	note A#, 4
+	note Ds, 2
+	note As, 4
 	note A_, 2
 	rest 8
 	sound_loop 2, .loop2
 	octave 3
-	note A#, 2
+	note As, 2
 	note A_, 2
 	note F_, 2
-	note F#, 2
+	note Fs, 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	note C_, 2
-	note C#, 2
+	note Cs, 2
 	note C_, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	note A_, 2
 	note F_, 2
-	note F#, 2
+	note Fs, 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	note C_, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	note A_, 2
-	note F#, 2
+	note Fs, 2
 	note F_, 2
-	note D#, 2
+	note Ds, 2
 	note F_, 2
-	note F#, 2
-	note A#, 2
-	note F#, 2
+	note Fs, 2
+	note As, 2
+	note Fs, 2
 	note F_, 2
-	note D#, 2
+	note Ds, 2
 	note F_, 2
-	note F#, 2
+	note Fs, 2
 	note A_, 2
 	octave 2
-	note A#, 2
+	note As, 2
 	note B_, 2
 	octave 3
-	note D#, 2
+	note Ds, 2
 	note F_, 2
 	octave 4
 	note C_, 2
 	octave 3
 	note B_, 2
 	note G_, 2
-	note G#, 2
+	note Gs, 2
 	octave 4
-	note D#, 2
+	note Ds, 2
 	note D_, 2
-	note D#, 2
+	note Ds, 2
 	note D_, 2
 	note C_, 2
 	octave 3
 	note B_, 2
 	note G_, 2
-	note G#, 2
+	note Gs, 2
 	octave 4
-	note D#, 2
+	note Ds, 2
 	note D_, 2
 	note C_, 2
 	octave 3
 	note B_, 2
-	note G#, 2
+	note Gs, 2
 	note G_, 2
 	note F_, 2
 	note G_, 2
-	note G#, 2
+	note Gs, 2
 	octave 4
 	note C_, 2
 	octave 3
-	note G#, 2
+	note Gs, 2
 	note G_, 2
 	note F_, 2
 	note G_, 2
-	note G#, 2
+	note Gs, 2
 	note B_, 2
 	note C_, 2
-	note C#, 2
+	note Cs, 2
 	note F_, 2
 	note G_, 2
 	rest 16
 	volume_envelope 11, 7
 	octave 2
-	note G#, 16
+	note Gs, 16
 	rest 16
 	note A_, 16
 	volume_envelope 11, 3
@@ -128,96 +128,96 @@ Music_RocketHideout_Ch2:
 	stereo_panning FALSE, TRUE
 .mainloop:
 	octave 2
-	note D#, 2
+	note Ds, 2
 	rest 2
-	note A#, 4
+	note As, 4
 	note A_, 2
 	rest 6
-	note D#, 2
-	note A#, 4
+	note Ds, 2
+	note As, 4
 	note A_, 2
 	rest 8
-	note D#, 2
+	note Ds, 2
 	rest 2
-	note A#, 4
+	note As, 4
 	note A_, 2
 	rest 6
-	note D#, 2
-	note A#, 4
+	note Ds, 2
+	note As, 4
 	note A_, 2
 	rest 8
 	octave 3
-	note D#, 12
-	note A#, 2
+	note Ds, 12
+	note As, 2
 	note A_, 2
 	octave 4
-	note C#, 8
+	note Cs, 8
 	note C_, 8
 	octave 3
-	note A#, 12
+	note As, 12
 	note A_, 4
-	note F#, 8
+	note Fs, 8
 	note F_, 8
 	octave 4
-	note D#, 12
-	note A#, 2
+	note Ds, 12
+	note As, 2
 	note A_, 2
-	note F#, 8
+	note Fs, 8
 	note F_, 8
-	note D#, 12
+	note Ds, 12
 	note D_, 4
 	octave 3
 	note B_, 8
-	note A#, 8
+	note As, 8
 	octave 4
 	note F_, 12
 	octave 5
 	note C_, 2
 	octave 4
 	note B_, 2
-	note G#, 8
+	note Gs, 8
 	note G_, 8
 	note F_, 12
 	note E_, 4
-	note C#, 8
+	note Cs, 8
 	note C_, 8
 	octave 2
-	note C#, 2
+	note Cs, 2
 	rest 2
-	note G#, 4
+	note Gs, 4
 	note G_, 2
 	rest 6
 	volume_envelope 12, 7
 	octave 3
-	note C#, 16
+	note Cs, 16
 	volume_envelope 12, 4
 	octave 2
-	note C#, 2
+	note Cs, 2
 	rest 2
-	note G#, 4
+	note Gs, 4
 	note G_, 2
 	rest 6
 	volume_envelope 12, 7
 	octave 3
-	note C#, 16
+	note Cs, 16
 	volume_envelope 12, 4
 	octave 2
-	note C#, 2
+	note Cs, 2
 	rest 2
-	note G#, 4
+	note Gs, 4
 	note G_, 2
 	rest 6
-	note C#, 2
-	note G#, 4
+	note Cs, 2
+	note Gs, 4
 	note G_, 2
 	rest 8
-	note C#, 2
+	note Cs, 2
 	rest 2
-	note G#, 4
+	note Gs, 4
 	note G_, 2
 	rest 6
-	note C#, 2
-	note G#, 4
+	note Cs, 2
+	note Gs, 4
 	note G_, 2
 	rest 8
 	sound_loop 0, .mainloop
@@ -227,13 +227,13 @@ Music_RocketHideout_Ch3:
 .mainloop:
 .loop1:
 	octave 2
-	note D#, 2
+	note Ds, 2
 	rest 2
-	note A#, 4
+	note As, 4
 	note A_, 2
 	rest 6
-	note D#, 2
-	note A#, 4
+	note Ds, 2
+	note As, 4
 	note A_, 2
 	rest 8
 	sound_loop 6, .loop1
@@ -253,23 +253,23 @@ Music_RocketHideout_Ch3:
 	rest 8
 	sound_loop 2, .loop2
 .loop3:
-	note C#, 2
+	note Cs, 2
 	rest 2
-	note G#, 4
+	note Gs, 4
 	note G_, 2
 	rest 6
 	octave 3
-	note C#, 16
+	note Cs, 16
 	sound_loop 2, .loop3
 .loop4:
 	octave 2
-	note C#, 2
+	note Cs, 2
 	rest 2
-	note G#, 4
+	note Gs, 4
 	note G_, 2
 	rest 6
-	note C#, 2
-	note G#, 4
+	note Cs, 2
+	note Gs, 4
 	note G_, 2
 	rest 8
 	sound_loop 2, .loop4

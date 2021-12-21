@@ -28,35 +28,35 @@ Music_DragonsDen_Ch1:
 
 .sub1:
 	octave 3
-	note A#, 12
+	note As, 12
 	note A_, 4
-	note A#, 12
+	note As, 12
 	note A_, 4
-	note A#, 6
+	note As, 6
 	octave 4
 	note C_, 4
-	note C#, 6
+	note Cs, 6
 	note E_, 16
-	note D#, 12
+	note Ds, 12
 	note D_, 4
 	octave 3
-	note G#, 16
+	note Gs, 16
 	sound_ret
 
 .sub2:
 	volume_envelope 11, 1
 	rest 2
 	octave 4
-	note C#, 3
-	note C#, 3
-	note C#, 3
-	note C#, 3
-	note C#, 4
-	note C#, 3
-	note C#, 3
-	note C#, 4
-	note C#, 2
-	note C#, 2
+	note Cs, 3
+	note Cs, 3
+	note Cs, 3
+	note Cs, 3
+	note Cs, 4
+	note Cs, 3
+	note Cs, 3
+	note Cs, 4
+	note Cs, 2
+	note Cs, 2
 	sound_ret
 
 Music_DragonsDen_Ch2:
@@ -77,28 +77,28 @@ Music_DragonsDen_Ch2:
 
 .sub1:
 	octave 4
-	note D#, 12
+	note Ds, 12
 	note D_, 4
-	note D#, 12
+	note Ds, 12
 	note D_, 4
-	note D#, 6
+	note Ds, 6
 	note F_, 4
-	note F#, 6
+	note Fs, 6
 	note A_, 16
-	note G#, 12
+	note Gs, 12
 	note G_, 4
-	note C#, 16
+	note Cs, 16
 	sound_ret
 
 .sub2:
 	volume_envelope 12, 1
 .sub2loop1:
 	octave 5
-	note C#, 4
+	note Cs, 4
 	octave 4
-	note G#, 4
-	note G#, 4
-	note G#, 4
+	note Gs, 4
+	note Gs, 4
+	note Gs, 4
 	sound_loop 2, .sub2loop1
 	sound_ret
 
@@ -107,53 +107,53 @@ Music_DragonsDen_Ch3:
 .loop1:
 	note_type 12, 1, 4
 	octave 4
-	note C#, 2
+	note Cs, 2
 	octave 3
-	note G#, 1
+	note Gs, 1
 	octave 4
-	note C#, 1
+	note Cs, 1
 	octave 3
-	note G#, 2
+	note Gs, 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	octave 3
-	note G#, 1
+	note Gs, 1
 	octave 4
-	note C#, 1
+	note Cs, 1
 	octave 3
-	note G#, 2
+	note Gs, 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	octave 3
-	note G#, 1
+	note Gs, 1
 	octave 4
-	note C#, 1
+	note Cs, 1
 	sound_loop 15, .loop1
 	rest 16
 	note_type 6, 2, 7
 .loop2:
 	octave 3
-	note C#, 4
+	note Cs, 4
 	octave 2
-	note G#, 2
+	note Gs, 2
 	octave 3
-	note C#, 2
+	note Cs, 2
 	octave 2
-	note G#, 4
+	note Gs, 4
 	octave 3
-	note C#, 4
+	note Cs, 4
 	octave 2
-	note G#, 2
+	note Gs, 2
 	octave 3
-	note C#, 2
+	note Cs, 2
 	octave 2
-	note G#, 4
+	note Gs, 4
 	octave 3
-	note C#, 4
+	note Cs, 4
 	octave 2
-	note G#, 2
+	note Gs, 2
 	octave 3
-	note C#, 2
+	note Cs, 2
 	sound_loop 16, .loop2
 	sound_loop 0, .mainloop
 

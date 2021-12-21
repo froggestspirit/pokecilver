@@ -19,19 +19,19 @@ Music_MainMenu_Ch1:
 .loop1:
 	note_type 12, 9, 2
 	octave 3
-	note C#, 6
-	note C#, 1
-	note C#, 1
-	note C#, 2
-	note C#, 2
-	note C#, 4
+	note Cs, 6
+	note Cs, 1
+	note Cs, 1
+	note Cs, 2
+	note Cs, 2
+	note Cs, 4
 	sound_loop 2, .loop1
-	note D#, 6
-	note D#, 1
-	note D#, 1
-	note D#, 2
-	note D#, 2
-	note D#, 4
+	note Ds, 6
+	note Ds, 1
+	note Ds, 1
+	note Ds, 2
+	note Ds, 2
+	note Ds, 4
 	octave 2
 	note B_, 6
 	note B_, 1
@@ -52,19 +52,19 @@ Music_MainMenu_Ch2:
 .mainloop:
 .loop1:
 	note_type 12, 10, 2
-	note F#, 6
-	note F#, 1
-	note F#, 1
-	note F#, 2
-	note F#, 2
-	note F#, 4
+	note Fs, 6
+	note Fs, 1
+	note Fs, 1
+	note Fs, 2
+	note Fs, 2
+	note Fs, 4
 	sound_loop 2, .loop1
-	note G#, 6
-	note G#, 1
-	note G#, 1
-	note G#, 2
-	note G#, 2
-	note G#, 4
+	note Gs, 6
+	note Gs, 1
+	note Gs, 1
+	note Gs, 2
+	note Gs, 2
+	note Gs, 4
 	note E_, 6
 	note E_, 1
 	note E_, 1
@@ -81,26 +81,26 @@ Music_MainMenu_Ch3:
 .mainloop:
 .loop1:
 	octave 2
-	note F#, 1
+	note Fs, 1
 	rest 5
-	note F#, 1
-	note F#, 1
-	note F#, 1
+	note Fs, 1
+	note Fs, 1
+	note Fs, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 1
-	note F#, 1
+	note Fs, 1
 	rest 3
 	sound_loop 2, .loop1
-	note G#, 1
+	note Gs, 1
 	rest 5
-	note G#, 1
-	note G#, 1
-	note G#, 1
+	note Gs, 1
+	note Gs, 1
+	note Gs, 1
 	rest 1
-	note G#, 1
+	note Gs, 1
 	rest 1
-	note G#, 1
+	note Gs, 1
 	rest 3
 	note E_, 1
 	rest 5

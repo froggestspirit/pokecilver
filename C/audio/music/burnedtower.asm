@@ -20,13 +20,13 @@ Music_BurnedTower_Ch1:
 	note A_, 2
 	volume_envelope 8, 0
 	octave 3
-	note D#, 6
+	note Ds, 6
 	volume_envelope 9, 1
 	note D_, 4
 	note D_, 4
 	note D_, 2
 	volume_envelope 8, 0
-	note C#, 6
+	note Cs, 6
 .loop1:
 	volume_envelope 9, 1
 	octave 2
@@ -34,7 +34,7 @@ Music_BurnedTower_Ch1:
 	note A_, 4
 	note A_, 2
 	volume_envelope 8, 0
-	note A#, 6
+	note As, 6
 	sound_loop 2, .loop1
 	tempo 150
 .mainloop:
@@ -45,35 +45,35 @@ Music_BurnedTower_Ch1:
 	note A_, 2
 	volume_envelope 10, 0
 	octave 3
-	note D#, 6
+	note Ds, 6
 	volume_envelope 11, 1
 	note D_, 4
 	note D_, 4
 	note D_, 2
 	volume_envelope 10, 0
-	note C#, 6
+	note Cs, 6
 	volume_envelope 11, 1
 	octave 2
 	note A_, 4
 	note A_, 4
 	note A_, 2
 	volume_envelope 10, 0
-	note A#, 6
+	note As, 6
 	volume_envelope 11, 1
 	note A_, 4
 	note A_, 4
 	note A_, 2
 	volume_envelope 11, 3
-	note A#, 16
-	note A#, 16
-	note A#, 16
-	note G#, 6
+	note As, 16
+	note As, 16
+	note As, 16
+	note Gs, 6
 	volume_envelope 11, 1
 	note A_, 4
 	note A_, 4
 	note A_, 2
 	volume_envelope 10, 0
-	note A#, 6
+	note As, 6
 	volume_envelope 11, 1
 	note B_, 4
 	note B_, 4
@@ -86,7 +86,7 @@ Music_BurnedTower_Ch1:
 	note E_, 4
 	note E_, 2
 	volume_envelope 10, 0
-	note D#, 6
+	note Ds, 6
 .loop2:
 	volume_envelope 11, 1
 	octave 2
@@ -117,20 +117,20 @@ Music_BurnedTower_Ch2:
 	note A_, 2
 	volume_envelope 11, 0
 	octave 3
-	note D#, 6
+	note Ds, 6
 	volume_envelope 12, 1
 	note D_, 4
 	note D_, 4
 	note D_, 2
 	volume_envelope 11, 0
-	note C#, 6
+	note Cs, 6
 	volume_envelope 12, 1
 	octave 2
 	note A_, 4
 	note A_, 4
 	note A_, 2
 	volume_envelope 11, 0
-	note A#, 4
+	note As, 4
 	volume_envelope 12, 1
 	volume_envelope 12, 2
 	octave 3
@@ -149,25 +149,25 @@ Music_BurnedTower_Ch2:
 	duty_cycle 2
 	volume_envelope 11, 0
 	octave 3
-	note F#, 4
+	note Fs, 4
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 4
 	note B_, 4
 	octave 4
-	note C#, 4
+	note Cs, 4
 	note D_, 2
-	note C#, 2
+	note Cs, 2
 	octave 3
 	note B_, 4
 	note G_, 4
-	note F#, 4
+	note Fs, 4
 	note E_, 2
-	note F#, 2
+	note Fs, 2
 	note G_, 4
 	note E_, 4
 	volume_envelope 11, 7
-	note F#, 16
+	note Fs, 16
 	sound_loop 0, .mainloop
 
 .sub1:
@@ -200,7 +200,7 @@ Music_BurnedTower_Ch3:
 	rest 16
 	rest 12
 	octave 3
-	note D#, 4
+	note Ds, 4
 .mainloop:
 .loop1:
 	octave 2
@@ -220,26 +220,26 @@ Music_BurnedTower_Ch3:
 	note E_, 2
 	rest 2
 	note E_, 2
-	note D#, 4
+	note Ds, 4
 	sound_loop 4, .loop1
 .loop2:
 	octave 2
 	note B_, 2
 	octave 3
-	note F#, 2
+	note Fs, 2
 	rest 2
-	note F#, 2
+	note Fs, 2
 	rest 2
-	note F#, 2
+	note Fs, 2
 	note G_, 4
 	octave 2
 	note B_, 2
 	octave 3
-	note F#, 2
+	note Fs, 2
 	rest 2
-	note F#, 2
+	note Fs, 2
 	rest 2
-	note F#, 2
+	note Fs, 2
 	note F_, 4
 	sound_loop 2, .loop2
 	sound_loop 0, .mainloop

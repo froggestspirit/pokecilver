@@ -19,11 +19,11 @@ Music_UnionCave_Ch1:
 	sound_loop 4, .loop1
 .loop2:
 	octave 2
-	note G#, 2
+	note Gs, 2
 	octave 3
-	note C#, 2
+	note Cs, 2
 	note E_, 4
-	note C#, 2
+	note Cs, 2
 	note E_, 2
 	note F_, 4
 	sound_loop 8, .loop2
@@ -35,20 +35,20 @@ Music_UnionCave_Ch1:
 	note F_, 4
 	note D_, 2
 	note F_, 2
-	note F#, 4
+	note Fs, 4
 	sound_loop 4, .loop3
 	rest 4
 	volume_envelope 8, 0
 	note F_, 16
-	note F#, 16
+	note Fs, 16
 	note G_, 16
-	note F#, 16
+	note Fs, 16
 	note G_, 8
-	note F#, 8
+	note Fs, 8
 	note F_, 8
 	note E_, 8
 	note G_, 8
-	note F#, 8
+	note Fs, 8
 	octave 4
 	note C_, 8
 	octave 3
@@ -67,9 +67,9 @@ Music_UnionCave_Ch1:
 
 .sub1:
 	octave 2
-	note G#, 2
+	note Gs, 2
 	octave 3
-	note C#, 2
+	note Cs, 2
 	note E_, 12
 	sound_ret
 
@@ -84,17 +84,17 @@ Music_UnionCave_Ch2:
 	volume_envelope 12, 7
 	sound_call .sub1
 	volume_envelope 12, 4
-	note C#, 4
+	note Cs, 4
 	octave 3
 	note B_, 4
 	octave 4
 	note D_, 2
 	note E_, 2
-	note C#, 2
+	note Cs, 2
 	octave 3
 	note B_, 2
 	octave 4
-	note C#, 4
+	note Cs, 4
 	octave 3
 	note B_, 4
 	octave 4
@@ -103,24 +103,24 @@ Music_UnionCave_Ch2:
 	note B_, 4
 	octave 4
 	note D_, 4
-	note F#, 2
+	note Fs, 2
 	note F_, 2
-	note C#, 2
+	note Cs, 2
 	octave 3
 	note B_, 2
 	octave 4
-	note C#, 8
+	note Cs, 8
 	note D_, 4
-	note C#, 4
+	note Cs, 4
 	rest 4
 	volume_envelope 10, 0
 	note C_, 16
-	note C#, 16
+	note Cs, 16
 	note D_, 16
-	note C#, 16
+	note Cs, 16
 	note E_, 16
-	note D#, 16
-	note A#, 16
+	note Ds, 16
+	note As, 16
 	note A_, 16
 	volume_envelope 10, 5
 	vibrato 6, 4, 4
@@ -138,39 +138,39 @@ Music_UnionCave_Ch2:
 	octave 4
 	note C_, 4
 	octave 3
-	note A#, 4
+	note As, 4
 	octave 4
-	note C#, 2
-	note D#, 2
+	note Cs, 2
+	note Ds, 2
 	note C_, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	octave 4
 	note C_, 4
 	octave 3
-	note A#, 4
+	note As, 4
 	octave 4
-	note C#, 8
+	note Cs, 8
 	octave 3
-	note A#, 4
+	note As, 4
 	octave 4
-	note C#, 4
+	note Cs, 4
 	note F_, 2
 	note E_, 2
 	note C_, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	octave 4
 	note C_, 8
-	note C#, 4
+	note Cs, 4
 	note C_, 4
 	sound_ret
 
 .sub2:
 	octave 2
-	note G#, 2
+	note Gs, 2
 	octave 3
-	note C#, 2
+	note Cs, 2
 	note E_, 12
 	sound_ret
 
@@ -190,7 +190,7 @@ Music_UnionCave_Ch3:
 	note E_, 2
 	rest 2
 	note E_, 2
-	note G#, 2
+	note Gs, 2
 	note E_, 2
 	rest 2
 	octave 4
@@ -206,24 +206,24 @@ Music_UnionCave_Ch3:
 	note F_, 2
 	rest 2
 	octave 4
-	note C#, 2
+	note Cs, 2
 	sound_loop 4, .loop3
 	rest 4
 	note C_, 8
 	octave 3
 	note B_, 8
-	note A#, 8
+	note As, 8
 	note A_, 8
 	octave 4
-	note C#, 8
+	note Cs, 8
 	note C_, 8
 	octave 3
 	note B_, 8
-	note A#, 8
+	note As, 8
 .loop4:
 	note A_, 4
 	note G_, 4
-	note A#, 2
+	note As, 2
 	octave 4
 	note C_, 2
 	octave 3
@@ -232,7 +232,7 @@ Music_UnionCave_Ch3:
 	sound_loop 3, .loop4
 	note A_, 4
 	note G_, 4
-	note A#, 8
+	note As, 8
 .loop5:
 	rest 16
 	sound_loop 4, .loop5

@@ -23,25 +23,25 @@ Music_PokemonMarch_Ch1:
 	note_type 8, 10, 2
 .mainloop:
 	sound_call .sub1
-	note D#, 2
+	note Ds, 2
 	note C_, 2
-	note D#, 2
+	note Ds, 2
 	note C_, 2
 	sound_call .sub1
-	note D#, 2
+	note Ds, 2
 	note C_, 2
-	note D#, 2
+	note Ds, 2
 	note G_, 2
 	sound_call .sub1
 	note C_, 2
 	note C_, 2
-	note D#, 2
+	note Ds, 2
 	note C_, 2
 	sound_call .sub1
-	note D#, 2
+	note Ds, 2
 	note C_, 2
-	note C#, 2
-	note D#, 2
+	note Cs, 2
+	note Ds, 2
 	sound_call .sub2
 	note F_, 2
 	note D_, 2
@@ -68,45 +68,45 @@ Music_PokemonMarch_Ch1:
 	note F_, 2
 	note D_, 2
 	sound_call .sub1
-	note D#, 2
+	note Ds, 2
 	note C_, 2
-	note D#, 2
+	note Ds, 2
 	note C_, 2
 	octave 2
-	note A#, 2
-	note A#, 2
+	note As, 2
+	note As, 2
 	octave 3
 	note C_, 2
 	note D_, 2
-	note C#, 2
+	note Cs, 2
 	note C_, 2
 	octave 2
-	note A#, 2
+	note As, 2
 	rest 4
-	note D#, 2
+	note Ds, 2
 	rest 4
 	octave 3
-	note D#, 2
-	note D#, 2
+	note Ds, 2
+	note Ds, 2
 	note F_, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note F_, 2
-	note D#, 4
+	note Ds, 4
 	note F_, 2
 	note G_, 4
-	note A#, 2
+	note As, 2
 	sound_loop 0, .mainloop
 
 .sub1:
 	rest 4
 	octave 3
-	note D#, 1
+	note Ds, 1
 	note D_, 1
-	note D#, 2
+	note Ds, 2
 	rest 2
-	note D#, 2
-	note D#, 2
+	note Ds, 2
+	note Ds, 2
 	rest 2
 	sound_ret
 
@@ -133,39 +133,39 @@ Music_PokemonMarch_Ch2:
 .mainloop:
 	note_type 12, 11, 7
 	octave 3
-	note G#, 12
+	note Gs, 12
 	note_type 8, 11, 3
-	note D#, 2
-	note G#, 2
-	note A#, 2
+	note Ds, 2
+	note Gs, 2
+	note As, 2
 	octave 4
 	note C_, 2
 	rest 16
 	rest 6
 	note_type 8, 11, 7
 	octave 3
-	note G#, 16
+	note Gs, 16
 	note_type 8, 11, 3
-	note D#, 2
-	note G#, 4
-	note A#, 2
+	note Ds, 2
+	note Gs, 4
+	note As, 2
 	octave 4
 	note C_, 4
-	note C#, 2
+	note Cs, 2
 	note C_, 4
-	note C#, 2
+	note Cs, 2
 	note C_, 4
-	note C#, 2
+	note Cs, 2
 	note C_, 2
 	octave 3
-	note A#, 2
-	note G#, 2
+	note As, 2
+	note Gs, 2
 	note_type 8, 11, 7
-	note A#, 16
+	note As, 16
 	note_type 8, 11, 3
-	note A#, 2
+	note As, 2
 	note F_, 2
-	note A#, 2
+	note As, 2
 	octave 4
 	note C_, 2
 	note D_, 2
@@ -173,61 +173,61 @@ Music_PokemonMarch_Ch2:
 	rest 6
 	note_type 8, 11, 7
 	octave 3
-	note A#, 16
+	note As, 16
 	note_type 8, 11, 3
 	note F_, 2
-	note A#, 4
+	note As, 4
 	octave 4
 	note C_, 2
 	note D_, 4
-	note D#, 2
+	note Ds, 2
 	note D_, 4
-	note D#, 2
+	note Ds, 2
 	note D_, 4
-	note D#, 2
+	note Ds, 2
 	note D_, 2
 	note C_, 2
 	octave 3
 	note B_, 2
 	note_type 8, 11, 7
-	note A#, 16
+	note As, 16
 	note_type 8, 11, 3
 	note A_, 2
-	note A#, 4
+	note As, 4
 	octave 4
 	note C_, 2
 	note_type 8, 11, 7
 	octave 3
-	note G#, 16
+	note Gs, 16
 	note_type 8, 11, 3
-	note A#, 2
-	note G#, 4
+	note As, 2
+	note Gs, 4
 	note F_, 2
-	note D#, 2
-	note D#, 2
+	note Ds, 2
+	note Ds, 2
 	note F_, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note F_, 2
-	note D#, 2
+	note Ds, 2
 	rest 2
 	octave 4
-	note D#, 1
+	note Ds, 1
 	note D_, 1
-	note D#, 1
+	note Ds, 1
 	rest 5
 	octave 3
 	note G_, 2
 	note G_, 2
-	note G#, 2
-	note A#, 2
+	note Gs, 2
+	note As, 2
 	note A_, 2
-	note G#, 2
+	note Gs, 2
 	note G_, 2
 	rest 2
 	octave 4
 	note G_, 1
-	note F#, 1
+	note Fs, 1
 	note G_, 1
 	rest 5
 	sound_loop 0, .mainloop
@@ -241,37 +241,37 @@ Music_PokemonMarch_Ch3:
 	sound_call .sub1
 	rest 2
 	octave 4
-	note D#, 2
+	note Ds, 2
 	sound_call .sub1
 	octave 4
-	note G#, 2
-	note D#, 2
+	note Gs, 2
+	note Ds, 2
 	sound_call .sub1
 	rest 2
 	octave 4
-	note D#, 2
+	note Ds, 2
 	octave 3
-	note G#, 2
+	note Gs, 2
 	rest 2
 	octave 4
-	note D#, 2
+	note Ds, 2
 	octave 3
-	note D#, 2
+	note Ds, 2
 	rest 2
 	octave 4
-	note D#, 2
+	note Ds, 2
 	octave 3
-	note G#, 2
+	note Gs, 2
 	rest 2
 	octave 4
-	note D#, 2
+	note Ds, 2
 	octave 3
-	note D#, 2
+	note Ds, 2
 	note G_, 2
-	note G#, 2
+	note Gs, 2
 .loop1:
 	octave 3
-	note A#, 2
+	note As, 2
 	rest 2
 	octave 4
 	note F_, 2
@@ -293,7 +293,7 @@ Music_PokemonMarch_Ch3:
 	rest 1
 	sound_loop 3, .loop1
 	octave 3
-	note A#, 2
+	note As, 2
 	rest 2
 	octave 4
 	note F_, 2
@@ -303,7 +303,7 @@ Music_PokemonMarch_Ch3:
 	octave 4
 	note F_, 2
 	octave 3
-	note A#, 2
+	note As, 2
 	rest 2
 	octave 4
 	note F_, 2
@@ -311,7 +311,7 @@ Music_PokemonMarch_Ch3:
 	note C_, 2
 	octave 3
 	note B_, 2
-	note A#, 2
+	note As, 2
 	rest 2
 	octave 4
 	note F_, 2
@@ -328,68 +328,68 @@ Music_PokemonMarch_Ch3:
 	octave 3
 	note F_, 2
 	note G_, 2
-	note A#, 2
-	note G#, 2
+	note As, 2
+	note Gs, 2
 	rest 2
 	octave 4
-	note D#, 2
+	note Ds, 2
 	octave 3
-	note D#, 2
+	note Ds, 2
 	rest 2
 	octave 4
-	note D#, 2
+	note Ds, 2
 	octave 3
 	note F_, 2
 	rest 2
 	octave 4
-	note D#, 2
+	note Ds, 2
 	octave 3
-	note G#, 2
+	note Gs, 2
 	rest 2
 	octave 4
 	note C_, 2
-	note D#, 2
-	note D#, 2
+	note Ds, 2
+	note Ds, 2
 	note F_, 2
 	note G_, 2
-	note F#, 2
+	note Fs, 2
 	note F_, 2
-	note D#, 2
+	note Ds, 2
 	rest 4
 	octave 3
-	note D#, 2
+	note Ds, 2
 	rest 4
 	octave 4
 	note G_, 2
 	note G_, 2
-	note G#, 2
-	note A#, 2
+	note Gs, 2
+	note As, 2
 	note A_, 2
-	note G#, 2
+	note Gs, 2
 	note G_, 2
 	rest 2
-	note D#, 2
+	note Ds, 2
 	note F_, 2
 	rest 2
-	note G#, 2
+	note Gs, 2
 	sound_loop 0, .mainloop
 
 .sub1:
 	octave 3
-	note G#, 2
+	note Gs, 2
 	rest 2
 	octave 4
-	note D#, 2
+	note Ds, 2
 	octave 3
-	note D#, 2
+	note Ds, 2
 	rest 2
 	octave 4
-	note D#, 2
+	note Ds, 2
 	octave 3
 	note F_, 2
 	rest 2
 	octave 4
-	note D#, 2
+	note Ds, 2
 	octave 3
 	note G_, 2
 	sound_ret

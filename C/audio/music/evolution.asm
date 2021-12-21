@@ -28,17 +28,17 @@ Music_Evolution_Ch1:
 .loop1:
 	sound_call .sub1
 	note_type 12, 10, 4
-	note F#, 4
+	note Fs, 4
 	sound_call .sub1
 	note_type 12, 10, 4
-	note F#, 4
+	note Fs, 4
 	sound_loop 2, .loop1
 	sound_call .sub2
 	note_type 12, 10, 4
-	note G#, 4
+	note Gs, 4
 	sound_call .sub2
 	note_type 12, 10, 4
-	note G#, 4
+	note Gs, 4
 	sound_loop 0, .mainloop
 
 .sub1:
@@ -92,7 +92,7 @@ Music_Evolution_Ch2:
 	sound_call .sub2
 	note_type 12, 11, 5
 	octave 4
-	note C#, 4
+	note Cs, 4
 	octave 3
 	sound_loop 0, .mainloop
 
@@ -137,7 +137,7 @@ Music_Evolution_Ch3:
 	note B_, 4
 	sound_call .sub2
 	octave 4
-	note C#, 4
+	note Cs, 4
 	sound_loop 0, .mainloop
 
 .sub1:
