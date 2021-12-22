@@ -1,5 +1,5 @@
 #pragma once
-
+#include <stdint.h>
 #include "../C/data/predef_pointers.h"
 
 // This file contains the absolute addresses for each label in ROM. A macro creates the following:

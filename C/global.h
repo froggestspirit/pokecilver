@@ -1,8 +1,6 @@
 #define TRUE 1
 #define FALSE 0
 
-
-
 #define vTiles0 0x8000
 #define vTiles1 0x8800
 #define vTiles2 0x9000

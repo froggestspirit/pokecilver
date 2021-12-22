@@ -43,7 +43,7 @@ def parse_line_label(string):
             if not funcRet:
                 asm = f"\treturn m{currentFunc};\n"
             asm = f"{asm}}}\n\n"
-        asm = f"{asm}int {currentFunc}(struct gb_s *gb){{"
+        asm = f"{asm}int {currentFunc}(){{"
     elif len(string[0]) and string[0][0] == ".":
         localLabel = string[0][1:].replace(':', '').strip()
         localLabelID = funcsKnown.index(f"{currentFunc}_{localLabel}")
@@ -143,7 +143,7 @@ def parse_asm(asm):
             preCond = "IF"
             asm = asm[1:]
         if asm[0][0] == ".":
-            return f"{preCond}{cond} goto _{asm[0][1:]};"
+            return f"{preCond}{cond}goto _{asm[0][1:]};"
         funcRet = True
         return f"JR{cond}(m{asm[0]});"
     elif opcode in ("jp"):
@@ -214,13 +214,18 @@ def main():
         comment.append("")
         asm.append("}")
 
-    for ln, line in enumerate(asm):
-        print(f"{line}{comment[ln]}".strip(" "))
-    
+    with open(args.fileName.replace(".asm", ".c"), "w") as cFile:
+        cFile.write('#include "../constants.h"\nstruct gb_s gb;\n\n')
+        for ln, line in enumerate(asm):
+            ln = f"{line}{comment[ln]}".strip(" ")
+            print(ln)
+            cFile.write(f"{ln}\n")
 
     print(f"\n\n")
-    for f in funcList:
-        print(f"func[a{f}] = {f};")
+    with open(args.fileName.replace(".asm", ".h"), "w") as cFile:
+        for f in funcList:
+            print(f"func[a{f}] = {f};")
+            cFile.write(f"{f}();\n")
     return 0
 
 
