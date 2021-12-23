@@ -215,7 +215,7 @@ def main():
         asm.append("}")
 
     with open(args.fileName.replace(".asm", ".c"), "w") as cFile:
-        cFile.write('#include "../constants.h"\nstruct gb_s gb;\n\n')
+        cFile.write('#include "../constants.h"\n\n')
         for ln, line in enumerate(asm):
             ln = f"{line}{comment[ln]}".strip(" ")
             print(ln)

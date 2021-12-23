@@ -1,5 +1,4 @@
 #include "../constants.h"
-struct gb_s gb;
 
 int Reset(){
 	CALL(mInitSound);  // call InitSound

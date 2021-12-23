@@ -855,3 +855,5 @@
                         CALL(aPredef);} while(0)
 #define PREDEF_JUMP(x)   do {LDA_PREDEF(x);\
                             JP(aPredef);} while(0)
+
+#define percent * 0xFF / 100

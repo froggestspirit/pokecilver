@@ -19,7 +19,7 @@ LICENSE := $(COPYRIGHT); Released under the $(LICENSE_SPDX) License.
 GIT_VER := $(shell git describe --dirty --always --tags --long)
 
 TARGET := peanut-sdl
-SRCS   := peanut_sdl.c ../C/home/*.c
+SRCS   := peanut_sdl.c $(wildcard ../C/home/*.c)
 CFLAGS += $(shell sdl2-config --cflags)
 
 ifeq ($(STATIC),yes)
@@ -86,7 +86,7 @@ $(TARGET): $(OBJS)
 		/DNAME="$(NAME)" /DICON_FILE="$(ICON_FILE)" $^
 
 clean:
-	$(RM) *.$(OBJEXT) $(TARGET) ../C/home/*.o
+	$(RM) *.$(OBJEXT) $(TARGET) $(wildcard ../C/home/*.o)
 
 help:
 	@cd
