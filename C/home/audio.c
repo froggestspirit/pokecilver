@@ -92,12 +92,12 @@ int PlayMusic(){
 
 
 _nomusic:
-	SET_PC(0x3DAB);
+	SET_PC(0x3DABU);
 	CALL(m_InitSound);  // call _InitSound
 
 
 _end:
-	SET_PC(0x3DAE);
+	SET_PC(0x3DAEU);
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
@@ -215,7 +215,7 @@ int PlaySFX(){
 
 
 _play:
-	SET_PC(0x3E2F);
+	SET_PC(0x3E2FU);
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A(BANK(a_PlaySFX));  // ld a, BANK(_PlaySFX)
@@ -232,7 +232,7 @@ _play:
 
 
 _done:
-	SET_PC(0x3E46);
+	SET_PC(0x3E46U);
 	POP_AF;  // pop af
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
@@ -255,7 +255,7 @@ int WaitSFX(){
 
 
 _wait:
-	SET_PC(0x3E53);
+	SET_PC(0x3E53U);
 // ;(port fix)ld hl, wChannel5Flags1
 // ;(port fix)bit 0, [hl]
 // ;(port fix)jr nz, .wait
@@ -313,7 +313,7 @@ int SkipMusic(){
 //  Skip a frames of music.
 
 _loop:
-	SET_PC(0x3E72);
+	SET_PC(0x3E72U);
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
 	DEC_A;  // dec a
@@ -344,7 +344,7 @@ int FadeToMapMusic(){
 
 
 _done:
-	SET_PC(0x3E98);
+	SET_PC(0x3E98U);
 	POP_AF;  // pop af
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
@@ -375,7 +375,7 @@ int PlayMapMusic(){
 
 
 _done:
-	SET_PC(0x3EBC);
+	SET_PC(0x3EBCU);
 	POP_AF;  // pop af
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
@@ -400,7 +400,7 @@ int PlayMapMusicBike(){
 	CALL(mGetMapMusic_MaybeSpecial);  // call GetMapMusic_MaybeSpecial
 
 _play:
-	SET_PC(0x3ED6);
+	SET_PC(0x3ED6U);
 	PUSH_DE;  // push de
 	LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
 	CALL(mPlayMusic);  // call PlayMusic
@@ -467,27 +467,27 @@ int SpecialMapMusic(){
 
 
 _no:
-	SET_PC(0x3F32);
+	SET_PC(0x3F32U);
 	AND_A_A;  // and a
 	RET;  // ret
 
 
 _bike:
-	SET_PC(0x3F34);  //  unreferenced
+	SET_PC(0x3F34U);  //  unreferenced
 	LD_DE(MUSIC_BICYCLE);  // ld de, MUSIC_BICYCLE
 	SCF;  // scf
 	RET;  // ret
 
 
 _surf:
-	SET_PC(0x3F39);
+	SET_PC(0x3F39U);
 	LD_DE(MUSIC_SURF);  // ld de, MUSIC_SURF
 	SCF;  // scf
 	RET;  // ret
 
 
 _contest:
-	SET_PC(0x3F3E);
+	SET_PC(0x3F3EU);
 	LD_A_addr(wMapGroup);  // ld a, [wMapGroup]
 	CP_A(GROUP_ROUTE_35_NATIONAL_PARK_GATE);  // cp GROUP_ROUTE_35_NATIONAL_PARK_GATE
 	IF_NZ goto _no;  // jr nz, .no
@@ -499,7 +499,7 @@ _contest:
 
 
 _ranking:
-	SET_PC(0x3F50);
+	SET_PC(0x3F50U);
 	LD_DE(MUSIC_BUG_CATCHING_CONTEST_RANKING);  // ld de, MUSIC_BUG_CATCHING_CONTEST_RANKING
 	SCF;  // scf
 	RET;  // ret
@@ -544,7 +544,7 @@ int PlaceBCDNumberSprite(){  //  unreferenced
 
 
 _max:
-	SET_PC(0x3F93);
+	SET_PC(0x3F93U);
 	LD_A("9");  // ld a, "9"
 	LD_addr_A(wVirtualOAMSprite38TileID);  // ld [wVirtualOAMSprite38TileID], a
 	LD_addr_A(wVirtualOAMSprite39TileID);  // ld [wVirtualOAMSprite39TileID], a
@@ -570,7 +570,7 @@ int CheckSFX(){
 	RET;  // ret
 
 _playing:
-	SET_PC(0x3FBA);
+	SET_PC(0x3FBAU);
 	SCF;  // scf
 	RET;  // ret
 

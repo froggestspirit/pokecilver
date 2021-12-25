@@ -1,7 +1,6 @@
 #pragma once
 
 //#include "charmap.h"
-
 #include "macros.h"
 #include "global.h"
 
@@ -51,3 +50,5 @@
 //#include "constants/trainer_constants.h"
 //#include "constants/trainer_data_constants.h"
 //#include "constants/type_constants.h"
+
+extern struct gb_s gb;

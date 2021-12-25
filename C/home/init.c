@@ -25,12 +25,12 @@ int _Start(){
 
 
 _cgb:
-	SET_PC(0x05CD);
+	SET_PC(0x05CDU);
 	LD_A(TRUE);  // ld a, TRUE
 
 
 _load:
-	SET_PC(0x05CF);
+	SET_PC(0x05CFU);
 	LDH_addr_A(hCGB);  // ldh [hCGB], a
 
 	return mInit;
@@ -61,7 +61,7 @@ int Init(){
 
 
 _wait:
-	SET_PC(0x05F6);
+	SET_PC(0x05F6U);
 	LDH_A_addr(rLY);  // ldh a, [rLY]
 	CP_A(LY_VBLANK + 1);  // cp LY_VBLANK + 1
 	IF_NZ goto _wait;  // jr nz, .wait
@@ -74,7 +74,7 @@ _wait:
 	LD_BC(WRAM1_End - WRAM0_Begin);  // ld bc, WRAM1_End - WRAM0_Begin
 
 _ByteFill:
-	SET_PC(0x0605);
+	SET_PC(0x0605U);
 	LD_hl(0);  // ld [hl], 0
 	INC_HL;  // inc hl
 	DEC_BC;  // dec bc
@@ -196,7 +196,7 @@ int FillBGMap(){
 	LD_L_E;  // ld l, e
 
 _loop:
-	SET_PC(0x06A2);
+	SET_PC(0x06A2U);
 	LD_hli_A;  // ld [hli], a
 	DEC_E;  // dec e
 	IF_NZ goto _loop;  // jr nz, .loop

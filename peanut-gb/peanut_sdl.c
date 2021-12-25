@@ -20,7 +20,7 @@
 #	include "minigb_apu/minigb_apu.h"
 #endif
 
-
+struct gb_s gb;
 #include "peanut_gb.h"
 
 /**

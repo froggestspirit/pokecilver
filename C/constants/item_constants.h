@@ -200,103 +200,95 @@ enum {
 
 #define NUM_ITEMS ITEM_BE
 
-__tmhm_value__ = 1
-
-add_tmnum: MACRO
-\1_TMNUM EQU __tmhm_value__
-__tmhm_value__ = __tmhm_value__ + 1
-ENDM
-
-add_tm: MACRO
-; Defines three constants:
-; - TM_\1: the item id, starting at $bf
-; - \1_TMNUM: the learnable TM/HM flag, starting at 1
-; - TM##_MOVE: alias for the move id, equal to the value of \1
-	const TM_\1
-TM{02d:__tmhm_value__}_MOVE = \1
-	add_tmnum \1
-ENDM
-
 // see data/moves/tmhm_moves.asm for moves
-#define TM01 NUM_ITEMS + 1
-	add_tm DYNAMICPUNCH // bf
-	add_tm HEADBUTT     // c0
-	add_tm CURSE        // c1
-	add_tm ROLLOUT      // c2
-	const ITEM_C3       // c3
-	add_tm ROAR         // c4
-	add_tm TOXIC        // c5
-	add_tm ZAP_CANNON   // c6
-	add_tm ROCK_SMASH   // c7
-	add_tm PSYCH_UP     // c8
-	add_tm HIDDEN_POWER // c9
-	add_tm SUNNY_DAY    // ca
-	add_tm SWEET_SCENT  // cb
-	add_tm SNORE        // cc
-	add_tm BLIZZARD     // cd
-	add_tm HYPER_BEAM   // ce
-	add_tm ICY_WIND     // cf
-	add_tm PROTECT      // d0
-	add_tm RAIN_DANCE   // d1
-	add_tm GIGA_DRAIN   // d2
-	add_tm ENDURE       // d3
-	add_tm FRUSTRATION  // d4
-	add_tm SOLARBEAM    // d5
-	add_tm IRON_TAIL    // d6
-	add_tm DRAGONBREATH // d7
-	add_tm THUNDER      // d8
-	add_tm EARTHQUAKE   // d9
-	add_tm RETURN       // da
-	add_tm DIG          // db
-	const ITEM_DC       // dc
-	add_tm PSYCHIC_M    // dd
-	add_tm SHADOW_BALL  // de
-	add_tm MUD_SLAP     // df
-	add_tm DOUBLE_TEAM  // e0
-	add_tm ICE_PUNCH    // e1
-	add_tm SWAGGER      // e2
-	add_tm SLEEP_TALK   // e3
-	add_tm SLUDGE_BOMB  // e4
-	add_tm SANDSTORM    // e5
-	add_tm FIRE_BLAST   // e6
-	add_tm SWIFT        // e7
-	add_tm DEFENSE_CURL // e8
-	add_tm THUNDERPUNCH // e9
-	add_tm DREAM_EATER  // ea
-	add_tm DETECT       // eb
-	add_tm REST         // ec
-	add_tm ATTRACT      // ed
-	add_tm THIEF        // ee
-	add_tm STEEL_WING   // ef
-	add_tm FIRE_PUNCH   // f0
-	add_tm FURY_CUTTER  // f1
-	add_tm NIGHTMARE    // f2
-#define NUM_TMS __tmhm_value__ - 1
 
-add_hm: MACRO
-// Defines three constants:
-// - HM_\1: the item id, starting at 0xf3
-// - \1_TMNUM: the learnable TM/HM flag, starting at 51
-#define // - HM##_MOVE: alias for the move id,al to the value of \1
-	const HM_\1
-HM_VALUE = __tmhm_value__ - NUM_TMS
-HM{02d:HM_VALUE}_MOVE = \1
-	add_tmnum \1
-ENDM
+#define TM_BASE __COUNTER__
+#define TM_ITEM_OFFSET NUM_ITEMS
+
+#define add_tm(tmNum, tmName)   enum {\
+                                    tmName##_TMNUM = __COUNTER__ - TM_BASE,\
+                                    TM_##tmName = tmName##_TMNUM + TM_ITEM_OFFSET,\
+                                    tmNum##_MOVE = TM_##tmName,\
+                                };
+
+    add_tm(TM01, DYNAMICPUNCH)
+	add_tm(TM02, HEADBUTT)
+	add_tm(TM03, CURSE)
+	add_tm(TM04, ROLLOUT)
+#define ITEM_C3 0xC3
+#define TM_ITEM_OFFSET NUM_ITEMS + 1
+	add_tm(TM05, ROAR)         // c4
+	add_tm(TM06, TOXIC)        // c5
+	add_tm(TM07, ZAP_CANNON)   // c6
+	add_tm(TM08, ROCK_SMASH)   // c7
+	add_tm(TM09, PSYCH_UP)     // c8
+	add_tm(TM10, HIDDEN_POWER) // c9
+	add_tm(TM11, SUNNY_DAY)    // ca
+	add_tm(TM12, SWEET_SCENT)  // cb
+	add_tm(TM13, SNORE)        // cc
+	add_tm(TM14, BLIZZARD)     // cd
+	add_tm(TM15, HYPER_BEAM)   // ce
+	add_tm(TM16, ICY_WIND)     // cf
+	add_tm(TM17, PROTECT)      // d0
+	add_tm(TM18, RAIN_DANCE)   // d1
+	add_tm(TM19, GIGA_DRAIN)   // d2
+	add_tm(TM20, ENDURE)       // d3
+	add_tm(TM21, FRUSTRATION)  // d4
+	add_tm(TM22, SOLARBEAM)    // d5
+	add_tm(TM23, IRON_TAIL)    // d6
+	add_tm(TM24, DRAGONBREATH) // d7
+	add_tm(TM25, THUNDER)      // d8
+	add_tm(TM26, EARTHQUAKE)   // d9
+	add_tm(TM27, RETURN)       // da
+	add_tm(TM28, DIG)          // db
+#define ITEM_DC 0xDC
+#define TM_ITEM_OFFSET NUM_ITEMS + 2
+	add_tm(TM29, PSYCHIC_M)    // dd
+	add_tm(TM30, SHADOW_BALL)  // de
+	add_tm(TM31, MUD_SLAP)     // df
+	add_tm(TM32, DOUBLE_TEAM)  // e0
+	add_tm(TM33, ICE_PUNCH)    // e1
+	add_tm(TM34, SWAGGER)      // e2
+	add_tm(TM35, SLEEP_TALK)   // e3
+	add_tm(TM36, SLUDGE_BOMB)  // e4
+	add_tm(TM37, SANDSTORM)    // e5
+	add_tm(TM38, FIRE_BLAST)   // e6
+	add_tm(TM39, SWIFT)        // e7
+	add_tm(TM40, DEFENSE_CURL) // e8
+	add_tm(TM41, THUNDERPUNCH) // e9
+	add_tm(TM42, DREAM_EATER)  // ea
+	add_tm(TM43, DETECT)       // eb
+	add_tm(TM44, REST)         // ec
+	add_tm(TM45, ATTRACT)      // ed
+	add_tm(TM46, THIEF)        // ee
+	add_tm(TM47, STEEL_WING)   // ef
+	add_tm(TM48, FIRE_PUNCH)   // f0
+	add_tm(TM49, FURY_CUTTER)  // f1
+	add_tm(TM50, NIGHTMARE)    // f2
+
+#define TM01 TM_DYNAMICPUNCH
+#define NUM_TMS NIGHTMARE_TMNUM
+
+#define add_hm(hmNum, hmName)   enum {\
+                                    hmName##_TMNUM = __COUNTER__ - TM_BASE,\
+                                    HM_##hmName = hmName##_TMNUM + TM_ITEM_OFFSET,\
+                                    hmNum##_MOVE = HM_##hmName,\
+                                };
+
+	add_hm(HM01, CUT)          // f3
+	add_hm(HM02, FLY)          // f4
+	add_hm(HM03, SURF)         // f5
+	add_hm(HM04, STRENGTH)     // f6
+	add_hm(HM05, FLASH)        // f7
+	add_hm(HM06, WHIRLPOOL)    // f8
+	add_hm(HM07, WATERFALL)    // f9
 
 #define HM01 const_value
-	add_hm CUT          // f3
-	add_hm FLY          // f4
-	add_hm SURF         // f5
-	add_hm STRENGTH     // f6
-	add_hm FLASH        // f7
-	add_hm WHIRLPOOL    // f8
-	add_hm WATERFALL    // f9
-#define NUM_HMS __tmhm_value__ - NUM_TMS - 1
+#define NUM_HMS WATERFALL_TMNUM - NUM_TMS
 
 #define NUM_TM_HM NUM_TMS + NUM_HMS
 
-	const ITEM_FA       // fa
+#define ITEM_FA 0xFA
 
 #define USE_SCRIPT_VAR 0x00
 #define ITEM_FROM_MEM  0xff
