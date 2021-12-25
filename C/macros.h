@@ -1,5 +1,4 @@
 #include "funcmap.h"
-#include "../peanut-gb/peanut_gb.h"
 
 #define SET_PC(x) gb.cpu_reg.pc = x;
 #define INC_PC(x) gb.cpu_reg.pc += x;

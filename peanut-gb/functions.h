@@ -1,4 +1,3 @@
-#pragma once
 
 #define ROM_SIZE 0x200000
 

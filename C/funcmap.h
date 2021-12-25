@@ -7,9 +7,11 @@
 // b{name} rom bank of the address
 // m{name} address the function would appear as when loaded (0x0000-0x3FFF for home, 0x4000-0x7FFF for everything elseU)
 
-#define FUNCMAP(x, y) 	static const uint32_t a##x = y;\
-                        static const uint8_t b##x = (y >> 14);\
-                        static const uint16_t m##x = (y < 0x4000 ? y : ((y & 0x3FFF) | 0x4000));
+#define FUNCMAP(x, y) 	enum {\
+                            a##x = y,\
+                            b##x = (y >> 14),\
+                            m##x = (y < 0x4000 ? y : ((y & 0x3FFF) | 0x4000)),\
+                        };
 
 #define NULL 0x0000
 FUNCMAP(FarCall, 0x0008U)

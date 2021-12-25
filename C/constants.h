@@ -1,4 +1,5 @@
-#pragma once
+
+#include "../peanut-gb/peanut_gb.h"
 
 //#include "charmap.h"
 #include "macros.h"

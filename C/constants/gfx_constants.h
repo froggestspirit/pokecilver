@@ -1,4 +1,4 @@
-#pragma once
+
 
 #define TILE_WIDTH 8 // pixels
 #define LEN_1BPP_TILE 1 * TILE_WIDTH // bytes
