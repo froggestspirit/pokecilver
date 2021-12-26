@@ -13,7 +13,7 @@ CC	:= cc
 OBJEXT	:= o
 RM	:= rm -f
 EXEOUT	:= -o
-EXTRA_CFLAGS := -std=c99 -pedantic -Wall -Wextra -Og -g3
+EXTRA_CFLAGS := -std=c99 -Wall -Wextra -Og -g3
 EXE	:= $(NAME)
 LICENSE := $(COPYRIGHT); Released under the $(LICENSE_SPDX) License.
 GIT_VER := $(shell git describe --dirty --always --tags --long)

@@ -1,0 +1,4 @@
+CopyBytes();
+GetFarByte();
+GetFarWord();
+ByteFill();

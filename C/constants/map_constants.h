@@ -66,6 +66,7 @@ map_const(ROUTE_38, 12, 20, 9)
 map_const(ROUTE_39, 13, 10, 18)
 map_const(OLIVINE_CITY, 14, 20, 18)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_MAHOGANY
 map_const(MAHOGANY_RED_GYARADOS_SPEECH_HOUSE, 1, 4, 4)
 map_const(MAHOGANY_GYM, 2, 5, 9)
@@ -75,6 +76,7 @@ map_const(ROUTE_42, 5, 30, 9)
 map_const(ROUTE_44, 6, 30, 9)
 map_const(MAHOGANY_TOWN, 7, 10, 9)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_DUNGEONS
 map_const(SPROUT_TOWER_1F, 1, 10, 8)
 map_const(SPROUT_TOWER_2F, 2, 10, 8)
@@ -159,6 +161,7 @@ map_const(SAFARI_ZONE_FUCHSIA_GATE_BETA, 80, 5, 4)
 map_const(SAFARI_ZONE_BETA, 81, 10, 18)
 map_const(VICTORY_ROAD, 82, 10, 36)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_ECRUTEAK
 map_const(ECRUTEAK_TIN_TOWER_ENTRANCE, 1, 10, 9)
 map_const(ECRUTEAK_TIN_TOWER_BACK_ENTRANCE, 2, 4, 4)
@@ -170,6 +173,7 @@ map_const(ECRUTEAK_GYM, 7, 5, 9)
 map_const(ECRUTEAK_ITEMFINDER_HOUSE, 8, 4, 4)
 map_const(ECRUTEAK_CITY, 9, 20, 18)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_BLACKTHORN
 map_const(BLACKTHORN_GYM_1F, 1, 5, 9)
 map_const(BLACKTHORN_GYM_2F, 2, 5, 9)
@@ -182,6 +186,7 @@ map_const(ROUTE_45, 8, 10, 45)
 map_const(ROUTE_46, 9, 10, 18)
 map_const(BLACKTHORN_CITY, 10, 20, 18)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_CINNABAR
 map_const(CINNABAR_POKECENTER_1F, 1, 5, 4)
 map_const(CINNABAR_POKECENTER_2F_BETA, 2, 8, 4)
@@ -192,6 +197,7 @@ map_const(ROUTE_20, 6, 30, 9)
 map_const(ROUTE_21, 7, 10, 18)
 map_const(CINNABAR_ISLAND, 8, 10, 9)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_CERULEAN
 map_const(CERULEAN_GYM_BADGE_SPEECH_HOUSE, 1, 4, 4)
 map_const(CERULEAN_POLICE_STATION, 2, 4, 4)
@@ -211,6 +217,7 @@ map_const(ROUTE_24, 15, 10, 9)
 map_const(ROUTE_25, 16, 30, 9)
 map_const(CERULEAN_CITY, 17, 20, 18)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_AZALEA
 map_const(AZALEA_POKECENTER_1F, 1, 5, 4)
 map_const(CHARCOAL_KILN, 2, 4, 4)
@@ -220,6 +227,7 @@ map_const(AZALEA_GYM, 5, 5, 8)
 map_const(ROUTE_33, 6, 10, 9)
 map_const(AZALEA_TOWN, 7, 20, 9)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_LAKE_OF_RAGE
 map_const(LAKE_OF_RAGE_HIDDEN_POWER_HOUSE, 1, 4, 4)
 map_const(LAKE_OF_RAGE_MAGIKARP_HOUSE, 2, 4, 4)
@@ -228,6 +236,7 @@ map_const(ROUTE_43_GATE, 4, 5, 4)
 map_const(ROUTE_43, 5, 10, 27)
 map_const(LAKE_OF_RAGE, 6, 20, 18)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_VIOLET
 map_const(ROUTE_32, 1, 10, 45)
 map_const(ROUTE_35, 2, 10, 18)
@@ -247,6 +256,7 @@ map_const(ROUTE_35_NATIONAL_PARK_GATE, 15, 4, 4)
 map_const(ROUTE_36_RUINS_OF_ALPH_GATE, 16, 5, 4)
 map_const(ROUTE_36_NATIONAL_PARK_GATE, 17, 5, 4)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_GOLDENROD
 map_const(ROUTE_34, 1, 10, 27)
 map_const(GOLDENROD_CITY, 2, 20, 18)
@@ -271,6 +281,7 @@ map_const(ILEX_FOREST_AZALEA_GATE, 20, 5, 4)
 map_const(ROUTE_34_ILEX_FOREST_GATE, 21, 5, 4)
 map_const(DAY_CARE, 22, 5, 4)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_VERMILION
 map_const(ROUTE_6, 1, 10, 9)
 map_const(ROUTE_11, 2, 20, 9)
@@ -286,6 +297,7 @@ map_const(VERMILION_GYM, 11, 5, 9)
 map_const(ROUTE_6_SAFFRON_GATE, 12, 5, 4)
 map_const(ROUTE_6_UNDERGROUND_PATH_ENTRANCE, 13, 4, 4)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_PALLET
 map_const(ROUTE_1, 1, 10, 18)
 map_const(PALLET_TOWN, 2, 10, 9)
@@ -294,6 +306,7 @@ map_const(REDS_HOUSE_2F, 4, 4, 4)
 map_const(BLUES_HOUSE, 5, 4, 4)
 map_const(OAKS_LAB, 6, 5, 6)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_PEWTER
 map_const(ROUTE_3, 1, 30, 9)
 map_const(PEWTER_CITY, 2, 20, 18)
@@ -304,6 +317,7 @@ map_const(PEWTER_POKECENTER_1F, 6, 5, 4)
 map_const(PEWTER_POKECENTER_2F_BETA, 7, 8, 4)
 map_const(PEWTER_SNOOZE_SPEECH_HOUSE, 8, 4, 4)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_FAST_SHIP
 map_const(OLIVINE_PORT, 1, 10, 18)
 map_const(VERMILION_PORT, 2, 10, 18)
@@ -318,6 +332,7 @@ map_const(MOUNT_MOON_SQUARE, 10, 15, 9)
 map_const(MOUNT_MOON_GIFT_SHOP, 11, 4, 4)
 map_const(TIN_TOWER_ROOF, 12, 10, 9)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_INDIGO
 map_const(ROUTE_23, 1, 10, 9)
 map_const(INDIGO_PLATEAU_POKECENTER_1F, 2, 9, 7)
@@ -328,6 +343,7 @@ map_const(KARENS_ROOM, 6, 5, 9)
 map_const(LANCES_ROOM, 7, 5, 12)
 map_const(HALL_OF_FAME, 8, 5, 7)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_FUCHSIA
 map_const(ROUTE_13, 1, 30, 9)
 map_const(ROUTE_14, 2, 10, 18)
@@ -343,6 +359,7 @@ map_const(FUCHSIA_POKECENTER_2F_BETA, 11, 8, 4)
 map_const(SAFARI_ZONE_WARDENS_HOME, 12, 5, 4)
 map_const(ROUTE_15_FUCHSIA_GATE, 13, 5, 4)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_LAVENDER
 map_const(ROUTE_8, 1, 20, 9)
 map_const(ROUTE_12, 2, 10, 27)
@@ -359,18 +376,21 @@ map_const(LAV_RADIO_TOWER_1F, 12, 10, 4)
 map_const(ROUTE_8_SAFFRON_GATE, 13, 5, 4)
 map_const(ROUTE_12_SUPER_ROD_HOUSE, 14, 4, 4)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_SILVER
 map_const(ROUTE_28, 1, 20, 9)
 map_const(SILVER_CAVE_OUTSIDE, 2, 20, 18)
 map_const(SILVER_CAVE_POKECENTER_1F, 3, 5, 4)
 map_const(ROUTE_28_STEEL_WING_HOUSE, 4, 4, 4)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_CABLE_CLUB
 map_const(POKECENTER_2F, 1, 8, 4)
 map_const(TRADE_CENTER, 2, 5, 4)
 map_const(COLOSSEUM, 3, 5, 4)
 map_const(TIME_CAPSULE, 4, 5, 4)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_CELADON
 map_const(ROUTE_7, 1, 10, 9)
 map_const(ROUTE_16, 2, 10, 9)
@@ -399,6 +419,7 @@ map_const(ROUTE_16_GATE, 24, 5, 4)
 map_const(ROUTE_7_SAFFRON_GATE, 25, 5, 4)
 map_const(ROUTE_17_ROUTE_18_GATE, 26, 5, 4)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_CIANWOOD
 map_const(ROUTE_40, 1, 10, 18)
 map_const(ROUTE_41, 2, 25, 27)
@@ -410,6 +431,7 @@ map_const(CIANWOOD_PHARMACY, 7, 4, 4)
 map_const(CIANWOOD_PHOTO_STUDIO, 8, 4, 4)
 map_const(CIANWOOD_LUGIA_SPEECH_HOUSE, 9, 4, 4)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_VIRIDIAN
 map_const(ROUTE_2, 1, 10, 27)
 map_const(ROUTE_22, 2, 20, 9)
@@ -425,6 +447,7 @@ map_const(ROUTE_2_NUGGET_HOUSE, 11, 4, 4)
 map_const(ROUTE_2_GATE, 12, 5, 4)
 map_const(VICTORY_ROAD_GATE, 13, 10, 9)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_NEW_BARK
 map_const(ROUTE_26, 1, 10, 54)
 map_const(ROUTE_27, 2, 40, 9)
@@ -440,6 +463,7 @@ map_const(DAY_OF_WEEK_SIBLINGS_HOUSE, 11, 4, 4)
 map_const(ROUTE_27_SANDSTORM_HOUSE, 12, 4, 4)
 map_const(ROUTE_29_ROUTE_46_GATE, 13, 5, 4)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_SAFFRON
 map_const(ROUTE_5, 1, 10, 9)
 map_const(SAFFRON_CITY, 2, 20, 18)
@@ -457,6 +481,7 @@ map_const(ROUTE_5_UNDERGROUND_PATH_ENTRANCE, 13, 4, 4)
 map_const(ROUTE_5_SAFFRON_GATE, 14, 5, 4)
 map_const(ROUTE_5_CLEANSE_TAG_HOUSE, 15, 4, 4)
 
+#undef CURRENT_MAP_GROUP
 #define CURRENT_MAP_GROUP  MAPGROUP_CHERRYGROVE
 map_const(ROUTE_30, 1, 10, 27)
 map_const(ROUTE_31, 2, 20, 9)

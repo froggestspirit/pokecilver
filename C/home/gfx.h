@@ -1,0 +1,13 @@
+FarDecompressBufferedPic();
+UpdatePlayerSprite();
+LoadStandardFont();
+LoadFontsBattleExtra();
+LoadFontsExtra();
+DecompressRequest2bpp();
+FarCopyBytes();
+FarCopyBytesDouble();
+Request2bpp();
+Request1bpp();
+Get2bpp();
+Get1bpp();
+DuplicateGet2bpp();

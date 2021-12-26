@@ -1,0 +1,2 @@
+CompareBytes();
+CompareBytesLong();

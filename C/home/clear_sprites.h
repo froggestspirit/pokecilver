@@ -1,0 +1,2 @@
+ClearSprites();
+HideSprites();

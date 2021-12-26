@@ -61,14 +61,19 @@ def parse_line_label(string):
         localLabel = string[0][1:].replace(':', '').strip()
         localLabelID = funcsKnown.index(f"{currentFunc}_{localLabel}")
         asm = f"\n_{localLabel}:\n\tSET_PC({funcsKnownAddr[localLabelID]});"
-    elif string[0].split(" ")[0] == "rept":
-        asm = f"for(int rept = 0; rept < {string[0].split(' ')[1]}; rept++){{"
-    elif string[0].split(" ")[0] == "endr":
-        asm = "}"
-    elif string[0].split(" ")[0] in ("INCLUDE","INCBIN"):
-        asm = f"// {asm}{string[0]}"
     else:
-        asm = f"{asm}{string[0]}"
+        parts = string[0].split(" ")
+        if parts[0] == "rept":
+            asm = f"for(int rept = 0; rept < {parts[1]}; rept++){{"
+        elif parts[0] == "endr":
+            asm = "}"
+        elif parts[0] in ("INCLUDE","INCBIN"):
+            asm = f"// {asm}{string[0]}"
+        elif len(parts) > 1 and parts[1] == "EQU":
+            asm = f"#define {parts[0]} {parts[2]}"
+        else:
+            asm = f"{asm}{string[0]}"
+            print(asm)
     funcRet = False
     if len(string) > 1:
         comment = f"  // {string[1]}"
@@ -140,7 +145,7 @@ def parse_asm(asm):
             return f"huh? {opcode} {asm}"
     elif opcode in ("scf", "ccf", "cpl", "daa", "rrca", "rlca", "rra", "rla"):
         return f"{opcode.upper()};"
-    elif opcode in ("ei", "di"):
+    elif opcode in ("ei", "di", "nop"):
         return ""
     elif opcode in ("ret", "reti"):
         cond = ""
@@ -161,6 +166,9 @@ def parse_asm(asm):
         return f"JR{cond}(m{asm[0]});"
     elif opcode in ("jp"):
         cond = ""
+        if asm[0] == "hl":
+            funcRet = True
+            return "JP_hl;"
         if asm[0] in condition:
             cond = f"{condition[asm[0]]} "
             asm = asm[1:]
@@ -234,12 +242,14 @@ def main():
 
     print(f"\n\n")
     with open(args.fileName.replace(".asm", ".h"), "w") as cFile:
+        print(f"\t// {args.fileName.replace('.asm', '.c')}")
         for f in funcList:
-            print(f"func[a{f}] = {f};")
+            print(f"\tREDIRECT({f});")
             cFile.write(f"{f}();\n")
     return 0
 
 
 start = time.time()
 if not main():
-    print(f"Done in: {time.time() - start} seconds")
+    pass
+    #print(f"Done in: {time.time() - start} seconds")

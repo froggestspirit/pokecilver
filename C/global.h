@@ -12584,7 +12584,7 @@
 #define wStackBottom 0xdf03
 #define wStackTop 0xdfff
 #define hTransferVirtualOAM 0xff80
-#define hTransferVirtualOAM.wait 0xff86
+#define hTransferVirtualOAM_wait 0xff86
 #define hRTCDayHi 0xff8f
 #define hRTCDayLo 0xff90
 #define hRTCHours 0xff91

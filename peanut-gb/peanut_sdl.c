@@ -801,7 +801,7 @@ void gb_draw_line()
  */
 
 #include "../C/macros.h"
-#include "functions.h"
+#include "../C/functions.h"
 extern int (*func[ROM_SIZE])();
 
 void gb_step_cpu()

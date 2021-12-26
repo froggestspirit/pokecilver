@@ -1,0 +1,3 @@
+LCD();
+DisableLCD();
+EnableLCD();

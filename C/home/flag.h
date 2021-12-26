@@ -1,0 +1,10 @@
+ResetMapBufferEventFlags();
+ResetBikeFlags();
+ResetFlashIfOutOfCave();
+EventFlagAction();
+FlagAction();
+CheckReceivedDex();
+CheckBPressedDebug();
+xor_a();
+xor_a_dec_a();
+CheckFieldDebug();

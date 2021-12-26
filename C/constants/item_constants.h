@@ -215,6 +215,7 @@ add_tm(TM02, 2, HEADBUTT)
 add_tm(TM03, 3, CURSE)
 add_tm(TM04, 4, ROLLOUT)
 #define ITEM_C3 0xC3
+#undef TM_ITEM_OFFSET
 #define TM_ITEM_OFFSET NUM_ITEMS + 1
 add_tm(TM05, 5, ROAR)
 add_tm(TM06, 6, TOXIC)
@@ -241,6 +242,7 @@ add_tm(TM26, 26, EARTHQUAKE)
 add_tm(TM27, 27, RETURN)
 add_tm(TM28, 28, DIG)
 #define ITEM_DC 0xDC
+#undef TM_ITEM_OFFSET
 #define TM_ITEM_OFFSET NUM_ITEMS + 2
 add_tm(TM29, 29, PSYCHIC_M)
 add_tm(TM30, 30, SHADOW_BALL)
