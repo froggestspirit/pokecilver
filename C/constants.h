@@ -35,7 +35,7 @@
 #include "constants/music_constants.h"
 //#include "constants/npc_trade_constants.h"
 //#include "constants/phone_constants.h"
-//#include "constants/pokemon_constants.h"
+#include "constants/pokemon_constants.h"
 #include "constants/pokemon_data_constants.h"
 //#include "constants/printer_constants.h"
 //#include "constants/radio_constants.h"

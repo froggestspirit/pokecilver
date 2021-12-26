@@ -6,6 +6,7 @@ int (*func[ROM_SIZE])();
 
 #include "../C/home/init.h"
 #include "../C/home/audio.h"
+#include "../C/home/battle.h"
 
 
 void init_function_pointers(){
@@ -47,27 +48,27 @@ void init_function_pointers(){
 	func[aTerminateExpBarSound] = TerminateExpBarSound;
 
 	// home/battle.c
-	// func[aGetPartyParamLocation] = GetPartyParamLocation;
-	// func[aGetPartyLocation] = GetPartyLocation;
-	// func[aGetDexNumber] = GetDexNumber;
-	// func[aUserPartyAttr] = UserPartyAttr;
-	// func[aOpponentPartyAttr] = OpponentPartyAttr;
-	// func[aBattlePartyAttr] = BattlePartyAttr;
-	// func[aOTPartyAttr] = OTPartyAttr;
-	// func[aResetDamage] = ResetDamage;
-	// func[aSetPlayerTurn] = SetPlayerTurn;
-	// func[aSetEnemyTurn] = SetEnemyTurn;
-	// func[aUpdateOpponentInParty] = UpdateOpponentInParty;
-	// func[aUpdateUserInParty] = UpdateUserInParty;
-	// func[aUpdateBattleMonInParty] = UpdateBattleMonInParty;
-	// func[aUpdateBattleMon] = UpdateBattleMon;
-	// func[aUpdateEnemyMonInParty] = UpdateEnemyMonInParty;
-	// func[aRefreshBattleHuds] = RefreshBattleHuds;
-	// func[aUpdateBattleHuds] = UpdateBattleHuds;
-	// func[aFarCopyRadioText] = FarCopyRadioText;
-	// func[aStdBattleTextbox] = StdBattleTextbox;
-	// func[aGetBattleAnimPointer] = GetBattleAnimPointer;
-	// func[aGetBattleAnimByte] = GetBattleAnimByte;
-	// func[aPushLYOverrides] = PushLYOverrides;
+	func[aGetPartyParamLocation] = GetPartyParamLocation;
+	func[aGetPartyLocation] = GetPartyLocation;
+	func[aGetDexNumber] = GetDexNumber;
+	func[aUserPartyAttr] = UserPartyAttr;
+	func[aOpponentPartyAttr] = OpponentPartyAttr;
+	func[aBattlePartyAttr] = BattlePartyAttr;
+	func[aOTPartyAttr] = OTPartyAttr;
+	func[aResetDamage] = ResetDamage;
+	func[aSetPlayerTurn] = SetPlayerTurn;
+	func[aSetEnemyTurn] = SetEnemyTurn;
+	func[aUpdateOpponentInParty] = UpdateOpponentInParty;
+	func[aUpdateUserInParty] = UpdateUserInParty;
+	func[aUpdateBattleMonInParty] = UpdateBattleMonInParty;
+	func[aUpdateBattleMon] = UpdateBattleMon;
+	func[aUpdateEnemyMonInParty] = UpdateEnemyMonInParty;
+	func[aRefreshBattleHuds] = RefreshBattleHuds;
+	func[aUpdateBattleHuds] = UpdateBattleHuds;
+	func[aFarCopyRadioText] = FarCopyRadioText;
+	func[aStdBattleTextbox] = StdBattleTextbox;
+	func[aGetBattleAnimPointer] = GetBattleAnimPointer;
+	func[aGetBattleAnimByte] = GetBattleAnimByte;
+	func[aPushLYOverrides] = PushLYOverrides;
 
 }

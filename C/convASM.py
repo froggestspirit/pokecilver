@@ -11,6 +11,19 @@ funcsKnown = []
 funcsKnownAddr = []
 funcRet = False
 
+
+def check_if_label(string, prefix):
+    global funcsKnown
+    parts = string.split(" ")
+    ret = ""
+    for part in parts:
+        if part in funcsKnown:
+            ret = f"{ret} {prefix}{part}"
+        else:
+            ret = f"{ret} {part}"
+    return ret[1:]
+
+
 def parse_line(string):
     if not string:
         return "", ""
@@ -52,6 +65,8 @@ def parse_line_label(string):
         asm = f"for(int rept = 0; rept < {string[0].split(' ')[1]}; rept++){{"
     elif string[0].split(" ")[0] == "endr":
         asm = "}"
+    elif string[0].split(" ")[0] in ("INCLUDE","INCBIN"):
+        asm = f"// {asm}{string[0]}"
     else:
         asm = f"{asm}{string[0]}"
     funcRet = False
@@ -112,9 +127,7 @@ def parse_asm(asm):
         elif asm[0] in register:  # Non-register into register
             if "[" in asm[1]:
                 source = "_addr"
-            elif f"{asm[1]}" in funcsKnown:
-                asm[1] = f"m{asm[1]}"
-            return f"{op}{register[asm[0]]}{source}({asm[1].strip('[]')});"
+            return f"{op}{register[asm[0]]}{source}({check_if_label(asm[1].strip('[]'), 'm')});"
         elif asm[1] in register:  # register into address
             return f"{op}{dest}{register[asm[1]]}({asm[0].strip('[]')});"
         else:  # unknown
@@ -162,9 +175,7 @@ def parse_asm(asm):
             asm = asm[1:]
         return f"CALL{cond}(m{asm[0]});"
     elif opcode in ("rst"):
-        if f"{asm[0]}" in funcsKnown:
-            return f"RST(m{asm[0]});"
-        return f"RST({asm[0]});"
+        return f"RST({check_if_label(asm[0], 'm')});"
     elif opcode in ("callfar", "farcall", "homecall"):
         return f"{opcode.upper()}(a{asm[0]});"
     elif opcode in ("lda_predef", "predef", "predef_jump"):
@@ -218,7 +229,7 @@ def main():
         cFile.write('#include "../constants.h"\n\n')
         for ln, line in enumerate(asm):
             ln = f"{line}{comment[ln]}".strip(" ")
-            print(ln)
+            #print(ln)
             cFile.write(f"{ln}\n")
 
     print(f"\n\n")

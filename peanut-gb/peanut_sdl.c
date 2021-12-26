@@ -75,7 +75,7 @@ void gb_set_rtc(const struct tm * const time)
 /**
  * Internal function used to read bytes.
  */
-uint8_t __gb_read(const uint_fast16_t addr)
+uint8_t gb_read(const uint_fast16_t addr)
 {
 	switch(addr >> 12)
 	{
@@ -240,7 +240,7 @@ uint8_t __gb_read(const uint_fast16_t addr)
 /**
  * Internal function used to write bytes.
  */
-void __gb_write(const uint_fast16_t addr, const uint8_t val)
+void gb_write(const uint_fast16_t addr, const uint8_t val)
 {
 	switch(addr >> 12)
 	{
@@ -473,7 +473,7 @@ void __gb_write(const uint_fast16_t addr, const uint8_t val)
 			gb.gb_reg.DMA = (val % 0xF1);
 
 			for(uint8_t i = 0; i < OAM_SIZE; i++)
-				gb.oam[i] = __gb_read((gb.gb_reg.DMA << 8) + i);
+				gb.oam[i] = gb_read((gb.gb_reg.DMA << 8) + i);
 
 			return;
 
@@ -527,7 +527,7 @@ void __gb_write(const uint_fast16_t addr, const uint8_t val)
 }
 
 #if ENABLE_LCD
-void __gb_draw_line()
+void gb_draw_line()
 {
 	uint8_t pixels[160] = {0};
 
@@ -804,7 +804,7 @@ void __gb_draw_line()
 #include "functions.h"
 extern int (*func[ROM_SIZE])();
 
-void __gb_step_cpu()
+void gb_step_cpu()
 {
 	uint8_t opcode, inst_cycles;
 
@@ -817,35 +817,35 @@ void __gb_step_cpu()
 		}
 	}
 	/* Obtain opcode */
-	opcode = (gb.gb_halt ? 0x00 : __gb_read(gb.cpu_reg.pc++));
+	opcode = (gb.gb_halt ? 0x00 : gb_read(gb.cpu_reg.pc++));
 
 	//if(opcode < 0xFF && gb.cpu_reg.pc -1 < 0x8000 && gb.cpu_reg.hl != 0xFF44) printf("%x: %x hl:%x\n", gb.cpu_reg.pc - 1, opcode, gb.cpu_reg.hl);
 	/* Execute opcode */
 	switch(opcode)
 	{
 	case 0x00:	/* NOP */	break;
-	case 0x01:	LD_BC(imm16);	INC_PC(-3)	break;
+	case 0x01:	LD_BC(imm16);	INC_PC(-1)	break;
 	case 0x02:	LD_bc_A;	INC_PC(-1)	break;
 	case 0x03:	INC_BC;	INC_PC(-1)	break;
 	case 0x04:	INC_B;	INC_PC(-1)	break;
 	case 0x05:	DEC_B;	INC_PC(-1)	break;
-	case 0x06:	LD_B(imm8);	INC_PC(-2)	break;
+	case 0x06:	LD_B(imm8);	INC_PC(-1)	break;
 	case 0x07:	RLCA;	INC_PC(-1)	break;
-	case 0x08:	LD_addr_SP(imm16);	INC_PC(-3)	break;
+	case 0x08:	LD_addr_SP(imm16);	INC_PC(-1)	break;
 	case 0x09:	ADD_HL_BC;	INC_PC(-1)	break;
 	case 0x0A:	LD_A_bc;	INC_PC(-1)	break;
 	case 0x0B:	DEC_BC;	INC_PC(-1)	break;
 	case 0x0C:	INC_C;	INC_PC(-1)	break;
 	case 0x0D:	DEC_C;	INC_PC(-1)	break;
-	case 0x0E:	LD_C(imm8);	INC_PC(-2)	break;
+	case 0x0E:	LD_C(imm8);	INC_PC(-1)	break;
 	case 0x0F:	RRCA;	INC_PC(-1)	break;
 	case 0x10: /* STOP */	break;
-	case 0x11:	LD_DE(imm16);	INC_PC(-3)	break;
+	case 0x11:	LD_DE(imm16);	INC_PC(-1)	break;
 	case 0x12:	LD_de_A;	INC_PC(-1)	break;
 	case 0x13:	INC_DE;	INC_PC(-1)	break;
 	case 0x14:	INC_D;	INC_PC(-1)	break;
 	case 0x15:	DEC_D;	INC_PC(-1)	break;
-	case 0x16:	LD_D(imm8);	INC_PC(-2)	break;
+	case 0x16:	LD_D(imm8);	INC_PC(-1)	break;
 	case 0x17:	RLA;	INC_PC(-1)	break;
 	case 0x18:	_JR(imm8);	break;
 	case 0x19:	ADD_HL_DE;	INC_PC(-1)	break;
@@ -853,15 +853,15 @@ void __gb_step_cpu()
 	case 0x1B:	DEC_DE;	INC_PC(-1)	break;
 	case 0x1C:	INC_E;	INC_PC(-1)	break;
 	case 0x1D:	DEC_E;	INC_PC(-1)	break;
-	case 0x1E:	LD_E(imm8);	INC_PC(-2)	break;
+	case 0x1E:	LD_E(imm8);	INC_PC(-1)	break;
 	case 0x1F:	RRA;	INC_PC(-1)	break;
 	case 0x20:	_JR_NZ(imm8);	break;
-	case 0x21:	LD_HL(imm16);	INC_PC(-3)	break;
+	case 0x21:	LD_HL(imm16);	INC_PC(-1)	break;
 	case 0x22:	LD_hli_A;	INC_PC(-1)	break;
 	case 0x23:	INC_HL;	INC_PC(-1)	break;
 	case 0x24:	INC_H;	INC_PC(-1)	break;
 	case 0x25:	DEC_H;	INC_PC(-1)	break;
-	case 0x26:	LD_H(imm8);	INC_PC(-2)	break;
+	case 0x26:	LD_H(imm8);	INC_PC(-1)	break;
 	case 0x27:	DAA;	INC_PC(-1)	break;
 	case 0x28:	_JR_Z(imm8);	break;
 	case 0x29:	ADD_HL_HL;	INC_PC(-1)	break;
@@ -869,15 +869,15 @@ void __gb_step_cpu()
 	case 0x2B:	DEC_HL;	INC_PC(-1)	break;
 	case 0x2C:	INC_L;	INC_PC(-1)	break;
 	case 0x2D:	DEC_L;	INC_PC(-1)	break;
-	case 0x2E:	LD_L(imm8);	INC_PC(-2)	break;
+	case 0x2E:	LD_L(imm8);	INC_PC(-1)	break;
 	case 0x2F:	CPL;	INC_PC(-1)	break;
 	case 0x30:	_JR_NC(imm8);	break;
-	case 0x31:	LD_SP(imm16);	INC_PC(-3)	break;
+	case 0x31:	LD_SP(imm16);	INC_PC(-1)	break;
 	case 0x32:	LD_hld_A;	INC_PC(-1)	break;
 	case 0x33:	INC_SP;	INC_PC(-1)	break;
 	case 0x34:	INC_hl;	INC_PC(-1)	break;
 	case 0x35:	DEC_hl;	INC_PC(-1)	break;
-	case 0x36:	LD_hl(imm8);	INC_PC(-2)	break;
+	case 0x36:	LD_hl(imm8);	INC_PC(-1)	break;
 	case 0x37:	SCF;	INC_PC(-1)	break;
 	case 0x38:	_JR_C(imm8);	break;
 	case 0x39:	ADD_HL_SP;	INC_PC(-1)	break;
@@ -885,7 +885,7 @@ void __gb_step_cpu()
 	case 0x3B:	DEC_SP;	INC_PC(-1)	break;
 	case 0x3C:	INC_A;	INC_PC(-1)	break;
 	case 0x3D:	DEC_A;	INC_PC(-1)	break;
-	case 0x3E:	LD_A(imm8);	INC_PC(-2)	break;
+	case 0x3E:	LD_A(imm8);	INC_PC(-1)	break;
 	case 0x3F:	CCF;	INC_PC(-1)	break;
 	case 0x40:	LD_B_B;	INC_PC(-1)	break;
 	case 0x41:	LD_B_C;	INC_PC(-1)	break;
@@ -1021,54 +1021,54 @@ void __gb_step_cpu()
 	case 0xC3:	_JP(imm16);	break;
 	case 0xC4:	_CALL_NZ(imm16);	break;
 	case 0xC5:	PUSH_BC;	INC_PC(-1)	break;
-	case 0xC6:	ADD_A(imm8);	INC_PC(-2)	break;
+	case 0xC6:	ADD_A(imm8);	INC_PC(-1)	break;
 	case 0xC7:	_RST(0x00);	break;  // RST
 	case 0xC8:	_RET_Z;	break;
 	case 0xC9:	_RET;	break;
 	case 0xCA:	_JP_Z(imm16);	break;
 	case 0xCC:	_CALL_Z(imm16);	break;
 	case 0xCD:	_CALL(imm16);	break;
-	case 0xCE:	ADC_A(imm8);	INC_PC(-2)	break;
+	case 0xCE:	ADC_A(imm8);	INC_PC(-1)	break;
 	case 0xCF:	_RST(0x08);	break;  // RST
 	case 0xD0:	_RET_NC;	break;
 	case 0xD1:	POP_DE;	INC_PC(-1)	break;
 	case 0xD2:	_JP_NC(imm16);	break;
 	case 0xD4:	_CALL_NC(imm16);	break;
 	case 0xD5:	PUSH_DE;	INC_PC(-1)	break;
-	case 0xD6:	SUB_A(imm8);	INC_PC(-2)	break;
+	case 0xD6:	SUB_A(imm8);	INC_PC(-1)	break;
 	case 0xD7:	_RST(0x10);	break;  // RST
 	case 0xD8:	_RET_C;	break;
 	case 0xD9:	_RETI;	break;
 	case 0xDA:	_JP_C(imm16);	break;
 	case 0xDC:	_CALL_C(imm16);	break;
-	case 0xDE:	SBC_A(imm8);	INC_PC(-2)	break;
+	case 0xDE:	SBC_A(imm8);	INC_PC(-1)	break;
 	case 0xDF:	_RST(0x18);	break;  // RST
-	case 0xE0:	LDH_addr_A(0xFF00 + imm8);	INC_PC(-2)	break;
+	case 0xE0:	LDH_addr_A(0xFF00 + imm8);	INC_PC(-1)	break;
 	case 0xE1:	POP_HL;	INC_PC(-1)	break;
 	case 0xE2:	LD_c_A;	INC_PC(-1)	break;
 	case 0xE5:	PUSH_HL;	INC_PC(-1)	break;
-	case 0xE6:	AND_A(imm8);	INC_PC(-2)	break;
+	case 0xE6:	AND_A(imm8);	INC_PC(-1)	break;
 	case 0xE7:	_RST(0x20);	break;  // RST
-	case 0xE8:	ADD_SP(imm8);	INC_PC(-2)	break;
+	case 0xE8:	ADD_SP(imm8);	INC_PC(-1)	break;
 	case 0xE9:	_JP_hl;	break;
-	case 0xEA:	LD_addr_A(imm16);	INC_PC(-3)	break;
-	case 0xEE:	XOR_A(imm8);	INC_PC(-2)	break;
+	case 0xEA:	LD_addr_A(imm16);	INC_PC(-1)	break;
+	case 0xEE:	XOR_A(imm8);	INC_PC(-1)	break;
 	case 0xEF:	_RST(0x28);	break;  // RST
-	case 0xF0:	LDH_A_addr(0xFF00 + imm8);	INC_PC(-2)	break;
+	case 0xF0:	LDH_A_addr(0xFF00 + imm8);	INC_PC(-1)	break;
 	case 0xF1:	POP_AF;	INC_PC(-1)	break;
 	case 0xF2:	LD_A_c;	INC_PC(-1)	break;
 	case 0xF3:	/* DI */	break;
 	case 0xF5:	PUSH_AF;	INC_PC(-1)	break;
-	case 0xF6:	OR_A(imm8);	INC_PC(-2)	break;
+	case 0xF6:	OR_A(imm8);	INC_PC(-1)	break;
 	case 0xF7:	_RST(0x30);	break;  // RST
-	case 0xF8:	LD_HL_SP(imm8);	INC_PC(-2)	break;
+	case 0xF8:	LD_HL_SP(imm8);	INC_PC(-1)	break;
 	case 0xF9:	LD_SP_HL;	INC_PC(-1)	break;
-	case 0xFA:	LD_A_addr(imm16);	INC_PC(-3)	break;
+	case 0xFA:	LD_A_addr(imm16);	INC_PC(-1)	break;
 	case 0xFB:	/* EI */	break;
-	case 0xFE:	CP_A(imm8);	INC_PC(-2)	break;
+	case 0xFE:	CP_A(imm8);	INC_PC(-1)	break;
 	case 0xFF:	_RST(0x38);	break;  // RST
 	case 0xCB: /* CB INST */
-		uint8_t op = __gb_read(gb.cpu_reg.pc++);
+		uint8_t op = gb_read(gb.cpu_reg.pc++);
 		switch(op){
 		case 0x00:	RLC_B;	break;
 		case 0x01:	RLC_C;	break;
@@ -1506,7 +1506,7 @@ void __gb_step_cpu()
 	{
 		gb.lcd_mode = LCD_TRANSFER;
 #if ENABLE_LCD
-		__gb_draw_line();
+		gb_draw_line();
 #endif
 	}
 }
@@ -1516,7 +1516,7 @@ void gb_run_frame()
 	gb.gb_frame = 0;
 
 	while(!gb.gb_frame)
-		__gb_step_cpu();
+		gb_step_cpu();
 }
 
 /**
@@ -1609,9 +1609,9 @@ void gb_reset()
 	gb.gb_reg.STAT = 0;
 	gb.gb_reg.LY = 0;
 
-	__gb_write(0xFF47, 0xFC);    // BGP
-	__gb_write(0xFF48, 0xFF);    // OBJP0
-	__gb_write(0xFF49, 0x0F);    // OBJP1
+	gb_write(0xFF47, 0xFC);    // BGP
+	gb_write(0xFF48, 0xFF);    // OBJP0
+	gb_write(0xFF49, 0x0F);    // OBJP1
 	gb.gb_reg.WY        = 0x00;
 	gb.gb_reg.WX        = 0x00;
 	gb.gb_reg.IE        = 0x00;
@@ -1888,7 +1888,7 @@ void gb_error(const enum gb_error_e gb_err, const uint16_t val)
 	switch(gb_err)
 	{
 	case GB_INVALID_OPCODE:
-		/* We compensate for the post-increment in the __gb_step_cpu
+		/* We compensate for the post-increment in the gb_step_cpu
 		 * function. */
 		fprintf(stdout, "Invalid opcode %#04x at PC: %#06x, SP: %#06x\n",
 			val,

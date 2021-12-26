@@ -10,42 +10,42 @@
 #define IF_NZ   INC_PC(2) if(!gb.cpu_reg.f_bits.z)
 //----------------------------------------------
 
-#define imm8 __gb_read(gb.cpu_reg.pc++)
-#define imm16 __gb_read(gb.cpu_reg.pc++) + (__gb_read(gb.cpu_reg.pc++) << 8)
-#define _bc_ __gb_read(gb.cpu_reg.bc)
-#define _de_ __gb_read(gb.cpu_reg.de)
-#define _hl_ __gb_read(gb.cpu_reg.hl)
-#define _hli_ __gb_read(gb.cpu_reg.hl++)
-#define _hld_ __gb_read(gb.cpu_reg.hl--)
+#define imm8 gb_read(gb.cpu_reg.pc)
+#define imm16 gb_read(gb.cpu_reg.pc) + (gb_read(gb.cpu_reg.pc + 1) << 8)
+#define _bc_ gb_read(gb.cpu_reg.bc)
+#define _de_ gb_read(gb.cpu_reg.de)
+#define _hl_ gb_read(gb.cpu_reg.hl)
+#define _hli_ gb_read(gb.cpu_reg.hl++)
+#define _hld_ gb_read(gb.cpu_reg.hl--)
 
-#define WRITE(dest, value) (__gb_write(dest, value))
-#define PUSH_AF do {__gb_write(--gb.cpu_reg.sp, gb.cpu_reg.a);\
-                    __gb_write(--gb.cpu_reg.sp,\
+#define WRITE(dest, value) (gb_write(dest, value))
+#define PUSH_AF do {gb_write(--gb.cpu_reg.sp, gb.cpu_reg.a);\
+                    gb_write(--gb.cpu_reg.sp,\
                     gb.cpu_reg.f_bits.z << 7 | gb.cpu_reg.f_bits.n << 6 |\
                     gb.cpu_reg.f_bits.h << 5 | gb.cpu_reg.f_bits.c << 4); INC_PC(1)} while(0)
-#define PUSH_BC do {__gb_write(--gb.cpu_reg.sp, gb.cpu_reg.b);\
-                    __gb_write(--gb.cpu_reg.sp, gb.cpu_reg.c); INC_PC(1)} while(0)
-#define PUSH_DE do {__gb_write(--gb.cpu_reg.sp, gb.cpu_reg.d);\
-                    __gb_write(--gb.cpu_reg.sp, gb.cpu_reg.e); INC_PC(1)} while(0)
-#define PUSH_HL do {__gb_write(--gb.cpu_reg.sp, gb.cpu_reg.h);\
-                    __gb_write(--gb.cpu_reg.sp, gb.cpu_reg.l); INC_PC(1)} while(0)
-#define PUSH_PC do {__gb_write(--gb.cpu_reg.sp, gb.cpu_reg.pc >> 8);\
-                    __gb_write(--gb.cpu_reg.sp, gb.cpu_reg.pc & 0xFF);} while(0)
+#define PUSH_BC do {gb_write(--gb.cpu_reg.sp, gb.cpu_reg.b);\
+                    gb_write(--gb.cpu_reg.sp, gb.cpu_reg.c); INC_PC(1)} while(0)
+#define PUSH_DE do {gb_write(--gb.cpu_reg.sp, gb.cpu_reg.d);\
+                    gb_write(--gb.cpu_reg.sp, gb.cpu_reg.e); INC_PC(1)} while(0)
+#define PUSH_HL do {gb_write(--gb.cpu_reg.sp, gb.cpu_reg.h);\
+                    gb_write(--gb.cpu_reg.sp, gb.cpu_reg.l); INC_PC(1)} while(0)
+#define PUSH_PC do {gb_write(--gb.cpu_reg.sp, gb.cpu_reg.pc >> 8);\
+                    gb_write(--gb.cpu_reg.sp, gb.cpu_reg.pc & 0xFF);} while(0)
 
-#define POP_AF	do {uint8_t temp_8 = __gb_read(gb.cpu_reg.sp++);\
+#define POP_AF	do {uint8_t temp_8 = gb_read(gb.cpu_reg.sp++);\
                     gb.cpu_reg.f_bits.z = (temp_8 >> 7) & 1;\
                     gb.cpu_reg.f_bits.n = (temp_8 >> 6) & 1;\
                     gb.cpu_reg.f_bits.h = (temp_8 >> 5) & 1;\
                     gb.cpu_reg.f_bits.c = (temp_8 >> 4) & 1;\
-                    gb.cpu_reg.a = __gb_read(gb.cpu_reg.sp++); INC_PC(1)} while(0)
-#define POP_BC	do {gb.cpu_reg.c = __gb_read(gb.cpu_reg.sp++);\
-                    gb.cpu_reg.b = __gb_read(gb.cpu_reg.sp++); INC_PC(1)} while(0)
-#define POP_DE	do {gb.cpu_reg.e = __gb_read(gb.cpu_reg.sp++);\
-                    gb.cpu_reg.d = __gb_read(gb.cpu_reg.sp++); INC_PC(1)} while(0)
-#define POP_HL	do {gb.cpu_reg.l = __gb_read(gb.cpu_reg.sp++);\
-                    gb.cpu_reg.h = __gb_read(gb.cpu_reg.sp++); INC_PC(1)} while(0)
-#define POP_PC	do {gb.cpu_reg.pc = __gb_read(gb.cpu_reg.sp++)|\
-                    (__gb_read(gb.cpu_reg.sp++) << 8);} while(0)
+                    gb.cpu_reg.a = gb_read(gb.cpu_reg.sp++); INC_PC(1)} while(0)
+#define POP_BC	do {gb.cpu_reg.c = gb_read(gb.cpu_reg.sp++);\
+                    gb.cpu_reg.b = gb_read(gb.cpu_reg.sp++); INC_PC(1)} while(0)
+#define POP_DE	do {gb.cpu_reg.e = gb_read(gb.cpu_reg.sp++);\
+                    gb.cpu_reg.d = gb_read(gb.cpu_reg.sp++); INC_PC(1)} while(0)
+#define POP_HL	do {gb.cpu_reg.l = gb_read(gb.cpu_reg.sp++);\
+                    gb.cpu_reg.h = gb_read(gb.cpu_reg.sp++); INC_PC(1)} while(0)
+#define POP_PC	do {gb.cpu_reg.pc = gb_read(gb.cpu_reg.sp++);\
+                    gb.cpu_reg.pc |= (gb_read(gb.cpu_reg.sp++) << 8);} while(0)
 
 #define LD_A(x)	do {gb.cpu_reg.a = x; INC_PC(2)} while(0)
 #define LD_A_A	do {INC_PC(1)} while(0)
@@ -55,11 +55,11 @@
 #define LD_A_E	do {gb.cpu_reg.a = gb.cpu_reg.e; INC_PC(1)} while(0)
 #define LD_A_H	do {gb.cpu_reg.a = gb.cpu_reg.h; INC_PC(1)} while(0)
 #define LD_A_L	do {gb.cpu_reg.a = gb.cpu_reg.l; INC_PC(1)} while(0)
-#define LD_A_bc	do {gb.cpu_reg.a = __gb_read(gb.cpu_reg.bc); INC_PC(1)} while(0)
-#define LD_A_de	do {gb.cpu_reg.a = __gb_read(gb.cpu_reg.de); INC_PC(1)} while(0)
-#define LD_A_hl	do {gb.cpu_reg.a = __gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
-#define LD_A_hli	do {gb.cpu_reg.a = __gb_read(gb.cpu_reg.hl++); INC_PC(1)} while(0)
-#define LD_A_hld	do {gb.cpu_reg.a = __gb_read(gb.cpu_reg.hl--); INC_PC(1)} while(0)
+#define LD_A_bc	do {gb.cpu_reg.a = gb_read(gb.cpu_reg.bc); INC_PC(1)} while(0)
+#define LD_A_de	do {gb.cpu_reg.a = gb_read(gb.cpu_reg.de); INC_PC(1)} while(0)
+#define LD_A_hl	do {gb.cpu_reg.a = gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
+#define LD_A_hli	do {gb.cpu_reg.a = gb_read(gb.cpu_reg.hl++); INC_PC(1)} while(0)
+#define LD_A_hld	do {gb.cpu_reg.a = gb_read(gb.cpu_reg.hl--); INC_PC(1)} while(0)
 #define LD_B(x)	do {gb.cpu_reg.b = x; INC_PC(2)} while(0)
 #define LD_B_A	do {gb.cpu_reg.b = gb.cpu_reg.a; INC_PC(1)} while(0)
 #define LD_B_B	do {INC_PC(1)} while(0)
@@ -68,7 +68,7 @@
 #define LD_B_E	do {gb.cpu_reg.b = gb.cpu_reg.e; INC_PC(1)} while(0)
 #define LD_B_H	do {gb.cpu_reg.b = gb.cpu_reg.h; INC_PC(1)} while(0)
 #define LD_B_L	do {gb.cpu_reg.b = gb.cpu_reg.l; INC_PC(1)} while(0)
-#define LD_B_hl	do {gb.cpu_reg.b = __gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
+#define LD_B_hl	do {gb.cpu_reg.b = gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
 #define LD_C(x)	do {gb.cpu_reg.c = x; INC_PC(2)} while(0)
 #define LD_C_A	do {gb.cpu_reg.c = gb.cpu_reg.a; INC_PC(1)} while(0)
 #define LD_C_B	do {gb.cpu_reg.c = gb.cpu_reg.b; INC_PC(1)} while(0)
@@ -77,7 +77,7 @@
 #define LD_C_E	do {gb.cpu_reg.c = gb.cpu_reg.e; INC_PC(1)} while(0)
 #define LD_C_H	do {gb.cpu_reg.c = gb.cpu_reg.h; INC_PC(1)} while(0)
 #define LD_C_L	do {gb.cpu_reg.c = gb.cpu_reg.l; INC_PC(1)} while(0)
-#define LD_C_hl	do {gb.cpu_reg.c = __gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
+#define LD_C_hl	do {gb.cpu_reg.c = gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
 #define LD_D(x)	do {gb.cpu_reg.d = x; INC_PC(2)} while(0)
 #define LD_D_A	do {gb.cpu_reg.d = gb.cpu_reg.a; INC_PC(1)} while(0)
 #define LD_D_B	do {gb.cpu_reg.d = gb.cpu_reg.b; INC_PC(1)} while(0)
@@ -86,7 +86,7 @@
 #define LD_D_E	do {gb.cpu_reg.d = gb.cpu_reg.e; INC_PC(1)} while(0)
 #define LD_D_H	do {gb.cpu_reg.d = gb.cpu_reg.h; INC_PC(1)} while(0)
 #define LD_D_L	do {gb.cpu_reg.d = gb.cpu_reg.l; INC_PC(1)} while(0)
-#define LD_D_hl	do {gb.cpu_reg.d = __gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
+#define LD_D_hl	do {gb.cpu_reg.d = gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
 #define LD_E(x)	do {gb.cpu_reg.e = x; INC_PC(2)} while(0)
 #define LD_E_A	do {gb.cpu_reg.e = gb.cpu_reg.a; INC_PC(1)} while(0)
 #define LD_E_B	do {gb.cpu_reg.e = gb.cpu_reg.b; INC_PC(1)} while(0)
@@ -95,7 +95,7 @@
 #define LD_E_E	do {INC_PC(1)} while(0)
 #define LD_E_H	do {gb.cpu_reg.e = gb.cpu_reg.h; INC_PC(1)} while(0)
 #define LD_E_L	do {gb.cpu_reg.e = gb.cpu_reg.l; INC_PC(1)} while(0)
-#define LD_E_hl	do {gb.cpu_reg.e = __gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
+#define LD_E_hl	do {gb.cpu_reg.e = gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
 #define LD_H(x)	do {gb.cpu_reg.h = x; INC_PC(2)} while(0)
 #define LD_H_A	do {gb.cpu_reg.h = gb.cpu_reg.a; INC_PC(1)} while(0)
 #define LD_H_B	do {gb.cpu_reg.h = gb.cpu_reg.b; INC_PC(1)} while(0)
@@ -104,7 +104,7 @@
 #define LD_H_E	do {gb.cpu_reg.h = gb.cpu_reg.e; INC_PC(1)} while(0)
 #define LD_H_H	do {INC_PC(1)} while(0)
 #define LD_H_L	do {gb.cpu_reg.h = gb.cpu_reg.l; INC_PC(1)} while(0)
-#define LD_H_hl	do {gb.cpu_reg.h = __gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
+#define LD_H_hl	do {gb.cpu_reg.h = gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
 #define LD_L(x)	do {gb.cpu_reg.l = x; INC_PC(2)} while(0)
 #define LD_L_A	do {gb.cpu_reg.l = gb.cpu_reg.a; INC_PC(1)} while(0)
 #define LD_L_B	do {gb.cpu_reg.l = gb.cpu_reg.b; INC_PC(1)} while(0)
@@ -113,20 +113,20 @@
 #define LD_L_E	do {gb.cpu_reg.l = gb.cpu_reg.e; INC_PC(1)} while(0)
 #define LD_L_H	do {gb.cpu_reg.l = gb.cpu_reg.h; INC_PC(1)} while(0)
 #define LD_L_L	do {INC_PC(1)} while(0)
-#define LD_L_hl	do {gb.cpu_reg.l = __gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
-#define LD_hl(x)	do {__gb_write(gb.cpu_reg.hl, x); INC_PC(2)} while(0)
-#define LD_hl_A	do {__gb_write(gb.cpu_reg.hl, gb.cpu_reg.a); INC_PC(1)} while(0)
-#define LD_hli_A	do {__gb_write(gb.cpu_reg.hl++, gb.cpu_reg.a); INC_PC(1)} while(0)
-#define LD_hld_A	do {__gb_write(gb.cpu_reg.hl--, gb.cpu_reg.a); INC_PC(1)} while(0)
-#define LD_hl_B	do {__gb_write(gb.cpu_reg.hl, gb.cpu_reg.b); INC_PC(1)} while(0)
-#define LD_hl_C	do {__gb_write(gb.cpu_reg.hl, gb.cpu_reg.c); INC_PC(1)} while(0)
-#define LD_hl_D	do {__gb_write(gb.cpu_reg.hl, gb.cpu_reg.d); INC_PC(1)} while(0)
-#define LD_hl_E	do {__gb_write(gb.cpu_reg.hl, gb.cpu_reg.e); INC_PC(1)} while(0)
-#define LD_hl_H	do {__gb_write(gb.cpu_reg.hl, gb.cpu_reg.h); INC_PC(1)} while(0)
-#define LD_hl_L	do {__gb_write(gb.cpu_reg.hl, gb.cpu_reg.l); INC_PC(1)} while(0)
+#define LD_L_hl	do {gb.cpu_reg.l = gb_read(gb.cpu_reg.hl); INC_PC(1)} while(0)
+#define LD_hl(x)	do {gb_write(gb.cpu_reg.hl, x); INC_PC(2)} while(0)
+#define LD_hl_A	do {gb_write(gb.cpu_reg.hl, gb.cpu_reg.a); INC_PC(1)} while(0)
+#define LD_hli_A	do {gb_write(gb.cpu_reg.hl++, gb.cpu_reg.a); INC_PC(1)} while(0)
+#define LD_hld_A	do {gb_write(gb.cpu_reg.hl--, gb.cpu_reg.a); INC_PC(1)} while(0)
+#define LD_hl_B	do {gb_write(gb.cpu_reg.hl, gb.cpu_reg.b); INC_PC(1)} while(0)
+#define LD_hl_C	do {gb_write(gb.cpu_reg.hl, gb.cpu_reg.c); INC_PC(1)} while(0)
+#define LD_hl_D	do {gb_write(gb.cpu_reg.hl, gb.cpu_reg.d); INC_PC(1)} while(0)
+#define LD_hl_E	do {gb_write(gb.cpu_reg.hl, gb.cpu_reg.e); INC_PC(1)} while(0)
+#define LD_hl_H	do {gb_write(gb.cpu_reg.hl, gb.cpu_reg.h); INC_PC(1)} while(0)
+#define LD_hl_L	do {gb_write(gb.cpu_reg.hl, gb.cpu_reg.l); INC_PC(1)} while(0)
 #define LD_hl_hl	do {INC_PC(1)} while(0)
-#define LD_bc_A	do {__gb_write(gb.cpu_reg.bc, gb.cpu_reg.a); INC_PC(1)} while(0)
-#define LD_de_A	do {__gb_write(gb.cpu_reg.de, gb.cpu_reg.a); INC_PC(1)} while(0)
+#define LD_bc_A	do {gb_write(gb.cpu_reg.bc, gb.cpu_reg.a); INC_PC(1)} while(0)
+#define LD_de_A	do {gb_write(gb.cpu_reg.de, gb.cpu_reg.a); INC_PC(1)} while(0)
 
 #define LD_BC(x)	do {gb.cpu_reg.bc = x; INC_PC(3)} while(0)
 #define LD_DE(x)	do {gb.cpu_reg.de = x; INC_PC(3)} while(0)
@@ -162,7 +162,7 @@
 #define JR_NC(x)	do {INC_PC(2) IF1_NC(JR(x));} while(0)
 #define JR_Z(x)	do {INC_PC(2) IF1_Z(JR(x));} while(0)
 #define JR_NZ(x)	do {INC_PC(2) IF1_NZ(JR(x));} while(0)
-#define _JR(x)	do {gb.cpu_reg.pc += (int8_t)x;} while(0)
+#define _JR(x)	do {gb.cpu_reg.pc += (int8_t)x + 1;} while(0)
 #define _JR_C(x)	do {IF1_C(_JR(x));} while(0)
 #define _JR_NC(x)	do {IF1_NC(_JR(x));} while(0)
 #define _JR_Z(x)	do {IF1_Z(_JR(x));} while(0)
@@ -187,6 +187,7 @@
 #define _JP_hl	do {gb.cpu_reg.pc = gb.cpu_reg.hl;} while(0)
 
 #define _CALL(x)	do {uint16_t dest = x;\
+                    INC_PC(2);\
                     PUSH_PC;\
                     gb.cpu_reg.pc = dest;} while(0)
 #define _CALL_C(x)	do {IF2_C(_CALL(x));} while(0)
@@ -223,7 +224,9 @@
                     PUSH_PC;\
                     gb.cpu_reg.pc = dest;\
                     return -1;} while(0)
-#define _RST(x)	do {_CALL(x & 0x38);} while(0)
+#define _RST(x)	do {uint16_t dest = x & 0x38;\
+                    PUSH_PC;\
+                    gb.cpu_reg.pc = dest;} while(0)
 
 #define INC_FLAGS(x)	do {gb.cpu_reg.f_bits.z = (x == 0x00);\
                             gb.cpu_reg.f_bits.n = 0;\
@@ -235,7 +238,7 @@
 #define INC_E	do {gb.cpu_reg.e++; INC_FLAGS(gb.cpu_reg.e);} while(0)
 #define INC_H	do {gb.cpu_reg.h++; INC_FLAGS(gb.cpu_reg.h);} while(0)
 #define INC_L	do {gb.cpu_reg.l++; INC_FLAGS(gb.cpu_reg.l);} while(0)
-#define INC_hl	do {uint8_t temp = _hl_ + 1; INC_FLAGS(temp); __gb_write(gb.cpu_reg.hl, temp);} while(0)
+#define INC_hl	do {uint8_t temp = _hl_ + 1; INC_FLAGS(temp); gb_write(gb.cpu_reg.hl, temp);} while(0)
 #define INC_BC	do {gb.cpu_reg.bc++; INC_PC(1)} while(0)
 #define INC_DE	do {gb.cpu_reg.de++; INC_PC(1)} while(0)
 #define INC_HL	do {gb.cpu_reg.hl++; INC_PC(1)} while(0)
@@ -251,7 +254,7 @@
 #define DEC_E	do {gb.cpu_reg.e--; DEC_FLAGS(gb.cpu_reg.e);} while(0)
 #define DEC_H	do {gb.cpu_reg.h--; DEC_FLAGS(gb.cpu_reg.h);} while(0)
 #define DEC_L	do {gb.cpu_reg.l--; DEC_FLAGS(gb.cpu_reg.l);} while(0)
-#define DEC_hl	do {uint8_t temp = _hl_ - 1; DEC_FLAGS(temp); __gb_write(gb.cpu_reg.hl, temp);} while(0)
+#define DEC_hl	do {uint8_t temp = _hl_ - 1; DEC_FLAGS(temp); gb_write(gb.cpu_reg.hl, temp);} while(0)
 #define DEC_BC	do {gb.cpu_reg.bc--; INC_PC(1)} while(0)
 #define DEC_DE	do {gb.cpu_reg.de--; INC_PC(1)} while(0)
 #define DEC_HL	do {gb.cpu_reg.hl--; INC_PC(1)} while(0)
@@ -471,8 +474,8 @@
                 gb.cpu_reg.f_bits.h = 1; INC_PC(1)} while(0)
 
 #define LD_addr_SP(x)	do {uint16_t temp = x;\
-                            __gb_write(temp++, gb.cpu_reg.sp & 0xFF);\
-                            __gb_write(temp, gb.cpu_reg.sp >> 8); INC_PC(3)} while(0)
+                            gb_write(temp++, gb.cpu_reg.sp & 0xFF);\
+                            gb_write(temp, gb.cpu_reg.sp >> 8); INC_PC(3)} while(0)
 
 #define RLCA	do {gb.cpu_reg.a = (gb.cpu_reg.a << 1) | (gb.cpu_reg.a >> 7);\
                     gb.cpu_reg.f_bits.z = 0;\
@@ -497,12 +500,12 @@
                 gb.cpu_reg.f_bits.h = 0;\
                 gb.cpu_reg.f_bits.c = temp & 0x1; INC_PC(1)} while(0)
 
-#define LD_addr_A(x)	do {__gb_write(x, gb.cpu_reg.a); INC_PC(3)} while(0)
-#define LD_A_addr(x)	do {gb.cpu_reg.a = __gb_read(x); INC_PC(3)} while(0)
-#define LDH_addr_A(x)	do {__gb_write(x, gb.cpu_reg.a); INC_PC(2)} while(0)
-#define LDH_A_addr(x)	do {gb.cpu_reg.a = __gb_read(x); INC_PC(2)} while(0)
-#define LD_c_A	do {__gb_write(0xFF00 + gb.cpu_reg.c, gb.cpu_reg.a); INC_PC(1)} while(0)
-#define LD_A_c	do {gb.cpu_reg.a = __gb_read(0xFF00 + gb.cpu_reg.c); INC_PC(1)} while(0)
+#define LD_addr_A(x)	do {gb_write(x, gb.cpu_reg.a); INC_PC(3)} while(0)
+#define LD_A_addr(x)	do {gb.cpu_reg.a = gb_read(x); INC_PC(3)} while(0)
+#define LDH_addr_A(x)	do {gb_write(x, gb.cpu_reg.a); INC_PC(2)} while(0)
+#define LDH_A_addr(x)	do {gb.cpu_reg.a = gb_read(x); INC_PC(2)} while(0)
+#define LD_c_A	do {gb_write(0xFF00 + gb.cpu_reg.c, gb.cpu_reg.a); INC_PC(1)} while(0)
+#define LD_A_c	do {gb.cpu_reg.a = gb_read(0xFF00 + gb.cpu_reg.c); INC_PC(1)} while(0)
 
 /* Taken from SameBoy, which is released under MIT Licence. */
 #define LD_HL_SP(x)	do {int8_t offset = x;\
@@ -548,12 +551,12 @@
                     gb.cpu_reg.a <<= 1;\
                     gb.cpu_reg.a += gb.cpu_reg.f_bits.c;\
                     ROT_FLAG(gb.cpu_reg.a, carry);} while(0)
-#define RL_hl	do {uint8_t temp = __gb_read(gb.cpu_reg.hl);\
+#define RL_hl	do {uint8_t temp = gb_read(gb.cpu_reg.hl);\
                     uint8_t carry = (temp >> 7);\
                     temp <<= 1;\
                     temp += gb.cpu_reg.f_bits.c;\
                     ROT_FLAG(temp, carry);\
-                    __gb_write(gb.cpu_reg.hl, temp);} while(0)
+                    gb_write(gb.cpu_reg.hl, temp);} while(0)
 
 #define RLC_B	do {uint8_t carry = (gb.cpu_reg.b >> 7);\
                     gb.cpu_reg.b <<= 1;\
@@ -583,12 +586,12 @@
                     gb.cpu_reg.a <<= 1;\
                     gb.cpu_reg.a += carry;\
                     ROT_FLAG(gb.cpu_reg.a, carry);} while(0)
-#define RLC_hl	do {uint8_t temp = __gb_read(gb.cpu_reg.hl);\
+#define RLC_hl	do {uint8_t temp = gb_read(gb.cpu_reg.hl);\
                     uint8_t carry = (temp >> 7);\
                     temp <<= 1;\
                     temp += carry;\
                     ROT_FLAG(temp, carry);\
-                    __gb_write(gb.cpu_reg.hl, temp);} while(0)
+                    gb_write(gb.cpu_reg.hl, temp);} while(0)
 
 #define RR_B	do {uint8_t carry = (gb.cpu_reg.b & 1);\
                     gb.cpu_reg.b >>= 1;\
@@ -618,12 +621,12 @@
                     gb.cpu_reg.a >>= 1;\
                     gb.cpu_reg.a += (gb.cpu_reg.f_bits.c << 7);\
                     ROT_FLAG(gb.cpu_reg.a, carry);} while(0)
-#define RR_hl	do {uint8_t temp = __gb_read(gb.cpu_reg.hl);\
+#define RR_hl	do {uint8_t temp = gb_read(gb.cpu_reg.hl);\
                     uint8_t carry = (temp & 1);\
                     temp >>= 1;\
                     temp += (gb.cpu_reg.f_bits.c << 7);\
                     ROT_FLAG(temp, carry);\
-                    __gb_write(gb.cpu_reg.hl, temp);} while(0)
+                    gb_write(gb.cpu_reg.hl, temp);} while(0)
 
 #define RRC_B	do {uint8_t carry = (gb.cpu_reg.b & 1);\
                     gb.cpu_reg.b >>= 1;\
@@ -653,12 +656,12 @@
                     gb.cpu_reg.a >>= 1;\
                     gb.cpu_reg.a += (carry << 7);\
                     ROT_FLAG(gb.cpu_reg.a, carry);} while(0)
-#define RRC_hl	do {uint8_t temp = __gb_read(gb.cpu_reg.hl);\
+#define RRC_hl	do {uint8_t temp = gb_read(gb.cpu_reg.hl);\
                     uint8_t carry = (temp & 1);\
                     temp >>= 1;\
                     temp += (carry << 7);\
                     ROT_FLAG(temp, carry);\
-                    __gb_write(gb.cpu_reg.hl, temp);} while(0)
+                    gb_write(gb.cpu_reg.hl, temp);} while(0)
 
 #define SLA_B	do {uint8_t carry = (gb.cpu_reg.b >> 7);\
                     gb.cpu_reg.b <<= 1;\
@@ -681,11 +684,11 @@
 #define SLA_A	do {uint8_t carry = (gb.cpu_reg.a >> 7);\
                     gb.cpu_reg.a <<= 1;\
                     ROT_FLAG(gb.cpu_reg.a, carry);} while(0)
-#define SLA_hl	do {uint8_t temp = __gb_read(gb.cpu_reg.hl);\
+#define SLA_hl	do {uint8_t temp = gb_read(gb.cpu_reg.hl);\
                     uint8_t carry = (temp >> 7);\
                     temp <<= 1;\
                     ROT_FLAG(temp, carry);\
-                    __gb_write(gb.cpu_reg.hl, temp);} while(0)
+                    gb_write(gb.cpu_reg.hl, temp);} while(0)
 
 #define SRA_B	do {uint8_t carry = (gb.cpu_reg.b & 1);\
                     gb.cpu_reg.b >>= 1;\
@@ -715,12 +718,12 @@
                     gb.cpu_reg.a >>= 1;\
                     gb.cpu_reg.a += ((gb.cpu_reg.a << 1) & 0x80);\
                     ROT_FLAG(gb.cpu_reg.a, carry);} while(0)
-#define SRA_hl	do {uint8_t temp = __gb_read(gb.cpu_reg.hl);\
+#define SRA_hl	do {uint8_t temp = gb_read(gb.cpu_reg.hl);\
                     uint8_t carry = (temp & 1);\
                     temp >>= 1;\
                     temp += ((temp << 1) & 0x80);\
                     ROT_FLAG(temp, carry);\
-                    __gb_write(gb.cpu_reg.hl, temp);} while(0)
+                    gb_write(gb.cpu_reg.hl, temp);} while(0)
 
 #define SWAP_FLAGS(x)	do {gb.cpu_reg.f_bits.z = (x == 0x00);\
                             gb.cpu_reg.f_bits.n = 0;\
@@ -754,12 +757,12 @@
                     gb.cpu_reg.a >>= 4;\
                     gb.cpu_reg.a |= temp;\
                     SWAP_FLAGS(gb.cpu_reg.a);} while(0)
-#define SWAP_hl	do {uint8_t val = __gb_read(gb.cpu_reg.hl);\
+#define SWAP_hl	do {uint8_t val = gb_read(gb.cpu_reg.hl);\
                     uint8_t temp = (val << 4);\
                     val >>= 4;\
                     val |= temp;\
                     SWAP_FLAGS(val);\
-                    __gb_write(gb.cpu_reg.hl, val);} while(0)
+                    gb_write(gb.cpu_reg.hl, val);} while(0)
 
 #define SRL_B	do {uint8_t carry = (gb.cpu_reg.b & 1);\
                     gb.cpu_reg.b >>= 1;\
@@ -782,11 +785,11 @@
 #define SRL_A	do {uint8_t carry = (gb.cpu_reg.a & 1);\
                     gb.cpu_reg.a >>= 1;\
                     ROT_FLAG(gb.cpu_reg.a, carry);} while(0)
-#define SRL_hl	do {uint8_t temp = __gb_read(gb.cpu_reg.hl);\
+#define SRL_hl	do {uint8_t temp = gb_read(gb.cpu_reg.hl);\
                     uint8_t carry = (temp & 1);\
                     temp >>= 1;\
                     ROT_FLAG(temp, carry);\
-                    __gb_write(gb.cpu_reg.hl, temp);} while(0)
+                    gb_write(gb.cpu_reg.hl, temp);} while(0)
 
 #define BIT_(x, bit)	do {uint8_t val = x;\
                         gb.cpu_reg.f_bits.z = !((val >> bit) & 0x1);\
@@ -799,7 +802,7 @@
 #define BIT_H(bit)	do {BIT_(gb.cpu_reg.h, bit);} while(0)
 #define BIT_L(bit)	do {BIT_(gb.cpu_reg.l, bit);} while(0)
 #define BIT_A(bit)	do {BIT_(gb.cpu_reg.a, bit);} while(0)
-#define BIT_hl(bit)	do {BIT_(__gb_read(gb.cpu_reg.hl), bit);} while(0)
+#define BIT_hl(bit)	do {BIT_(gb_read(gb.cpu_reg.hl), bit);} while(0)
 
 #define RES_(x, bit)	do {x &= (0xFE << bit) | (0xFF >> (8 - bit));} while(0)
 #define RES_B(bit)	do {gb.cpu_reg.b &= ((1 << bit) ^ 0xFF); INC_PC(2)} while(0)
@@ -809,9 +812,9 @@
 #define RES_H(bit)	do {gb.cpu_reg.h &= ((1 << bit) ^ 0xFF); INC_PC(2)} while(0)
 #define RES_L(bit)	do {gb.cpu_reg.l &= ((1 << bit) ^ 0xFF); INC_PC(2)} while(0)
 #define RES_A(bit)	do {gb.cpu_reg.a &= ((1 << bit) ^ 0xFF); INC_PC(2)} while(0)
-#define RES_hl(bit)	do {uint8_t val = __gb_read(gb.cpu_reg.hl);\
+#define RES_hl(bit)	do {uint8_t val = gb_read(gb.cpu_reg.hl);\
                         val &= ((1 << bit) ^ 0xFF);\
-                        __gb_write(gb.cpu_reg.hl, val); INC_PC(2)} while(0)
+                        gb_write(gb.cpu_reg.hl, val); INC_PC(2)} while(0)
 
 #define SET_(x, bit)	do {x |= (0x1 << bit);} while(0)
 #define SET_B(bit)	do {gb.cpu_reg.b |= (1 << bit); INC_PC(2)} while(0)
@@ -821,9 +824,9 @@
 #define SET_H(bit)	do {gb.cpu_reg.h |= (1 << bit); INC_PC(2)} while(0)
 #define SET_L(bit)	do {gb.cpu_reg.l |= (1 << bit); INC_PC(2)} while(0)
 #define SET_A(bit)	do {gb.cpu_reg.a |= (1 << bit); INC_PC(2)} while(0)
-#define SET_hl(bit)	do {uint8_t val = __gb_read(gb.cpu_reg.hl);\
+#define SET_hl(bit)	do {uint8_t val = gb_read(gb.cpu_reg.hl);\
                         val |= (0x1 << bit);\
-                        __gb_write(gb.cpu_reg.hl, val); INC_PC(2)} while(0)
+                        gb_write(gb.cpu_reg.hl, val); INC_PC(2)} while(0)
 
 
 // Pokegold macros

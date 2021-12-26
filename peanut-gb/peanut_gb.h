@@ -495,9 +495,9 @@ struct gb_s
 /**
  * Internal function used to read bytes.
  */
-uint8_t __gb_read(const uint_fast16_t addr);
+uint8_t gb_read(const uint_fast16_t addr);
 
 /**
  * Internal function used to write bytes.
  */
-void __gb_write(const uint_fast16_t addr, const uint8_t val);
+void gb_write(const uint_fast16_t addr, const uint8_t val);

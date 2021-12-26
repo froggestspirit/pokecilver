@@ -1,4 +1,4 @@
-#pragma once
+
 #include <stdint.h>
 #include "../C/data/predef_pointers.h"
 
@@ -13,7 +13,6 @@
                             m##x = (y < 0x4000 ? y : ((y & 0x3FFF) | 0x4000)),\
                         };
 
-#define NULL 0x0000
 FUNCMAP(FarCall, 0x0008U)
 FUNCMAP(Bankswitch, 0x0010U)
 FUNCMAP(JumpTable, 0x0028U)
