@@ -4,11 +4,11 @@
 
 // string buffer constants
 enum {
-	STRING_BUFFER_3, // use
-}; wStringBuffer3
+	STRING_BUFFER_3, // use wStringBuffer3
 	STRING_BUFFER_4, // use wStringBuffer4
 	STRING_BUFFER_5, // use wStringBuffer5
-#define NUM_STRING_BUFFERS const_value
+	NUM_STRING_BUFFERS,
+};
 
 #define STRING_BUFFER_LENGTH 19
 
@@ -43,10 +43,10 @@ enum {
 
 // trainertext arguments
 enum {
-};
 	TRAINERTEXT_SEEN,
 	TRAINERTEXT_WIN,
 	TRAINERTEXT_LOSS,
+};
 
 // readvar/writevar/loadvar arguments
 // _GetVarAction.VarActionTable indexes (see engine/overworld/variables.asm)
@@ -82,8 +82,7 @@ enum {
 
 // PlayerEventScriptPointers indexes (see engine/overworld/events.asm)
 enum {
-};-1
-	PLAYEREVENT_MAPSCRIPT,
+	PLAYEREVENT_MAPSCRIPT = -1,
 	PLAYEREVENT_NONE,
 	PLAYEREVENT_SEENBYTRAINER,
 	PLAYEREVENT_TALKTOTRAINER,
@@ -94,11 +93,11 @@ enum {
 	PLAYEREVENT_WHITEOUT,
 	PLAYEREVENT_HATCH,
 	PLAYEREVENT_JOYCHANGEFACING,
-#define NUM_PLAYER_EVENTS const_value
+	NUM_PLAYER_EVENTS,
+};
 
 // PlayerMovementPointers indexes (see engine/overworld/events.asm)
 enum {
-};
 	PLAYERMOVEMENT_NORMAL,
 	PLAYERMOVEMENT_WARP,
 	PLAYERMOVEMENT_TURN,
@@ -107,7 +106,8 @@ enum {
 	PLAYERMOVEMENT_CONTINUE,
 	PLAYERMOVEMENT_EXIT_WATER,
 	PLAYERMOVEMENT_JUMP,
-#define NUM_PLAYER_MOVEMENTS const_value
+	NUM_PLAYER_MOVEMENTS,
+};
 
 // script data sizes (see macros/scripts/maps.asm)
 #define SCENE_SCRIPT_SIZE 4 // scene_script
@@ -120,7 +120,6 @@ enum {
 // bg_event types
 // BGEventJumptable indexes (see engine/overworld/events.asm)
 enum {
-};
 	BGEVENT_READ,
 	BGEVENT_UP,
 	BGEVENT_DOWN,
@@ -130,12 +129,12 @@ enum {
 	BGEVENT_IFNOTSET,
 	BGEVENT_ITEM,
 	BGEVENT_COPY,
-#define NUM_BGEVENTS const_value
+	NUM_BGEVENTS,
+};
 
 // object_event types
 // ObjectEventTypeArray indexes (see engine/overworld/events.asm)
 enum {
-};
 	OBJECTTYPE_SCRIPT,
 	OBJECTTYPE_ITEMBALL,
 	OBJECTTYPE_TRAINER,
@@ -143,7 +142,8 @@ enum {
 	OBJECTTYPE_4,
 	OBJECTTYPE_5,
 	OBJECTTYPE_6,
-#define NUM_OBJECT_TYPES const_value
+	NUM_OBJECT_TYPES,
+};
 
 // command queue members
 #define CMDQUEUE_TYPE 0
@@ -157,20 +157,19 @@ enum {
 
 // #define Handl euedCommand.Jumptable indexes (see engine/overworld/events.asm)
 enum {
-};
 	CMDQUEUE_NULL,
 	CMDQUEUE_TYPE1,
 	CMDQUEUE_STONETABLE,
 	CMDQUEUE_TYPE3,
 	CMDQUEUE_TYPE4,
-#define NUM_CMDQUEUE_TYPES const_value
+	NUM_CMDQUEUE_TYPES,
+};
 
 #define MAX_XYCOMPARE_LENGTH 32
 
 // elevfloor macro values
 // ElevatorFloorNames indexes (see data/events/elevator_floors.asm)
 enum {
-};
 	FLOOR_B4F,
 	FLOOR_B3F,
 	FLOOR_B2F,
@@ -187,12 +186,12 @@ enum {
 	FLOOR_10F,
 	FLOOR_11F,
 	FLOOR_ROOF,
-#define NUM_FLOORS const_value
+	NUM_FLOORS,
+};
 
 // showemote arguments
 // Emotes indexes (see data/sprites/emotes.asm)
 enum {
-};
 	EMOTE_SHOCK,
 	EMOTE_QUESTION,
 	EMOTE_HAPPY,
@@ -205,7 +204,8 @@ enum {
 	EMOTE_ROD,
 	EMOTE_BOULDER_DUST,
 	EMOTE_GRASS_RUSTLE,
-#define NUM_EMOTES const_value
+	NUM_EMOTES,
+};
 #define EMOTE_FROM_MEM -1
 #define EMOTE_LENGTH 6
 
@@ -253,8 +253,8 @@ enum {
 	DECODESC_RIGHT_DOLL, // 2
 	DECODESC_BIG_DOLL,   // 3
 	DECODESC_CONSOLE,    // 4
+	NUM_DECODESCS,
 };
-#define NUM_DECODESCS const_value
 
 // ActivateFishingSwarm setval arguments
 enum {
@@ -317,5 +317,5 @@ enum {
 	UNOWNPUZZLE_OMANYTE,    // 1
 	UNOWNPUZZLE_AERODACTYL, // 2
 	UNOWNPUZZLE_HO_OH,      // 3
+	NUM_UNOWN_PUZZLES,
 };
-#define NUM_UNOWN_PUZZLES const_value

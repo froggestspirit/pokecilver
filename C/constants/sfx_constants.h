@@ -189,4 +189,4 @@ enum {
 	SFX_STOP_SLOT,                   // ba
 	SFX_2_BOOPS,                     // bb
 };
-#define NUM_SFX const_value
+	NUM_SFX,

@@ -1,0 +1,3 @@
+InitString();
+InitName();
+_InitString();

@@ -46,7 +46,7 @@ enum {
 	KEY_ITEM_POCKET, // 2
 	TM_HM_POCKET,    // 3
 };
-#define NUM_POCKETS const_value
+	NUM_POCKETS,
 
 #define MAX_ITEMS 20
 #define MAX_BALLS 12

@@ -1,0 +1,2 @@
+PrintBCDNumber();
+PrintBCDDigit();

@@ -1,0 +1,2 @@
+OpenSRAM();
+CloseSRAM();

@@ -1,40 +1,41 @@
 // object_struct members (see macros/wram.asm)
-rsreset
-OBJECT_SPRITE              rb // 00
-OBJECT_MAP_OBJECT_INDEX    rb // 01
-OBJECT_SPRITE_TILE         rb // 02
-OBJECT_MOVEMENTTYPE        rb // 03
-OBJECT_FLAGS1              rb // 04
-OBJECT_FLAGS2              rb // 05
-OBJECT_PALETTE             rb // 06
-OBJECT_DIRECTION_WALKING   rb // 07
-OBJECT_FACING              rb // 08
-OBJECT_STEP_TYPE           rb // 09
-OBJECT_STEP_DURATION       rb // 0a
-OBJECT_ACTION              rb // 0b
-OBJECT_STEP_FRAME          rb // 0c
-OBJECT_FACING_STEP         rb // 0d
-OBJECT_NEXT_TILE           rb // 0e
-OBJECT_STANDING_TILE       rb // 0f
-OBJECT_NEXT_MAP_X          rb // 10
-OBJECT_NEXT_MAP_Y          rb // 11
-OBJECT_MAP_X               rb // 12
-OBJECT_MAP_Y               rb // 13
-OBJECT_INIT_X              rb // 14
-OBJECT_INIT_Y              rb // 15
-OBJECT_RADIUS              rb // 16
-OBJECT_SPRITE_X            rb // 17
-OBJECT_SPRITE_Y            rb // 18
-OBJECT_SPRITE_X_OFFSET     rb // 19
-OBJECT_SPRITE_Y_OFFSET     rb // 1a
-OBJECT_MOVEMENT_BYTE_INDEX rb // 1b
-OBJECT_1C                  rb // 1c
-OBJECT_1D                  rb // 1d
-OBJECT_1E                  rb // 1e
-OBJECT_1F                  rb // 1f
-OBJECT_RANGE               rb // 20
-                           rb_skip 7
-#define OBJECT_LENGTH _RS
+enum {
+	OBJECT_SPRITE,               // 00
+	OBJECT_MAP_OBJECT_INDEX,     // 01
+	OBJECT_SPRITE_TILE,          // 02
+	OBJECT_MOVEMENTTYPE,         // 03
+	OBJECT_FLAGS1,               // 04
+	OBJECT_FLAGS2,               // 05
+	OBJECT_PALETTE,              // 06
+	OBJECT_DIRECTION_WALKING,    // 07
+	OBJECT_FACING,               // 08
+	OBJECT_STEP_TYPE,            // 09
+	OBJECT_STEP_DURATION,        // 0a
+	OBJECT_ACTION,               // 0b
+	OBJECT_STEP_FRAME,           // 0c
+	OBJECT_FACING_STEP,          // 0d
+	OBJECT_NEXT_TILE,            // 0e
+	OBJECT_STANDING_TILE,        // 0f
+	OBJECT_NEXT_MAP_X,           // 10
+	OBJECT_NEXT_MAP_Y,           // 11
+	OBJECT_MAP_X,                // 12
+	OBJECT_MAP_Y,                // 13
+	OBJECT_INIT_X,               // 14
+	OBJECT_INIT_Y,               // 15
+	OBJECT_RADIUS,               // 16
+	OBJECT_SPRITE_X,             // 17
+	OBJECT_SPRITE_Y,             // 18
+	OBJECT_SPRITE_X_OFFSET,      // 19
+	OBJECT_SPRITE_Y_OFFSET,      // 1a
+	OBJECT_MOVEMENT_BYTE_INDEX,  // 1b
+	OBJECT_1C,                   // 1c
+	OBJECT_1D,                   // 1d
+	OBJECT_1E,                   // 1e
+	OBJECT_1F,                   // 1f
+	OBJECT_RANGE,                // 20
+};
+
+#define OBJECT_LENGTH OBJECT_RANGE + 8
 #define NUM_OBJECT_STRUCTS 13 // see wObjectStructs
 
 // object_struct OBJECT_FACING values
@@ -100,33 +101,34 @@ enum {
 #define ABSOLUTE_TILE_ID 1 << ABSOLUTE_TILE_ID_F
 
 // map_object struct members (see macros/wram.asm)
-rsreset
-MAPOBJECT_OBJECT_STRUCT_ID rb // 0
-MAPOBJECT_SPRITE           rb // 1
-MAPOBJECT_Y_COORD          rb // 2
-MAPOBJECT_X_COORD          rb // 3
-MAPOBJECT_MOVEMENT         rb // 4
-MAPOBJECT_RADIUS           rb // 5
-MAPOBJECT_HOUR             rb // 6
-MAPOBJECT_TIMEOFDAY        rb // 7
-MAPOBJECT_COLOR            rb // 8
-MAPOBJECT_RANGE            rb // 9
-MAPOBJECT_SCRIPT_POINTER   rw // a
-MAPOBJECT_EVENT_FLAG       rw // c
-                           rb_skip 2
-#define MAPOBJECT_LENGTH _RS
+enum {
+	MAPOBJECT_OBJECT_STRUCT_ID,  // 0
+	MAPOBJECT_SPRITE,            // 1
+	MAPOBJECT_Y_COORD,           // 2
+	MAPOBJECT_X_COORD,           // 3
+	MAPOBJECT_MOVEMENT,          // 4
+	MAPOBJECT_RADIUS,            // 5
+	MAPOBJECT_HOUR,              // 6
+	MAPOBJECT_TIMEOFDAY,         // 7
+	MAPOBJECT_COLOR,             // 8
+	MAPOBJECT_RANGE,             // 9
+	MAPOBJECT_SCRIPT_POINTER = 0xA,
+	MAPOBJECT_EVENT_FLAG = 0xC,
+};
+#define MAPOBJECT_LENGTH MAPOBJECT_EVENT_FLAG + 4
 #define NUM_OBJECTS 16
 #define PLAYER_OBJECT 0
 
 // SpriteMovementData struct members (see data/sprites/map_objects.asm)
-rsreset
-SPRITEMOVEATTR_MOVEMENT rb // 0
-SPRITEMOVEATTR_FACING   rb // 1
-SPRITEMOVEATTR_ACTION   rb // 2
-SPRITEMOVEATTR_FLAGS1   rb // 3
-SPRITEMOVEATTR_FLAGS2   rb // 4
-SPRITEMOVEATTR_PALFLAGS rb // 5
-#define NUM_SPRITEMOVEDATA_FIELDS _RS
+enum {
+	SPRITEMOVEATTR_MOVEMENT,  // 0
+	SPRITEMOVEATTR_FACING,    // 1
+	SPRITEMOVEATTR_ACTION,    // 2
+	SPRITEMOVEATTR_FLAGS1,    // 3
+	SPRITEMOVEATTR_FLAGS2,    // 4
+	SPRITEMOVEATTR_PALFLAGS,  // 5
+	NUM_SPRITEMOVEDATA_FIELDS,
+};
 
 #define MAPOBJECT_SCREEN_WIDTH (SCREEN_WIDTH / 2) + 2
 #define MAPOBJECT_SCREEN_HEIGHT (SCREEN_HEIGHT / 2) + 2
@@ -170,8 +172,8 @@ enum {
 	SPRITEMOVEDATA_BOULDERDUST,          // 22
 	SPRITEMOVEDATA_GRASS,                // 23
 	SPRITEMOVEDATA_SWIM_WANDER,          // 24
+	NUM_SPRITEMOVEDATA,
 };
-#define NUM_SPRITEMOVEDATA const_value
 
 // MapObjectMovementPattern.Pointers indexes (see engine/overworld/map_objects.asm)
 enum {
@@ -203,8 +205,8 @@ enum {
 	SPRITEMOVEFN_SPIN_COUNTERCLOCKWISE, // 19
 	SPRITEMOVEFN_BOULDERDUST,           // 1a
 	SPRITEMOVEFN_GRASS,                 // 1b
+	NUM_SPRITEMOVEFN,
 };
-#define NUM_SPRITEMOVEFN const_value
 
 // StepTypesJumptable indexes (see engine/overworld/map_objects.asm)
 enum {
@@ -233,8 +235,8 @@ enum {
 	STEP_TYPE_16,               // 16
 	STEP_TYPE_17,               // 17
 	STEP_TYPE_DELETE,           // 18
+	NUM_STEP_TYPES,
 };
-#define NUM_STEP_TYPES const_value
 
 // ObjectActionPairPointers indexes (see engine/overworld/map_object_action.asm)
 enum {
@@ -254,8 +256,8 @@ enum {
 	OBJECT_ACTION_BIG_DOLL,      // 0d
 	OBJECT_ACTION_BOULDER_DUST,  // 0e
 	OBJECT_ACTION_GRASS_SHAKE,   // 0f
+	NUM_OBJECT_ACTIONS,
 };
-#define NUM_OBJECT_ACTIONS const_value
 
 // Facings indexes (see data/sprites/facings.asm)
 enum {
@@ -291,8 +293,8 @@ enum {
 	FACING_BOULDER_DUST_2, // 1d
 	FACING_GRASS_1,        // 1e
 	FACING_GRASS_2,        // 1f
+	NUM_FACINGS,
 };
-#define NUM_FACINGS const_value
 
 // DoPlayerMovement.DoStep arguments (see engine/overworld/player_movement.asm)
 enum {
@@ -304,5 +306,5 @@ enum {
 	STEP_TURN,          // 5
 	STEP_BACK_LEDGE,    // 6
 	STEP_WALK_IN_PLACE, // 7
+	NUM_STEPS,
 };
-#define NUM_STEPS const_value

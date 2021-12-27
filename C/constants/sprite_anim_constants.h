@@ -31,7 +31,7 @@ enum {
 	SPRITE_ANIM_DICT_GS_SPLASH,    // 6
 	SPRITE_ANIM_DICT_SLOTS,        // 7
 	SPRITE_ANIM_DICT_ARROW_CURSOR, // 8
-#define NUM_SPRITE_ANIM_GFX const_value
+	NUM_SPRITE_ANIM_GFX,
 
 // wSpriteAnimDict size (see wram.asm)
 #define NUM_SPRITEANIMDICT_ENTRIES 10
@@ -86,7 +86,7 @@ enum {
 	SPRITE_ANIM_INDEX_HEADBUTT,                  // 2d
 	SPRITE_ANIM_INDEX_EGG_HATCH,                 // 2e
 };
-#define NUM_SPRITE_ANIM_INDEXES const_value
+	NUM_SPRITE_ANIM_INDEXES,
 
 // DoAnimFrame.Jumptable indexes (see engine/gfx/sprite_anims.asm)
 enum {
@@ -133,7 +133,7 @@ enum {
 	SPRITE_ANIM_SEQ_FLY_TO,                      // 28
 	SPRITE_ANIM_SEQ_GS_INTRO_HO_OH_LUGIA,        // 29
 };
-#define NUM_SPRITE_ANIM_SEQS const_value
+	NUM_SPRITE_ANIM_SEQS,
 
 // SpriteAnimFrameData indexes (see data/sprite_anims/framesets.asm)
 enum {
@@ -194,7 +194,7 @@ enum {
 	SPRITE_ANIM_FRAMESET_GS_INTRO_HO_OH_LUGIA,      // 36
 	SPRITE_ANIM_FRAMESET_HEADBUTT,                  // 37
 };
-#define NUM_SPRITE_ANIM_FRAMESETS const_value
+	NUM_SPRITE_ANIM_FRAMESETS,
 
 // SpriteAnimOAMData indexes (see data/sprite_anims/oam.asm)
 enum {
@@ -291,4 +291,4 @@ enum {
 	SPRITE_ANIM_OAMSET_GS_INTRO_HO_OH_LUGIA_5,      // 5a
 	SPRITE_ANIM_OAMSET_HEADBUTT_TREE_2,             // 5b
 };
-#define NUM_SPRITE_ANIM_OAMSETS const_value
+	NUM_SPRITE_ANIM_OAMSETS,

@@ -92,7 +92,7 @@ enum {
 	PARTYMENUACTION_GIVE_MON,
 	PARTYMENUACTION_GIVE_MON_FEMALE, // unused
 	PARTYMENUACTION_GIVE_ITEM,
-#define NUM_PARTYMENUACTIONS const_value
+	NUM_PARTYMENUACTIONS,
 // PrintPartyMenuActionText arguments (see engine/pokemon/party_menu.asm)
 	_next, 0xf0
 	PARTYMENUTEXT_HEAL_PSN,
@@ -117,4 +117,4 @@ enum {
 	NAME_FRIEND,
 	NAME_6, // duplicate of NAME_MON
 	NAME_7, // duplicate of NAME_MON
-#define NUM_NAME_TYPES const_value
+	NUM_NAME_TYPES,

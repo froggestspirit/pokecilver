@@ -74,4 +74,4 @@ enum {
 	CRY_DUNSPARCE,
 	CRY_DONPHAN,
 
-#define NUM_CRIES const_value
+	NUM_CRIES,

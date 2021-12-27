@@ -77,7 +77,7 @@ enum {
 	US_COORDINATION,
 	TEXT_TRANSLATION,
 	PAAD_TESTING,
-#define NUM_CREDITS_STRINGS const_value
+	NUM_CREDITS_STRINGS,
 
 // CreditsScript indexes (see data/credits_script.asm)
 enum {

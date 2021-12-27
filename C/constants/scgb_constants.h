@@ -34,7 +34,7 @@ enum {
 	SCGB_MYSTERY_GIFT,
 	SCGB_1E,
 	SCGB_POKEDEX_5X5,
-#define NUM_SCGB_LAYOUTS const_value
+	NUM_SCGB_LAYOUTS,
 
 #define SCGB_PARTY_MENU_HP_BARS 0xfc
 #define SCGB_DEFAULT 0xff
@@ -122,7 +122,7 @@ enum {
 	PREDEFPAL_UNOWN_PUZZLE,
 	PREDEFPAL_GAMEFREAK_LOGO_OB,
 	PREDEFPAL_GAMEFREAK_LOGO_BG,
-#define NUM_PREDEF_PALS const_value
+	NUM_PREDEF_PALS,
 
 // SGB system command codes
 // http://gbdev.gg8.se/wiki/articles/SGB_Functions#SGB_System_Command_Table

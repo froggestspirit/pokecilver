@@ -43,4 +43,4 @@ enum {
 	MART_MT_MOON,
 	MART_INDIGO_PLATEAU,
 	MART_UNDERGROUND,
-#define NUM_MARTS const_value
+	NUM_MARTS,

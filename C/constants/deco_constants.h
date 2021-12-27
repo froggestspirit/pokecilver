@@ -47,7 +47,7 @@ enum {
 	BLUE_CARPET,
 	YELLOW_CARPET,
 	GREEN_CARPET,
-#define NUM_DECO_NAMES const_value
+	NUM_DECO_NAMES,
 
 // DoDecorationAction2.DecoActions indexes (see engine/overworld/decorations.asm)
 enum {

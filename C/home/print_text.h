@@ -1,0 +1,4 @@
+PrintLetterDelay();
+CopyDataUntil();
+FarPrintText();
+CallPointerAt();

@@ -37,31 +37,31 @@ int (*func[ROM_SIZE])();
 // #include "../C/home/palettes.h"
 #include "../C/home/pokedex_flags.h"
 // #include "../C/home/pokemon.h"
-// #include "../C/home/predef.h"
-// #include "../C/home/print_bcd.h"
-// #include "../C/home/printer.h"
+#include "../C/home/predef.h"
+#include "../C/home/print_bcd.h"
+#include "../C/home/printer.h"
 // #include "../C/home/print_num.h"
-// #include "../C/home/print_text.h"
-// #include "../C/home/queue_script.h"
-// #include "../C/home/random.h"
-// #include "../C/home/region.h"
-// #include "../C/home/scrolling_menu.h"
+#include "../C/home/print_text.h"
+#include "../C/home/queue_script.h"
+#include "../C/home/random.h"
+#include "../C/home/region.h"
+#include "../C/home/scrolling_menu.h"
 // #include "../C/home/serial.h"
-// #include "../C/home/sine.h"
-// #include "../C/home/sprite_anims.h"
-// #include "../C/home/sprite_updates.h"
-// #include "../C/home/sram.h"
-// #include "../C/home/stone_queue.h"
-// #include "../C/home/string.h"
+#include "../C/home/sine.h"
+#include "../C/home/sprite_anims.h"
+#include "../C/home/sprite_updates.h"
+#include "../C/home/sram.h"
+#include "../C/home/stone_queue.h"
+#include "../C/home/string.h"
 // #include "../C/home/text.h"
 // #include "../C/home/tilemap.h"
 // #include "../C/home/time.h"
-// #include "../C/home/time_palettes.h"
-// #include "../C/home/trainers.h"
+#include "../C/home/time_palettes.h"
+#include "../C/home/trainers.h"
 // #include "../C/home/vblank.h"
 // #include "../C/home/video.h"
 // #include "../C/home/warp_connection.h"
-// #include "../C/home/window.h"
+#include "../C/home/window.h"
 
 
 void init_function_pointers(){
@@ -246,4 +246,85 @@ void init_function_pointers(){
 	REDIRECT(CheckSeenMon);
 	REDIRECT(PokedexFlagAction);
 
+	// home/predef.c
+	REDIRECT(Predef);
+
+	// home/print_bcd.c
+	REDIRECT(PrintBCDNumber);
+	REDIRECT(PrintBCDDigit);
+
+	// home/printer.c
+	REDIRECT(PrinterReceive);
+	REDIRECT(AskSerial);
+
+	// home/print_text.c
+	REDIRECT(PrintLetterDelay);
+	REDIRECT(CopyDataUntil);
+	REDIRECT(FarPrintText);
+	REDIRECT(CallPointerAt);
+
+	// home/queue_script.c
+	REDIRECT(QueueScript);
+	REDIRECT(FarQueueScript);
+
+	// home/random.c
+	REDIRECT(Random);
+	REDIRECT(BattleRandom);
+	REDIRECT(RandomRange);
+
+	// home/region.c
+	REDIRECT(IsInJohto);
+	REDIRECT(SetXYCompareFlags);
+
+	// home/scrolling_menu.c
+	REDIRECT(ScrollingMenu);
+	REDIRECT(InitScrollingMenu);
+	REDIRECT(JoyTextDelay_ForcehJoyDown);
+
+	// home/sine.c
+	REDIRECT(Cosine);
+	REDIRECT(Sine);
+
+	// home/sprite_anims.c
+	REDIRECT(InitSpriteAnimStruct);
+	REDIRECT(ReinitSpriteAnimFrame);
+
+	// home/sprite_updates.c
+	REDIRECT(DisableSpriteUpdates);
+	REDIRECT(EnableSpriteUpdates);
+
+	// home/sram.c
+	REDIRECT(OpenSRAM);
+	REDIRECT(CloseSRAM);
+
+	// home/stone_queue.c
+	REDIRECT(HandleStoneQueue);
+
+	// home/string.c
+	REDIRECT(InitString);
+	REDIRECT(InitName);
+	REDIRECT(_InitString);
+
+	// home/time_palettes.c
+	REDIRECT(UpdateTimeAndPals);
+	REDIRECT(TimeOfDayPals);
+	REDIRECT(UpdateTimePals);
+
+	// home/trainers.c
+	REDIRECT(CheckTrainerBattle);
+	REDIRECT(_CheckTrainerBattle);
+	REDIRECT(TalkToTrainer);
+	REDIRECT(LoadTrainer_continue);
+	REDIRECT(FacingPlayerDistance_bc);
+	REDIRECT(FacingPlayerDistance);
+	REDIRECT(CheckTrainerFlag);
+	REDIRECT(PrintWinLossText);
+
+	// home/window.c
+	REDIRECT(RefreshScreen);
+	REDIRECT(CloseText);
+	REDIRECT(OpenText);
+	REDIRECT(_OpenAndCloseMenu_HDMATransferTilemapAndAttrmap);
+	REDIRECT(SafeUpdateSprites);
+	REDIRECT(SetCarryFlag);
 }

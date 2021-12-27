@@ -1,0 +1,2 @@
+IsInJohto();
+SetXYCompareFlags();

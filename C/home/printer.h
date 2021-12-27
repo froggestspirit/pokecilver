@@ -1,0 +1,2 @@
+PrinterReceive();
+AskSerial();

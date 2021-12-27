@@ -1,0 +1,2 @@
+DisableSpriteUpdates();
+EnableSpriteUpdates();

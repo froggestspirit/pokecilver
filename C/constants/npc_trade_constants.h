@@ -21,7 +21,7 @@ enum {
 	NPC_TRADE_CHRIS,  // 4
 	NPC_TRADE_KIM,    // 5
 };
-#define NUM_NPC_TRADES const_value
+	NUM_NPC_TRADES,
 
 // trade gender limits
 enum {

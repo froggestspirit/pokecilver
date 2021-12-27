@@ -13,10 +13,13 @@ funcRet = False
 
 
 def check_if_label(string, prefix):
+    global currentFunc
     global funcsKnown
     parts = string.split(" ")
     ret = ""
     for part in parts:
+        if part[0] == ".":
+            part = f"{currentFunc}_{part[1:]}"
         if part in funcsKnown:
             ret = f"{ret} {prefix}{part}"
         else:
@@ -73,7 +76,8 @@ def parse_line_label(string):
             asm = f"#define {parts[0]} {parts[2]}"
         else:
             asm = f"{asm}{string[0]}"
-            print(asm)
+            if asm:
+                print(asm)
     funcRet = False
     if len(string) > 1:
         comment = f"  // {string[1]}"
@@ -181,7 +185,7 @@ def parse_asm(asm):
         if asm[0] in condition:
             cond = f"{condition[asm[0]]} "
             asm = asm[1:]
-        return f"CALL{cond}(m{asm[0]});"
+        return f"CALL{cond}({check_if_label(asm[0], 'm')});"
     elif opcode in ("rst"):
         return f"RST({check_if_label(asm[0], 'm')});"
     elif opcode in ("callfar", "farcall", "homecall"):
@@ -240,7 +244,7 @@ def main():
             #print(ln)
             cFile.write(f"{ln}\n")
 
-    print(f"\n\n")
+    print(f"\n")
     with open(args.fileName.replace(".asm", ".h"), "w") as cFile:
         print(f"\t// {args.fileName.replace('.asm', '.c')}")
         for f in funcList:

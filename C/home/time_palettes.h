@@ -1,0 +1,3 @@
+UpdateTimeAndPals();
+TimeOfDayPals();
+UpdateTimePals();

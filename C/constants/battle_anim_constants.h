@@ -219,7 +219,7 @@ enum {
 	ANIM_OBJ_PLAYERHEAD_1ROW,
 	ANIM_OBJ_ENEMYFEET_2ROW,
 	ANIM_OBJ_PLAYERHEAD_2ROW,
-#define NUM_ANIM_OBJS const_value
+	NUM_ANIM_OBJS,
 
 // DoBattleAnimFrame arguments (see engine/battle_anims/functions.asm)
 enum {
@@ -304,7 +304,7 @@ enum {
 	BATTLEANIMFUNC_ANCIENT_POWER,
 	BATTLEANIMFUNC_ROCK_SMASH,
 	BATTLEANIMFUNC_COTTON,
-#define NUM_BATTLEANIMFUNCS const_value
+	NUM_BATTLEANIMFUNCS,
 
 // BattleAnimFrameData indexes (see data/battle_anims/framesets.asm)
 enum {
@@ -494,7 +494,7 @@ enum {
 	BATTLEANIMFRAMESET_B6,
 	BATTLEANIMFRAMESET_B7,
 	BATTLEANIMFRAMESET_B8,
-#define NUM_BATTLEANIMFRAMESETS const_value
+	NUM_BATTLEANIMFRAMESETS,
 
 // BattleAnimOAMData indexes (see data/battle_anims/oam.asm)
 enum {
@@ -715,7 +715,7 @@ enum {
 	BATTLEANIMOAMSET_D5,
 	BATTLEANIMOAMSET_D6,
 	BATTLEANIMOAMSET_D7,
-#define NUM_BATTLEANIMOAMSETS const_value
+	NUM_BATTLEANIMOAMSETS,
 
 // BattleBGEffects indexes (see engine/battle_anims/bg_effects.asm)
 enum {

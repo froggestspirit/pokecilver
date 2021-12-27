@@ -1,7 +1,6 @@
 // Landmarks indexes (see data/maps/landmarks.asm)
 enum {
 	LANDMARK_SPECIAL,           // 00
-};
 // Johto landmarks
 	LANDMARK_NEW_BARK_TOWN,     // 01
 	LANDMARK_ROUTE_29,          // 02
@@ -48,7 +47,6 @@ enum {
 	LANDMARK_DARK_CAVE,         // 2b
 	LANDMARK_ROUTE_46,          // 2c
 	LANDMARK_SILVER_CAVE,       // 2d
-#define KANTO_LANDMARK const_value
 	LANDMARK_PALLET_TOWN,       // 2e
 	LANDMARK_ROUTE_1,           // 2f
 	LANDMARK_VIRIDIAN_CITY,     // 30
@@ -98,11 +96,13 @@ enum {
 	LANDMARK_TOHJO_FALLS,       // 5c
 	LANDMARK_ROUTE_28,          // 5d
 	LANDMARK_FAST_SHIP,         // 5e
-#define NUM_LANDMARKS const_value
+	NUM_LANDMARKS,
+};
+#define KANTO_LANDMARK LANDMARK_PALLET_TOWN
 
 // Regions
 enum {
 	JOHTO_REGION, // 0
 	KANTO_REGION, // 1
+	NUM_REGIONS,
 };
-#define NUM_REGIONS const_value

@@ -1,0 +1,2 @@
+InitSpriteAnimStruct();
+ReinitSpriteAnimFrame();
