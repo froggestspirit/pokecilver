@@ -204,19 +204,19 @@ void init_function_pointers(){
 	REDIRECT(GameTimer);
 
 	// home/gfx.c
-	//REDIRECT(FarDecompressBufferedPic);
-	//REDIRECT(UpdatePlayerSprite);
+	REDIRECT(FarDecompressBufferedPic);
+	REDIRECT(UpdatePlayerSprite);
 	REDIRECT(LoadStandardFont);
-	//REDIRECT(LoadFontsBattleExtra);
-	//REDIRECT(LoadFontsExtra);
-	//REDIRECT(DecompressRequest2bpp);
-	//REDIRECT(FarCopyBytes);
-	//REDIRECT(FarCopyBytesDouble);
-	//REDIRECT(Request2bpp);
-	//REDIRECT(Request1bpp);
-	//REDIRECT(Get2bpp);
-	//REDIRECT(Get1bpp);
-	//REDIRECT(DuplicateGet2bpp);
+	REDIRECT(LoadFontsBattleExtra);
+	REDIRECT(LoadFontsExtra);
+	REDIRECT(DecompressRequest2bpp);
+	REDIRECT(FarCopyBytes);
+	REDIRECT(FarCopyBytesDouble);
+	REDIRECT(Request2bpp);
+	REDIRECT(Request1bpp);
+	REDIRECT(Get2bpp);
+	REDIRECT(Get1bpp);
+	REDIRECT(DuplicateGet2bpp);
 
 	// home/item.c
 	REDIRECT(DoItemEffect);

@@ -37,7 +37,7 @@ int UpdatePlayerSprite(){
 }
 
 int LoadStandardFont(){
-	CALLFAR(a_LoadStandardFont);  // farcall _LoadStandardFont
+	FARCALL(a_LoadStandardFont);  // farcall _LoadStandardFont
 	RET;  // ret
 
 }

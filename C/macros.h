@@ -837,20 +837,20 @@
 
 #define FARCALL(x)	do {uint32_t val = x;\
                         LD_A(BANK(val));\
-                        LD_HL(val & 0x7FFF);\
-                        CALL(mFarCall);} while(0)
+                        LD_HL((val & 0x3FFF) | 0x4000);\
+                        RST(mFarCall);} while(0)
 #define CALLFAR(x)	do {uint32_t val = x;\
-                        LD_HL(val & 0x7FFF);\
+                        LD_HL((val & 0x3FFF) | 0x4000);\
                         LD_A(BANK(val));\
-                        CALL(mFarCall);} while(0)
+                        RST(mFarCall);} while(0)
 #define HOMECALL(x)	do {uint32_t val = x;\
                         LD_A_addr(hROMBank);\
                         PUSH_AF;\
                         LD_A(BANK(val));\
-                        CALL(mBankswitch);\
-                        CALL(val & 0x7FFF);\
+                        RST(mBankswitch);\
+                        CALL((val & 0x3FFF) | 0x4000);\
                         POP_AF;\
-                        CALL(mBankswitch);} while(0)
+                        RST(mBankswitch);} while(0)
 
 #define LDA_PREDEF(x)   do {LD_A(x);} while(0)
 #define PREDEF(x)   do {LDA_PREDEF(x);\
