@@ -1,6 +1,5 @@
 // CreditsStringsPointers indexes (see data/credits_strings_pointers.asm)
 enum {
-};
 	SATOSHI_TAJIRI,
 	JUNICHI_MASUDA,
 	TETSUYA_WATANABE,
@@ -78,14 +77,15 @@ enum {
 	TEXT_TRANSLATION,
 	PAAD_TESTING,
 	NUM_CREDITS_STRINGS,
+};
 
 // CreditsScript indexes (see data/credits_script.asm)
 enum {
-};-1, -1
-	CREDITS_END,
-	CREDITS_WAIT,
-	CREDITS_SCENE,
-	CREDITS_CLEAR,
-	CREDITS_MUSIC,
-	CREDITS_WAIT2,
-	CREDITS_THEEND,
+	CREDITS_END = -1,
+	CREDITS_WAIT = -2,
+	CREDITS_SCENE = -3,
+	CREDITS_CLEAR = -4,
+	CREDITS_MUSIC = -5,
+	CREDITS_WAIT2 = -6,
+	CREDITS_THEEND = -7,
+};

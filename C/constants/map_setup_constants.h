@@ -1,7 +1,7 @@
 // hMapEntryMethod values
 // MapSetupScripts indexes (see data/maps/setup_scripts.asm)
 enum {
-	MAPSETUP_WARP,       // f1
+	MAPSETUP_WARP = 0xF1,// f1
 	MAPSETUP_CONTINUE,   // f2
 	MAPSETUP_RELOADMAP,  // f3
 	MAPSETUP_TELEPORT,   // f4
@@ -13,13 +13,13 @@ enum {
 	MAPSETUP_SUBMENU,    // fa
 	MAPSETUP_BADWARP,    // fb
 };
-#define NUM_MAPSETUP_SCRIPTS const_value - 0xf1
+#define NUM_MAPSETUP_SCRIPTS MAPSETUP_BADWARP - 0xF0
 
 // callback types
 enum {
-};
 	MAPCALLBACK_TILES,
 	MAPCALLBACK_OBJECTS,
 	MAPCALLBACK_CMDQUEUE,
 	MAPCALLBACK_SPRITES,
 	MAPCALLBACK_NEWMAP,
+};

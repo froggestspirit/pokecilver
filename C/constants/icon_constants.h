@@ -1,6 +1,5 @@
 // IconPointers indexes (see data/icon_pointers.asm)
 enum {
-};
 	ICON_NULL,
 	ICON_POLIWAG,
 	ICON_JIGGLYPUFF,
@@ -17,7 +16,7 @@ enum {
 	ICON_LAPRAS,
 	ICON_HUMANSHAPE,
 	ICON_FOX,
-	,#define ICON_ INE
+	ICON_EQUINE,
 	ICON_SHELL,
 	ICON_BLOB,
 	ICON_SERPENT,
@@ -40,12 +39,13 @@ enum {
 	ICON_SLOWPOKE,
 	ICON_SUDOWOODO,
 	ICON_BIGMON,
-#define NUM_ICONS const_value - 1
+};
+#define NUM_ICONS ICON_BIGMON
 
 // LoadMenuMonIcon.Jumptable indexes (see engine/gfx/mon_icons.asm)
 enum {
-};
 	MONICON_PARTYMENU,
 	MONICON_NAMINGSCREEN,
 	MONICON_MOVES,
 	MONICON_TRADE,
+};

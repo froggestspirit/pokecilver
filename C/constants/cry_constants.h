@@ -1,6 +1,5 @@
 // Cries indexes (see audio/cry_pointers.asm)
 enum {
-};
 
 // gen 1
 	CRY_NIDORAN_M,
@@ -75,3 +74,4 @@ enum {
 	CRY_DONPHAN,
 
 	NUM_CRIES,
+};

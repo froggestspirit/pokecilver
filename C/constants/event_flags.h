@@ -1,7 +1,6 @@
 // wEventFlags bit flags
 
 enum {
-};
 // The first eight flags are reset upon reloading the map
 	EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1,
 	EVENT_TEMPORARY_UNTIL_MAP_RELOAD_2,
@@ -27,7 +26,7 @@ enum {
 	EVENT_GOT_HM04_STRENGTH,
 	EVENT_GOT_HM05_FLASH,
 	EVENT_GOT_HM06_WHIRLPOOL,
-	_skip, // unused
+	EVENT_UNUSED_01, // unused
 // Rods
 	EVENT_GOT_OLD_ROD,
 	EVENT_GOT_GOOD_ROD,
@@ -66,8 +65,8 @@ enum {
 	EVENT_LAKE_OF_RAGE_EXPLAINED_WEIRD_MAGIKARP,
 	EVENT_LAKE_OF_RAGE_ASKED_FOR_MAGIKARP,
 	EVENT_LAKE_OF_RAGE_ELIXIR_ON_STANDBY,
-	_skip, // unused
-	_skip, // unused
+	EVENT_UNUSED_02, // unused
+	EVENT_UNUSED_03, // unused
 	EVENT_HEALED_MOOMOO,
 	EVENT_GOT_TM13_SNORE_FROM_MOOMOO_FARM,
 	EVENT_TALKED_TO_FARMER_ABOUT_MOOMOO,
@@ -195,9 +194,8 @@ enum {
 	EVENT_SILVER_CAVE_OUTSIDE_HIDDEN_FULL_RESTORE,
 // Unused: next 15 events
 
-	_next, 200
 // Kanto story events
-	EVENT_GOT_NUGGET_FROM_GUY,
+	EVENT_GOT_NUGGET_FROM_GUY = 200,
 	EVENT_RETURNED_MACHINE_PART,
 	EVENT_MET_MANAGER_AT_POWER_PLANT,
 	EVENT_MET_ROCKET_GRUNT_AT_CERULEAN_GYM,
@@ -255,9 +253,8 @@ enum {
 	EVENT_CINNABAR_ISLAND_HIDDEN_RARE_CANDY,
 // Unused: next 345 events
 
-	_next, 600
 // Kurt Apricorn events
-	EVENT_GAVE_KURT_RED_APRICORN,
+	EVENT_GAVE_KURT_RED_APRICORN = 600,
 	EVENT_GAVE_KURT_BLU_APRICORN,
 	EVENT_GAVE_KURT_YLW_APRICORN,
 	EVENT_GAVE_KURT_GRN_APRICORN,
@@ -305,8 +302,8 @@ enum {
 	EVENT_ARNIE_READY_FOR_REMATCH,
 	EVENT_ALAN_ASKED_FOR_PHONE_NUMBER,
 	EVENT_ALAN_READY_FOR_REMATCH,
-	_skip, // unused
-	_skip, // unused
+	EVENT_UNUSED_04, // unused
+	EVENT_UNUSED_05, // unused
 	EVENT_DANA_ASKED_FOR_PHONE_NUMBER,
 	EVENT_DANA_READY_FOR_REMATCH,
 	EVENT_CHAD_ASKED_FOR_PHONE_NUMBER,
@@ -329,7 +326,7 @@ enum {
 	EVENT_PARRY_READY_FOR_REMATCH,
 	EVENT_ERIN_ASKED_FOR_PHONE_NUMBER,
 	EVENT_ERIN_READY_FOR_REMATCH,
-	_skip, // unused
+	EVENT_UNUSED_06, // unused
 // Ruins of Alph puzzles
 	EVENT_SOLVED_HO_OH_PUZZLE,
 	EVENT_SOLVED_KABUTO_PUZZLE,
@@ -469,10 +466,9 @@ enum {
 	EVENT_LISTENED_TO_INITIAL_RADIO,
 // Unused: next 194 events
 
-	_next, 1000
 // Trainer flags
 // Swimmer F
-	EVENT_BEAT_SWIMMERF_ELAINE,
+	EVENT_BEAT_SWIMMERF_ELAINE = 1000,
 	EVENT_BEAT_SWIMMERF_PAULA,
 	EVENT_BEAT_SWIMMERF_KAYLEE,
 	EVENT_BEAT_SWIMMERF_SUSIE,
@@ -549,7 +545,7 @@ enum {
 	EVENT_BEAT_BURGLAR_DUNCAN,
 	EVENT_BEAT_BURGLAR_EDDIE,
 	EVENT_BEAT_BURGLAR_COREY,
-	_skip, // unused
+	EVENT_UNUSED_07, // unused
 // Biker
 	EVENT_BEAT_BIKER_BENNY,
 	EVENT_BEAT_BIKER_KAZU,
@@ -741,7 +737,7 @@ enum {
 	EVENT_BEAT_POKEFANF_BEVERLY3,
 	EVENT_BEAT_POKEFANF_GEORGIA,
 // Kimono Girl
-	_skip, // unused
+	EVENT_UNUSED_08, // unused
 	EVENT_BEAT_KIMONO_GIRL_NAOKO,
 	EVENT_BEAT_KIMONO_GIRL_SAYO,
 	EVENT_BEAT_KIMONO_GIRL_ZUKI,
@@ -985,13 +981,12 @@ enum {
 	EVENT_BEAT_CHAMPION_LANCE,
 // Unused: next 131 events
 
-	_next, 1600
 // Sprite visibility flags
 // When these events are cleared, the sprite becomes visible// when set, the sprite is hidden.
 // The map script command macros `disappear` and `appear` set/clear these flags and immediately apply the effect on visibility.
 // The map script command macros `setevent` and `clearevent` set/clear these flags, and their effects will be seen when the map is reloaded.
 // Johto itemballs
-	EVENT_CYNDAQUIL_POKEBALL_IN_ELMS_LAB,
+	EVENT_CYNDAQUIL_POKEBALL_IN_ELMS_LAB = 1600,
 	EVENT_TOTODILE_POKEBALL_IN_ELMS_LAB,
 	EVENT_CHIKORITA_POKEBALL_IN_ELMS_LAB,
 	EVENT_VIOLET_CITY_PP_UP,
@@ -1290,9 +1285,8 @@ enum {
 	EVENT_ECRUTEAK_TIN_TOWER_ENTRANCE_SAGE_RIGHT,
 // Unused: next 4 events
 
-	_next, 1900
 // Kanto people
-	EVENT_ROUTE_24_ROCKET,
+	EVENT_ROUTE_24_ROCKET = 1900,
 	EVENT_CERULEAN_GYM_ROCKET,
 	EVENT_ROUTE_25_MISTY_BOYFRIEND,
 	EVENT_TRAINERS_IN_CERULEAN_GYM,
@@ -1326,6 +1320,6 @@ enum {
 	EVENT_ROUTE_15_PP_UP,
 	EVENT_ROUTE_25_PROTEIN,
 // Unused: next 116 events
+};
 
-	_next, 2048
-#define NUM_EVENTS const_value // 800
+#define NUM_EVENTS 0x800

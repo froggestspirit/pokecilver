@@ -1,6 +1,5 @@
 // MoveEffectsPointers indexes (see data/moves/effects_pointers.asm)
 enum {
-};
 	EFFECT_NORMAL_HIT,
 	EFFECT_SLEEP,
 	EFFECT_POISON_HIT,
@@ -159,3 +158,4 @@ enum {
 	EFFECT_FLY,
 	EFFECT_DEFENSE_CURL,
 	NUM_MOVE_EFECTS,
+};

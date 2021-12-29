@@ -258,11 +258,11 @@ enum {
 	WHIRLPOOL,    // fa
 	BEAT_UP,      // fb
 };
-#define NUM_ATTACKS const_value - 1
+#define NUM_ATTACKS BEAT_UP
 
 // Battle animations use the same constants as the moves up to this point
-	_next, 0xff
-	ANIM_SWEET_SCENT_2,     // ff
+enum {
+	ANIM_SWEET_SCENT_2 = 0xFF,
 	ANIM_THROW_POKE_BALL,   // 100
 	ANIM_SEND_OUT_MON,      // 101
 	ANIM_RETURN_MON,        // 102
@@ -286,11 +286,11 @@ enum {
 	ANIM_WOBBLE,            // 113
 	ANIM_SHAKE,             // 114
 	ANIM_HIT_CONFUSION,     // 115
-#define NUM_BATTLE_ANIMS const_value - 1
+};
+#define NUM_BATTLE_ANIMS ANIM_HIT_CONFUSION
 
 // wNumHits uses offsets from ANIM_MISS
 enum {
-};
 	BATTLEANIM_NONE,
 	BATTLEANIM_ENEMY_DAMAGE,
 	BATTLEANIM_ENEMY_STAT_DOWN,
@@ -299,3 +299,4 @@ enum {
 	BATTLEANIM_WOBBLE,
 	BATTLEANIM_SHAKE,
 	BATTLEANIM_HIT_CONFUSION,
+};

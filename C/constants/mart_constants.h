@@ -1,14 +1,13 @@
 // mart types (see engine/items/mart.asm)
 enum {
-};
 	MARTTYPE_STANDARD,
 	MARTTYPE_BITTER,
 	MARTTYPE_BARGAIN,
 	MARTTYPE_PHARMACY,
+};
 
 // Marts indexes (see data/items/marts.asm)
 enum {
-};
 	MART_CHERRYGROVE,
 	MART_CHERRYGROVE_DEX,
 	MART_VIOLET,
@@ -44,3 +43,4 @@ enum {
 	MART_INDIGO_PLATEAU,
 	MART_UNDERGROUND,
 	NUM_MARTS,
+};
