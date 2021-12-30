@@ -5,9 +5,6 @@
 // - TypeMatchups (see data/types/type_matchups.asm)
 // - TypeBoostItems (see data/types/type_boost_items.asm)
 enum {
-};
-
-#define PHYSICAL const_value
 	NORMAL,
 	FIGHTING,
 	FLYING,
@@ -18,13 +15,7 @@ enum {
 	BUG,
 	GHOST,
 	STEEL,
-
-#define UNUSED_TYPES const_value
-	_next, 19
-	CURSE_TYPE,
-#define UNUSED_TYPES_END const_value
-
-#define SPECIAL const_value
+	CURSE_TYPE = 19,
 	FIRE,
 	WATER,
 	GRASS,
@@ -33,7 +24,13 @@ enum {
 	ICE,
 	DRAGON,
 	DARK,
-#define TYPES_END const_value
+};
+
+#define PHYSICAL NORMAL
+#define SPECIAL FIRE
+#define UNUSED_TYPES STEEL + 1
+#define UNUSED_TYPES_END CURSE_TYPE + 1
+#define TYPES_END DARK + 1
 
 #define NUM_TYPES TYPES_END + UNUSED_TYPES - UNUSED_TYPES_END - 1 // discount BIRD
 

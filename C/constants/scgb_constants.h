@@ -1,7 +1,6 @@
 // CGBLayoutJumptable indexes (see engine/gfx/cgb_layouts.asm)
 // SGBLayoutJumptable indexes (see engine/gfx/sgb_layouts.asm)
 enum {
-};
 	SCGB_BATTLE_GRAYSCALE,
 	SCGB_BATTLE_COLORS,
 	SCGB_POKEGEAR_PALS,
@@ -35,6 +34,7 @@ enum {
 	SCGB_1E,
 	SCGB_POKEDEX_5X5,
 	NUM_SCGB_LAYOUTS,
+};
 
 #define SCGB_PARTY_MENU_HP_BARS 0xfc
 #define SCGB_DEFAULT 0xff
@@ -42,7 +42,6 @@ enum {
 // PredefPals indexes (see gfx/sgb/predef.pal)
 // GetPredefPal arguments (see engine/gfx/color.asm)
 enum {
-};
 	PREDEFPAL_ROUTES,
 	PREDEFPAL_PALLET,
 	PREDEFPAL_VIRIDIAN,
@@ -123,11 +122,11 @@ enum {
 	PREDEFPAL_GAMEFREAK_LOGO_OB,
 	PREDEFPAL_GAMEFREAK_LOGO_BG,
 	NUM_PREDEF_PALS,
+};
 
 // SGB system command codes
 // http://gbdev.gg8.se/wiki/articles/SGB_Functions#SGB_System_Command_Table
 enum {
-};
 	SGB_PAL01,
 	SGB_PAL23,
 	SGB_PAL03,
@@ -153,5 +152,6 @@ enum {
 	SGB_ATTR_SET,
 	SGB_MASK_EN,
 	SGB_OBJ_TRN,
+};
 
 #define PALPACKET_LENGTH 0x10

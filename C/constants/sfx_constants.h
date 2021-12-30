@@ -188,5 +188,5 @@ enum {
 	SFX_TRAIN_ARRIVED,               // b9
 	SFX_STOP_SLOT,                   // ba
 	SFX_2_BOOPS,                     // bb
-};
 	NUM_SFX,
+};

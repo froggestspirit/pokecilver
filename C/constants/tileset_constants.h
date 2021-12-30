@@ -1,6 +1,6 @@
 // Tilesets indexes (see data/tilesets.asm)
 enum {
-	TILESET_JOHTO,                // 01
+	TILESET_JOHTO = 1,            // 01
 	TILESET_JOHTO_MODERN,         // 02
 	TILESET_KANTO,                // 03
 	TILESET_HOUSE,                // 04
@@ -29,7 +29,7 @@ enum {
 	TILESET_DARK_CAVE,            // 1b
 	TILESET_FOREST,               // 1c
 };
-#define NUM_TILESETS const_value - 1
+#define NUM_TILESETS TILESET_FOREST
 
 // wTileset struct size
 #define TILESET_LENGTH 15

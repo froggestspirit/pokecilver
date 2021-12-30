@@ -97,13 +97,9 @@ enum {
 	SPRITE_FRUIT_TREE, // 5d
 	SPRITE_GOLD_TROPHY, // 5e
 	SPRITE_SILVER_TROPHY, // 5f
-};
-#define NUM_OVERWORLD_SPRITES const_value - 1
 
 // SpriteMons indexes (see data/sprites/sprite_mons.asm)
-	_next, 0x80
-#define SPRITE_POKEMON const_value
-	SPRITE_UNOWN, // 80
+	SPRITE_UNOWN = 0x80, // 80
 	SPRITE_GEODUDE, // 81
 	SPRITE_GROWLITHE, // 82
 	SPRITE_WEEDLE, // 83
@@ -138,17 +134,13 @@ enum {
 	SPRITE_GYARADOS, // a0
 	SPRITE_LUGIA, // a1
 	SPRITE_HO_OH, // a2
-#define NUM_POKEMON_SPRITES const_value - SPRITE_POKEMON
 
 // special GetMonSprite values (see engine/overworld/overworld.asm)
-	_next, 0xe0
-	SPRITE_DAY_CARE_MON_1, // e0
+	SPRITE_DAY_CARE_MON_1 = 0xE0, // e0
 	SPRITE_DAY_CARE_MON_2, // e1
 
 // wVariableSprites indexes (see wram.asm)
-	_next, 0xf0
-#define SPRITE_VARS const_value
-	SPRITE_CONSOLE, // f0
+	SPRITE_CONSOLE = 0xF0, // f0
 	SPRITE_DOLL_1, // f1
 	SPRITE_DOLL_2, // f2
 	SPRITE_BIG_DOLL, // f3
@@ -161,3 +153,8 @@ enum {
 	SPRITE_FUCHSIA_GYM_4, // fa
 	SPRITE_COPYCAT, // fb
 	SPRITE_JANINE_IMPERSONATOR, // fc
+};
+#define NUM_OVERWORLD_SPRITES SPRITE_SILVER_TROPHY
+#define SPRITE_POKEMON SPRITE_UNOWN
+#define NUM_POKEMON_SPRITES (SPRITE_HO_OH + 1) - SPRITE_POKEMON
+#define SPRITE_VARS SPRITE_CONSOLE

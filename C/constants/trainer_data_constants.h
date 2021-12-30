@@ -1,26 +1,27 @@
 // TrainerClassAttributes struct members (see data/trainers/attributes.asm)
-rsreset
-TRNATTR_ITEM1           rb // 0
-TRNATTR_ITEM2           rb // 1
-TRNATTR_BASEMONEY       rb // 2
-TRNATTR_AI_MOVE_WEIGHTS rw // 3
-TRNATTR_AI_ITEM_SWITCH  rw // 5
-#define NUM_TRAINER_ATTRIBUTES _RS
+enum {
+	TRNATTR_ITEM1,
+	TRNATTR_ITEM2,
+	TRNATTR_BASEMONEY,
+	TRNATTR_AI_MOVE_WEIGHTS,
+	TRNATTR_AI_ITEM_SWITCH = TRNATTR_AI_MOVE_WEIGHTS + 2,
+	NUM_TRAINER_ATTRIBUTES = TRNATTR_AI_ITEM_SWITCH + 2,
+};
 
 // TRNATTR_AI_MOVE_WEIGHTS bit flags (wEnemyTrainerAIFlags)
 // AIScoringPointers indexes (see engine/battle/ai/move.asm)
 enum {
+	AI_BASIC = 1,
+	AI_SETUP = 2,
+	AI_TYPES = 4,
+	AI_OFFENSIVE = 8,
+	AI_SMART = 16,
+	AI_OPPORTUNIST = 32,
+	AI_AGGRESSIVE = 64,
+	AI_CAUTIOUS = 128,
+	AI_STATUS = 256,
+	AI_RISKY = 512,
 };
-	shift_const AI_BASIC
-	shift_const AI_SETUP
-	shift_const AI_TYPES
-	shift_const AI_OFFENSIVE
-	shift_const AI_SMART
-	shift_const AI_OPPORTUNIST
-	shift_const AI_AGGRESSIVE
-	shift_const AI_CAUTIOUS
-	shift_const AI_STATUS
-	shift_const AI_RISKY
 #define NO_AI 0
 
 // TRNATTR_AI_ITEM_SWITCH bit flags
@@ -28,11 +29,10 @@ enum {
 	SWITCH_OFTEN_F,     // 0
 	SWITCH_RARELY_F,    // 1
 	SWITCH_SOMETIMES_F, // 2
-};
-	_skip,               // 3
-	ALWAYS_USE_F,       // 4
+	ALWAYS_USE_F = 4,   // 4
 	UNKNOWN_USE_F,      // 5
 	CONTEXT_USE_F,      // 6
+};
 
 #define SWITCH_OFTEN 1 << SWITCH_OFTEN_F
 #define SWITCH_RARELY 1 << SWITCH_RARELY_F
@@ -43,8 +43,8 @@ enum {
 
 // TrainerTypes indexes (see engine/battle/read_trainer_party.asm)
 enum {
-};
 	TRAINERTYPE_NORMAL,
 	TRAINERTYPE_MOVES,
 	TRAINERTYPE_ITEM,
 	TRAINERTYPE_ITEM_MOVES,
+};

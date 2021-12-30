@@ -1,11 +1,12 @@
 // overworld_sprite struct members (see data/sprites/sprites.asm)
-rsreset
-SPRITEDATA_ADDR    rw // 0
-SPRITEDATA_SIZE    rb // 2
-SPRITEDATA_BANK    rb // 3
-SPRITEDATA_TYPE    rb // 4
-SPRITEDATA_PALETTE rb // 5
-#define NUM_SPRITEDATA_FIELDS _RS
+enum {
+	SPRITEDATA_ADDR,
+	SPRITEDATA_SIZE = 2,
+	SPRITEDATA_BANK,
+	SPRITEDATA_TYPE,
+	SPRITEDATA_PALETTE,
+	NUM_SPRITEDATA_FIELDS,
+};
 
 // sprite types
 enum {
@@ -29,8 +30,7 @@ enum {
 // object_events set bit 3 so as not to use the sprite's default palette
 // MapObjectPals indexes (see gfx/overworld/npc_sprites.pal)
 enum {
-}; << 3
-	PAL_NPC_RED,    // 8
+	PAL_NPC_RED = 8,    // 8
 	PAL_NPC_BLUE,   // 9
 	PAL_NPC_GREEN,  // a
 	PAL_NPC_BROWN,  // b
@@ -38,3 +38,4 @@ enum {
 	PAL_NPC_SILVER, // d
 	PAL_NPC_TREE,   // e
 	PAL_NPC_ROCK,   // f
+};

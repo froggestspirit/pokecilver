@@ -14,10 +14,9 @@ enum {
 	POKE_FLUTE_RADIO,       // 07
 	UNOWN_RADIO,            // 08
 	EVOLUTION_RADIO,        // 09
-};
 	NUM_RADIO_CHANNELS,
 // internal indexes for channel segments
-	OAKS_POKEMON_TALK_2,    // 0a
+	OAKS_POKEMON_TALK_2 = NUM_RADIO_CHANNELS,    // 0a
 	OAKS_POKEMON_TALK_3,    // 0b
 	OAKS_POKEMON_TALK_4,    // 0c
 	OAKS_POKEMON_TALK_5,    // 0d
@@ -75,10 +74,10 @@ enum {
 	POKEDEX_SHOW_7,         // 41
 	POKEDEX_SHOW_8,         // 42
 	NUM_RADIO_SEGMENTS,
+};
 
 // PlayRadioStationPointers indexes (see engine/pokegear/pokegear.asm)
 enum {
-};
 	MAPRADIO_POKEMON_CHANNEL,
 	MAPRADIO_OAKS_POKEMON_TALK,
 	MAPRADIO_POKEDEX_SHOW,
@@ -89,6 +88,7 @@ enum {
 	MAPRADIO_LETS_ALL_SING,
 	MAPRADIO_ROCKET,
 	NUM_MAP_RADIO_STATIONS,
+};
 
 // These tables in engine/pokegear/radio.asm are all sized to a power of 2
 // so there's no need for a rejection sampling loop

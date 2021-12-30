@@ -1,11 +1,3 @@
-__trainer_class__ = 0
-
-trainerclass: MACRO
-\#define 1 __trainer_class__
-__trainer_class__ = __trainer_class__ + 1
-enum {
-};
-ENDM
 
 // trainer class ids
 // `trainerclass` indexes are for:
@@ -17,39 +9,59 @@ ENDM
 // - TrainerPicPointers (see data/trainers/pic_pointers.asm)
 // - TrainerPalettes (see data/trainers/palettes.asm)
 // trainer constants are Trainers indexes, for the sub-tables of TrainerGroups (see data/trainers/parties.asm)
-#define CHRIS __trainer_class__
-	trainerclass TRAINER_NONE // 0
+#define CHRIS 0
+#define TRAINER_NONE 0x00
+enum {
 	PHONECONTACT_MOM,
 	PHONECONTACT_BIKESHOP,
 	PHONECONTACT_BILL,
 	PHONECONTACT_ELM,
-#define NUM_NONTRAINER_PHONECONTACTS const_value - 1
+};
 
-	trainerclass FALKNER // 1
+#define NUM_NONTRAINER_PHONECONTACTS PHONECONTACT_ELM
+
+#define FALKNER 0x01
+enum {
 	FALKNER1,
+};
 
-	trainerclass WHITNEY // 2
+#define WHITNEY 0x02
+enum {
 	WHITNEY1,
+};
 
-	trainerclass BUGSY // 3
+#define BUGSY 0x03
+enum {
 	BUGSY1,
+};
 
-	trainerclass MORTY // 4
+#define MORTY 0x04
+enum {
 	MORTY1,
+};
 
-	trainerclass PRYCE // 5
+#define PRYCE 0x05
+enum {
 	PRYCE1,
+};
 
-	trainerclass JASMINE // 6
+#define JASMINE 0x06
+enum {
 	JASMINE1,
+};
 
-	trainerclass CHUCK // 7
+#define CHUCK 0x07
+enum {
 	CHUCK1,
+};
 
-	trainerclass CLAIR // 8
+#define CLAIR 0x08
+enum {
 	CLAIR1,
+};
 
-	trainerclass RIVAL1 // 9
+#define RIVAL1 0x09
+enum {
 	RIVAL1_1_CHIKORITA,
 	RIVAL1_1_CYNDAQUIL,
 	RIVAL1_1_TOTODILE,
@@ -65,49 +77,73 @@ ENDM
 	RIVAL1_5_CHIKORITA,
 	RIVAL1_5_CYNDAQUIL,
 	RIVAL1_5_TOTODILE,
+};
 
-	trainerclass POKEMON_PROF // a
+#define POKEMON_PROF 0x0a
 
-	trainerclass WILL // b
+#define WILL 0x0b
+enum {
 	WILL1,
+};
 
-	trainerclass CAL // c
+#define CAL 0x0c
+enum {
 	CAL1, // unused
 	CAL2,
 	CAL3,
+};
 
-	trainerclass BRUNO // d
+#define BRUNO 0x0d
+enum {
 	BRUNO1,
+};
 
-	trainerclass KAREN // e
+#define KAREN 0x0e
+enum {
 	KAREN1,
+};
 
-	trainerclass KOGA // f
+#define KOGA 0x0f
+enum {
 	KOGA1,
+};
 
-	trainerclass CHAMPION // 10
+#define CHAMPION 0x10
+enum {
 	LANCE,
+};
 
-	trainerclass BROCK // 11
+#define BROCK 0x11
+enum {
 	BROCK1,
+};
 
-	trainerclass MISTY // 12
+#define MISTY 0x12
+enum {
 	MISTY1,
+};
 
-	trainerclass LT_SURGE // 13
+#define LT_SURGE 0x13
+enum {
 	LT_SURGE1,
+};
 
-	trainerclass SCIENTIST // 14
+#define SCIENTIST 0x14
+enum {
 	ROSS,
 	MITCH,
 	JED,
 	MARC,
 	RICH,
+};
 
-	trainerclass ERIKA // 15
+#define ERIKA 0x15
+enum {
 	ERIKA1,
+};
 
-	trainerclass YOUNGSTER // 16
+#define YOUNGSTER 0x16
+enum {
 	JOEY1,
 	MIKEY,
 	ALBERT,
@@ -120,8 +156,10 @@ ENDM
 	JIMMY,
 	OWEN,
 	JASON,
+};
 
-	trainerclass SCHOOLBOY // 17
+#define SCHOOLBOY 0x17
+enum {
 	JACK1,
 	KIPP,
 	ALAN1,
@@ -146,8 +184,10 @@ ENDM
 	ALAN5, // unused
 	CHAD4, // unused
 	CHAD5, // unused
+};
 
-	trainerclass BIRD_KEEPER // 18
+#define BIRD_KEEPER 0x18
+enum {
 	ROD,
 	ABE,
 	BRYAN,
@@ -167,8 +207,10 @@ ENDM
 	JOSE3,
 	VANCE2,
 	VANCE3,
+};
 
-	trainerclass LASS // 19
+#define LASS 0x19
+enum {
 	CARRIE,
 	BRIDGET,
 	ALICE,
@@ -184,11 +226,15 @@ ENDM
 	CONNIE3, // unused
 	DANA2,
 	DANA3,
+};
 
-	trainerclass JANINE // 1a
+#define JANINE 0x1a
+enum {
 	JANINE1,
+};
 
-	trainerclass COOLTRAINERM // 1b
+#define COOLTRAINERM 0x1b
+enum {
 	NICK,
 	AARON,
 	PAUL,
@@ -208,8 +254,10 @@ ENDM
 	KEVIN,
 	STEVE, // unused
 	ALLEN,
+};
 
-	trainerclass COOLTRAINERF // 1c
+#define COOLTRAINERF 0x1c
+enum {
 	GWEN,
 	LOIS,
 	FRAN,
@@ -230,8 +278,10 @@ ENDM
 	BETH3,
 	REENA2,
 	REENA3,
+};
 
-	trainerclass BEAUTY // 1d
+#define BEAUTY 0x1d
+enum {
 	VICTORIA,
 	SAMANTHA,
 	JULIE, // unused
@@ -248,8 +298,10 @@ ENDM
 	JULIA,
 	THERESA, // unused
 	VALERIE,
+};
 
-	trainerclass POKEMANIAC // 1e
+#define POKEMANIAC 0x1e
+enum {
 	LARRY,
 	ANDREW,
 	CALVIN,
@@ -263,8 +315,10 @@ ENDM
 	ISSAC,
 	DONALD,
 	ZACH,
+};
 
-	trainerclass GRUNTM // 1f
+#define GRUNTM 0x1f
+enum {
 	GRUNTM_1,
 	GRUNTM_2,
 	GRUNTM_3,
@@ -296,27 +350,37 @@ ENDM
 	GRUNTM_29,
 	GRUNTM_30, // unused
 	GRUNTM_31,
+};
 
-	trainerclass GENTLEMAN // 20
+#define GENTLEMAN 0x20
+enum {
 	PRESTON,
 	EDWARD,
 	GREGORY,
 	VIRGIL, // unused
 	ALFRED,
+};
 
-	trainerclass SKIER // 21
+#define SKIER 0x21
+enum {
 	ROXANNE,
 	CLARISSA,
+};
 
-	trainerclass TEACHER // 22
+#define TEACHER 0x22
+enum {
 	COLETTE,
 	HILLARY,
 	SHIRLEY,
+};
 
-	trainerclass SABRINA // 23
+#define SABRINA 0x23
+enum {
 	SABRINA1,
+};
 
-	trainerclass BUG_CATCHER // 24
+#define BUG_CATCHER 0x24
+enum {
 	DON,
 	ROB,
 	ED,
@@ -331,8 +395,10 @@ ENDM
 	DOUG,
 	ARNIE2,
 	ARNIE3,
+};
 
-	trainerclass FISHER // 25
+#define FISHER 0x25
+enum {
 	JUSTIN,
 	RALPH1,
 	ARNOLD,
@@ -355,8 +421,10 @@ ENDM
 	WILTON2,
 	SCOTT,
 	WILTON3,
+};
 
-	trainerclass SWIMMERM // 26
+#define SWIMMERM 0x26
+enum {
 	HAROLD,
 	SIMON,
 	RANDALL,
@@ -378,8 +446,10 @@ ENDM
 	JAMES, // unused
 	LEWIS, // unused
 	PARKER,
+};
 
-	trainerclass SWIMMERF // 27
+#define SWIMMERF 0x27
+enum {
 	ELAINE,
 	PAULA,
 	KAYLEE,
@@ -399,8 +469,10 @@ ENDM
 	NIKKI,
 	DIANA,
 	BRIANA,
+};
 
-	trainerclass SAILOR // 28
+#define SAILOR 0x28
+enum {
 	EUGENE,
 	HUEY1,
 	TERRELL,
@@ -413,8 +485,10 @@ ENDM
 	HARRY,
 	HUEY2,
 	HUEY3,
+};
 
-	trainerclass SUPER_NERD // 29
+#define SUPER_NERD 0x29
+enum {
 	STAN,
 	ERIC,
 	GREGG, // unused
@@ -427,20 +501,26 @@ ENDM
 	TERU,
 	RUSS, // unused
 	NORTON, // unused
+};
 
-	trainerclass RIVAL2 // 2a
+#define RIVAL2 0x2a
+enum {
 	RIVAL2_1_CHIKORITA,
 	RIVAL2_1_CYNDAQUIL,
 	RIVAL2_1_TOTODILE,
 	RIVAL2_2_CHIKORITA,
 	RIVAL2_2_CYNDAQUIL,
 	RIVAL2_2_TOTODILE,
+};
 
-	trainerclass GUITARIST // 2b
+#define GUITARIST 0x2b
+enum {
 	CLYDE,
 	VINCENT,
+};
 
-	trainerclass HIKER // 2c
+#define HIKER 0x2c
+enum {
 	ANTHONY1,
 	RUSSELL,
 	PHILLIP,
@@ -461,8 +541,10 @@ ENDM
 	DANIEL,
 	PARRY2,
 	PARRY3,
+};
 
-	trainerclass BIKER // 2d
+#define BIKER 0x2d
+enum {
 	KAZU1, // unused
 	KAZU2, // unused
 	DWAYNE,
@@ -472,16 +554,22 @@ ENDM
 	RILEY,
 	JOEL,
 	GLENN,
+};
 
-	trainerclass BLAINE // 2e
+#define BLAINE 0x2e
+enum {
 	BLAINE1,
+};
 
-	trainerclass BURGLAR // 2f
+#define BURGLAR 0x2f
+enum {
 	DUNCAN,
 	EDDIE,
 	COREY,
+};
 
-	trainerclass FIREBREATHER // 30
+#define FIREBREATHER 0x30
+enum {
 	OTIS,
 	DICK,
 	NED,
@@ -490,15 +578,19 @@ ENDM
 	WALT,
 	RAY,
 	LYLE,
+};
 
-	trainerclass JUGGLER // 31
+#define JUGGLER 0x31
+enum {
 	IRWIN1,
 	FRITZ,
 	HORTON,
 	IRWIN2,
 	IRWIN3,
+};
 
-	trainerclass BLACKBELT_T // 32
+#define BLACKBELT_T 0x32
+enum {
 	KENJI1,
 	YOSHI,
 	KENJI2,
@@ -508,14 +600,18 @@ ENDM
 	LUNG,
 	KENJI3,
 	WAI,
+};
 
-	trainerclass EXECUTIVEM // 33
+#define EXECUTIVEM 0x33
+enum {
 	EXECUTIVEM_1,
 	EXECUTIVEM_2,
 	EXECUTIVEM_3,
 	EXECUTIVEM_4,
+};
 
-	trainerclass PSYCHIC_T // 34
+#define PSYCHIC_T 0x34
+enum {
 	NATHAN,
 	FRANKLIN,
 	HERMAN,
@@ -528,8 +624,10 @@ ENDM
 	GILBERT,
 	JARED,
 	RODNEY,
+};
 
-	trainerclass PICNICKER // 35
+#define PICNICKER 0x35
+enum {
 	LIZ1,
 	GINA1,
 	BROOKE,
@@ -551,8 +649,10 @@ ENDM
 	TANYA,
 	TIFFANY3,
 	ERIN3,
+};
 
-	trainerclass CAMPER // 36
+#define CAMPER 0x36
+enum {
 	ROLAND,
 	TODD1,
 	IVAN,
@@ -572,12 +672,16 @@ ENDM
 	JOHN, // unused
 	JERRY,
 	SPENCER,
+};
 
-	trainerclass EXECUTIVEF // 37
+#define EXECUTIVEF 0x37
+enum {
 	EXECUTIVEF_1,
 	EXECUTIVEF_2,
+};
 
-	trainerclass SAGE // 38
+#define SAGE 0x38
+enum {
 	CHOW,
 	NICO,
 	JIN,
@@ -587,8 +691,10 @@ ENDM
 	EDMOND,
 	NEAL,
 	LI,
+};
 
-	trainerclass MEDIUM // 39
+#define MEDIUM 0x39
+enum {
 	MARTHA,
 	GRACE,
 	BETHANY, // unused
@@ -596,13 +702,17 @@ ENDM
 	ETHEL, // unused
 	REBECCA,
 	DORIS,
+};
 
-	trainerclass BOARDER // 3a
+#define BOARDER 0x3a
+enum {
 	RONALD,
 	BRAD,
 	DOUGLAS,
+};
 
-	trainerclass POKEFANM // 3b
+#define POKEFANM 0x3b
+enum {
 	WILLIAM,
 	DEREK1,
 	ROBERT,
@@ -615,16 +725,20 @@ ENDM
 	DEREK2,
 	DEREK3,
 	ALEX,
+};
 
-	trainerclass KIMONO_GIRL // 3c
+#define KIMONO_GIRL 0x3c
+enum {
 	KYOKO, // unused
 	NAOKO,
 	SAYO,
 	ZUKI,
 	KUNI,
 	MIKI,
+};
 
-	trainerclass TWINS // 3d
+#define TWINS 0x3d
+enum {
 	AMYANDMAY1,
 	ANNANDANNE1,
 	ANNANDANNE2,
@@ -633,29 +747,40 @@ ENDM
 	JOANDZOE2,
 	MEGANDPEG1,
 	MEGANDPEG2,
+};
 
-	trainerclass POKEFANF // 3e
+#define POKEFANF 0x3e
+enum {
 	BEVERLY1,
 	RUTH,
 	BEVERLY2,
 	BEVERLY3,
 	GEORGIA,
+};
 
-	trainerclass RED // 3f
+#define RED 0x3f
+enum {
 	RED1,
+};
 
-	trainerclass BLUE // 40
+#define BLUE 0x40
+enum {
 	BLUE1,
+};
 
-	trainerclass OFFICER // 41
+#define OFFICER 0x41
+enum {
 	KEITH,
 	DIRK,
+};
 
-	trainerclass GRUNTF // 42
+#define GRUNTF 0x42
+enum {
 	GRUNTF_1,
 	GRUNTF_2,
 	GRUNTF_3,
 	GRUNTF_4,
 	GRUNTF_5,
+};
 
-#define NUM_TRAINER_CLASSES __trainer_class__ - 1
+#define NUM_TRAINER_CLASSES GRUNTF
