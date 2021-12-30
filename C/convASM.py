@@ -106,7 +106,8 @@ def parse_asm(asm):
                 "[hl]": "_hl",
                 "[hli]": "_hli",
                 "[hld]": "_hld",
-                "[sp]": "_sp"}
+                "[sp]": "_sp",
+                "[c]": "_c"}
     condition = {"c": "_C",
                 "nc": "_NC",
                 "z": "_Z",
@@ -150,7 +151,7 @@ def parse_asm(asm):
     elif opcode in ("scf", "ccf", "cpl", "daa", "rrca", "rlca", "rra", "rla"):
         return f"{opcode.upper()};"
     elif opcode in ("ei", "di", "nop"):
-        return ""
+        return "NOP"
     elif opcode in ("ret", "reti"):
         cond = ""
         if asm[0] in condition:
@@ -206,6 +207,12 @@ def parse_asm(asm):
             return f"{op}{register[asm[0]]};"
         else:  # unknown
             return f"huh? {opcode} {asm}"
+    elif opcode in ("db", "dw", "dn", "assert"):
+        return f"//{opcode} {asm};"
+    elif opcode in ("maskbits"):
+        if len(asm) == 1:
+            asm.append(0)
+        return f"{opcode}({int(asm[0])}, {int(asm[1])});"
     else:
         print(f"{opcode} {asm}")
     return asm

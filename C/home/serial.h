@@ -1,0 +1,12 @@
+Serial();
+Serial_ExchangeBytes();
+Serial_ExchangeByte();
+CheckLinkTimeoutFramesNonzero();
+SerialDisconnected();
+Serial_ExchangeSyncBytes();
+Serial_PrintWaitingTextAndSyncAndExchangeNybble();
+Serial_SyncAndExchangeNybble();
+WaitLinkTransfer();
+LinkTransfer();
+LinkDataReceived();
+SetBitsForTimeCapsuleRequestIfNotLinked();

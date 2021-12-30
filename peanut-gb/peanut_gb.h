@@ -28,7 +28,8 @@
  * SameBoy, and code marked as being taken from SameBoy,
  * is Copyright (c) 2015-2019 Lior Halphon.
  */
-
+#ifndef PEANUT_H
+#define PEANUT_H
 #include <stdint.h>	/* Required for int types */
 #include <time.h>	/* Required for tm struct */
 
@@ -501,3 +502,5 @@ uint8_t gb_read(const uint_fast16_t addr);
  * Internal function used to write bytes.
  */
 void gb_write(const uint_fast16_t addr, const uint8_t val);
+
+#endif

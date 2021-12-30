@@ -1,3 +1,5 @@
+#ifndef MACROS_H
+#define MACROS_H
 #include "funcmap.h"
 
 #define SET_PC(x) gb.cpu_reg.pc = x;
@@ -17,8 +19,23 @@
 #define reg_hl_ gb_read(gb.cpu_reg.hl)
 #define reg_hli_ gb_read(gb.cpu_reg.hl++)
 #define reg_hld_ gb_read(gb.cpu_reg.hl--)
+#define REG_A gb.cpu_reg.a
+#define REG_F gb.cpu_reg.f
+#define REG_B gb.cpu_reg.b
+#define REG_C gb.cpu_reg.c
+#define REG_D gb.cpu_reg.d
+#define REG_E gb.cpu_reg.e
+#define REG_H gb.cpu_reg.h
+#define REG_L gb.cpu_reg.l
+#define REG_AF gb.cpu_reg.af
+#define REG_BC gb.cpu_reg.bc
+#define REG_DE gb.cpu_reg.de
+#define REG_HL gb.cpu_reg.hl
+#define REG_PC gb.cpu_reg.pc
+#define REG_SP gb.cpu_reg.sp
 
 #define WRITE(dest, value) (gb_write(dest, value))
+#define NOP	do {INC_PC(1)} while(0)
 #define PUSH_AF do {gb_write(--gb.cpu_reg.sp, gb.cpu_reg.a);\
                     gb_write(--gb.cpu_reg.sp,\
                     gb.cpu_reg.f_bits.z << 7 | gb.cpu_reg.f_bits.n << 6 |\
@@ -504,8 +521,8 @@
 #define LD_A_addr(x)	do {gb.cpu_reg.a = gb_read(x); INC_PC(3)} while(0)
 #define LDH_addr_A(x)	do {gb_write(x, gb.cpu_reg.a); INC_PC(2)} while(0)
 #define LDH_A_addr(x)	do {gb.cpu_reg.a = gb_read(x); INC_PC(2)} while(0)
-#define LD_c_A	do {gb_write(0xFF00 + gb.cpu_reg.c, gb.cpu_reg.a); INC_PC(1)} while(0)
-#define LD_A_c	do {gb.cpu_reg.a = gb_read(0xFF00 + gb.cpu_reg.c); INC_PC(1)} while(0)
+#define LDH_c_A	do {gb_write(0xFF00 + gb.cpu_reg.c, gb.cpu_reg.a); INC_PC(1)} while(0)
+#define LDH_A_c	do {gb.cpu_reg.a = gb_read(0xFF00 + gb.cpu_reg.c); INC_PC(1)} while(0)
 
 /* Taken from SameBoy, which is released under MIT Licence. */
 #define LD_HL_SP(x)	do {int8_t offset = x;\
@@ -859,3 +876,11 @@
                             JP(mPredef);} while(0)
 
 #define percent * 0xFF / 100
+
+#define maskbits(num, shift)    do {int x = 1;\
+                                    for(int i = 0; i < 8; i++){\
+                                    if(x + 1 < num) x = (x << 1) | 1;\
+                                    }\
+                                    AND_(x << shift);} while(0)
+
+#endif

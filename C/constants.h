@@ -1,4 +1,5 @@
-
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 #include "../peanut-gb/peanut_gb.h"
 
 //#include "charmap.h"
@@ -53,3 +54,4 @@
 #include "constants/type_constants.h"
 
 extern struct gb_s gb;
+#endif

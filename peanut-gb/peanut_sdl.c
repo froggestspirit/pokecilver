@@ -823,7 +823,7 @@ void gb_step_cpu()
 	/* Execute opcode */
 	switch(opcode)
 	{
-	case 0x00:	/* NOP */	break;
+	case 0x00:	NOP;	INC_PC(-1)	break;
 	case 0x01:	LD_BC(imm16);	INC_PC(-1)	break;
 	case 0x02:	LD_bc_A;	INC_PC(-1)	break;
 	case 0x03:	INC_BC;	INC_PC(-1)	break;
@@ -1045,7 +1045,7 @@ void gb_step_cpu()
 	case 0xDF:	_RST(0x18);	break;  // RST
 	case 0xE0:	LDH_addr_A(0xFF00 + imm8);	INC_PC(-1)	break;
 	case 0xE1:	POP_HL;	INC_PC(-1)	break;
-	case 0xE2:	LD_c_A;	INC_PC(-1)	break;
+	case 0xE2:	LDH_c_A;	INC_PC(-1)	break;
 	case 0xE5:	PUSH_HL;	INC_PC(-1)	break;
 	case 0xE6:	AND_A(imm8);	INC_PC(-1)	break;
 	case 0xE7:	_RST(0x20);	break;  // RST
@@ -1056,7 +1056,7 @@ void gb_step_cpu()
 	case 0xEF:	_RST(0x28);	break;  // RST
 	case 0xF0:	LDH_A_addr(0xFF00 + imm8);	INC_PC(-1)	break;
 	case 0xF1:	POP_AF;	INC_PC(-1)	break;
-	case 0xF2:	LD_A_c;	INC_PC(-1)	break;
+	case 0xF2:	LDH_A_c;	INC_PC(-1)	break;
 	case 0xF3:	/* DI */	break;
 	case 0xF5:	PUSH_AF;	INC_PC(-1)	break;
 	case 0xF6:	OR_A(imm8);	INC_PC(-1)	break;
