@@ -1,0 +1,14 @@
+Joypad();
+ClearJoypad();
+UpdateJoypad();
+GetJoypad();
+StartAutoInput();
+StopAutoInput();
+JoyTitleScreenInput();
+JoyWaitAorB();
+WaitButton();
+JoyTextDelay();
+WaitPressAorB_BlinkCursor();
+SimpleWaitPressAorB();
+PromptButton();
+BlinkCursor();

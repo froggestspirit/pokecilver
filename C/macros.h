@@ -883,4 +883,6 @@
                                     }\
                                     AND_(x << shift);} while(0)
 
+#include "macros/coords.h"
+
 #endif

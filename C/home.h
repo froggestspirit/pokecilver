@@ -15,7 +15,7 @@
 #include "home/time.h"
 #include "home/init.h"
 #include "home/serial.h"
-//#include "home/joypad.h"
+#include "home/joypad.h"
 //#include "home/decompress.h"
 //#include "home/palettes.h"
 #include "home/gfx.h"

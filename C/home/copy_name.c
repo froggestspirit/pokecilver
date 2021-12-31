@@ -15,7 +15,7 @@ _loop:
 	LD_A_de;  // ld a, [de]
 	INC_DE;  // inc de
 	LD_hli_A;  // ld [hli], a
-	CP_A("@");  // cp "@"
+	CP_A(0x50);  // cp "@"
 	IF_NZ goto _loop;  // jr nz, .loop
 	RET;  // ret
 

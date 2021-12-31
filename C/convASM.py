@@ -3,18 +3,47 @@ import argparse
 import time
 
 
+charMapFile = "charmap.asm"
 funcMapFile = "funcmap.h"
 
 currentFunc = ""
 funcList = []
 funcsKnown = []
 funcsKnownAddr = []
+charMap = []
+charMapEqu = []
 funcRet = False
+
+
+def convert_string(string):
+    global charMap
+    global charMapEqu
+    if string[0] != '"':
+        return string
+    i = 0
+    parts = []
+    string = string.strip('"')
+    while i < len(string):
+        end = i + 1
+        if string[i] == "<":
+            end = string[i:].index(">") + i + 1
+        elif string[i] == "'" and len(string) > i + 1:
+            if string[i:end + 1] in charMap:
+                end += 1
+        parts.append(string[i:end])
+        i = end
+    conv = []
+    for part in parts:
+        id = charMap.index(part)
+        conv.append(charMapEqu[id])
+    return ", ".join(conv)
 
 
 def check_if_label(string, prefix):
     global currentFunc
     global funcsKnown
+    if string[0] == '"' and string[-1] == '"':
+        return convert_string(string)
     parts = string.split(" ")
     ret = ""
     for part in parts:
@@ -151,7 +180,7 @@ def parse_asm(asm):
     elif opcode in ("scf", "ccf", "cpl", "daa", "rrca", "rlca", "rra", "rla"):
         return f"{opcode.upper()};"
     elif opcode in ("ei", "di", "nop"):
-        return "NOP"
+        return "NOP;"
     elif opcode in ("ret", "reti"):
         cond = ""
         if asm[0] in condition:
@@ -200,19 +229,27 @@ def parse_asm(asm):
         if asm[0] in register:  # Register
             return f"{op}_A{register[asm[0]]};"
         else:
-            return f"{op}_A({asm[0].strip('[]')});"
+            return f"{op}_A({convert_string(asm[0].strip('[]'))});"
     elif opcode in ("push", "pop", "inc", "dec", "srl", "sla", "sra", "rl", "rlc", "rr", "rrc", "swap"):
         op = opcode.upper()
         if asm[0] in register:
             return f"{op}{register[asm[0]]};"
         else:  # unknown
             return f"huh? {opcode} {asm}"
-    elif opcode in ("db", "dw", "dn", "assert"):
+    elif opcode in ("db", "dw", "dn", "assert", "dwcoord", "menu_coords"):
         return f"//{opcode} {asm};"
     elif opcode in ("maskbits"):
         if len(asm) == 1:
             asm.append(0)
         return f"{opcode}({int(asm[0])}, {int(asm[1])});"
+    elif opcode in ("hlcoord", "bccoord", "decoord", "ldcoord_a", "lda_coord"):
+        if len(asm) == 2:
+            asm.append("wTilemap")
+        return f"{opcode}({int(asm[0])}, {int(asm[1])}, {asm[2]});"
+    elif opcode in ("hlbgcoord", "bcbgcoord", "debgcoord"):
+        if len(asm) == 2:
+            asm.append("vBGMap0")
+        return f"{opcode}({int(asm[0])}, {int(asm[1])}, {asm[2]});"
     else:
         print(f"{opcode} {asm}")
     return asm
@@ -223,9 +260,24 @@ def main():
     global funcList
     global funcsKnown
     global funcsKnownAddr
+    global charMap
+    global charMapEqu
     parser = argparse.ArgumentParser()
     parser.add_argument("fileName")
     args = parser.parse_args()
+
+    with open(charMapFile, "r") as inFile:
+        charFile = inFile.read().split("\n")
+    for i in charFile:
+        if i[1:8] == "charmap":
+            end = 11
+            if i[10] == "<":
+                end = i[10:].index(">") + 11
+            elif i[10] == "'" and i[11] != '"':
+                end += 1
+            charMap.append(i[10:end])
+            start = i[end:].index("$") + end + 1
+            charMapEqu.append(f"0x{i[start:start+2]}")
 
     with open(funcMapFile, "r") as inFile:
         funcsFile = inFile.read().split("\n")

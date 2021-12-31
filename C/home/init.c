@@ -5,7 +5,7 @@ int Reset(){
 	XOR_A_A;  // xor a
 	LDH_addr_A(hMapAnims);  // ldh [hMapAnims], a
 	CALL(mClearPalettes);  // call ClearPalettes
-	  // ei
+	NOP;  // ei
 
 	LD_HL(wJoypadDisable);  // ld hl, wJoypadDisable
 	SET_hl(JOYPAD_DISABLE_SGB_TRANSFER_F);  // set JOYPAD_DISABLE_SGB_TRANSFER_F, [hl]
@@ -37,7 +37,7 @@ _load:
 }
 
 int Init(){
-	  // di
+	NOP;  // di
 
 	XOR_A_A;  // xor a
 	LDH_addr_A(rIF);  // ldh [rIF], a
@@ -156,7 +156,7 @@ _ByteFill:
 
 	LD_A(IE_DEFAULT);  // ld a, IE_DEFAULT
 	LDH_addr_A(rIE);  // ldh [rIE], a
-	  // ei
+	NOP;  // ei
 
 	CALL(mDelayFrame);  // call DelayFrame
 
@@ -179,7 +179,7 @@ int ClearVRAM(){
 }
 
 int BlankBGMap(){
-	LD_A(" ");  // ld a, " "
+	LD_A(0x7f);  // ld a, " "
 	JR(mFillBGMap);  // jr FillBGMap
 
 }

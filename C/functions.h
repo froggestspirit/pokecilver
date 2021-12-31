@@ -95,7 +95,7 @@ void init_function_pointers(){
 
 	// home/copy_name.c
 	REDIRECT(CopyName1);
-	//REDIRECT(CopyName2); (Is broken on newgame, relies on charmap.asm)
+	REDIRECT(CopyName2);
 
 	// home/delay.c
 	REDIRECT(DelayFrame);
@@ -310,5 +310,21 @@ void init_function_pointers(){
 	REDIRECT(LinkTransfer);
 	REDIRECT(LinkDataReceived);
 	REDIRECT(SetBitsForTimeCapsuleRequestIfNotLinked);
+
+	// home/joypad.c
+	//REDIRECT(Joypad);
+	//REDIRECT(ClearJoypad);
+	//REDIRECT(UpdateJoypad);
+	//REDIRECT(GetJoypad);
+	//REDIRECT(StartAutoInput);
+	//REDIRECT(StopAutoInput);
+	//REDIRECT(JoyTitleScreenInput);
+	//REDIRECT(JoyWaitAorB);
+	//REDIRECT(WaitButton);
+	//REDIRECT(JoyTextDelay);
+	//REDIRECT(WaitPressAorB_BlinkCursor);
+	//REDIRECT(SimpleWaitPressAorB);
+	//REDIRECT(PromptButton);
+	//REDIRECT(BlinkCursor);
 
 }
