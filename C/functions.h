@@ -312,19 +312,94 @@ void init_function_pointers(){
 	REDIRECT(SetBitsForTimeCapsuleRequestIfNotLinked);
 
 	// home/joypad.c
-	//REDIRECT(Joypad);
-	//REDIRECT(ClearJoypad);
-	//REDIRECT(UpdateJoypad);
-	//REDIRECT(GetJoypad);
-	//REDIRECT(StartAutoInput);
-	//REDIRECT(StopAutoInput);
-	//REDIRECT(JoyTitleScreenInput);
-	//REDIRECT(JoyWaitAorB);
-	//REDIRECT(WaitButton);
-	//REDIRECT(JoyTextDelay);
-	//REDIRECT(WaitPressAorB_BlinkCursor);
-	//REDIRECT(SimpleWaitPressAorB);
-	//REDIRECT(PromptButton);
-	//REDIRECT(BlinkCursor);
+	REDIRECT(Joypad);
+	REDIRECT(ClearJoypad);
+	REDIRECT(UpdateJoypad);
+	REDIRECT(GetJoypad);
+	REDIRECT(StartAutoInput);
+	REDIRECT(StopAutoInput);
+	REDIRECT(JoyTitleScreenInput);
+	REDIRECT(JoyWaitAorB);
+	REDIRECT(WaitButton);
+	REDIRECT(JoyTextDelay);
+	REDIRECT(WaitPressAorB_BlinkCursor);
+	REDIRECT(SimpleWaitPressAorB);
+	REDIRECT(PromptButton);
+	REDIRECT(BlinkCursor);
 
+	// home/decompress.c
+	REDIRECT(FarDecompress);
+	REDIRECT(Decompress);
+
+	// home/palettes.c
+	REDIRECT(UpdatePalsIfCGB);
+	REDIRECT(UpdateCGBPals);
+	REDIRECT(DmgToCgbBGPals);
+	REDIRECT(DmgToCgbObjPals);
+	REDIRECT(DmgToCgbObjPal0);
+	REDIRECT(DmgToCgbObjPal1);
+	REDIRECT(CopyPals);
+	REDIRECT(ClearVBank1);
+	REDIRECT(ReloadPalettes);
+	REDIRECT(ReloadSpritesNoPalettes);
+	REDIRECT(SwapTextboxPalettes);
+	REDIRECT(ScrollBGMapPalettes);
+
+	// home/video.c
+	REDIRECT(UpdateBGMapBuffer);
+	REDIRECT(WaitTop);
+	REDIRECT(UpdateBGMap);
+	REDIRECT(Serve1bppRequest);
+	REDIRECT(Serve2bppRequest);
+	REDIRECT(AnimateTileset);
+	REDIRECT(Video_DummyFunction);
+	REDIRECT(EnableSpriteDisplay);
+	REDIRECT(FillBGMap0WithBlack);
+
+	// home/movement.c
+	REDIRECT(InitMovementBuffer);
+	REDIRECT(DecrementMovementBufferCount);
+	REDIRECT(AppendToMovementBuffer);
+	REDIRECT(AppendToMovementBufferNTimes);
+	REDIRECT(ComputePathToWalkToPlayer);
+
+	// home/copy_tilemap.c
+	REDIRECT(LoadTilemapToTempTilemap);
+	REDIRECT(SafeLoadTempTilemapToTilemap);
+	REDIRECT(LoadTempTilemapToTilemap);
+
+	// home/names.c
+	REDIRECT(NamesPointers);
+	REDIRECT(GetName);
+	REDIRECT(GetNthString);
+	REDIRECT(GetBasePokemonName);
+	REDIRECT(GetPokemonName);
+	REDIRECT(GetItemName);
+	REDIRECT(GetTMHMName);
+	REDIRECT(GetMoveName);
+
+	// home/pokemon.c
+	REDIRECT(DrawBattleHPBar);
+	REDIRECT(PrepMonFrontpic);
+	REDIRECT(_PrepMonFrontpic);
+	REDIRECT(PlayStereoCry);
+	REDIRECT(PlayMonCry);
+	REDIRECT(_PlayMonCry);
+	REDIRECT(LoadCry);
+	REDIRECT(GetCryIndex);
+	REDIRECT(PrintLevel);
+	REDIRECT(PrintLevel_Force3Digits);
+	REDIRECT(Print8BitNumLeftAlign);
+	REDIRECT(GetNthMove);
+	REDIRECT(GetBaseData);
+	REDIRECT(GetCurNickname);
+	REDIRECT(GetNickname);
+
+	// home/hm_moves.c
+	REDIRECT(IsHM);
+	REDIRECT(IsHMMove);
+
+	// home/print_num.c
+	REDIRECT(PrintNum);
+	REDIRECT(PrintHexNumber);
 }

@@ -116,8 +116,7 @@ int CopyDataUntil(){
 	JR_NZ (mCopyDataUntil);  // jr nz, CopyDataUntil
 	RET;  // ret
 
-// INCLUDE "home/print_num.asm"
-
+//#include "print_num.h"
 	return mFarPrintText;
 }
 

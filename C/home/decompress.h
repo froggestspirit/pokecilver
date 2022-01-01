@@ -1,0 +1,2 @@
+FarDecompress();
+Decompress();

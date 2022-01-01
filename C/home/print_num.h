@@ -1,0 +1,2 @@
+PrintNum();
+PrintHexNumber();

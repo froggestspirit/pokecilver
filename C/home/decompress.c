@@ -1,0 +1,381 @@
+#include "../constants.h"
+
+int FarDecompress(){
+//  Decompress graphics data from a:hl to de.
+
+	LD_addr_A(wLZBank);  // ld [wLZBank], a
+	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
+	PUSH_AF;  // push af
+	LD_A_addr(wLZBank);  // ld a, [wLZBank]
+	RST(mBankswitch);  // rst Bankswitch
+
+	CALL(mDecompress);  // call Decompress
+
+	POP_AF;  // pop af
+	RST(mBankswitch);  // rst Bankswitch
+	RET;  // ret
+
+}
+
+int Decompress(){
+//  Pokemon GSC uses an lz variant (lz3) for compression.
+//  This is mainly (but not necessarily) used for graphics.
+
+//  This function decompresses lz-compressed data from hl to de.
+
+#define LZ_END 0xff  //  Compressed data is terminated with $ff.
+
+//  A typical control command consists of:
+
+#define LZ_CMD 0b11100000  //  command id (bits 5-7)
+#define LZ_LEN 0b00011111  //  length n   (bits 0-4)
+
+//  Additional parameters are read during command execution.
+
+//  Commands:
+
+#define LZ_LITERAL 0  //  Read literal data for n bytes.
+#define LZ_ITERATE 1  //  Write the same byte for n bytes.
+#define LZ_ALTERNATE 2  //  Alternate two bytes for n bytes.
+#define LZ_ZERO 3  //  Write 0 for n bytes.
+
+//  Another class of commands reuses data from the decompressed output.
+#define LZ_RW 2  //  bit
+
+//  These commands take a signed offset to start copying from.
+//  Wraparound is simulated.
+//  Positive offsets (15-bit) are added to the start address.
+//  Negative offsets (7-bit) are subtracted from the current position.
+
+#define LZ_REPEAT 4  //  Repeat n bytes from the offset.
+#define LZ_FLIP 5  //  Repeat n bitflipped bytes.
+#define LZ_REVERSE 6  //  Repeat n bytes in reverse.
+
+//  If the value in the count needs to be larger than 5 bits,
+//  LZ_LONG can be used to expand the count to 10 bits.
+#define LZ_LONG 7
+
+//  A new control command is read in bits 2-4.
+//  The top two bits of the length are bits 0-1.
+//  Another byte is read containing the bottom 8 bits.
+#define LZ_LONG_HI 0b00000011
+
+//  In other words, the structure of the command becomes
+//  111xxxyy yyyyyyyy
+//  x: the new control command
+//  y: the length
+
+//  For more information, refer to the code below and in extras/gfx.py.
+
+// ; Save the output address
+// ; for rewrite commands.
+	LD_A_E;  // ld a, e
+	LD_addr_A(wLZAddress);  // ld [wLZAddress], a
+	LD_A_D;  // ld a, d
+	LD_addr_A(wLZAddress + 1);  // ld [wLZAddress + 1], a
+
+
+_Main:
+	SET_PC(0x0B06U);
+	LD_A_hl;  // ld a, [hl]
+	CP_A(LZ_END);  // cp LZ_END
+	RET_Z ;  // ret z
+
+	AND_A(LZ_CMD);  // and LZ_CMD
+
+	CP_A(LZ_LONG);  // cp LZ_LONG
+	IF_NZ goto _short;  // jr nz, .short
+
+//  The count is now 10 bits.
+
+// ; Read the next 3 bits.
+// ; %00011100 -> %11100000
+	LD_A_hl;  // ld a, [hl]
+	ADD_A_A;  // add a
+	ADD_A_A;  // add a ; << 3
+	ADD_A_A;  // add a
+
+// ; This is our new control code.
+	AND_A(LZ_CMD);  // and LZ_CMD
+	PUSH_AF;  // push af
+
+	LD_A_hli;  // ld a, [hli]
+	AND_A(LZ_LONG_HI);  // and LZ_LONG_HI
+	LD_B_A;  // ld b, a
+	LD_A_hli;  // ld a, [hli]
+	LD_C_A;  // ld c, a
+
+// ; read at least 1 byte
+	INC_BC;  // inc bc
+	goto _command;  // jr .command
+
+
+_short:
+	SET_PC(0x0B20U);
+	PUSH_AF;  // push af
+
+	LD_A_hli;  // ld a, [hli]
+	AND_A(LZ_LEN);  // and LZ_LEN
+	LD_C_A;  // ld c, a
+	LD_B(0);  // ld b, 0
+
+// ; read at least 1 byte
+	INC_C;  // inc c
+
+
+_command:
+	SET_PC(0x0B28U);
+// ; Increment loop counts.
+// ; We bail the moment they hit 0.
+	INC_B;  // inc b
+	INC_C;  // inc c
+
+	POP_AF;  // pop af
+
+	BIT_A(LZ_RW);  // bit LZ_RW, a
+	IF_NZ goto _rewrite;  // jr nz, .rewrite
+
+	CP_A(LZ_ITERATE);  // cp LZ_ITERATE
+	IF_Z goto _Iter;  // jr z, .Iter
+	CP_A(LZ_ALTERNATE);  // cp LZ_ALTERNATE
+	IF_Z goto _Alt;  // jr z, .Alt
+	CP_A(LZ_ZERO);  // cp LZ_ZERO
+	IF_Z goto _Zero;  // jr z, .Zero
+
+//  Literal
+//  Read literal data for bc bytes.
+
+_lloop:
+	SET_PC(0x0B3BU);
+	DEC_C;  // dec c
+	IF_NZ goto _lnext;  // jr nz, .lnext
+	DEC_B;  // dec b
+	JP_Z (mDecompress_Main);  // jp z, .Main
+
+
+_lnext:
+	SET_PC(0x0B42U);
+	LD_A_hli;  // ld a, [hli]
+	LD_de_A;  // ld [de], a
+	INC_DE;  // inc de
+	goto _lloop;  // jr .lloop
+
+
+_Iter:
+	SET_PC(0x0B47U);
+//  Write the same byte for bc bytes.
+	LD_A_hli;  // ld a, [hli]
+
+
+_iloop:
+	SET_PC(0x0B48U);
+	DEC_C;  // dec c
+	IF_NZ goto _inext;  // jr nz, .inext
+	DEC_B;  // dec b
+	JP_Z (mDecompress_Main);  // jp z, .Main
+
+
+_inext:
+	SET_PC(0x0B4FU);
+	LD_de_A;  // ld [de], a
+	INC_DE;  // inc de
+	goto _iloop;  // jr .iloop
+
+
+_Alt:
+	SET_PC(0x0B53U);
+//  Alternate two bytes for bc bytes.
+	DEC_C;  // dec c
+	IF_NZ goto _anext1;  // jr nz, .anext1
+	DEC_B;  // dec b
+	JP_Z (mDecompress_adone1);  // jp z, .adone1
+
+_anext1:
+	SET_PC(0x0B5AU);
+	LD_A_hli;  // ld a, [hli]
+	LD_de_A;  // ld [de], a
+	INC_DE;  // inc de
+
+	DEC_C;  // dec c
+	IF_NZ goto _anext2;  // jr nz, .anext2
+	DEC_B;  // dec b
+	JP_Z (mDecompress_adone2);  // jp z, .adone2
+
+_anext2:
+	SET_PC(0x0B64U);
+	LD_A_hld;  // ld a, [hld]
+	LD_de_A;  // ld [de], a
+	INC_DE;  // inc de
+
+	goto _Alt;  // jr .Alt
+
+// ; Skip past the bytes we were alternating.
+
+_adone1:
+	SET_PC(0x0B69U);
+	INC_HL;  // inc hl
+
+_adone2:
+	SET_PC(0x0B6AU);
+	INC_HL;  // inc hl
+	goto _Main;  // jr .Main
+
+
+_Zero:
+	SET_PC(0x0B6DU);
+//  Write 0 for bc bytes.
+	XOR_A_A;  // xor a
+
+
+_zloop:
+	SET_PC(0x0B6EU);
+	DEC_C;  // dec c
+	IF_NZ goto _znext;  // jr nz, .znext
+	DEC_B;  // dec b
+	JP_Z (mDecompress_Main);  // jp z, .Main
+
+
+_znext:
+	SET_PC(0x0B75U);
+	LD_de_A;  // ld [de], a
+	INC_DE;  // inc de
+	goto _zloop;  // jr .zloop
+
+
+_rewrite:
+	SET_PC(0x0B79U);
+//  Repeat decompressed data from output.
+	PUSH_HL;  // push hl
+	PUSH_AF;  // push af
+
+	LD_A_hli;  // ld a, [hli]
+	BIT_A(7);  // bit 7, a ; sign
+	IF_Z goto _positive;  // jr z, .positive
+
+//  negative
+// ; hl = de + -a
+	AND_A(0b01111111);  // and %01111111
+	CPL;  // cpl
+	ADD_A_E;  // add e
+	LD_L_A;  // ld l, a
+	LD_A(-1);  // ld a, -1
+	ADC_A_D;  // adc d
+	LD_H_A;  // ld h, a
+	goto _ok;  // jr .ok
+
+
+_positive:
+	SET_PC(0x0B8BU);
+//  Positive offsets are two bytes.
+	LD_L_hl;  // ld l, [hl]
+	LD_H_A;  // ld h, a
+// ; add to starting output address
+	LD_A_addr(wLZAddress);  // ld a, [wLZAddress]
+	ADD_A_L;  // add l
+	LD_L_A;  // ld l, a
+	LD_A_addr(wLZAddress + 1);  // ld a, [wLZAddress + 1]
+	ADC_A_H;  // adc h
+	LD_H_A;  // ld h, a
+
+
+_ok:
+	SET_PC(0x0B97U);
+	POP_AF;  // pop af
+
+	CP_A(LZ_REPEAT);  // cp LZ_REPEAT
+	IF_Z goto _Repeat;  // jr z, .Repeat
+	CP_A(LZ_FLIP);  // cp LZ_FLIP
+	IF_Z goto _Flip;  // jr z, .Flip
+	CP_A(LZ_REVERSE);  // cp LZ_REVERSE
+	IF_Z goto _Reverse;  // jr z, .Reverse
+
+//  Since LZ_LONG is command 7,
+//  only commands 0-6 are passed in.
+//  This leaves room for an extra command 7.
+//  However, lengths longer than 768
+//  would be interpreted as LZ_END.
+
+//  More practically, LZ_LONG is not recursive.
+//  For now, it defaults to LZ_REPEAT.
+
+
+_Repeat:
+	SET_PC(0x0BA4U);
+//  Copy decompressed data for bc bytes.
+	DEC_C;  // dec c
+	IF_NZ goto _rnext;  // jr nz, .rnext
+	DEC_B;  // dec b
+	IF_Z goto _donerw;  // jr z, .donerw
+
+
+_rnext:
+	SET_PC(0x0BAAU);
+	LD_A_hli;  // ld a, [hli]
+	LD_de_A;  // ld [de], a
+	INC_DE;  // inc de
+	goto _Repeat;  // jr .Repeat
+
+
+_Flip:
+	SET_PC(0x0BAFU);
+//  Copy bitflipped decompressed data for bc bytes.
+	DEC_C;  // dec c
+	IF_NZ goto _fnext;  // jr nz, .fnext
+	DEC_B;  // dec b
+	JP_Z (mDecompress_donerw);  // jp z, .donerw
+
+
+_fnext:
+	SET_PC(0x0BB6U);
+	LD_A_hli;  // ld a, [hli]
+	PUSH_BC;  // push bc
+	LD_BC(8);  // lb bc, 0, 8
+
+
+_floop:
+	SET_PC(0x0BBBU);
+	RRA;  // rra
+	RL_B;  // rl b
+	DEC_C;  // dec c
+	IF_NZ goto _floop;  // jr nz, .floop
+
+	LD_A_B;  // ld a, b
+	POP_BC;  // pop bc
+
+	LD_de_A;  // ld [de], a
+	INC_DE;  // inc de
+	goto _Flip;  // jr .Flip
+
+
+_Reverse:
+	SET_PC(0x0BC7U);
+//  Copy reversed decompressed data for bc bytes.
+	DEC_C;  // dec c
+	IF_NZ goto _rvnext;  // jr nz, .rvnext
+
+	DEC_B;  // dec b
+	JP_Z (mDecompress_donerw);  // jp z, .donerw
+
+
+_rvnext:
+	SET_PC(0x0BCEU);
+	LD_A_hld;  // ld a, [hld]
+	LD_de_A;  // ld [de], a
+	INC_DE;  // inc de
+	goto _Reverse;  // jr .Reverse
+
+
+_donerw:
+	SET_PC(0x0BD3U);
+	POP_HL;  // pop hl
+
+	BIT_hl(7);  // bit 7, [hl]
+	IF_NZ goto _next;  // jr nz, .next
+	INC_HL;  // inc hl ; positive offset is two bytes
+
+_next:
+	SET_PC(0x0BD9U);
+	INC_HL;  // inc hl
+	JP(mDecompress_Main);  // jp .Main
+
+}

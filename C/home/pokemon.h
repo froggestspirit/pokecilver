@@ -1,0 +1,15 @@
+DrawBattleHPBar();
+PrepMonFrontpic();
+_PrepMonFrontpic();
+PlayStereoCry();
+PlayMonCry();
+_PlayMonCry();
+LoadCry();
+GetCryIndex();
+PrintLevel();
+PrintLevel_Force3Digits();
+Print8BitNumLeftAlign();
+GetNthMove();
+GetBaseData();
+GetCurNickname();
+GetNickname();

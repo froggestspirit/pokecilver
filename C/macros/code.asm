@@ -1,13 +1,5 @@
 ; Syntactic sugar macros
 
-lb: MACRO ; r, hi, lo
-	ld \1, ((\2) & $ff) << 8 | ((\3) & $ff)
-ENDM
-
-ln: MACRO ; r, hi, lo
-	ld \1, ((\2) & $f) << 4 | ((\3) & $f)
-ENDM
-
 ; Design patterns
 
 jumptable: MACRO

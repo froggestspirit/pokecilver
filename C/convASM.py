@@ -94,15 +94,17 @@ def parse_line_label(string):
         localLabelID = funcsKnown.index(f"{currentFunc}_{localLabel}")
         asm = f"\n_{localLabel}:\n\tSET_PC({funcsKnownAddr[localLabelID]});"
     else:
-        parts = string[0].split(" ")
+        parts = list(i for i in string[0].split(" ") if i != "")
+        if not parts:
+            parts = [""]
         if parts[0] == "rept":
-            asm = f"for(int rept = 0; rept < {parts[1]}; rept++){{"
+            asm = f"for(int rept = 0; rept < {' '.join(parts[1:])}; rept++){{"
         elif parts[0] == "endr":
             asm = "}"
         elif parts[0] in ("INCLUDE","INCBIN"):
             asm = f"// {asm}{string[0]}"
         elif len(parts) > 1 and parts[1] == "EQU":
-            asm = f"#define {parts[0]} {parts[2]}"
+            asm = f"#define {parts[0]} {' '.join(parts[2:]).replace('$', '0x').replace('%', '0b')}"
         else:
             asm = f"{asm}{string[0]}"
             if asm:
@@ -241,18 +243,22 @@ def parse_asm(asm):
     elif opcode in ("maskbits"):
         if len(asm) == 1:
             asm.append(0)
-        return f"{opcode}({int(asm[0])}, {int(asm[1])});"
+        return f"{opcode}({(asm[0])}, {(asm[1])});"
     elif opcode in ("hlcoord", "bccoord", "decoord", "ldcoord_a", "lda_coord"):
         if len(asm) == 2:
             asm.append("wTilemap")
-        return f"{opcode}({int(asm[0])}, {int(asm[1])}, {asm[2]});"
+        return f"{opcode}({(asm[0])}, {(asm[1])}, {asm[2]});"
     elif opcode in ("hlbgcoord", "bcbgcoord", "debgcoord"):
         if len(asm) == 2:
             asm.append("vBGMap0")
-        return f"{opcode}({int(asm[0])}, {int(asm[1])}, {asm[2]});"
+        return f"{opcode}({(asm[0])}, {(asm[1])}, {asm[2]});"
+    elif opcode in ("lb"):
+        return f"LD{register[asm[0]]}(({(asm[1])} << 8) | {(asm[2])});"
+    elif opcode in ("ln"):
+        return f"LD{register[asm[0]]}(({(asm[1])} << 4) | {(asm[2])});"
     else:
         print(f"{opcode} {asm}")
-    return asm
+    return f"//{opcode} {asm}"
 
 
 def main():

@@ -2326,6 +2326,140 @@ void save_lcd_bmp(uint16_t fb[LCD_HEIGHT][LCD_WIDTH])
 	fflush(stdout);
 }
 
+int get_input(){
+	static SDL_Event event;
+	while(SDL_PollEvent(&event))
+	{
+		static int fullscreen = 0;
+
+		switch(event.type)
+		{
+		case SDL_QUIT:
+			return 0;
+
+		case SDL_CONTROLLERBUTTONDOWN:
+		case SDL_CONTROLLERBUTTONUP:
+			switch(event.cbutton.button)
+			{
+			case SDL_CONTROLLER_BUTTON_A:
+				gb.direct.joypad_bits.a = !event.cbutton.state;
+				break;
+
+			case SDL_CONTROLLER_BUTTON_B:
+				gb.direct.joypad_bits.b = !event.cbutton.state;
+				break;
+
+			case SDL_CONTROLLER_BUTTON_BACK:
+				gb.direct.joypad_bits.select = !event.cbutton.state;
+				break;
+
+			case SDL_CONTROLLER_BUTTON_START:
+				gb.direct.joypad_bits.start = !event.cbutton.state;
+				break;
+
+			case SDL_CONTROLLER_BUTTON_DPAD_UP:
+				gb.direct.joypad_bits.up = !event.cbutton.state;
+				break;
+
+			case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+				gb.direct.joypad_bits.right = !event.cbutton.state;
+				break;
+
+			case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+				gb.direct.joypad_bits.down = !event.cbutton.state;
+				break;
+
+			case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+				gb.direct.joypad_bits.left = !event.cbutton.state;
+				break;
+			}
+
+			break;
+
+		case SDL_KEYDOWN:
+			switch(event.key.keysym.sym)
+			{
+			case SDLK_RETURN:
+				gb.direct.joypad_bits.start = 0;
+				break;
+
+			case SDLK_BACKSPACE:
+				gb.direct.joypad_bits.select = 0;
+				break;
+
+			case SDLK_z:
+				gb.direct.joypad_bits.a = 0;
+				break;
+
+			case SDLK_x:
+				gb.direct.joypad_bits.b = 0;
+				break;
+
+			case SDLK_UP:
+				gb.direct.joypad_bits.up = 0;
+				break;
+
+			case SDLK_RIGHT:
+				gb.direct.joypad_bits.right = 0;
+				break;
+
+			case SDLK_DOWN:
+				gb.direct.joypad_bits.down = 0;
+				break;
+
+			case SDLK_LEFT:
+				gb.direct.joypad_bits.left = 0;
+				break;
+
+			case SDLK_r:
+				gb_reset();
+				break;
+			}
+
+			break;
+
+		case SDL_KEYUP:
+			switch(event.key.keysym.sym)
+			{
+			case SDLK_RETURN:
+				gb.direct.joypad_bits.start = 1;
+				break;
+
+			case SDLK_BACKSPACE:
+				gb.direct.joypad_bits.select = 1;
+				break;
+
+			case SDLK_z:
+				gb.direct.joypad_bits.a = 1;
+				break;
+
+			case SDLK_x:
+				gb.direct.joypad_bits.b = 1;
+				break;
+
+			case SDLK_UP:
+				gb.direct.joypad_bits.up = 1;
+				break;
+
+			case SDLK_RIGHT:
+				gb.direct.joypad_bits.right = 1;
+				break;
+
+			case SDLK_DOWN:
+				gb.direct.joypad_bits.down = 1;
+				break;
+
+			case SDLK_LEFT:
+				gb.direct.joypad_bits.left = 1;
+				break;
+			}
+
+			break;
+		}
+	}
+	return 1;
+}
+
 int main(int argc, char **argv)
 {
 	struct priv_t priv =
@@ -2666,224 +2800,7 @@ int main(int argc, char **argv)
 		old_ticks = SDL_GetTicks();
 
 		/* Get joypad input. */
-		while(SDL_PollEvent(&event))
-		{
-			static int fullscreen = 0;
-
-			switch(event.type)
-			{
-			case SDL_QUIT:
-				goto quit;
-
-			case SDL_CONTROLLERBUTTONDOWN:
-			case SDL_CONTROLLERBUTTONUP:
-				switch(event.cbutton.button)
-				{
-				case SDL_CONTROLLER_BUTTON_A:
-					gb.direct.joypad_bits.a = !event.cbutton.state;
-					break;
-
-				case SDL_CONTROLLER_BUTTON_B:
-					gb.direct.joypad_bits.b = !event.cbutton.state;
-					break;
-
-				case SDL_CONTROLLER_BUTTON_BACK:
-					gb.direct.joypad_bits.select = !event.cbutton.state;
-					break;
-
-				case SDL_CONTROLLER_BUTTON_START:
-					gb.direct.joypad_bits.start = !event.cbutton.state;
-					break;
-
-				case SDL_CONTROLLER_BUTTON_DPAD_UP:
-					gb.direct.joypad_bits.up = !event.cbutton.state;
-					break;
-
-				case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
-					gb.direct.joypad_bits.right = !event.cbutton.state;
-					break;
-
-				case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
-					gb.direct.joypad_bits.down = !event.cbutton.state;
-					break;
-
-				case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
-					gb.direct.joypad_bits.left = !event.cbutton.state;
-					break;
-				}
-
-				break;
-
-			case SDL_KEYDOWN:
-				switch(event.key.keysym.sym)
-				{
-				case SDLK_RETURN:
-					gb.direct.joypad_bits.start = 0;
-					break;
-
-				case SDLK_BACKSPACE:
-					gb.direct.joypad_bits.select = 0;
-					break;
-
-				case SDLK_z:
-					gb.direct.joypad_bits.a = 0;
-					break;
-
-				case SDLK_x:
-					gb.direct.joypad_bits.b = 0;
-					break;
-
-				case SDLK_UP:
-					gb.direct.joypad_bits.up = 0;
-					break;
-
-				case SDLK_RIGHT:
-					gb.direct.joypad_bits.right = 0;
-					break;
-
-				case SDLK_DOWN:
-					gb.direct.joypad_bits.down = 0;
-					break;
-
-				case SDLK_LEFT:
-					gb.direct.joypad_bits.left = 0;
-					break;
-
-				case SDLK_SPACE:
-					fast_mode = 2;
-					break;
-
-				case SDLK_1:
-					fast_mode = 1;
-					break;
-
-				case SDLK_2:
-					fast_mode = 2;
-					break;
-
-				case SDLK_3:
-					fast_mode = 3;
-					break;
-
-				case SDLK_4:
-					fast_mode = 4;
-					break;
-
-				case SDLK_r:
-					gb_reset();
-					break;
-#if ENABLE_LCD
-
-				case SDLK_i:
-					gb.direct.interlace = ~gb.direct.interlace;
-					break;
-
-				case SDLK_o:
-					gb.direct.frame_skip = ~gb.direct.frame_skip;
-					break;
-
-				case SDLK_b:
-					dump_bmp = ~dump_bmp;
-
-					if(dump_bmp)
-						puts("Dumping frames");
-					else
-						printf("\nStopped dumping frames\n");
-
-					break;
-#endif
-
-				case SDLK_p:
-					if(event.key.keysym.mod == KMOD_LSHIFT)
-					{
-						auto_assign_palette(&priv, gb_colour_hash());
-						break;
-					}
-
-					if(++selected_palette == NUMBER_OF_PALETTES)
-						selected_palette = 0;
-
-					manual_assign_palette(&priv, selected_palette);
-					break;
-				}
-
-				break;
-
-			case SDL_KEYUP:
-				switch(event.key.keysym.sym)
-				{
-				case SDLK_RETURN:
-					gb.direct.joypad_bits.start = 1;
-					break;
-
-				case SDLK_BACKSPACE:
-					gb.direct.joypad_bits.select = 1;
-					break;
-
-				case SDLK_z:
-					gb.direct.joypad_bits.a = 1;
-					break;
-
-				case SDLK_x:
-					gb.direct.joypad_bits.b = 1;
-					break;
-
-				case SDLK_UP:
-					gb.direct.joypad_bits.up = 1;
-					break;
-
-				case SDLK_RIGHT:
-					gb.direct.joypad_bits.right = 1;
-					break;
-
-				case SDLK_DOWN:
-					gb.direct.joypad_bits.down = 1;
-					break;
-
-				case SDLK_LEFT:
-					gb.direct.joypad_bits.left = 1;
-					break;
-
-				case SDLK_SPACE:
-					fast_mode = 1;
-					break;
-
-				case SDLK_f:
-					if(fullscreen)
-					{
-						SDL_SetWindowFullscreen(window, 0);
-						fullscreen = 0;
-						SDL_ShowCursor(SDL_ENABLE);
-					}
-					else
-					{
-						SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-						fullscreen = SDL_WINDOW_FULLSCREEN_DESKTOP;
-						SDL_ShowCursor(SDL_DISABLE);
-					}
-					break;
-
-				case SDLK_F11:
-				{
-					if(fullscreen)
-					{
-						SDL_SetWindowFullscreen(window, 0);
-						fullscreen = 0;
-						SDL_ShowCursor(SDL_ENABLE);
-					}
-					else
-					{
-						SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-						fullscreen = SDL_WINDOW_FULLSCREEN;
-						SDL_ShowCursor(SDL_DISABLE);
-					}
-				}
-				break;
-				}
-
-				break;
-			}
-		}
+		if(!get_input()) goto quit;
 
 		/* Execute CPU cycles until the screen has to be redrawn. */
 		gb_run_frame();

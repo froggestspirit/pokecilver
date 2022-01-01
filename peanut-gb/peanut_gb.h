@@ -503,4 +503,6 @@ uint8_t gb_read(const uint_fast16_t addr);
  */
 void gb_write(const uint_fast16_t addr, const uint8_t val);
 
+int get_input();
+
 #endif

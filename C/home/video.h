@@ -1,0 +1,9 @@
+UpdateBGMapBuffer();
+WaitTop();
+UpdateBGMap();
+Serve1bppRequest();
+Serve2bppRequest();
+AnimateTileset();
+Video_DummyFunction();
+EnableSpriteDisplay();
+FillBGMap0WithBlack();

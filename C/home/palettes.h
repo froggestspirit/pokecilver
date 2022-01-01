@@ -1,0 +1,12 @@
+UpdatePalsIfCGB();
+UpdateCGBPals();
+DmgToCgbBGPals();
+DmgToCgbObjPals();
+DmgToCgbObjPal0();
+DmgToCgbObjPal1();
+CopyPals();
+ClearVBank1();
+ReloadPalettes();
+ReloadSpritesNoPalettes();
+SwapTextboxPalettes();
+ScrollBGMapPalettes();
