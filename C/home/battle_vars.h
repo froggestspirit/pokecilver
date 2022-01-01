@@ -1,0 +1,4 @@
+GetBattleVar();
+GetBattleVarAddr();
+BattleVarPairs();
+BattleVarLocations();

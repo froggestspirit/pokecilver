@@ -22,3 +22,5 @@
 \n\tset ([0-9a-z].*), \[hl\]
 \n\tSET_hl($1);
 
+([a-z_0-9]*: MACRO(\n\t.*)*\nENDM)
+/*$1*/

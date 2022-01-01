@@ -1,0 +1,13 @@
+ClearBGPalettes();
+WaitBGMap();
+WaitBGMap2();
+IsCGB();
+ApplyTilemap();
+CGBOnly_CopyTilemapAtOnce();
+CopyTilemapAtOnce();
+SetPalettes();
+ClearPalettes();
+GetMemSGBLayout();
+GetSGBLayout();
+SetHPPal();
+GetHPPal();

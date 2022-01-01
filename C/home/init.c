@@ -60,11 +60,12 @@ int Init(){
 	LDH_addr_A(rTAC);  // ldh [rTAC], a
 
 
-_wait:
+//_wait:
 	SET_PC(0x05F6U);
 	LDH_A_addr(rLY);  // ldh a, [rLY]
 	CP_A(LY_VBLANK + 1);  // cp LY_VBLANK + 1
 	IF_NZ goto _wait;  // jr nz, .wait
+_wait:  // moved to prevent hanging
 
 	XOR_A_A;  // xor a
 	LDH_addr_A(rLCDC);  // ldh [rLCDC], a

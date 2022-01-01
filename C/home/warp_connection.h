@@ -1,0 +1,13 @@
+HandleNewMap();
+HandleContinueMap();
+LoadMapTimeOfDay();
+LoadMapGraphics();
+LoadMapPalettes();
+RefreshMapSprites();
+CheckMovingOffEdgeOfMap();
+EnterMapConnection();
+CheckWarpTile();
+WarpCheck();
+GetDestinationWarpNumber();
+CopyWarpData();
+EnterMapWarp();

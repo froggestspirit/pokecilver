@@ -2,7 +2,8 @@
 #define MACROS_H
 #include "funcmap.h"
 
-#define SET_PC(x) gb.cpu_reg.pc = x;
+#define SET_PC(x)   do {gb.cpu_reg.pc = (uint16_t) (x);\
+                        gb.cpu_reg.pc = gb.cpu_reg.pc >= 0x4000 ? (gb.cpu_reg.pc & 0x3FFF) | 0x4000 : (gb.cpu_reg.pc & 0x3FFF);} while(0)
 #define INC_PC(x) gb.cpu_reg.pc += x;
 
 //---- Only use these for the goto commands ----
@@ -884,5 +885,7 @@
                                     AND_(x << (shift));} while(0)
 
 #include "macros/coords.h"
+#include "macros/scripts/audio.h"
+#include "macros/scripts/text.h"
 
 #endif

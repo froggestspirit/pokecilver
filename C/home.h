@@ -3,7 +3,7 @@
 //SECTION "NULL", ROM0
 //NULL::
 
-//#include "home/header.h"
+#include "home/header.h"
 
 //SECTION "Home", ROM0
 
@@ -19,15 +19,15 @@
 #include "home/decompress.h"
 #include "home/palettes.h"
 #include "home/gfx.h"
-//#include "home/text.h"
+#include "home/text.h"
 #include "home/video.h"
-//#include "home/map_objects.h"
+#include "home/map_objects.h"
 #include "home/sine.h"
 #include "home/movement.h"
-//#include "home/menu.h"
+#include "home/menu.h"
 #include "home/printer.h"
 #include "home/game_time.h"
-//#include "home/map.h"
+#include "home/map.h"
 #include "home/farcall.h"
 #include "home/predef.h"
 #include "home/window.h"
@@ -48,7 +48,7 @@
 #include "home/print_text.h"
 #include "home/queue_script.h"
 #include "home/compare.h"
-//#include "home/tilemap.h"
+#include "home/tilemap.h"
 #include "home/pokedex_flags.h"
 #include "home/names.h"
 #include "home/scrolling_menu.h"

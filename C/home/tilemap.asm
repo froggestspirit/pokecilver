@@ -108,19 +108,116 @@ CopyTilemapAtOnce::
 	ld c, LOW(rSTAT)
 
 .loop
-rept SCREEN_WIDTH / 2
 	pop de
 ; if in v/hblank, wait until not in v/hblank
-.loop\@
+.loop_u8221
 	ldh a, [c]
 	and b
-	jr nz, .loop\@
+	jr nz, .loop_u8221
 ; load vBGMap
 	ld [hl], e
 	inc l
 	ld [hl], d
 	inc l
-endr
+	pop de
+; if in v/hblank, wait until not in v/hblank
+.loop_u8222
+	ldh a, [c]
+	and b
+	jr nz, .loop_u8222
+; load vBGMap
+	ld [hl], e
+	inc l
+	ld [hl], d
+	inc l
+	pop de
+; if in v/hblank, wait until not in v/hblank
+.loop_u8223
+	ldh a, [c]
+	and b
+	jr nz, .loop_u8223
+; load vBGMap
+	ld [hl], e
+	inc l
+	ld [hl], d
+	inc l
+	pop de
+; if in v/hblank, wait until not in v/hblank
+.loop_u8224
+	ldh a, [c]
+	and b
+	jr nz, .loop_u8224
+; load vBGMap
+	ld [hl], e
+	inc l
+	ld [hl], d
+	inc l
+	pop de
+; if in v/hblank, wait until not in v/hblank
+.loop_u8225
+	ldh a, [c]
+	and b
+	jr nz, .loop_u8225
+; load vBGMap
+	ld [hl], e
+	inc l
+	ld [hl], d
+	inc l
+	pop de
+; if in v/hblank, wait until not in v/hblank
+.loop_u8226
+	ldh a, [c]
+	and b
+	jr nz, .loop_u8226
+; load vBGMap
+	ld [hl], e
+	inc l
+	ld [hl], d
+	inc l
+	pop de
+; if in v/hblank, wait until not in v/hblank
+.loop_u8227
+	ldh a, [c]
+	and b
+	jr nz, .loop_u8227
+; load vBGMap
+	ld [hl], e
+	inc l
+	ld [hl], d
+	inc l
+	pop de
+; if in v/hblank, wait until not in v/hblank
+.loop_u8228
+	ldh a, [c]
+	and b
+	jr nz, .loop_u8228
+; load vBGMap
+	ld [hl], e
+	inc l
+	ld [hl], d
+	inc l
+	pop de
+; if in v/hblank, wait until not in v/hblank
+.loop_u8229
+	ldh a, [c]
+	and b
+	jr nz, .loop_u8229
+; load vBGMap
+	ld [hl], e
+	inc l
+	ld [hl], d
+	inc l
+	pop de
+; if in v/hblank, wait until not in v/hblank
+.loop_u8230
+	ldh a, [c]
+	and b
+	jr nz, .loop_u8230
+; load vBGMap
+	ld [hl], e
+	inc l
+	ld [hl], d
+	inc l
 
 	ld de, BG_MAP_WIDTH - SCREEN_WIDTH
 	add hl, de

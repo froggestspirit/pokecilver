@@ -163,7 +163,6 @@ LoadMetatiles::
 	ld h, a
 
 	; copy the 4x4 metatile
-rept METATILE_WIDTH - 1
 rept METATILE_WIDTH
 	ld a, [hli]
 	ld [de], a
@@ -172,10 +171,31 @@ endr
 	ld a, e
 	add SURROUNDING_WIDTH - METATILE_WIDTH
 	ld e, a
-	jr nc, .next\@
+	jr nc, .next_u8129
 	inc d
-.next\@
+.next_u8129
+rept METATILE_WIDTH
+	ld a, [hli]
+	ld [de], a
+	inc de
 endr
+	ld a, e
+	add SURROUNDING_WIDTH - METATILE_WIDTH
+	ld e, a
+	jr nc, .next_u8134
+	inc d
+.next_u8134
+rept METATILE_WIDTH
+	ld a, [hli]
+	ld [de], a
+	inc de
+endr
+	ld a, e
+	add SURROUNDING_WIDTH - METATILE_WIDTH
+	ld e, a
+	jr nc, .next_u8139
+	inc d
+.next_u8139
 rept METATILE_WIDTH
 	ld a, [hli]
 	ld [de], a

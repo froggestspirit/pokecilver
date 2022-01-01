@@ -20,3 +20,5 @@ StdBattleTextbox();
 GetBattleAnimPointer();
 GetBattleAnimByte();
 PushLYOverrides();
+
+#include "battle_vars.h"

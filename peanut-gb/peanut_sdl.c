@@ -807,7 +807,6 @@ extern int (*func[ROM_SIZE])();
 void gb_step_cpu()
 {
 	uint8_t opcode, inst_cycles;
-
 	if(gb.cpu_reg.pc == 0x18) gb.gb_frame = 1;
 	if(gb.cpu_reg.pc < 0x8000){
 		if(func[gb.cpu_reg.pc + ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE)] != NULL){

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import time
-
+import os
 
 charMapFile = "charmap.asm"
 funcMapFile = "funcmap.h"
@@ -12,31 +12,41 @@ funcsKnown = []
 funcsKnownAddr = []
 charMap = []
 charMapEqu = []
+includes = []
+inMacro = False
 funcRet = False
 
 
 def convert_string(string):
     global charMap
     global charMapEqu
-    if string[0] != '"':
+    print(string)
+    strings = string.split('"')
+    if len(strings) < 2:
         return string
-    i = 0
-    parts = []
-    string = string.strip('"')
-    while i < len(string):
-        end = i + 1
-        if string[i] == "<":
-            end = string[i:].index(">") + i + 1
-        elif string[i] == "'" and len(string) > i + 1:
-            if string[i:end + 1] in charMap:
-                end += 1
-        parts.append(string[i:end])
-        i = end
-    conv = []
-    for part in parts:
-        id = charMap.index(part)
-        conv.append(charMapEqu[id])
-    return ", ".join(conv)
+    newStrings = []
+    for ind, string in enumerate(strings):
+        if not (ind & 1):
+            newStrings.append(string)
+            continue
+        i = 0
+        parts = []
+        string = string.strip('"')
+        while i < len(string):
+            end = i + 1
+            if string[i] == "<":
+                end = string[i:].index(">") + i + 1
+            elif string[i] == "'" and len(string) > i + 1:
+                if string[i:end + 1] in charMap:
+                    end += 1
+            parts.append(string[i:end])
+            i = end
+        conv = []
+        for part in parts:
+            id = charMap.index(part)
+            conv.append(charMapEqu[id])
+        newStrings.append(", ".join(conv))
+    return "".join(newStrings)
 
 
 def check_if_label(string, prefix):
@@ -57,9 +67,10 @@ def check_if_label(string, prefix):
 
 
 def parse_line(string):
+    global inMacro
     if not string:
         return "", ""
-    if string[0] != "\t":
+    if string[0] != "\t" or inMacro:
         return parse_line_label(string)
     comment = string.strip("\t")
     if comment:
@@ -77,22 +88,39 @@ def parse_line_label(string):
     global funcRet
     global funcsKnown
     global funcsKnownAddr
+    global includes
+    global inMacro
     comment = ""
     asm = ""
     string = string.split(";")
-    if string[0].find("::") != -1:
+    if inMacro:
+        if string[0] == "ENDM":
+            inMacro = False
+        return "", f"// {';'.join(string)}"
+    elif string[0].split(" ")[-1] == "MACRO":
+        inMacro = True
+        return "", f"// {';'.join(string)}"
+    if string[0].find(":") != -1 and string[0][0] != ".":
         prevFunc = currentFunc
-        currentFunc = string[0].split("::")[0]
+        parts = string[0].split(" ")
+        parts[0] = f"{parts[0].strip(':')}:"  # force one : at the end
+        currentFunc = parts[0][:-1]
         funcList.append(currentFunc)
         if prevFunc != "":
             if not funcRet:
                 asm = f"\treturn m{currentFunc};\n"
             asm = f"{asm}}}\n\n"
         asm = f"{asm}int {currentFunc}(){{"
+        if len(parts) > 1:
+            asm = f"{asm}\n//{' '.join(parts[1:])}"
     elif len(string[0]) and string[0][0] == ".":
-        localLabel = string[0][1:].replace(':', '').strip()
-        localLabelID = funcsKnown.index(f"{currentFunc}_{localLabel}")
-        asm = f"\n_{localLabel}:\n\tSET_PC({funcsKnownAddr[localLabelID]});"
+        parts = string[0][1:].split(" ")
+        parts[0] = f"{parts[0].strip(':')}:"  # force one : at the end
+        if len(parts) > 1:
+            parts[0] = f"{parts[0]}\n//"
+        localLabel = " ".join(parts)
+        localLabelID = funcsKnown.index(f"{currentFunc}_{localLabel.split(':')[0]}")
+        asm = f"\n_{localLabel}\n\tSET_PC({funcsKnownAddr[localLabelID]});"
     else:
         parts = list(i for i in string[0].split(" ") if i != "")
         if not parts:
@@ -103,6 +131,7 @@ def parse_line_label(string):
             asm = "}"
         elif parts[0] in ("INCLUDE","INCBIN"):
             asm = f"// {asm}{string[0]}"
+            includes.append(" ".join(parts[1:]))
         elif len(parts) > 1 and parts[1] == "EQU":
             asm = f"#define {parts[0]} {' '.join(parts[2:]).replace('$', '0x').replace('%', '0b')}"
         else:
@@ -112,6 +141,8 @@ def parse_line_label(string):
     funcRet = False
     if len(string) > 1:
         comment = f"  // {string[1]}"
+        if asm == "":
+            comment = f"// {string[1]}"
     return asm, comment
 
 
@@ -256,6 +287,8 @@ def parse_asm(asm):
         return f"LD{register[asm[0]]}(({(asm[1])} << 8) | {(asm[2])});"
     elif opcode in ("ln"):
         return f"LD{register[asm[0]]}(({(asm[1])} << 4) | {(asm[2])});"
+    elif opcode in ("print_name"):
+        return f"opcode({check_if_label(asm[0])});"
     else:
         print(f"{opcode} {asm}")
     return f"//{opcode} {asm}"
@@ -268,6 +301,7 @@ def main():
     global funcsKnownAddr
     global charMap
     global charMapEqu
+    global includes
     parser = argparse.ArgumentParser()
     parser.add_argument("fileName")
     args = parser.parse_args()
@@ -301,20 +335,23 @@ def main():
     if currentFunc != "":
         comment.append("")
         asm.append("}")
-
-    with open(args.fileName.replace(".asm", ".c"), "w") as cFile:
-        cFile.write('#include "../constants.h"\n\n')
-        for ln, line in enumerate(asm):
-            ln = f"{line}{comment[ln]}".strip(" ")
-            #print(ln)
-            cFile.write(f"{ln}\n")
+    if not os.path.exists(args.fileName.replace(".asm", ".c")):
+        with open(args.fileName.replace(".asm", ".c"), "w") as cFile:
+            cFile.write('#include "../constants.h"\n\n')
+            for ln, line in enumerate(asm):
+                ln = f"{line}{comment[ln]}".strip(" ")
+                cFile.write(f"{ln}\n")
 
     print(f"\n")
-    with open(args.fileName.replace(".asm", ".h"), "w") as cFile:
-        print(f"\t// {args.fileName.replace('.asm', '.c')}")
-        for f in funcList:
-            print(f"\tREDIRECT({f});")
-            cFile.write(f"{f}();\n")
+    if not os.path.exists(args.fileName.replace(".asm", ".h")):
+        with open(args.fileName.replace(".asm", ".h"), "w") as cFile:
+            for f in funcList:
+                cFile.write(f"{f}();\n")
+            for inc in includes:
+                cFile.write(f"//#include {inc}\n")
+    print(f"\t// {args.fileName.replace('.asm', '.c')}")
+    for f in funcList:
+        print(f"\tREDIRECT({f});")
     return 0
 
 
