@@ -46,11 +46,11 @@ int UserPartyAttr(){
 	PUSH_AF;  // push af
 	LDH_A_addr(hBattleTurn);  // ldh a, [hBattleTurn]
 	AND_A_A;  // and a
-	IF_NZ goto _ot;  // jr nz, .ot
+	IF_NZ goto ot;  // jr nz, .ot
 	POP_AF;  // pop af
 	JR(mBattlePartyAttr);  // jr BattlePartyAttr
 
-_ot:
+ot:
 	SET_PC(0x3B6EU);
 	POP_AF;  // pop af
 	JR(mOTPartyAttr);  // jr OTPartyAttr
@@ -61,11 +61,11 @@ int OpponentPartyAttr(){
 	PUSH_AF;  // push af
 	LDH_A_addr(hBattleTurn);  // ldh a, [hBattleTurn]
 	AND_A_A;  // and a
-	IF_Z goto _ot;  // jr z, .ot
+	IF_Z goto ot;  // jr z, .ot
 	POP_AF;  // pop af
 	JR(mBattlePartyAttr);  // jr BattlePartyAttr
 
-_ot:
+ot:
 	SET_PC(0x3B7AU);
 	POP_AF;  // pop af
 	JR(mOTPartyAttr);  // jr OTPartyAttr

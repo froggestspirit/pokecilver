@@ -1,3 +1,3 @@
-Random();
-BattleRandom();
-RandomRange();
+int Random();
+int BattleRandom();
+int RandomRange();

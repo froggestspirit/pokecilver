@@ -6,13 +6,13 @@ int Load2DMenuData(){
 	LD_HL(w2DMenuData);  // ld hl, w2DMenuData
 	LD_B(w2DMenuDataEnd - w2DMenuData);  // ld b, w2DMenuDataEnd - w2DMenuData
 
-_loop:
+loop:
 	SET_PC(0x1A53U);
 	LD_A_de;  // ld a, [de]
 	INC_DE;  // inc de
 	LD_hli_A;  // ld [hli], a
 	DEC_B;  // dec b
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 
 // ; Reset menu state
 	LD_A(0x1);  // ld a, $1
@@ -29,14 +29,14 @@ _loop:
 }
 
 int StaticMenuJoypad(){
-	CALLFAR(a_StaticMenuJoypad);  // callfar _StaticMenuJoypad
+	CALLFAR(av_StaticMenuJoypad);  // callfar _StaticMenuJoypad
 	CALL(mGetMenuJoypad);  // call GetMenuJoypad
 	RET;  // ret
 
 }
 
 int ScrollingMenuJoypad(){
-	CALLFAR(a_ScrollingMenuJoypad);  // callfar _ScrollingMenuJoypad
+	CALLFAR(av_ScrollingMenuJoypad);  // callfar _ScrollingMenuJoypad
 	CALL(mGetMenuJoypad);  // call GetMenuJoypad
 	RET;  // ret
 
@@ -80,21 +80,21 @@ int HideCursor(){
 }
 
 int PushWindow(){
-	CALLFAR(a_PushWindow);  // callfar _PushWindow
+	CALLFAR(av_PushWindow);  // callfar _PushWindow
 	RET;  // ret
 
 }
 
 int ExitMenu(){
 	PUSH_AF;  // push af
-	CALLFAR(a_ExitMenu);  // callfar _ExitMenu
+	CALLFAR(av_ExitMenu);  // callfar _ExitMenu
 	POP_AF;  // pop af
 	RET;  // ret
 
 }
 
 int InitVerticalMenuCursor(){
-	CALLFAR(a_InitVerticalMenuCursor);  // callfar _InitVerticalMenuCursor
+	CALLFAR(av_InitVerticalMenuCursor);  // callfar _InitVerticalMenuCursor
 	RET;  // ret
 
 }
@@ -116,26 +116,26 @@ int RestoreTileBackup(){
 	INC_C;  // inc c
 
 
-_row:
+row:
 	SET_PC(0x1AC6U);
 	PUSH_BC;  // push bc
 	PUSH_HL;  // push hl
 
 
-_col:
+col:
 	SET_PC(0x1AC8U);
 	LD_A_de;  // ld a, [de]
 	LD_hli_A;  // ld [hli], a
 	DEC_DE;  // dec de
 	DEC_C;  // dec c
-	IF_NZ goto _col;  // jr nz, .col
+	IF_NZ goto col;  // jr nz, .col
 
 	POP_HL;  // pop hl
 	LD_BC(SCREEN_WIDTH);  // ld bc, SCREEN_WIDTH
 	ADD_HL_BC;  // add hl, bc
 	POP_BC;  // pop bc
 	DEC_B;  // dec b
-	IF_NZ goto _row;  // jr nz, .row
+	IF_NZ goto row;  // jr nz, .row
 
 	RET;  // ret
 
@@ -145,13 +145,13 @@ int PopWindow(){
 	LD_B(wMenuHeaderEnd - wMenuHeader);  // ld b, wMenuHeaderEnd - wMenuHeader
 	LD_DE(wMenuHeader);  // ld de, wMenuHeader
 
-_loop:
+loop:
 	SET_PC(0x1ADDU);
 	LD_A_hld;  // ld a, [hld]
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
 	DEC_B;  // dec b
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 	RET;  // ret
 
 }
@@ -217,7 +217,7 @@ int PlaceVerticalMenuItems(){
 	INC_DE;  // inc de
 	LD_B_A;  // ld b, a
 
-_loop:
+loop:
 	SET_PC(0x1B2DU);
 	PUSH_BC;  // push bc
 	CALL(mPlaceString);  // call PlaceString
@@ -226,7 +226,7 @@ _loop:
 	ADD_HL_BC;  // add hl, bc
 	POP_BC;  // pop bc
 	DEC_B;  // dec b
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 
 	LD_A_addr(wMenuDataFlags);  // ld a, [wMenuDataFlags]
 	BIT_A(4);  // bit 4, a
@@ -261,20 +261,20 @@ int GetMenuTextStartCoord(){
 //  bit 6: if not set, leave extra room on top
 	LD_A_addr(wMenuDataFlags);  // ld a, [wMenuDataFlags]
 	BIT_A(6);  // bit 6, a
-	IF_NZ goto _bit_6_set;  // jr nz, .bit_6_set
+	IF_NZ goto bit_6_set;  // jr nz, .bit_6_set
 	INC_B;  // inc b
 
 
-_bit_6_set:
+bit_6_set:
 	SET_PC(0x1B69U);
 //  bit 7: if set, leave extra room on the left
 	LD_A_addr(wMenuDataFlags);  // ld a, [wMenuDataFlags]
 	BIT_A(7);  // bit 7, a
-	IF_Z goto _bit_7_clear;  // jr z, .bit_7_clear
+	IF_Z goto bit_7_clear;  // jr z, .bit_7_clear
 	INC_C;  // inc c
 
 
-_bit_7_clear:
+bit_7_clear:
 	SET_PC(0x1B71U);
 	RET;  // ret
 
@@ -376,7 +376,7 @@ int LoadMenuTextbox(){
 	RET;  // ret
 
 
-_MenuHeader:
+MenuHeader:
 	SET_PC(0x1BCFU);
 	//db ['MENU_BACKUP_TILES'];  // db MENU_BACKUP_TILES ; flags
 	//menu_coords ['0', '12', 'SCREEN_WIDTH - 1', 'SCREEN_HEIGHT - 1'];  // menu_coords 0, 12, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
@@ -399,7 +399,7 @@ int LoadStandardMenuHeader(){
 	RET;  // ret
 
 
-_MenuHeader:
+MenuHeader:
 	SET_PC(0x1BE5U);
 	//db ['MENU_BACKUP_TILES'];  // db MENU_BACKUP_TILES ; flags
 	//menu_coords ['0', '0', 'SCREEN_WIDTH - 1', 'SCREEN_HEIGHT - 1'];  // menu_coords 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1
@@ -425,20 +425,20 @@ int VerticalMenu(){
 	CALL(mCopyMenuData);  // call CopyMenuData
 	LD_A_addr(wMenuDataFlags);  // ld a, [wMenuDataFlags]
 	BIT_A(7);  // bit 7, a
-	IF_Z goto _cancel;  // jr z, .cancel
+	IF_Z goto cancel;  // jr z, .cancel
 	CALL(mInitVerticalMenuCursor);  // call InitVerticalMenuCursor
 	CALL(mStaticMenuJoypad);  // call StaticMenuJoypad
 	CALL(mMenuClickSound);  // call MenuClickSound
 	BIT_A(1);  // bit 1, a
-	IF_Z goto _okay;  // jr z, .okay
+	IF_Z goto okay;  // jr z, .okay
 
-_cancel:
+cancel:
 	SET_PC(0x1C17U);
 	SCF;  // scf
 	RET;  // ret
 
 
-_okay:
+okay:
 	SET_PC(0x1C19U);
 	AND_A_A;  // and a
 	RET;  // ret
@@ -482,7 +482,7 @@ int YesNoBox(){
 }
 
 int PlaceYesNoBox(){
-	JR(m_YesNoBox);  // jr _YesNoBox
+	JR(mv_YesNoBox);  // jr _YesNoBox
 
 }
 
@@ -493,7 +493,7 @@ int PlaceGenericTwoOptionBox(){
 
 }
 
-int _YesNoBox(){
+int v_YesNoBox(){
 //  Return nc (yes) or c (no).
 	PUSH_BC;  // push bc
 	LD_HL(mYesNoMenuHeader);  // ld hl, YesNoMenuHeader
@@ -520,15 +520,15 @@ int InterpretTwoOptionMenu(){
 	CALL(mDelayFrames);  // call DelayFrames
 	CALL(mCloseWindow);  // call CloseWindow
 	POP_AF;  // pop af
-	IF_C goto _no;  // jr c, .no
+	IF_C goto no;  // jr c, .no
 	LD_A_addr(wMenuCursorY);  // ld a, [wMenuCursorY]
 	CP_A(2);  // cp 2 ; no
-	IF_Z goto _no;  // jr z, .no
+	IF_Z goto no;  // jr z, .no
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_no:
+no:
 	SET_PC(0x1C7EU);
 	LD_A(2);  // ld a, 2
 	LD_addr_A(wMenuCursorY);  // ld [wMenuCursorY], a
@@ -544,7 +544,7 @@ int YesNoMenuHeader(){
 	//db ['1'];  // db 1 ; default option
 
 
-_MenuData:
+MenuData:
 	SET_PC(0x1C8DU);
 	//db ['STATICMENU_CURSOR | STATICMENU_NO_TOP_SPACING'];  // db STATICMENU_CURSOR | STATICMENU_NO_TOP_SPACING ; flags
 	//db ['2'];  // db 2
@@ -555,13 +555,13 @@ _MenuData:
 }
 
 int OffsetMenuHeader(){
-	CALL(m_OffsetMenuHeader);  // call _OffsetMenuHeader
+	CALL(mv_OffsetMenuHeader);  // call _OffsetMenuHeader
 	CALL(mPushWindow);  // call PushWindow
 	RET;  // ret
 
 }
 
-int _OffsetMenuHeader(){
+int v_OffsetMenuHeader(){
 	PUSH_DE;  // push de
 	CALL(mCopyMenuHeader);  // call CopyMenuHeader
 	POP_DE;  // pop de
@@ -658,20 +658,20 @@ int GetMenuIndexSet(){
 	LD_L_A;  // ld l, a
 	LD_A_addr(wWhichIndexSet);  // ld a, [wWhichIndexSet]
 	AND_A_A;  // and a
-	IF_Z goto _skip;  // jr z, .skip
+	IF_Z goto skip;  // jr z, .skip
 	LD_B_A;  // ld b, a
 	LD_C(-1);  // ld c, -1
 
-_loop:
+loop:
 	SET_PC(0x1D34U);
 	LD_A_hli;  // ld a, [hli]
 	CP_A_C;  // cp c
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 	DEC_B;  // dec b
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 
 
-_skip:
+skip:
 	SET_PC(0x1D3BU);
 	LD_D_H;  // ld d, h
 	LD_E_L;  // ld e, l
@@ -686,7 +686,7 @@ int RunMenuItemPrintingFunction(){
 	LD_BC(2 * SCREEN_WIDTH + 2);  // ld bc, 2 * SCREEN_WIDTH + 2
 	ADD_HL_BC;  // add hl, bc
 
-_loop:
+loop:
 	SET_PC(0x1D49U);
 	INC_DE;  // inc de
 	LD_A_de;  // ld a, [de]
@@ -703,10 +703,10 @@ _loop:
 	LD_DE(2 * SCREEN_WIDTH);  // ld de, 2 * SCREEN_WIDTH
 	ADD_HL_DE;  // add hl, de
 	POP_DE;  // pop de
-	goto _loop;  // jr .loop
+	goto loop;  // jr .loop
 
 
-__hl_:
+_hl_:
 	SET_PC(0x1D63U);
 	LD_A_hli;  // ld a, [hli]
 	LD_H_hl;  // ld h, [hl]
@@ -720,20 +720,20 @@ int InitMenuCursorAndButtonPermissions(){
 	LD_HL(wMenuJoypadFilter);  // ld hl, wMenuJoypadFilter
 	LD_A_addr(wMenuDataFlags);  // ld a, [wMenuDataFlags]
 	BIT_A(3);  // bit 3, a
-	IF_Z goto _disallow_select;  // jr z, .disallow_select
+	IF_Z goto disallow_select;  // jr z, .disallow_select
 	SET_hl(START_F);  // set START_F, [hl]
 
 
-_disallow_select:
+disallow_select:
 	SET_PC(0x1D76U);
 	LD_A_addr(wMenuDataFlags);  // ld a, [wMenuDataFlags]
 	BIT_A(2);  // bit 2, a
-	IF_Z goto _disallow_left_right;  // jr z, .disallow_left_right
+	IF_Z goto disallow_left_right;  // jr z, .disallow_left_right
 	SET_hl(D_LEFT_F);  // set D_LEFT_F, [hl]
 	SET_hl(D_RIGHT_F);  // set D_RIGHT_F, [hl]
 
 
-_disallow_left_right:
+disallow_left_right:
 	SET_PC(0x1D81U);
 	RET;  // ret
 
@@ -757,41 +757,41 @@ int GetStaticMenuJoypad(){
 
 int ContinueGettingMenuJoypad(){
 	BIT_A(A_BUTTON_F);  // bit A_BUTTON_F, a
-	IF_NZ goto _a_button;  // jr nz, .a_button
+	IF_NZ goto a_button;  // jr nz, .a_button
 	BIT_A(B_BUTTON_F);  // bit B_BUTTON_F, a
-	IF_NZ goto _b_start;  // jr nz, .b_start
+	IF_NZ goto b_start;  // jr nz, .b_start
 	BIT_A(START_F);  // bit START_F, a
-	IF_NZ goto _b_start;  // jr nz, .b_start
+	IF_NZ goto b_start;  // jr nz, .b_start
 	BIT_A(D_RIGHT_F);  // bit D_RIGHT_F, a
-	IF_NZ goto _d_right;  // jr nz, .d_right
+	IF_NZ goto d_right;  // jr nz, .d_right
 	BIT_A(D_LEFT_F);  // bit D_LEFT_F, a
-	IF_NZ goto _d_left;  // jr nz, .d_left
+	IF_NZ goto d_left;  // jr nz, .d_left
 	XOR_A_A;  // xor a
 	LD_addr_A(wMenuJoypad);  // ld [wMenuJoypad], a
-	goto _done;  // jr .done
+	goto done;  // jr .done
 
 
-_d_right:
+d_right:
 	SET_PC(0x1DACU);
 	LD_A(D_RIGHT);  // ld a, D_RIGHT
 	LD_addr_A(wMenuJoypad);  // ld [wMenuJoypad], a
-	goto _done;  // jr .done
+	goto done;  // jr .done
 
 
-_d_left:
+d_left:
 	SET_PC(0x1DB3U);
 	LD_A(D_LEFT);  // ld a, D_LEFT
 	LD_addr_A(wMenuJoypad);  // ld [wMenuJoypad], a
-	goto _done;  // jr .done
+	goto done;  // jr .done
 
 
-_a_button:
+a_button:
 	SET_PC(0x1DBAU);
 	LD_A(A_BUTTON);  // ld a, A_BUTTON
 	LD_addr_A(wMenuJoypad);  // ld [wMenuJoypad], a
 
 
-_done:
+done:
 	SET_PC(0x1DBFU);
 	CALL(mGetMenuIndexSet);  // call GetMenuIndexSet
 	LD_A_addr(wMenuCursorY);  // ld a, [wMenuCursorY]
@@ -806,7 +806,7 @@ _done:
 	RET;  // ret
 
 
-_b_start:
+b_start:
 	SET_PC(0x1DD5U);
 	LD_A(B_BUTTON);  // ld a, B_BUTTON
 	LD_addr_A(wMenuJoypad);  // ld [wMenuJoypad], a
@@ -911,7 +911,7 @@ int ClearWindowData(){
 	RET;  // ret
 
 
-_bytefill:
+bytefill:
 	SET_PC(0x1E55U);
 	LD_BC(0x10);  // ld bc, $10
 	XOR_A_A;  // xor a
@@ -923,13 +923,13 @@ _bytefill:
 int MenuClickSound(){
 	PUSH_AF;  // push af
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
-	IF_Z goto _nosound;  // jr z, .nosound
+	IF_Z goto nosound;  // jr z, .nosound
 	LD_HL(wMenuFlags);  // ld hl, wMenuFlags
 	BIT_A(3);  // bit 3, a
-	IF_NZ goto _nosound;  // jr nz, .nosound
+	IF_NZ goto nosound;  // jr nz, .nosound
 	CALL(mPlayClickSFX);  // call PlayClickSFX
 
-_nosound:
+nosound:
 	SET_PC(0x1E6CU);
 	POP_AF;  // pop af
 	RET;  // ret
@@ -968,14 +968,14 @@ int Place2DMenuItemName(){
 
 }
 
-int _2DMenu(){
+int v_2DMenu(){
 	CALL(mCopyMenuData);  // call CopyMenuData
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	LD_addr_A(wMenuData_2DMenuItemStringsBank);  // ld [wMenuData_2DMenuItemStringsBank], a
 	PUSH_AF;  // push af
-	LD_A(BANK(a_2DMenu_));  // ld a, BANK(_2DMenu_)
+	LD_A(BANK(av_2DMenu_));  // ld a, BANK(_2DMenu_)
 	RST(mBankswitch);  // rst Bankswitch
-	CALL(m_2DMenu_);  // call _2DMenu_
+	CALL(mv_2DMenu_);  // call _2DMenu_
 	POP_BC;  // pop bc
 	LD_A_B;  // ld a, b
 	RST(mBankswitch);  // rst Bankswitch

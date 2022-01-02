@@ -10,10 +10,10 @@ int IsInJohto(){
 	CALL(mGetWorldMapLocation);  // call GetWorldMapLocation
 
 	CP_A(LANDMARK_FAST_SHIP);  // cp LANDMARK_FAST_SHIP
-	IF_Z goto _Johto;  // jr z, .Johto
+	IF_Z goto Johto;  // jr z, .Johto
 
 	CP_A(LANDMARK_SPECIAL);  // cp LANDMARK_SPECIAL
-	IF_NZ goto _CheckRegion;  // jr nz, .CheckRegion
+	IF_NZ goto CheckRegion;  // jr nz, .CheckRegion
 
 	LD_A_addr(wBackupMapGroup);  // ld a, [wBackupMapGroup]
 	LD_B_A;  // ld b, a
@@ -22,19 +22,19 @@ int IsInJohto(){
 	CALL(mGetWorldMapLocation);  // call GetWorldMapLocation
 
 
-_CheckRegion:
+CheckRegion:
 	SET_PC(0x2FF3U);
 	CP_A(KANTO_LANDMARK);  // cp KANTO_LANDMARK
-	IF_NC goto _Kanto;  // jr nc, .Kanto
+	IF_NC goto Kanto;  // jr nc, .Kanto
 
 
-_Johto:
+Johto:
 	SET_PC(0x2FF7U);
 	XOR_A_A;  // xor a ; JOHTO_REGION
 	RET;  // ret
 
 
-_Kanto:
+Kanto:
 	SET_PC(0x2FF9U);
 	LD_A(KANTO_REGION);  // ld a, KANTO_REGION
 	RET;  // ret
@@ -54,7 +54,7 @@ int SetXYCompareFlags(){
 	LD_A_addr(wXYComparePointer + 1);  // ld a, [wXYComparePointer + 1]
 	LD_H_A;  // ld h, a
 	OR_A_L;  // or l
-	IF_Z goto _quit;  // jr z, .quit
+	IF_Z goto quit;  // jr z, .quit
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	CALL(mSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
@@ -67,19 +67,19 @@ int SetXYCompareFlags(){
 	PUSH_BC;  // push bc
 	LD_C(0);  // ld c, 0
 
-_loop:
+loop:
 	SET_PC(0x3025U);
 	LD_A_hl;  // ld a, [hl]
 	CP_A(-1);  // cp -1 ; end?
-	IF_Z goto _done;  // jr z, .done
+	IF_Z goto done;  // jr z, .done
 	PUSH_HL;  // push hl
 	LD_A_D;  // ld a, d
 	CP_A_hl;  // cp [hl]
-	IF_NZ goto _next;  // jr nz, .next
+	IF_NZ goto next;  // jr nz, .next
 	INC_HL;  // inc hl
 	LD_A_E;  // ld a, e
 	CP_A_hl;  // cp [hl]
-	IF_NZ goto _next;  // jr nz, .next
+	IF_NZ goto next;  // jr nz, .next
 	LD_HL(wXYCompareFlags);  // ld hl, wXYCompareFlags
 	LD_B(SET_FLAG);  // ld b, SET_FLAG
 	PUSH_DE;  // push de
@@ -89,7 +89,7 @@ _loop:
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
 
-_next:
+next:
 	SET_PC(0x3044U);
 	POP_HL;  // pop hl
 	INC_HL;  // inc hl
@@ -98,15 +98,15 @@ _next:
 	INC_C;  // inc c
 	LD_A_C;  // ld a, c
 	CP_A(MAX_XYCOMPARE_LENGTH);  // cp MAX_XYCOMPARE_LENGTH
-	IF_C goto _loop;  // jr c, .loop
+	IF_C goto loop;  // jr c, .loop
 
-_done:
+done:
 	SET_PC(0x304EU);
 	POP_BC;  // pop bc
 	POP_AF;  // pop af
 	RST(mBankswitch);  // rst Bankswitch
 
-_quit:
+quit:
 	SET_PC(0x3051U);
 	POP_HL;  // pop hl
 	RET;  // ret

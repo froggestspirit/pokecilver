@@ -1,1 +1,1 @@
-HandleStoneQueue();
+int HandleStoneQueue();

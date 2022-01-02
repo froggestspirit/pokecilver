@@ -2,12 +2,12 @@
 
 //  Register aliases
 
-int _hl_(){
+int v_hl_(){
 	JP_hl;  // jp hl
 
 }
 
-int _de_(){
+int v_de_(){
 	PUSH_DE;  // push de
 	RET;  // ret
 

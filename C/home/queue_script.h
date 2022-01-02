@@ -1,2 +1,2 @@
-QueueScript();
-FarQueueScript();
+int QueueScript();
+int FarQueueScript();

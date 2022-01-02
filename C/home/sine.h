@@ -1,2 +1,2 @@
-Cosine();
-Sine();
+int Cosine();
+int Sine();

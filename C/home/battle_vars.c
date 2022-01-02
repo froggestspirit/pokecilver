@@ -27,11 +27,11 @@ int GetBattleVarAddr(){
 //  This lets battle variable calls be side-neutral.
 	LDH_A_addr(hBattleTurn);  // ldh a, [hBattleTurn]
 	AND_A_A;  // and a
-	IF_Z goto _getvar;  // jr z, .getvar
+	IF_Z goto getvar;  // jr z, .getvar
 	INC_HL;  // inc hl
 
 
-_getvar:
+getvar:
 	SET_PC(0x3C19U);
 //  var id
 	LD_A_hl;  // ld a, [hl]
@@ -81,87 +81,87 @@ int BattleVarPairs(){
 
 //                    player                 enemy
 
-_Substatus1:
+Substatus1:
 //     db PLAYER_SUBSTATUS_1,    ENEMY_SUBSTATUS_1
 	SET_PC(0x3C52U);
 
-_Substatus1Opp:
+Substatus1Opp:
 //  db ENEMY_SUBSTATUS_1,     PLAYER_SUBSTATUS_1
 	SET_PC(0x3C54U);
 
-_Substatus2:
+Substatus2:
 //     db PLAYER_SUBSTATUS_2,    ENEMY_SUBSTATUS_2
 	SET_PC(0x3C56U);
 
-_Substatus2Opp:
+Substatus2Opp:
 //  db ENEMY_SUBSTATUS_2,     PLAYER_SUBSTATUS_2
 	SET_PC(0x3C58U);
 
-_Substatus3:
+Substatus3:
 //     db PLAYER_SUBSTATUS_3,    ENEMY_SUBSTATUS_3
 	SET_PC(0x3C5AU);
 
-_Substatus3Opp:
+Substatus3Opp:
 //  db ENEMY_SUBSTATUS_3,     PLAYER_SUBSTATUS_3
 	SET_PC(0x3C5CU);
 
-_Substatus4:
+Substatus4:
 //     db PLAYER_SUBSTATUS_4,    ENEMY_SUBSTATUS_4
 	SET_PC(0x3C5EU);
 
-_Substatus4Opp:
+Substatus4Opp:
 //  db ENEMY_SUBSTATUS_4,     PLAYER_SUBSTATUS_4
 	SET_PC(0x3C60U);
 
-_Substatus5:
+Substatus5:
 //     db PLAYER_SUBSTATUS_5,    ENEMY_SUBSTATUS_5
 	SET_PC(0x3C62U);
 
-_Substatus5Opp:
+Substatus5Opp:
 //  db ENEMY_SUBSTATUS_5,     PLAYER_SUBSTATUS_5
 	SET_PC(0x3C64U);
 
-_Status:
+Status:
 //         db PLAYER_STATUS,         ENEMY_STATUS
 	SET_PC(0x3C66U);
 
-_StatusOpp:
+StatusOpp:
 //      db ENEMY_STATUS,          PLAYER_STATUS
 	SET_PC(0x3C68U);
 
-_MoveAnim:
+MoveAnim:
 //       db PLAYER_MOVE_ANIMATION, ENEMY_MOVE_ANIMATION
 	SET_PC(0x3C6AU);
 
-_MoveEffect:
+MoveEffect:
 //     db PLAYER_MOVE_EFFECT,    ENEMY_MOVE_EFFECT
 	SET_PC(0x3C6CU);
 
-_MovePower:
+MovePower:
 //      db PLAYER_MOVE_POWER,     ENEMY_MOVE_POWER
 	SET_PC(0x3C6EU);
 
-_MoveType:
+MoveType:
 //       db PLAYER_MOVE_TYPE,      ENEMY_MOVE_TYPE
 	SET_PC(0x3C70U);
 
-_CurMove:
+CurMove:
 //        db PLAYER_CUR_MOVE,       ENEMY_CUR_MOVE
 	SET_PC(0x3C72U);
 
-_LastCounter:
+LastCounter:
 //    db PLAYER_COUNTER_MOVE,   ENEMY_COUNTER_MOVE
 	SET_PC(0x3C74U);
 
-_LastCounterOpp:
+LastCounterOpp:
 // db ENEMY_COUNTER_MOVE,    PLAYER_COUNTER_MOVE
 	SET_PC(0x3C76U);
 
-_LastMove:
+LastMove:
 //       db PLAYER_LAST_MOVE,      ENEMY_LAST_MOVE
 	SET_PC(0x3C78U);
 
-_LastMoveOpp:
+LastMoveOpp:
 //    db ENEMY_LAST_MOVE,       PLAYER_LAST_MOVE
 	SET_PC(0x3C7AU);
 

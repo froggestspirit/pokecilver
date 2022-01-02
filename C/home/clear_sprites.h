@@ -1,2 +1,2 @@
-ClearSprites();
-HideSprites();
+int ClearSprites();
+int HideSprites();

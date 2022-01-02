@@ -75,7 +75,7 @@ int Decompress(){
 	LD_addr_A(wLZAddress + 1);  // ld [wLZAddress + 1], a
 
 
-_Main:
+Main:
 	SET_PC(0x0B06U);
 	LD_A_hl;  // ld a, [hl]
 	CP_A(LZ_END);  // cp LZ_END
@@ -84,7 +84,7 @@ _Main:
 	AND_A(LZ_CMD);  // and LZ_CMD
 
 	CP_A(LZ_LONG);  // cp LZ_LONG
-	IF_NZ goto _short;  // jr nz, .short
+	IF_NZ goto l_short;  // jr nz, .short
 
 //  The count is now 10 bits.
 
@@ -107,10 +107,10 @@ _Main:
 
 // ; read at least 1 byte
 	INC_BC;  // inc bc
-	goto _command;  // jr .command
+	goto command;  // jr .command
 
 
-_short:
+l_short:
 	SET_PC(0x0B20U);
 	PUSH_AF;  // push af
 
@@ -123,7 +123,7 @@ _short:
 	INC_C;  // inc c
 
 
-_command:
+command:
 	SET_PC(0x0B28U);
 // ; Increment loop counts.
 // ; We bail the moment they hit 0.
@@ -133,116 +133,116 @@ _command:
 	POP_AF;  // pop af
 
 	BIT_A(LZ_RW);  // bit LZ_RW, a
-	IF_NZ goto _rewrite;  // jr nz, .rewrite
+	IF_NZ goto rewrite;  // jr nz, .rewrite
 
 	CP_A(LZ_ITERATE);  // cp LZ_ITERATE
-	IF_Z goto _Iter;  // jr z, .Iter
+	IF_Z goto Iter;  // jr z, .Iter
 	CP_A(LZ_ALTERNATE);  // cp LZ_ALTERNATE
-	IF_Z goto _Alt;  // jr z, .Alt
+	IF_Z goto Alt;  // jr z, .Alt
 	CP_A(LZ_ZERO);  // cp LZ_ZERO
-	IF_Z goto _Zero;  // jr z, .Zero
+	IF_Z goto Zero;  // jr z, .Zero
 
 //  Literal
 //  Read literal data for bc bytes.
 
-_lloop:
+lloop:
 	SET_PC(0x0B3BU);
 	DEC_C;  // dec c
-	IF_NZ goto _lnext;  // jr nz, .lnext
+	IF_NZ goto lnext;  // jr nz, .lnext
 	DEC_B;  // dec b
 	JP_Z (mDecompress_Main);  // jp z, .Main
 
 
-_lnext:
+lnext:
 	SET_PC(0x0B42U);
 	LD_A_hli;  // ld a, [hli]
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
-	goto _lloop;  // jr .lloop
+	goto lloop;  // jr .lloop
 
 
-_Iter:
+Iter:
 	SET_PC(0x0B47U);
 //  Write the same byte for bc bytes.
 	LD_A_hli;  // ld a, [hli]
 
 
-_iloop:
+iloop:
 	SET_PC(0x0B48U);
 	DEC_C;  // dec c
-	IF_NZ goto _inext;  // jr nz, .inext
+	IF_NZ goto inext;  // jr nz, .inext
 	DEC_B;  // dec b
 	JP_Z (mDecompress_Main);  // jp z, .Main
 
 
-_inext:
+inext:
 	SET_PC(0x0B4FU);
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
-	goto _iloop;  // jr .iloop
+	goto iloop;  // jr .iloop
 
 
-_Alt:
+Alt:
 	SET_PC(0x0B53U);
 //  Alternate two bytes for bc bytes.
 	DEC_C;  // dec c
-	IF_NZ goto _anext1;  // jr nz, .anext1
+	IF_NZ goto anext1;  // jr nz, .anext1
 	DEC_B;  // dec b
 	JP_Z (mDecompress_adone1);  // jp z, .adone1
 
-_anext1:
+anext1:
 	SET_PC(0x0B5AU);
 	LD_A_hli;  // ld a, [hli]
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
 
 	DEC_C;  // dec c
-	IF_NZ goto _anext2;  // jr nz, .anext2
+	IF_NZ goto anext2;  // jr nz, .anext2
 	DEC_B;  // dec b
 	JP_Z (mDecompress_adone2);  // jp z, .adone2
 
-_anext2:
+anext2:
 	SET_PC(0x0B64U);
 	LD_A_hld;  // ld a, [hld]
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
 
-	goto _Alt;  // jr .Alt
+	goto Alt;  // jr .Alt
 
 // ; Skip past the bytes we were alternating.
 
-_adone1:
+adone1:
 	SET_PC(0x0B69U);
 	INC_HL;  // inc hl
 
-_adone2:
+adone2:
 	SET_PC(0x0B6AU);
 	INC_HL;  // inc hl
-	goto _Main;  // jr .Main
+	goto Main;  // jr .Main
 
 
-_Zero:
+Zero:
 	SET_PC(0x0B6DU);
 //  Write 0 for bc bytes.
 	XOR_A_A;  // xor a
 
 
-_zloop:
+zloop:
 	SET_PC(0x0B6EU);
 	DEC_C;  // dec c
-	IF_NZ goto _znext;  // jr nz, .znext
+	IF_NZ goto znext;  // jr nz, .znext
 	DEC_B;  // dec b
 	JP_Z (mDecompress_Main);  // jp z, .Main
 
 
-_znext:
+znext:
 	SET_PC(0x0B75U);
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
-	goto _zloop;  // jr .zloop
+	goto zloop;  // jr .zloop
 
 
-_rewrite:
+rewrite:
 	SET_PC(0x0B79U);
 //  Repeat decompressed data from output.
 	PUSH_HL;  // push hl
@@ -250,7 +250,7 @@ _rewrite:
 
 	LD_A_hli;  // ld a, [hli]
 	BIT_A(7);  // bit 7, a ; sign
-	IF_Z goto _positive;  // jr z, .positive
+	IF_Z goto positive;  // jr z, .positive
 
 //  negative
 // ; hl = de + -a
@@ -261,10 +261,10 @@ _rewrite:
 	LD_A(-1);  // ld a, -1
 	ADC_A_D;  // adc d
 	LD_H_A;  // ld h, a
-	goto _ok;  // jr .ok
+	goto ok;  // jr .ok
 
 
-_positive:
+positive:
 	SET_PC(0x0B8BU);
 //  Positive offsets are two bytes.
 	LD_L_hl;  // ld l, [hl]
@@ -278,16 +278,16 @@ _positive:
 	LD_H_A;  // ld h, a
 
 
-_ok:
+ok:
 	SET_PC(0x0B97U);
 	POP_AF;  // pop af
 
 	CP_A(LZ_REPEAT);  // cp LZ_REPEAT
-	IF_Z goto _Repeat;  // jr z, .Repeat
+	IF_Z goto Repeat;  // jr z, .Repeat
 	CP_A(LZ_FLIP);  // cp LZ_FLIP
-	IF_Z goto _Flip;  // jr z, .Flip
+	IF_Z goto Flip;  // jr z, .Flip
 	CP_A(LZ_REVERSE);  // cp LZ_REVERSE
-	IF_Z goto _Reverse;  // jr z, .Reverse
+	IF_Z goto Reverse;  // jr z, .Reverse
 
 //  Since LZ_LONG is command 7,
 //  only commands 0-6 are passed in.
@@ -299,81 +299,81 @@ _ok:
 //  For now, it defaults to LZ_REPEAT.
 
 
-_Repeat:
+Repeat:
 	SET_PC(0x0BA4U);
 //  Copy decompressed data for bc bytes.
 	DEC_C;  // dec c
-	IF_NZ goto _rnext;  // jr nz, .rnext
+	IF_NZ goto rnext;  // jr nz, .rnext
 	DEC_B;  // dec b
-	IF_Z goto _donerw;  // jr z, .donerw
+	IF_Z goto donerw;  // jr z, .donerw
 
 
-_rnext:
+rnext:
 	SET_PC(0x0BAAU);
 	LD_A_hli;  // ld a, [hli]
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
-	goto _Repeat;  // jr .Repeat
+	goto Repeat;  // jr .Repeat
 
 
-_Flip:
+Flip:
 	SET_PC(0x0BAFU);
 //  Copy bitflipped decompressed data for bc bytes.
 	DEC_C;  // dec c
-	IF_NZ goto _fnext;  // jr nz, .fnext
+	IF_NZ goto fnext;  // jr nz, .fnext
 	DEC_B;  // dec b
 	JP_Z (mDecompress_donerw);  // jp z, .donerw
 
 
-_fnext:
+fnext:
 	SET_PC(0x0BB6U);
 	LD_A_hli;  // ld a, [hli]
 	PUSH_BC;  // push bc
 	LD_BC(8);  // lb bc, 0, 8
 
 
-_floop:
+floop:
 	SET_PC(0x0BBBU);
 	RRA;  // rra
 	RL_B;  // rl b
 	DEC_C;  // dec c
-	IF_NZ goto _floop;  // jr nz, .floop
+	IF_NZ goto floop;  // jr nz, .floop
 
 	LD_A_B;  // ld a, b
 	POP_BC;  // pop bc
 
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
-	goto _Flip;  // jr .Flip
+	goto Flip;  // jr .Flip
 
 
-_Reverse:
+Reverse:
 	SET_PC(0x0BC7U);
 //  Copy reversed decompressed data for bc bytes.
 	DEC_C;  // dec c
-	IF_NZ goto _rvnext;  // jr nz, .rvnext
+	IF_NZ goto rvnext;  // jr nz, .rvnext
 
 	DEC_B;  // dec b
 	JP_Z (mDecompress_donerw);  // jp z, .donerw
 
 
-_rvnext:
+rvnext:
 	SET_PC(0x0BCEU);
 	LD_A_hld;  // ld a, [hld]
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
-	goto _Reverse;  // jr .Reverse
+	goto Reverse;  // jr .Reverse
 
 
-_donerw:
+donerw:
 	SET_PC(0x0BD3U);
 	POP_HL;  // pop hl
 
 	BIT_hl(7);  // bit 7, [hl]
-	IF_NZ goto _next;  // jr nz, .next
+	IF_NZ goto next;  // jr nz, .next
 	INC_HL;  // inc hl ; positive offset is two bytes
 
-_next:
+next:
 	SET_PC(0x0BD9U);
 	INC_HL;  // inc hl
 	JP(mDecompress_Main);  // jp .Main

@@ -29,7 +29,7 @@ int IHandler(){
 	LD_HL(0xFF44);  // ld hl, $FF44
 	LD_A(144);  // ld a, 144
 
-_wait:
+wait:
 	SET_PC(0x006AU);
 	CP_A_hl;  // cp [hl]
 	IF_NC JR(mIHandler_wait);  // jr nc, .wait
@@ -44,5 +44,5 @@ _wait:
 
 int Start(){
 	NOP;  // nop
-	JP(m_Start);  // jp _Start
+	JP(mv_Start);  // jp _Start
 }

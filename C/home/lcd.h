@@ -1,3 +1,3 @@
-LCD();
-DisableLCD();
-EnableLCD();
+int LCD();
+int DisableLCD();
+int EnableLCD();

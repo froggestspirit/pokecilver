@@ -16,6 +16,9 @@ includes = []
 inMacro = False
 funcRet = False
 
+# if local labels are named these, prepend them with "l_"
+labelReserved = ("short", "auto", "break", "return")
+
 
 def convert_string(string):
     global charMap
@@ -90,6 +93,7 @@ def parse_line_label(string):
     global funcsKnownAddr
     global includes
     global inMacro
+    global labelReserved
     comment = ""
     asm = ""
     string = string.split(";")
@@ -104,6 +108,8 @@ def parse_line_label(string):
         prevFunc = currentFunc
         parts = string[0].split(" ")
         parts[0] = f"{parts[0].strip(':')}:"  # force one : at the end
+        if parts[0][0] == "_":
+            parts[0] = f"v{parts[0]}"  # Prefix functions beginning with an underscore
         currentFunc = parts[0][:-1]
         funcList.append(currentFunc)
         if prevFunc != "":
@@ -120,7 +126,9 @@ def parse_line_label(string):
             parts[0] = f"{parts[0]}\n//"
         localLabel = " ".join(parts)
         localLabelID = funcsKnown.index(f"{currentFunc}_{localLabel.split(':')[0]}")
-        asm = f"\n_{localLabel}\n\tSET_PC({funcsKnownAddr[localLabelID]});"
+        if localLabel in labelReserved:
+            localLabel = f"l_{localLabel}"
+        asm = f"\n{localLabel}\n\tSET_PC({funcsKnownAddr[localLabelID]});"
     else:
         parts = list(i for i in string[0].split(" ") if i != "")
         if not parts:
@@ -150,6 +158,7 @@ def parse_asm(asm):
     global funcRet
     global currentFunc
     global funcsKnown
+    global labelReserved
     register = {"a": "_A",
                 "b": "_B",
                 "c": "_C",
@@ -228,7 +237,9 @@ def parse_asm(asm):
             preCond = "IF"
             asm = asm[1:]
         if asm[0][0] == ".":
-            return f"{preCond}{cond}goto _{asm[0][1:]};"
+            if asm[0][1:] in labelReserved:
+                return f"{preCond}{cond}goto l_{asm[0][1:]};"
+            return f"{preCond}{cond}goto {asm[0][1:]};"
         funcRet = True
         return f"JR{cond}(m{asm[0]});"
     elif opcode in ("jp"):
@@ -346,9 +357,9 @@ def main():
     if not os.path.exists(args.fileName.replace(".asm", ".h")):
         with open(args.fileName.replace(".asm", ".h"), "w") as cFile:
             for f in funcList:
-                cFile.write(f"{f}();\n")
+                cFile.write(f"int {f}();\n")
             for inc in includes:
-                cFile.write(f"//#include {inc}\n")
+                cFile.write(f"//#include {inc.replace('.asm', '.h')}\n")
     print(f"\t// {args.fileName.replace('.asm', '.c')}")
     for f in funcList:
         print(f"\tREDIRECT({f});")

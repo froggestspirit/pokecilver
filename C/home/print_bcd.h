@@ -1,2 +1,2 @@
-PrintBCDNumber();
-PrintBCDDigit();
+int PrintBCDNumber();
+int PrintBCDDigit();

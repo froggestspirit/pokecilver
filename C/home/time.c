@@ -75,7 +75,7 @@ int FixDays(){
 //  check if day count > 255 (bit 8 set)
 	LDH_A_addr(hRTCDayHi);  // ldh a, [hRTCDayHi] ; DH
 	BIT_A(0);  // bit 0, a
-	IF_Z goto _daylo;  // jr z, .daylo
+	IF_Z goto daylo;  // jr z, .daylo
 //  reset dh (bit 8)
 	RES_A(0);  // res 0, a
 	LDH_addr_A(hRTCDayHi);  // ldh [hRTCDayHi], a
@@ -84,15 +84,15 @@ int FixDays(){
 //  mod twice since bit 8 (DH) was set
 	LDH_A_addr(hRTCDayLo);  // ldh a, [hRTCDayLo]
 
-_modh:
+modh:
 	SET_PC(0x04B4U);
 	SUB_A(140);  // sub 140
-	IF_NC goto _modh;  // jr nc, .modh
+	IF_NC goto modh;  // jr nc, .modh
 
-_modl:
+modl:
 	SET_PC(0x04B8U);
 	SUB_A(140);  // sub 140
-	IF_NC goto _modl;  // jr nc, .modl
+	IF_NC goto modl;  // jr nc, .modl
 	ADD_A(140);  // add 140
 
 //  update dl
@@ -100,22 +100,22 @@ _modl:
 
 //  flag for sRTCStatusFlags
 	LD_A(0b01000000);  // ld a, %01000000
-	goto _set;  // jr .set
+	goto set;  // jr .set
 
 
-_daylo:
+daylo:
 	SET_PC(0x04C4U);
 //  quit if fewer than 140 days have passed
 	LDH_A_addr(hRTCDayLo);  // ldh a, [hRTCDayLo]
 	CP_A(140);  // cp 140
-	IF_C goto _quit;  // jr c, .quit
+	IF_C goto quit;  // jr c, .quit
 
 //  mod 140
 
-_mod:
+mod:
 	SET_PC(0x04CAU);
 	SUB_A(140);  // sub 140
-	IF_NC goto _mod;  // jr nc, .mod
+	IF_NC goto mod;  // jr nc, .mod
 	ADD_A(140);  // add 140
 
 //  update dl
@@ -125,7 +125,7 @@ _mod:
 	LD_A(0b00100000);  // ld a, %00100000
 
 
-_set:
+set:
 	SET_PC(0x04D4U);
 //  update clock with modded day value
 	PUSH_AF;  // push af
@@ -135,7 +135,7 @@ _set:
 	RET;  // ret
 
 
-_quit:
+quit:
 	SET_PC(0x04DBU);
 	CCF;  // ccf
 	XOR_A_A;  // xor a
@@ -153,10 +153,10 @@ int FixTime(){
 	LD_A_addr(wStartSecond);  // ld a, [wStartSecond]
 	ADD_A_C;  // add c
 	SUB_A(60);  // sub 60
-	IF_NC goto _updatesec;  // jr nc, .updatesec
+	IF_NC goto updatesec;  // jr nc, .updatesec
 	ADD_A(60);  // add 60
 
-_updatesec:
+updatesec:
 	SET_PC(0x04EBU);
 	LDH_addr_A(hSeconds);  // ldh [hSeconds], a
 
@@ -167,10 +167,10 @@ _updatesec:
 	LD_A_addr(wStartMinute);  // ld a, [wStartMinute]
 	ADC_A_C;  // adc c
 	SUB_A(60);  // sub 60
-	IF_NC goto _updatemin;  // jr nc, .updatemin
+	IF_NC goto updatemin;  // jr nc, .updatemin
 	ADD_A(60);  // add 60
 
-_updatemin:
+updatemin:
 	SET_PC(0x04FBU);
 	LDH_addr_A(hMinutes);  // ldh [hMinutes], a
 
@@ -181,10 +181,10 @@ _updatemin:
 	LD_A_addr(wStartHour);  // ld a, [wStartHour]
 	ADC_A_C;  // adc c
 	SUB_A(24);  // sub 24
-	IF_NC goto _updatehr;  // jr nc, .updatehr
+	IF_NC goto updatehr;  // jr nc, .updatehr
 	ADD_A(24);  // add 24
 
-_updatehr:
+updatehr:
 	SET_PC(0x050BU);
 	LDH_addr_A(hHours);  // ldh [hHours], a
 
@@ -221,7 +221,7 @@ int InitDayOfWeek(){
 }
 
 int InitTime(){
-	FARCALL(a_InitTime);  // farcall _InitTime
+	FARCALL(av_InitTime);  // farcall _InitTime
 	RET;  // ret
 
 }
@@ -232,7 +232,7 @@ int ClearClock(){
 	RET;  // ret
 
 
-_ClearhRTC:
+ClearhRTC:
 	SET_PC(0x0546U);
 	XOR_A_A;  // xor a
 	LDH_addr_A(hRTCSeconds);  // ldh [hRTCSeconds], a

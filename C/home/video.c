@@ -23,7 +23,7 @@ int UpdateBGMapBuffer(){
 	LD_DE(wBGMapBuffer);  // ld de, wBGMapBuffer
 
 
-_next:
+next:
 	SET_PC(0x1467U);
 //  Copy a pair of 16x8 blocks (one 16x16 block)
 
@@ -61,7 +61,7 @@ for(int rept = 0; rept < 2; rept++){
 	DEC_A;  // dec a
 	LDH_addr_A(hBGMapTileCount);  // ldh [hBGMapTileCount], a
 
-	IF_NZ goto _next;  // jr nz, .next
+	IF_NZ goto next;  // jr nz, .next
 
 //  Restore the stack pointer
 	LDH_A_addr(hSPBuffer);  // ldh a, [hSPBuffer]
@@ -86,13 +86,13 @@ int WaitTop(){
 
 	LDH_A_addr(hBGMapThird);  // ldh a, [hBGMapThird]
 	AND_A_A;  // and a
-	IF_Z goto _done;  // jr z, .done
+	IF_Z goto done;  // jr z, .done
 
 	CALL(mDelayFrame);  // call DelayFrame
 	JR(mWaitTop);  // jr WaitTop
 
 
-_done:
+done:
 	SET_PC(0x14B5U);
 	XOR_A_A;  // xor a
 	LDH_addr_A(hBGMapMode);  // ldh [hBGMapMode], a
@@ -109,9 +109,9 @@ int UpdateBGMap(){
 
 //  BG Map 0
 	DEC_A;  // dec a ; 1
-	IF_Z goto _Tiles;  // jr z, .Tiles
+	IF_Z goto Tiles;  // jr z, .Tiles
 	DEC_A;  // dec a ; 2
-	IF_Z goto _Attr;  // jr z, .Attr
+	IF_Z goto Attr;  // jr z, .Attr
 
 //  BG Map 1
 	DEC_A;  // dec a ; useless
@@ -143,7 +143,7 @@ int UpdateBGMap(){
 	RET;  // ret
 
 
-_Attr:
+Attr:
 	SET_PC(0x14E8U);
 	LD_A(1);  // ld a, 1
 	LDH_addr_A(rVBK);  // ldh [rVBK], a
@@ -156,21 +156,21 @@ _Attr:
 	RET;  // ret
 
 
-_Tiles:
+Tiles:
 	SET_PC(0x14F7U);
 	hlcoord(0, 0, wTilemap);  // hlcoord 0, 0
 
 
-_update:
+update:
 	SET_PC(0x14FAU);
 	LD_addr_SP(hSPBuffer);  // ld [hSPBuffer], sp
 
 //  Which third?
 	LDH_A_addr(hBGMapThird);  // ldh a, [hBGMapThird]
 	AND_A_A;  // and a ; 0
-	IF_Z goto _top;  // jr z, .top
+	IF_Z goto top;  // jr z, .top
 	DEC_A;  // dec a ; 1
-	IF_Z goto _middle;  // jr z, .middle
+	IF_Z goto middle;  // jr z, .middle
 // ; 2
 
 #define THIRD_HEIGHT SCREEN_HEIGHT / 3
@@ -190,10 +190,10 @@ _update:
 
 //  Next time: top third
 	XOR_A_A;  // xor a
-	goto _start;  // jr .start
+	goto start;  // jr .start
 
 
-_middle:
+middle:
 	SET_PC(0x1517U);
 	LD_DE(THIRD_HEIGHT * SCREEN_WIDTH);  // ld de, THIRD_HEIGHT * SCREEN_WIDTH
 	ADD_HL_DE;  // add hl, de
@@ -209,10 +209,10 @@ _middle:
 
 //  Next time: bottom third
 	LD_A(2);  // ld a, 2
-	goto _start;  // jr .start
+	goto start;  // jr .start
 
 
-_top:
+top:
 	SET_PC(0x152AU);
 	LD_SP_HL;  // ld sp, hl
 
@@ -225,7 +225,7 @@ _top:
 	LD_A(1);  // ld a, 1
 
 
-_start:
+start:
 	SET_PC(0x1533U);
 //  Which third to update next time
 	LDH_addr_A(hBGMapThird);  // ldh [hBGMapThird], a
@@ -237,7 +237,7 @@ _start:
 	LD_BC(BG_MAP_WIDTH - (SCREEN_WIDTH - 1));  // ld bc, BG_MAP_WIDTH - (SCREEN_WIDTH - 1)
 
 
-_row:
+row:
 	SET_PC(0x153AU);
 //  Copy a row of 20 tiles
 for(int rept = 0; rept < SCREEN_WIDTH / 2 - 1; rept++){
@@ -254,7 +254,7 @@ for(int rept = 0; rept < SCREEN_WIDTH / 2 - 1; rept++){
 
 	ADD_HL_BC;  // add hl, bc
 	DEC_A;  // dec a
-	IF_NZ goto _row;  // jr nz, .row
+	IF_NZ goto row;  // jr nz, .row
 
 	LDH_A_addr(hSPBuffer);  // ldh a, [hSPBuffer]
 	LD_L_A;  // ld l, a
@@ -295,7 +295,7 @@ int Serve1bppRequest(){
 	LD_addr_A(wRequested1bppSize);  // ld [wRequested1bppSize], a
 
 
-_next:
+next:
 	SET_PC(0x1594U);
 
 for(int rept = 0; rept < 3; rept++){
@@ -320,7 +320,7 @@ for(int rept = 0; rept < 3; rept++){
 
 	INC_HL;  // inc hl
 	DEC_B;  // dec b
-	IF_NZ goto _next;  // jr nz, .next
+	IF_NZ goto next;  // jr nz, .next
 
 	LD_A_L;  // ld a, l
 	LD_addr_A(wRequested1bppDest);  // ld [wRequested1bppDest], a
@@ -368,7 +368,7 @@ int Serve2bppRequest(){
 	LD_addr_A(wRequested2bppSize);  // ld [wRequested2bppSize], a
 
 
-_next:
+next:
 	SET_PC(0x15EBU);
 
 for(int rept = 0; rept < 7; rept++){
@@ -385,7 +385,7 @@ for(int rept = 0; rept < 7; rept++){
 
 	INC_HL;  // inc hl
 	DEC_B;  // dec b
-	IF_NZ goto _next;  // jr nz, .next
+	IF_NZ goto next;  // jr nz, .next
 
 	LD_A_L;  // ld a, l
 	LD_addr_A(wRequested2bppDest);  // ld [wRequested2bppDest], a
@@ -410,10 +410,10 @@ int AnimateTileset(){
 
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
-	LD_A(BANK(a_AnimateTileset));  // ld a, BANK(_AnimateTileset)
+	LD_A(BANK(av_AnimateTileset));  // ld a, BANK(_AnimateTileset)
 	RST(mBankswitch);  // rst Bankswitch
 
-	CALL(m_AnimateTileset);  // call _AnimateTileset
+	CALL(mv_AnimateTileset);  // call _AnimateTileset
 
 	POP_AF;  // pop af
 	RST(mBankswitch);  // rst Bankswitch
@@ -440,9 +440,9 @@ int FillBGMap0WithBlack(){
 	RET_Z ;  // ret z
 
 	DEC_A;  // dec a ; 1
-	IF_Z goto _one;  // jr z, .one
+	IF_Z goto one;  // jr z, .one
 	DEC_A;  // dec a ; 2
-	IF_Z goto _two;  // jr z, .two
+	IF_Z goto two;  // jr z, .two
 // ; 3
 
 #define BG_THIRD_HEIGHT (BG_MAP_HEIGHT - SCREEN_HEIGHT) / 2
@@ -459,33 +459,33 @@ int FillBGMap0WithBlack(){
 	LD_B(SCREEN_HEIGHT);  // ld b, SCREEN_HEIGHT
 	LD_A(0x60);  // ld a, "■"
 
-_loop1:
+loop1:
 	SET_PC(0x165DU);
 for(int rept = 0; rept < BG_MAP_WIDTH - SCREEN_WIDTH; rept++){
 	LD_hli_A;  // ld [hli], a
 }
 	ADD_HL_DE;  // add hl, de
 	DEC_B;  // dec b
-	IF_NZ goto _loop1;  // jr nz, .loop1
+	IF_NZ goto loop1;  // jr nz, .loop1
 	RET;  // ret
 
 
-_two:
+two:
 	SET_PC(0x166EU);
 //  Black out the top 7 BG Map rows below the screen area
 	LD_A(1);  // ld a, 1
 	LD_DE(BG_MAP_WIDTH * SCREEN_HEIGHT);  // ld de, BG_MAP_WIDTH * SCREEN_HEIGHT
-	goto _go;  // jr .go
+	goto go;  // jr .go
 
 
-_one:
+one:
 	SET_PC(0x1675U);
 //  Black out the bottom 7 BG Map rows below the screen area
 	XOR_A_A;  // xor a
 	LD_DE(BG_MAP_WIDTH * (SCREEN_HEIGHT + BG_THIRD_HEIGHT));  // ld de, BG_MAP_WIDTH * (SCREEN_HEIGHT + BG_THIRD_HEIGHT)
 
 
-_go:
+go:
 	SET_PC(0x1679U);
 	LDH_addr_A(hBlackOutBGMapThird);  // ldh [hBlackOutBGMapThird], a
 	LD_HL(hBGMapAddress);  // ld hl, hBGMapAddress
@@ -496,13 +496,13 @@ _go:
 	LD_B(BG_THIRD_HEIGHT * 2);  // ld b, BG_THIRD_HEIGHT * 2
 	LD_A(0x60);  // ld a, "■"
 
-_loop2:
+loop2:
 	SET_PC(0x1686U);
 for(int rept = 0; rept < BG_MAP_WIDTH / 2; rept++){
 	LD_hli_A;  // ld [hli], a
 }
 	DEC_B;  // dec b
-	IF_NZ goto _loop2;  // jr nz, .loop2
+	IF_NZ goto loop2;  // jr nz, .loop2
 	RET;  // ret
 
 }

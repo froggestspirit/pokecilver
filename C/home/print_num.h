@@ -1,2 +1,2 @@
-PrintNum();
-PrintHexNumber();
+int PrintNum();
+int PrintHexNumber();

@@ -1,1 +1,1 @@
-Predef();
+int Predef();

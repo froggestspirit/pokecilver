@@ -10,7 +10,7 @@ int Cosine(){  //  unreferenced
 int Sine(){
 //  a = d * sin(a * pi/32)
 	LD_E_A;  // ld e, a
-	HOMECALL(a_Sine);  // homecall _Sine
+	HOMECALL(av_Sine);  // homecall _Sine
 	RET;  // ret
 
 }

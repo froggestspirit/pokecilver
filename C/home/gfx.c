@@ -31,25 +31,25 @@ int FarDecompressBufferedPic(){  //  unreferenced
 }
 
 int UpdatePlayerSprite(){
-	FARCALL(a_UpdatePlayerSprite);  // farcall _UpdatePlayerSprite
+	FARCALL(av_UpdatePlayerSprite);  // farcall _UpdatePlayerSprite
 	RET;  // ret
 
 }
 
 int LoadStandardFont(){
-	FARCALL(a_LoadStandardFont);  // farcall _LoadStandardFont
+	FARCALL(av_LoadStandardFont);  // farcall _LoadStandardFont
 	RET;  // ret
 
 }
 
 int LoadFontsBattleExtra(){
-	FARCALL(a_LoadFontsBattleExtra);  // farcall _LoadFontsBattleExtra
+	FARCALL(av_LoadFontsBattleExtra);  // farcall _LoadFontsBattleExtra
 	RET;  // ret
 
 }
 
 int LoadFontsExtra(){
-	FARCALL(a_LoadFontsExtra);  // farcall _LoadFontsExtra
+	FARCALL(av_LoadFontsExtra);  // farcall _LoadFontsExtra
 	RET;  // ret
 
 }
@@ -111,22 +111,22 @@ int FarCopyBytesDouble(){
 
 	INC_B;  // inc b
 	INC_C;  // inc c
-	goto _dec;  // jr .dec
+	goto dec;  // jr .dec
 
 
-_loop:
+loop:
 	SET_PC(0x0DEFU);
 	LD_A_de;  // ld a, [de]
 	INC_DE;  // inc de
 	LD_hli_A;  // ld [hli], a
 	LD_hli_A;  // ld [hli], a
 
-_dec:
+dec:
 	SET_PC(0x0DF3U);
 	DEC_C;  // dec c
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 	DEC_B;  // dec b
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 
 	POP_AF;  // pop af
 	RST(mBankswitch);  // rst Bankswitch
@@ -155,11 +155,11 @@ int Request2bpp(){
 	LD_A_H;  // ld a, h
 	LD_addr_A(wRequested2bppDest + 1);  // ld [wRequested2bppDest + 1], a
 
-_loop:
+loop:
 	SET_PC(0x0E17U);
 	LD_A_C;  // ld a, c
 	CP_A(TILES_PER_CYCLE);  // cp TILES_PER_CYCLE
-	IF_NC goto _cycle;  // jr nc, .cycle
+	IF_NC goto cycle;  // jr nc, .cycle
 
 	LD_addr_A(wRequested2bppSize);  // ld [wRequested2bppSize], a
 	CALL(mDelayFrame);  // call DelayFrame
@@ -172,7 +172,7 @@ _loop:
 	RET;  // ret
 
 
-_cycle:
+cycle:
 	SET_PC(0x0E28U);
 	LD_A(TILES_PER_CYCLE);  // ld a, TILES_PER_CYCLE
 	LD_addr_A(wRequested2bppSize);  // ld [wRequested2bppSize], a
@@ -181,7 +181,7 @@ _cycle:
 	LD_A_C;  // ld a, c
 	SUB_A(TILES_PER_CYCLE);  // sub TILES_PER_CYCLE
 	LD_C_A;  // ld c, a
-	goto _loop;  // jr .loop
+	goto loop;  // jr .loop
 
 	return mRequest1bpp;
 }
@@ -207,11 +207,11 @@ int Request1bpp(){
 	LD_A_H;  // ld a, h
 	LD_addr_A(wRequested1bppDest + 1);  // ld [wRequested1bppDest + 1], a
 
-_loop:
+loop:
 	SET_PC(0x0E51U);
 	LD_A_C;  // ld a, c
 	CP_A(TILES_PER_CYCLE);  // cp TILES_PER_CYCLE
-	IF_NC goto _cycle;  // jr nc, .cycle
+	IF_NC goto cycle;  // jr nc, .cycle
 
 	LD_addr_A(wRequested1bppSize);  // ld [wRequested1bppSize], a
 	CALL(mDelayFrame);  // call DelayFrame
@@ -224,7 +224,7 @@ _loop:
 	RET;  // ret
 
 
-_cycle:
+cycle:
 	SET_PC(0x0E62U);
 	LD_A(TILES_PER_CYCLE);  // ld a, TILES_PER_CYCLE
 	LD_addr_A(wRequested1bppSize);  // ld [wRequested1bppSize], a
@@ -233,7 +233,7 @@ _cycle:
 	LD_A_C;  // ld a, c
 	SUB_A(TILES_PER_CYCLE);  // sub TILES_PER_CYCLE
 	LD_C_A;  // ld c, a
-	goto _loop;  // jr .loop
+	goto loop;  // jr .loop
 
 	return mGet2bpp;
 }

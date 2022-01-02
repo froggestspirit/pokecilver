@@ -20,13 +20,13 @@ int ResetBikeFlags(){
 int ResetFlashIfOutOfCave(){
 	LD_A_addr(wEnvironment);  // ld a, [wEnvironment]
 	CP_A(ROUTE);  // cp ROUTE
-	IF_Z goto _outdoors;  // jr z, .outdoors
+	IF_Z goto outdoors;  // jr z, .outdoors
 	CP_A(TOWN);  // cp TOWN
-	IF_Z goto _outdoors;  // jr z, .outdoors
+	IF_Z goto outdoors;  // jr z, .outdoors
 	RET;  // ret
 
 
-_outdoors:
+outdoors:
 	SET_PC(0x2F27U);
 	LD_HL(wStatusFlags);  // ld hl, wStatusFlags
 	RES_hl(STATUSFLAGS_FLASH_F);  // res STATUSFLAGS_FLASH_F, [hl]
@@ -66,30 +66,30 @@ for(int rept = 0; rept < 3; rept++){
 // ; implement a decoder
 	LD_C(1);  // ld c, 1
 	RRCA;  // rrca
-	IF_NC goto _one;  // jr nc, .one
+	IF_NC goto one;  // jr nc, .one
 	RLC_C;  // rlc c
 
-_one:
+one:
 	SET_PC(0x2F4BU);
 	RRCA;  // rrca
-	IF_NC goto _two;  // jr nc, .two
+	IF_NC goto two;  // jr nc, .two
 	RLC_C;  // rlc c
 	RLC_C;  // rlc c
 
-_two:
+two:
 	SET_PC(0x2F52U);
 	RRCA;  // rrca
-	IF_NC goto _three;  // jr nc, .three
+	IF_NC goto three;  // jr nc, .three
 	SWAP_C;  // swap c
 
-_three:
+three:
 	SET_PC(0x2F57U);
 
 // ; check b's value: 0, 1, 2
 	LD_A_B;  // ld a, b
 	CP_A(SET_FLAG);  // cp SET_FLAG
-	IF_C goto _clearbit;  // jr c, .clearbit ; RESET_FLAG
-	IF_Z goto _setbit;  // jr z, .setbit ; SET_FLAG
+	IF_C goto clearbit;  // jr c, .clearbit ; RESET_FLAG
+	IF_Z goto setbit;  // jr z, .setbit ; SET_FLAG
 
 // ; check bit
 	LD_A_hl;  // ld a, [hl]
@@ -98,7 +98,7 @@ _three:
 	RET;  // ret
 
 
-_setbit:
+setbit:
 	SET_PC(0x2F62U);
 // ; set bit
 	LD_A_hl;  // ld a, [hl]
@@ -107,7 +107,7 @@ _setbit:
 	RET;  // ret
 
 
-_clearbit:
+clearbit:
 	SET_PC(0x2F66U);
 // ; clear bit
 	LD_A_C;  // ld a, c

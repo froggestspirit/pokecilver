@@ -1,2 +1,2 @@
-IsHM();
-IsHMMove();
+int IsHM();
+int IsHMMove();

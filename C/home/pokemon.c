@@ -18,11 +18,11 @@ int DrawBattleHPBar(){
 	PUSH_HL;  // push hl
 	LD_A(0x62);  // ld a, $62 ; empty bar
 
-_template:
+template:
 	SET_PC(0x398CU);
 	LD_hli_A;  // ld [hli], a
 	DEC_D;  // dec d
-	IF_NZ goto _template;  // jr nz, .template
+	IF_NZ goto template;  // jr nz, .template
 	LD_A(0x6b);  // ld a, $6b ; bar end
 	ADD_A_B;  // add b
 	LD_hl_A;  // ld [hl], a
@@ -31,37 +31,37 @@ _template:
 //  Safety check # pixels
 	LD_A_E;  // ld a, e
 	AND_A_A;  // and a
-	IF_NZ goto _fill;  // jr nz, .fill
+	IF_NZ goto fill;  // jr nz, .fill
 	LD_A_C;  // ld a, c
 	AND_A_A;  // and a
-	IF_Z goto _done;  // jr z, .done
+	IF_Z goto done;  // jr z, .done
 	LD_E(1);  // ld e, 1
 
 
-_fill:
+fill:
 	SET_PC(0x399FU);
 //  Keep drawing tiles until pixel length is reached
 	LD_A_E;  // ld a, e
 	SUB_A(TILE_WIDTH);  // sub TILE_WIDTH
-	IF_C goto _lastbar;  // jr c, .lastbar
+	IF_C goto lastbar;  // jr c, .lastbar
 
 	LD_E_A;  // ld e, a
 	LD_A(0x6a);  // ld a, $6a ; full bar
 	LD_hli_A;  // ld [hli], a
 	LD_A_E;  // ld a, e
 	AND_A_A;  // and a
-	IF_Z goto _done;  // jr z, .done
-	goto _fill;  // jr .fill
+	IF_Z goto done;  // jr z, .done
+	goto fill;  // jr .fill
 
 
-_lastbar:
+lastbar:
 	SET_PC(0x39AEU);
 	LD_A(0x62);  // ld a, $62  ; empty bar
 	ADD_A_E;  // add e      ; + e
 	LD_hl_A;  // ld [hl], a
 
 
-_done:
+done:
 	SET_PC(0x39B2U);
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
@@ -74,20 +74,20 @@ int PrepMonFrontpic(){
 	LD_A(0x1);  // ld a, $1
 	LD_addr_A(wBoxAlignment);  // ld [wBoxAlignment], a
 
-	return m_PrepMonFrontpic;
+	return mv_PrepMonFrontpic;
 }
 
-int _PrepMonFrontpic(){
+int v_PrepMonFrontpic(){
 	LD_A_addr(wCurPartySpecies);  // ld a, [wCurPartySpecies]
 //  is a pokemon?
 	AND_A_A;  // and a
-	IF_Z goto _not_pokemon;  // jr z, .not_pokemon
+	IF_Z goto not_pokemon;  // jr z, .not_pokemon
 	CP_A(EGG);  // cp EGG
-	IF_Z goto _egg;  // jr z, .egg
+	IF_Z goto egg;  // jr z, .egg
 	CP_A(NUM_POKEMON + 1);  // cp NUM_POKEMON + 1
-	IF_NC goto _not_pokemon;  // jr nc, .not_pokemon
+	IF_NC goto not_pokemon;  // jr nc, .not_pokemon
 
-_egg:
+egg:
 	SET_PC(0x39C9U);
 	PUSH_HL;  // push hl
 	LD_DE(vTiles2);  // ld de, vTiles2
@@ -102,7 +102,7 @@ _egg:
 	RET;  // ret
 
 
-_not_pokemon:
+not_pokemon:
 	SET_PC(0x39E3U);
 	XOR_A_A;  // xor a
 	LD_addr_A(wBoxAlignment);  // ld [wBoxAlignment], a
@@ -117,7 +117,7 @@ int PlayStereoCry(){
 	LD_A(1);  // ld a, 1
 	LD_addr_A(wStereoPanningMask);  // ld [wStereoPanningMask], a
 	POP_AF;  // pop af
-	JR(m_PlayMonCry);  // jr _PlayMonCry
+	JR(mv_PlayMonCry);  // jr _PlayMonCry
 
 }
 
@@ -128,16 +128,16 @@ int PlayMonCry(){
 	LD_addr_A(wCryTracks);  // ld [wCryTracks], a
 	POP_AF;  // pop af
 
-	return m_PlayMonCry;
+	return mv_PlayMonCry;
 }
 
-int _PlayMonCry(){
+int v_PlayMonCry(){
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
 
 	CALL(mGetCryIndex);  // call GetCryIndex
-	IF_C goto _done;  // jr c, .done
+	IF_C goto done;  // jr c, .done
 
 	LD_E_C;  // ld e, c
 	LD_D_B;  // ld d, b
@@ -145,7 +145,7 @@ int _PlayMonCry(){
 	CALL(mWaitSFX);  // call WaitSFX
 
 
-_done:
+done:
 	SET_PC(0x3A0EU);
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
@@ -193,9 +193,9 @@ for(int rept = 0; rept < MON_CRY_LENGTH; rept++){
 
 int GetCryIndex(){
 	AND_A_A;  // and a
-	IF_Z goto _no;  // jr z, .no
+	IF_Z goto no;  // jr z, .no
 	CP_A(NUM_POKEMON + 1);  // cp NUM_POKEMON + 1
-	IF_NC goto _no;  // jr nc, .no
+	IF_NC goto no;  // jr nc, .no
 
 	DEC_A;  // dec a
 	LD_C_A;  // ld c, a
@@ -204,7 +204,7 @@ int GetCryIndex(){
 	RET;  // ret
 
 
-_no:
+no:
 	SET_PC(0x3A4AU);
 	SCF;  // scf
 	RET;  // ret
@@ -269,7 +269,7 @@ int GetBaseData(){
 //  Egg doesn't have BaseData
 	LD_A_addr(wCurSpecies);  // ld a, [wCurSpecies]
 	CP_A(EGG);  // cp EGG
-	IF_Z goto _egg;  // jr z, .egg
+	IF_Z goto egg;  // jr z, .egg
 
 //  Get BaseData
 	DEC_A;  // dec a
@@ -279,10 +279,10 @@ int GetBaseData(){
 	LD_DE(wCurBaseData);  // ld de, wCurBaseData
 	LD_BC(BASE_DATA_SIZE);  // ld bc, BASE_DATA_SIZE
 	CALL(mCopyBytes);  // call CopyBytes
-	goto _end;  // jr .end
+	goto end;  // jr .end
 
 
-_egg:
+egg:
 	SET_PC(0x3A9AU);
 	LD_DE(mEggPic);  // ld de, EggPic
 
@@ -301,10 +301,10 @@ _egg:
 	LD_hl_E;  // ld [hl], e
 	INC_HL;  // inc hl
 	LD_hl_D;  // ld [hl], d
-	goto _end;  // jr .end ; useless
+	goto end;  // jr .end ; useless
 
 
-_end:
+end:
 	SET_PC(0x3AAFU);
 //  Replace Pokedex # with species
 	LD_A_addr(wCurSpecies);  // ld a, [wCurSpecies]

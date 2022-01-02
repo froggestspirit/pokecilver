@@ -35,59 +35,59 @@ int PrintLetterDelay(){
 //  force fast scroll?
 	LD_A_addr(wTextboxFlags);  // ld a, [wTextboxFlags]
 	BIT_A(FAST_TEXT_DELAY_F);  // bit FAST_TEXT_DELAY_F, a
-	IF_Z goto _fast;  // jr z, .fast
+	IF_Z goto fast;  // jr z, .fast
 
 //  text speed
 	LD_A_addr(wOptions);  // ld a, [wOptions]
 	AND_A(0b111);  // and %111
-	goto _updatedelay;  // jr .updatedelay
+	goto updatedelay;  // jr .updatedelay
 
 
-_fast:
+fast:
 	SET_PC(0x3203U);
 	LD_A(TEXT_DELAY_FAST);  // ld a, TEXT_DELAY_FAST
 
 
-_updatedelay:
+updatedelay:
 	SET_PC(0x3205U);
 	LD_addr_A(wTextDelayFrames);  // ld [wTextDelayFrames], a
 
 
-_checkjoypad:
+checkjoypad:
 	SET_PC(0x3208U);
 	CALL(mGetJoypad);  // call GetJoypad
 
 //  input override
 	LD_A_addr(wDisableTextAcceleration);  // ld a, [wDisableTextAcceleration]
 	AND_A_A;  // and a
-	IF_NZ goto _wait;  // jr nz, .wait
+	IF_NZ goto wait;  // jr nz, .wait
 
 //  Wait one frame if holding A or B.
 	LDH_A_addr(hJoyDown);  // ldh a, [hJoyDown]
 	BIT_A(A_BUTTON_F);  // bit A_BUTTON_F, a
-	IF_Z goto _checkb;  // jr z, .checkb
-	goto _delay;  // jr .delay
+	IF_Z goto checkb;  // jr z, .checkb
+	goto delay;  // jr .delay
 
-_checkb:
+checkb:
 	SET_PC(0x3219U);
 	BIT_A(B_BUTTON_F);  // bit B_BUTTON_F, a
-	IF_Z goto _wait;  // jr z, .wait
+	IF_Z goto wait;  // jr z, .wait
 
 
-_delay:
+delay:
 	SET_PC(0x321DU);
 	CALL(mDelayFrame);  // call DelayFrame
-	goto _end;  // jr .end
+	goto end;  // jr .end
 
 
-_wait:
+wait:
 	SET_PC(0x3222U);
 	LD_A_addr(wTextDelayFrames);  // ld a, [wTextDelayFrames]
 	AND_A_A;  // and a
 // ;(port fix)jr nz, .checkjoypad
 
 
-_end:
+end:
 	SET_PC(0x3226U);
 	POP_AF;  // pop af
 	LDH_addr_A(hOAMUpdate);  // ldh [hOAMUpdate], a
@@ -145,7 +145,7 @@ int CallPointerAt(){
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
 
-	CALL(m_hl_);  // call _hl_
+	CALL(mv_hl_);  // call _hl_
 
 	POP_HL;  // pop hl
 	LD_A_H;  // ld a, h

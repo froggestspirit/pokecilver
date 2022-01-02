@@ -136,7 +136,7 @@ int GetJoypad(){
 //  See more below.
 	LD_A_addr(wInputType);  // ld a, [wInputType]
 	CP_A(AUTO_INPUT);  // cp AUTO_INPUT
-	IF_Z goto _auto;  // jr z, .auto
+	IF_Z goto l_auto;  // jr z, .auto
 
 //  To get deltas, take this and last frame's input.
 	LDH_A_addr(hJoypadDown);  // ldh a, [hJoypadDown] ; real input
@@ -163,7 +163,7 @@ int GetJoypad(){
 	LDH_addr_A(hJoyDown);  // ldh [hJoyDown], a ; frame input
 
 
-_quit:
+quit:
 	SET_PC(0x0953U);
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
@@ -172,7 +172,7 @@ _quit:
 	RET;  // ret
 
 
-_auto:
+l_auto:
 	SET_PC(0x0958U);
 //  Use a predetermined input stream (used in the catching tutorial).
 
@@ -193,61 +193,61 @@ _auto:
 //  We only update when the input duration has expired.
 	LD_A_addr(wAutoInputLength);  // ld a, [wAutoInputLength]
 	AND_A_A;  // and a
-	IF_Z goto _updateauto;  // jr z, .updateauto
+	IF_Z goto updateauto;  // jr z, .updateauto
 
 //  Until then, don't change anything.
 	DEC_A;  // dec a
 	LD_addr_A(wAutoInputLength);  // ld [wAutoInputLength], a
 	POP_AF;  // pop af
 	RST(mBankswitch);  // rst Bankswitch
-	goto _quit;  // jr .quit
+	goto quit;  // jr .quit
 
 
-_updateauto:
+updateauto:
 	SET_PC(0x0973U);
 //  An input of $ff will end the stream.
 	LD_A_hli;  // ld a, [hli]
 	CP_A(-1);  // cp -1
-	IF_Z goto _stopauto;  // jr z, .stopauto
+	IF_Z goto stopauto;  // jr z, .stopauto
 	LD_B_A;  // ld b, a
 
 //  A duration of $ff will end the stream indefinitely.
 	LD_A_hli;  // ld a, [hli]
 	LD_addr_A(wAutoInputLength);  // ld [wAutoInputLength], a
 	CP_A(-1);  // cp -1
-	IF_NZ goto _next;  // jr nz, .next
+	IF_NZ goto next;  // jr nz, .next
 
 //  The current input is overwritten.
 	DEC_HL;  // dec hl
 	DEC_HL;  // dec hl
 	LD_B(NO_INPUT);  // ld b, NO_INPUT
-	goto _finishauto;  // jr .finishauto
+	goto finishauto;  // jr .finishauto
 
 
-_next:
+next:
 	SET_PC(0x0987U);
 //  On to the next input...
 	LD_A_L;  // ld a, l
 	LD_addr_A(wAutoInputAddress);  // ld [wAutoInputAddress], a
 	LD_A_H;  // ld a, h
 	LD_addr_A(wAutoInputAddress + 1);  // ld [wAutoInputAddress + 1], a
-	goto _finishauto;  // jr .finishauto
+	goto finishauto;  // jr .finishauto
 
 
-_stopauto:
+stopauto:
 	SET_PC(0x0991U);
 	CALL(mStopAutoInput);  // call StopAutoInput
 	LD_B(NO_INPUT);  // ld b, NO_INPUT
 
 
-_finishauto:
+finishauto:
 	SET_PC(0x0996U);
 	POP_AF;  // pop af
 	RST(mBankswitch);  // rst Bankswitch
 	LD_A_B;  // ld a, b
 	LDH_addr_A(hJoyPressed);  // ldh [hJoyPressed], a ; pressed
 	LDH_addr_A(hJoyDown);  // ldh [hJoyDown], a ; input
-	goto _quit;  // jr .quit
+	goto quit;  // jr .quit
 
 	return mStartAutoInput;
 }
@@ -290,7 +290,7 @@ int StopAutoInput(){
 
 int JoyTitleScreenInput(){  //  unreferenced
 
-_loop:
+loop:
 	SET_PC(0x09CCU);
 	CALL(mDelayFrame);  // call DelayFrame
 
@@ -301,21 +301,21 @@ _loop:
 //  Save data can be deleted by pressing Up + B + Select.
 	LDH_A_addr(hJoyDown);  // ldh a, [hJoyDown]
 	CP_A(D_UP | SELECT | B_BUTTON);  // cp D_UP | SELECT | B_BUTTON
-	IF_Z goto _keycombo;  // jr z, .keycombo
+	IF_Z goto keycombo;  // jr z, .keycombo
 
 //  Press Start or A to start the game.
 	LDH_A_addr(hJoyLast);  // ldh a, [hJoyLast]
 	AND_A(START | A_BUTTON);  // and START | A_BUTTON
-	IF_NZ goto _keycombo;  // jr nz, .keycombo
+	IF_NZ goto keycombo;  // jr nz, .keycombo
 
 	DEC_C;  // dec c
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_keycombo:
+keycombo:
 	SET_PC(0x09E5U);
 	SCF;  // scf
 	RET;  // ret
@@ -324,7 +324,7 @@ _keycombo:
 
 int JoyWaitAorB(){
 
-_loop:
+loop:
 	SET_PC(0x09E7U);
 	CALL(mDelayFrame);  // call DelayFrame
 	CALL(mGetJoypad);  // call GetJoypad
@@ -332,7 +332,7 @@ _loop:
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
 	RET_NZ ;  // ret nz
 	CALL(mUpdateTimeAndPals);  // call UpdateTimeAndPals
-	goto _loop;  // jr .loop
+	goto loop;  // jr .loop
 
 }
 
@@ -354,31 +354,31 @@ int JoyTextDelay(){
 	LDH_A_addr(hInMenu);  // ldh a, [hInMenu]
 	AND_A_A;  // and a
 	LDH_A_addr(hJoyPressed);  // ldh a, [hJoyPressed]
-	IF_Z goto _ok;  // jr z, .ok
+	IF_Z goto ok;  // jr z, .ok
 	LDH_A_addr(hJoyDown);  // ldh a, [hJoyDown]
 
-_ok:
+ok:
 	SET_PC(0x0A14U);
 	LDH_addr_A(hJoyLast);  // ldh [hJoyLast], a
 	LDH_A_addr(hJoyPressed);  // ldh a, [hJoyPressed]
 	AND_A_A;  // and a
-	IF_Z goto _checkframedelay;  // jr z, .checkframedelay
+	IF_Z goto checkframedelay;  // jr z, .checkframedelay
 	LD_A(15);  // ld a, 15
 	LD_addr_A(wTextDelayFrames);  // ld [wTextDelayFrames], a
 	RET;  // ret
 
 
-_checkframedelay:
+checkframedelay:
 	SET_PC(0x0A21U);
 	LD_A_addr(wTextDelayFrames);  // ld a, [wTextDelayFrames]
 	AND_A_A;  // and a
-	IF_Z goto _restartframedelay;  // jr z, .restartframedelay
+	IF_Z goto restartframedelay;  // jr z, .restartframedelay
 	XOR_A_A;  // xor a
 	LDH_addr_A(hJoyLast);  // ldh [hJoyLast], a
 	RET;  // ret
 
 
-_restartframedelay:
+restartframedelay:
 	SET_PC(0x0A2BU);
 	LD_A(5);  // ld a, 5
 	LD_addr_A(wTextDelayFrames);  // ld [wTextDelayFrames], a
@@ -403,7 +403,7 @@ int WaitPressAorB_BlinkCursor(){
 	LDH_addr_A(hObjectStructIndex);  // ldh [hObjectStructIndex], a
 
 
-_loop:
+loop:
 	SET_PC(0x0A3EU);
 	PUSH_HL;  // push hl
 	hlcoord(18, 17, wTilemap);  // hlcoord 18, 17
@@ -425,12 +425,12 @@ _loop:
 
 int SimpleWaitPressAorB(){
 
-_loop:
+loop:
 	SET_PC(0x0A54U);
 	CALL(mJoyTextDelay);  // call JoyTextDelay
 	LDH_A_addr(hJoyLast);  // ldh a, [hJoyLast]
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
-	IF_Z goto _loop;  // jr z, .loop
+	IF_Z goto loop;  // jr z, .loop
 	RET;  // ret
 
 }
@@ -441,7 +441,7 @@ int PromptButton(){
 //  pressed, afterwards, play a sound.
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
 	AND_A_A;  // and a
-	IF_NZ goto _link;  // jr nz, .link
+	IF_NZ goto link;  // jr nz, .link
 	CALL(mPromptButton_wait_input);  // call .wait_input
 	PUSH_DE;  // push de
 	LD_DE(SFX_READ_TEXT_2);  // ld de, SFX_READ_TEXT_2
@@ -450,13 +450,13 @@ int PromptButton(){
 	RET;  // ret
 
 
-_link:
+link:
 	SET_PC(0x0A70U);
 	LD_C(65);  // ld c, 65
 	JP(mDelayFrames);  // jp DelayFrames
 
 
-_wait_input:
+wait_input:
 	SET_PC(0x0A75U);
 	LDH_A_addr(hOAMUpdate);  // ldh a, [hOAMUpdate]
 	PUSH_AF;  // push af
@@ -464,46 +464,46 @@ _wait_input:
 	LDH_addr_A(hOAMUpdate);  // ldh [hOAMUpdate], a
 	LD_A_addr(wInputType);  // ld a, [wInputType]
 	OR_A_A;  // or a
-	IF_Z goto _input_wait_loop;  // jr z, .input_wait_loop
-	FARCALL(a_DudeAutoInput_A);  // farcall _DudeAutoInput_A
+	IF_Z goto input_wait_loop;  // jr z, .input_wait_loop
+	FARCALL(av_DudeAutoInput_A);  // farcall _DudeAutoInput_A
 
 
-_input_wait_loop:
+input_wait_loop:
 	SET_PC(0x0A88U);
 	CALL(mPromptButton_blink_cursor);  // call .blink_cursor
 	CALL(mJoyTextDelay);  // call JoyTextDelay
 	LDH_A_addr(hJoyPressed);  // ldh a, [hJoyPressed]
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
-	IF_NZ goto _received_input;  // jr nz, .received_input
+	IF_NZ goto received_input;  // jr nz, .received_input
 	CALL(mUpdateTimeAndPals);  // call UpdateTimeAndPals
 	LD_A(0x1);  // ld a, $1
 	LDH_addr_A(hBGMapMode);  // ldh [hBGMapMode], a
 	CALL(mDelayFrame);  // call DelayFrame
-	goto _input_wait_loop;  // jr .input_wait_loop
+	goto input_wait_loop;  // jr .input_wait_loop
 
 
-_received_input:
+received_input:
 	SET_PC(0x0AA0U);
 	POP_AF;  // pop af
 	LDH_addr_A(hOAMUpdate);  // ldh [hOAMUpdate], a
 	RET;  // ret
 
 
-_blink_cursor:
+blink_cursor:
 	SET_PC(0x0AA4U);
 	LDH_A_addr(hVBlankCounter);  // ldh a, [hVBlankCounter]
 	AND_A(0b00010000);  // and %00010000 ; bit 4, a
-	IF_Z goto _cursor_off;  // jr z, .cursor_off
+	IF_Z goto cursor_off;  // jr z, .cursor_off
 	LD_A(0xee);  // ld a, "▼"
-	goto _load_cursor_state;  // jr .load_cursor_state
+	goto load_cursor_state;  // jr .load_cursor_state
 
 
-_cursor_off:
+cursor_off:
 	SET_PC(0x0AAEU);
 	LD_A(0x7a);  // ld a, "─"
 
 
-_load_cursor_state:
+load_cursor_state:
 	SET_PC(0x0AB0U);
 	ldcoord_a(18, 17, wTilemap);  // ldcoord_a 18, 17
 	RET;  // ret
@@ -517,7 +517,7 @@ int BlinkCursor(){
 	LD_A(0xee);  // ld a, "▼"
 	CP_A_B;  // cp b
 	POP_BC;  // pop bc
-	IF_NZ goto _place_arrow;  // jr nz, .place_arrow
+	IF_NZ goto place_arrow;  // jr nz, .place_arrow
 	LDH_A_addr(hMapObjectIndex);  // ldh a, [hMapObjectIndex]
 	DEC_A;  // dec a
 	LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
@@ -535,7 +535,7 @@ int BlinkCursor(){
 	RET;  // ret
 
 
-_place_arrow:
+place_arrow:
 	SET_PC(0x0AD5U);
 	LDH_A_addr(hMapObjectIndex);  // ldh a, [hMapObjectIndex]
 	AND_A_A;  // and a

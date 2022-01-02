@@ -5,7 +5,7 @@ int CheckTrainerBattle(){
 	PUSH_AF;  // push af
 
 	CALL(mSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
-	CALL(m_CheckTrainerBattle);  // call _CheckTrainerBattle
+	CALL(mv_CheckTrainerBattle);  // call _CheckTrainerBattle
 
 	POP_BC;  // pop bc
 	LD_A_B;  // ld a, b
@@ -14,7 +14,7 @@ int CheckTrainerBattle(){
 
 }
 
-int _CheckTrainerBattle(){
+int v_CheckTrainerBattle(){
 //  Check if any trainer on the map sees the player and wants to battle.
 
 //  Skip the player object.
@@ -22,7 +22,7 @@ int _CheckTrainerBattle(){
 	LD_DE(wMap2Object);  // ld de, wMap2Object
 
 
-_loop:
+loop:
 	SET_PC(0x3852U);
 
 //  Start a battle if the object:
@@ -34,7 +34,7 @@ _loop:
 	ADD_HL_DE;  // add hl, de
 	LD_A_hl;  // ld a, [hl]
 	AND_A_A;  // and a
-	IF_Z goto _next;  // jr z, .next
+	IF_Z goto next;  // jr z, .next
 
 //  Is a trainer
 	LD_HL(MAPOBJECT_COLOR);  // ld hl, MAPOBJECT_COLOR
@@ -42,26 +42,26 @@ _loop:
 	LD_A_hl;  // ld a, [hl]
 	AND_A(0xf);  // and $f
 	CP_A(OBJECTTYPE_TRAINER);  // cp OBJECTTYPE_TRAINER
-	IF_NZ goto _next;  // jr nz, .next
+	IF_NZ goto next;  // jr nz, .next
 
 //  Is visible on the map
 	LD_HL(MAPOBJECT_OBJECT_STRUCT_ID);  // ld hl, MAPOBJECT_OBJECT_STRUCT_ID
 	ADD_HL_DE;  // add hl, de
 	LD_A_hl;  // ld a, [hl]
 	CP_A(-1);  // cp -1
-	IF_Z goto _next;  // jr z, .next
+	IF_Z goto next;  // jr z, .next
 
 //  Is facing the player...
 	CALL(mGetObjectStruct);  // call GetObjectStruct
 	CALL(mFacingPlayerDistance_bc);  // call FacingPlayerDistance_bc
-	IF_NC goto _next;  // jr nc, .next
+	IF_NC goto next;  // jr nc, .next
 
 //  ...within their sight range
 	LD_HL(MAPOBJECT_RANGE);  // ld hl, MAPOBJECT_RANGE
 	ADD_HL_DE;  // add hl, de
 	LD_A_hl;  // ld a, [hl]
 	CP_A_B;  // cp b
-	IF_C goto _next;  // jr c, .next
+	IF_C goto next;  // jr c, .next
 
 //  And hasn't already been beaten
 	PUSH_BC;  // push bc
@@ -80,10 +80,10 @@ _loop:
 	POP_DE;  // pop de
 	POP_BC;  // pop bc
 	AND_A_A;  // and a
-	IF_Z goto _startbattle;  // jr z, .startbattle
+	IF_Z goto startbattle;  // jr z, .startbattle
 
 
-_next:
+next:
 	SET_PC(0x3897U);
 	POP_DE;  // pop de
 	LD_HL(MAPOBJECT_LENGTH);  // ld hl, MAPOBJECT_LENGTH
@@ -94,12 +94,12 @@ _next:
 	POP_AF;  // pop af
 	INC_A;  // inc a
 	CP_A(NUM_OBJECTS);  // cp NUM_OBJECTS
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 	XOR_A_A;  // xor a
 	RET;  // ret
 
 
-_startbattle:
+startbattle:
 	SET_PC(0x38A6U);
 	POP_DE;  // pop de
 	POP_AF;  // pop af
@@ -167,69 +167,69 @@ int FacingPlayerDistance(){
 
 	LD_A_addr(wPlayerStandingMapX);  // ld a, [wPlayerStandingMapX]
 	CP_A_D;  // cp d
-	IF_Z goto _CheckY;  // jr z, .CheckY
+	IF_Z goto CheckY;  // jr z, .CheckY
 
 	LD_A_addr(wPlayerStandingMapY);  // ld a, [wPlayerStandingMapY]
 	CP_A_E;  // cp e
-	IF_Z goto _CheckX;  // jr z, .CheckX
+	IF_Z goto CheckX;  // jr z, .CheckX
 
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_CheckY:
+CheckY:
 	SET_PC(0x3905U);
 	LD_A_addr(wPlayerStandingMapY);  // ld a, [wPlayerStandingMapY]
 	SUB_A_E;  // sub e
-	IF_Z goto _NotFacing;  // jr z, .NotFacing
-	IF_NC goto _Above;  // jr nc, .Above
+	IF_Z goto NotFacing;  // jr z, .NotFacing
+	IF_NC goto Above;  // jr nc, .Above
 
 //  Below
 	CPL;  // cpl
 	INC_A;  // inc a
 	LD_D_A;  // ld d, a
 	LD_E(OW_UP);  // ld e, OW_UP
-	goto _CheckFacing;  // jr .CheckFacing
+	goto CheckFacing;  // jr .CheckFacing
 
 
-_Above:
+Above:
 	SET_PC(0x3914U);
 	LD_D_A;  // ld d, a
 	LD_E(OW_DOWN);  // ld e, OW_DOWN
-	goto _CheckFacing;  // jr .CheckFacing
+	goto CheckFacing;  // jr .CheckFacing
 
 
-_CheckX:
+CheckX:
 	SET_PC(0x3919U);
 	LD_A_addr(wPlayerStandingMapX);  // ld a, [wPlayerStandingMapX]
 	SUB_A_D;  // sub d
-	IF_Z goto _NotFacing;  // jr z, .NotFacing
-	IF_NC goto _Left;  // jr nc, .Left
+	IF_Z goto NotFacing;  // jr z, .NotFacing
+	IF_NC goto Left;  // jr nc, .Left
 
 //  Right
 	CPL;  // cpl
 	INC_A;  // inc a
 	LD_D_A;  // ld d, a
 	LD_E(OW_LEFT);  // ld e, OW_LEFT
-	goto _CheckFacing;  // jr .CheckFacing
+	goto CheckFacing;  // jr .CheckFacing
 
 
-_Left:
+Left:
 	SET_PC(0x3928U);
 	LD_D_A;  // ld d, a
 	LD_E(OW_RIGHT);  // ld e, OW_RIGHT
 
 
-_CheckFacing:
+CheckFacing:
 	SET_PC(0x392BU);
 	CALL(mGetSpriteDirection);  // call GetSpriteDirection
 	CP_A_E;  // cp e
-	IF_NZ goto _NotFacing;  // jr nz, .NotFacing
+	IF_NZ goto NotFacing;  // jr nz, .NotFacing
 	SCF;  // scf
 	RET;  // ret
 
 
-_NotFacing:
+NotFacing:
 	SET_PC(0x3933U);
 	AND_A_A;  // and a
 	RET;  // ret
@@ -266,23 +266,23 @@ int PrintWinLossText(){
 	LD_A_addr(wBattleType);  // ld a, [wBattleType]
 	CP_A(BATTLETYPE_CANLOSE);  // cp BATTLETYPE_CANLOSE
 // ; code was probably dummied out here
-	goto _canlose;  // jr .canlose
+	goto canlose;  // jr .canlose
 
 //  unused
 	LD_HL(wWinTextPointer);  // ld hl, wWinTextPointer
-	goto _ok;  // jr .ok
+	goto ok;  // jr .ok
 
 
-_canlose:
+canlose:
 	SET_PC(0x3964U);
 	LD_A_addr(wBattleResult);  // ld a, [wBattleResult]
 	LD_HL(wWinTextPointer);  // ld hl, wWinTextPointer
 	AND_A_A;  // and a ; WIN?
-	IF_Z goto _ok;  // jr z, .ok
+	IF_Z goto ok;  // jr z, .ok
 	LD_HL(wLossTextPointer);  // ld hl, wLossTextPointer
 
 
-_ok:
+ok:
 	SET_PC(0x3970U);
 	LD_A_hli;  // ld a, [hli]
 	LD_H_hl;  // ld h, [hl]

@@ -1,2 +1,2 @@
-IsInJohto();
-SetXYCompareFlags();
+int IsInJohto();
+int SetXYCompareFlags();

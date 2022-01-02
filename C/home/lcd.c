@@ -6,7 +6,7 @@ int LCD(){
 	PUSH_AF;  // push af
 	LDH_A_addr(hLCDCPointer);  // ldh a, [hLCDCPointer]
 	AND_A_A;  // and a
-	IF_Z goto _done;  // jr z, .done
+	IF_Z goto done;  // jr z, .done
 
 	PUSH_HL;  // push hl
 	LDH_A_addr(rLY);  // ldh a, [rLY]
@@ -21,7 +21,7 @@ int LCD(){
 	POP_HL;  // pop hl
 
 
-_done:
+done:
 	SET_PC(0x0430U);
 	POP_AF;  // pop af
 	RET;  // ret
@@ -46,12 +46,12 @@ int DisableLCD(){
 	LDH_addr_A(rIE);  // ldh [rIE], a
 
 
-_wait:
+wait:
 	SET_PC(0x0441U);
 //  Wait until VBlank would normally happen
 	LDH_A_addr(rLY);  // ldh a, [rLY]
 	CP_A(LY_VBLANK + 1);  // cp LY_VBLANK + 1
-	//IF_NZ goto _wait;  // jr nz, .wait
+	//IF_NZ goto wait;  // jr nz, .wait
 
 	LDH_A_addr(rLCDC);  // ldh a, [rLCDC]
 	AND_A(0xff ^ (1 << rLCDC_ENABLE));  // and $ff ^ (1 << rLCDC_ENABLE)

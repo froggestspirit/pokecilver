@@ -4,20 +4,20 @@ int CopyBytes(){
 //  copy bc bytes from hl to de
 	INC_B;  // inc b ; we bail the moment b hits 0, so include the last run
 	INC_C;  // inc c ; same thing; include last byte
-	goto _HandleLoop;  // jr .HandleLoop
+	goto HandleLoop;  // jr .HandleLoop
 
-_CopyByte:
+CopyByte:
 	SET_PC(0x311CU);
 	LD_A_hli;  // ld a, [hli]
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
 
-_HandleLoop:
+HandleLoop:
 	SET_PC(0x311FU);
 	DEC_C;  // dec c
-	IF_NZ goto _CopyByte;  // jr nz, .CopyByte
+	IF_NZ goto CopyByte;  // jr nz, .CopyByte
 	DEC_B;  // dec b
-	IF_NZ goto _CopyByte;  // jr nz, .CopyByte
+	IF_NZ goto CopyByte;  // jr nz, .CopyByte
 	RET;  // ret
 
 }
@@ -70,18 +70,18 @@ int ByteFill(){
 //  fill bc bytes with the value of a, starting at hl
 	INC_B;  // inc b ; we bail the moment b hits 0, so include the last run
 	INC_C;  // inc c ; same thing; include last byte
-	goto _HandleLoop;  // jr .HandleLoop
+	goto HandleLoop;  // jr .HandleLoop
 
-_PutByte:
+PutByte:
 	SET_PC(0x314EU);
 	LD_hli_A;  // ld [hli], a
 
-_HandleLoop:
+HandleLoop:
 	SET_PC(0x314FU);
 	DEC_C;  // dec c
-	IF_NZ goto _PutByte;  // jr nz, .PutByte
+	IF_NZ goto PutByte;  // jr nz, .PutByte
 	DEC_B;  // dec b
-	IF_NZ goto _PutByte;  // jr nz, .PutByte
+	IF_NZ goto PutByte;  // jr nz, .PutByte
 	RET;  // ret
 
 }

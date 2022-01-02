@@ -1,4 +1,4 @@
-CopyBytes();
-GetFarByte();
-GetFarWord();
-ByteFill();
+int CopyBytes();
+int GetFarByte();
+int GetFarWord();
+int ByteFill();

@@ -1,2 +1,2 @@
-_hl_();
-_de_();
+int v_hl_();
+int v_de_();

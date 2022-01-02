@@ -1,2 +1,2 @@
-FarDecompress();
-Decompress();
+int FarDecompress();
+int Decompress();

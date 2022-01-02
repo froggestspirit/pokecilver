@@ -18,13 +18,13 @@ int UpdateTimeAndPals(){
 }
 
 int TimeOfDayPals(){
-	CALLFAR(a_TimeOfDayPals);  // callfar _TimeOfDayPals
+	CALLFAR(av_TimeOfDayPals);  // callfar _TimeOfDayPals
 	RET;  // ret
 
 }
 
 int UpdateTimePals(){
-	CALLFAR(a_UpdateTimePals);  // callfar _UpdateTimePals
+	CALLFAR(av_UpdateTimePals);  // callfar _UpdateTimePals
 	RET;  // ret
 
 }

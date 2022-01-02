@@ -17,19 +17,19 @@ int Reset(){
 
 }
 
-int _Start(){
+int v_Start(){
 	CP_A(0x11);  // cp $11
-	IF_Z goto _cgb;  // jr z, .cgb
+	IF_Z goto cgb;  // jr z, .cgb
 	XOR_A_A;  // xor a ; FALSE
-	goto _load;  // jr .load
+	goto load;  // jr .load
 
 
-_cgb:
+cgb:
 	SET_PC(0x05CDU);
 	LD_A(TRUE);  // ld a, TRUE
 
 
-_load:
+load:
 	SET_PC(0x05CFU);
 	LDH_addr_A(hCGB);  // ldh [hCGB], a
 
@@ -64,8 +64,8 @@ int Init(){
 	SET_PC(0x05F6U);
 	LDH_A_addr(rLY);  // ldh a, [rLY]
 	CP_A(LY_VBLANK + 1);  // cp LY_VBLANK + 1
-	IF_NZ goto _wait;  // jr nz, .wait
-_wait:  // moved to prevent hanging
+	IF_NZ goto wait;  // jr nz, .wait
+wait:  // moved to prevent hanging
 
 	XOR_A_A;  // xor a
 	LDH_addr_A(rLCDC);  // ldh [rLCDC], a
@@ -74,14 +74,14 @@ _wait:  // moved to prevent hanging
 	LD_HL(WRAM0_Begin);  // ld hl, WRAM0_Begin
 	LD_BC(WRAM1_End - WRAM0_Begin);  // ld bc, WRAM1_End - WRAM0_Begin
 
-_ByteFill:
+ByteFill:
 	SET_PC(0x0605U);
 	LD_hl(0);  // ld [hl], 0
 	INC_HL;  // inc hl
 	DEC_BC;  // dec bc
 	LD_A_B;  // ld a, b
 	OR_A_C;  // or c
-	IF_NZ goto _ByteFill;  // jr nz, .ByteFill
+	IF_NZ goto ByteFill;  // jr nz, .ByteFill
 
 	LD_SP(wStackTop);  // ld sp, wStackTop
 
@@ -196,13 +196,13 @@ int FillBGMap(){
 	LD_DE(vBGMap1 - vBGMap0);  // ld de, vBGMap1 - vBGMap0
 	LD_L_E;  // ld l, e
 
-_loop:
+loop:
 	SET_PC(0x06A2U);
 	LD_hli_A;  // ld [hli], a
 	DEC_E;  // dec e
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 	DEC_D;  // dec d
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 	RET;  // ret
 
 }

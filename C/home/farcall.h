@@ -1,2 +1,2 @@
-FarCall_hl();
-FarCall_JumpToHL();
+int FarCall_hl();
+int FarCall_JumpToHL();

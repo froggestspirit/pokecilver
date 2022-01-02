@@ -5,12 +5,12 @@ int ScrollingMenu(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 
-	LD_A(BANK(a_ScrollingMenu));  // ld a, BANK(_ScrollingMenu) ; aka BANK(_InitScrollingMenu)
+	LD_A(BANK(av_ScrollingMenu));  // ld a, BANK(_ScrollingMenu) ; aka BANK(_InitScrollingMenu)
 	RST(mBankswitch);  // rst Bankswitch
 
-	CALL(m_InitScrollingMenu);  // call _InitScrollingMenu
+	CALL(mv_InitScrollingMenu);  // call _InitScrollingMenu
 	CALL(mScrollingMenu_UpdatePalettes);  // call .UpdatePalettes
-	CALL(m_ScrollingMenu);  // call _ScrollingMenu
+	CALL(mv_ScrollingMenu);  // call _ScrollingMenu
 
 	POP_AF;  // pop af
 	RST(mBankswitch);  // rst Bankswitch
@@ -19,7 +19,7 @@ int ScrollingMenu(){
 	RET;  // ret
 
 
-_UpdatePalettes:
+UpdatePalettes:
 	SET_PC(0x3765U);
 	LD_HL(wVramState);  // ld hl, wVramState
 	BIT_hl(0);  // bit 0, [hl]

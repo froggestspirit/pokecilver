@@ -5,24 +5,24 @@ int CountSetBits(){
 //  Return in a, c and [wNumSetBits].
 	LD_C(0);  // ld c, 0
 
-_next:
+next:
 	SET_PC(0x35A0U);
 	LD_A_hli;  // ld a, [hli]
 	LD_E_A;  // ld e, a
 	LD_D(8);  // ld d, 8
 
 
-_count:
+count:
 	SET_PC(0x35A4U);
 	SRL_E;  // srl e
 	LD_A(0);  // ld a, 0
 	ADC_A_C;  // adc c
 	LD_C_A;  // ld c, a
 	DEC_D;  // dec d
-	IF_NZ goto _count;  // jr nz, .count
+	IF_NZ goto count;  // jr nz, .count
 
 	DEC_B;  // dec b
-	IF_NZ goto _next;  // jr nz, .next
+	IF_NZ goto next;  // jr nz, .next
 
 	LD_A_C;  // ld a, c
 	LD_addr_A(wNumSetBits);  // ld [wNumSetBits], a
@@ -33,10 +33,10 @@ _count:
 int GetWeekday(){
 	LD_A_addr(wCurDay);  // ld a, [wCurDay]
 
-_mod:
+mod:
 	SET_PC(0x35B8U);
 	SUB_A(7);  // sub 7
-	IF_NC goto _mod;  // jr nc, .mod
+	IF_NC goto mod;  // jr nc, .mod
 	ADD_A(7);  // add 7
 	RET;  // ret
 

@@ -1,3 +1,3 @@
-InitString();
-InitName();
-_InitString();
+int InitString();
+int InitName();
+int v_InitString();

@@ -5,21 +5,21 @@ int ClearBox(){
 	LD_A(0x7f);  // ld a, " "
 	LD_DE(SCREEN_WIDTH);  // ld de, SCREEN_WIDTH
 
-_row:
+row:
 	SET_PC(0x0EC0U);
 	PUSH_HL;  // push hl
 	PUSH_BC;  // push bc
 
-_col:
+col:
 	SET_PC(0x0EC2U);
 	LD_hli_A;  // ld [hli], a
 	DEC_C;  // dec c
-	IF_NZ goto _col;  // jr nz, .col
+	IF_NZ goto col;  // jr nz, .col
 	POP_BC;  // pop bc
 	POP_HL;  // pop hl
 	ADD_HL_DE;  // add hl, de
 	DEC_B;  // dec b
-	IF_NZ goto _row;  // jr nz, .row
+	IF_NZ goto row;  // jr nz, .row
 	RET;  // ret
 
 }
@@ -77,7 +77,7 @@ int TextboxBorder(){
 	LD_DE(SCREEN_WIDTH);  // ld de, SCREEN_WIDTH
 	ADD_HL_DE;  // add hl, de
 
-_row:
+row:
 	SET_PC(0x0F05U);
 	PUSH_HL;  // push hl
 	LD_A(0x7c);  // ld a, "│"
@@ -90,7 +90,7 @@ _row:
 	LD_DE(SCREEN_WIDTH);  // ld de, SCREEN_WIDTH
 	ADD_HL_DE;  // add hl, de
 	DEC_B;  // dec b
-	IF_NZ goto _row;  // jr nz, .row
+	IF_NZ goto row;  // jr nz, .row
 
 // ; Bottom
 	LD_A(0x7d);  // ld a, "└"
@@ -102,16 +102,16 @@ _row:
 	RET;  // ret
 
 
-_PlaceChars:
+PlaceChars:
 	SET_PC(0x0F23U);
 //  Place char a c times.
 	LD_D_C;  // ld d, c
 
-_loop:
+loop:
 	SET_PC(0x0F24U);
 	LD_hli_A;  // ld [hli], a
 	DEC_D;  // dec d
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 	RET;  // ret
 
 }
@@ -126,22 +126,22 @@ int TextboxPalette(){
 	INC_C;  // inc c
 	LD_A(PAL_BG_TEXT);  // ld a, PAL_BG_TEXT
 
-_col:
+col:
 	SET_PC(0x0F33U);
 	PUSH_BC;  // push bc
 	PUSH_HL;  // push hl
 
-_row:
+row:
 	SET_PC(0x0F35U);
 	LD_hli_A;  // ld [hli], a
 	DEC_C;  // dec c
-	IF_NZ goto _row;  // jr nz, .row
+	IF_NZ goto row;  // jr nz, .row
 	POP_HL;  // pop hl
 	LD_DE(SCREEN_WIDTH);  // ld de, SCREEN_WIDTH
 	ADD_HL_DE;  // add hl, de
 	POP_BC;  // pop bc
 	DEC_B;  // dec b
-	IF_NZ goto _col;  // jr nz, .col
+	IF_NZ goto col;  // jr nz, .col
 	RET;  // ret
 
 }
@@ -168,7 +168,7 @@ int RadioTerminator(){
 	RET;  // ret
 
 
-_stop:
+stop:
 	SET_PC(0x0F5BU);
 	//text_end ['?']  // text_end
 
@@ -287,62 +287,62 @@ int CheckDict(){
 	//dict ['"<ENEMY>"', 'PlaceEnemysName']  // dict "<ENEMY>",   PlaceEnemysName
 	//dict ['"ﾟ"', '.diacritic']  // dict "ﾟ",         .diacritic
 	CP_A(0xe5);  // cp "ﾞ"
-	IF_NZ goto _not_diacritic;  // jr nz, .not_diacritic
+	IF_NZ goto not_diacritic;  // jr nz, .not_diacritic
 
 
-_diacritic:
+diacritic:
 	SET_PC(0x102EU);
 	LD_B_A;  // ld b, a
 	CALL(mDiacritic);  // call Diacritic
 	JP(mNextChar);  // jp NextChar
 
 
-_not_diacritic:
+not_diacritic:
 	SET_PC(0x1035U);
 	CP_A(FIRST_REGULAR_TEXT_CHAR);  // cp FIRST_REGULAR_TEXT_CHAR
-	IF_NC goto _place;  // jr nc, .place
+	IF_NC goto place;  // jr nc, .place
 //  dakuten or handakuten
 	CP_A(0x40);  // cp "パ"
-	IF_NC goto _handakuten;  // jr nc, .handakuten
+	IF_NC goto handakuten;  // jr nc, .handakuten
 //  dakuten
 	CP_A(FIRST_HIRAGANA_DAKUTEN_CHAR);  // cp FIRST_HIRAGANA_DAKUTEN_CHAR
-	IF_NC goto _hiragana_dakuten;  // jr nc, .hiragana_dakuten
+	IF_NC goto hiragana_dakuten;  // jr nc, .hiragana_dakuten
 //  katakana dakuten
 	ADD_A(0x85 - 0x05);  // add "カ" - "ガ"
-	goto _place_dakuten;  // jr .place_dakuten
+	goto place_dakuten;  // jr .place_dakuten
 
 
-_hiragana_dakuten:
+hiragana_dakuten:
 	SET_PC(0x1045U);
 	ADD_A(0xb6 - 0x26);  // add "か" - "が"
 
-_place_dakuten:
+place_dakuten:
 	SET_PC(0x1047U);
 	LD_B(0xe5);  // ld b, "ﾞ" ; dakuten
 	CALL(mDiacritic);  // call Diacritic
-	goto _place;  // jr .place
+	goto place;  // jr .place
 
 
-_handakuten:
+handakuten:
 	SET_PC(0x104EU);
 	CP_A(0x44);  // cp "ぱ"
-	IF_NC goto _hiragana_handakuten;  // jr nc, .hiragana_handakuten
+	IF_NC goto hiragana_handakuten;  // jr nc, .hiragana_handakuten
 //  katakana handakuten
 	ADD_A(0x99 - 0x40);  // add "ハ" - "パ"
-	goto _place_handakuten;  // jr .place_handakuten
+	goto place_handakuten;  // jr .place_handakuten
 
 
-_hiragana_handakuten:
+hiragana_handakuten:
 	SET_PC(0x1056U);
 	ADD_A(0xca - 0x44);  // add "は" - "ぱ"
 
-_place_handakuten:
+place_handakuten:
 	SET_PC(0x1058U);
 	LD_B(0xe4);  // ld b, "ﾟ" ; handakuten
 	CALL(mDiacritic);  // call Diacritic
 
 
-_place:
+place:
 	SET_PC(0x105DU);
 	LD_hli_A;  // ld [hli], a
 	CALL(mPrintLetterDelay);  // call PrintLetterDelay
@@ -438,13 +438,13 @@ int PlaceMoveUsersName(){
 int PlaceBattlersName(){
 	PUSH_DE;  // push de
 	AND_A_A;  // and a
-	IF_NZ goto _enemy;  // jr nz, .enemy
+	IF_NZ goto enemy;  // jr nz, .enemy
 
 	LD_DE(wBattleMonNickname);  // ld de, wBattleMonNickname
 	JR(mPlaceCommandCharacter);  // jr PlaceCommandCharacter
 
 
-_enemy:
+enemy:
 	SET_PC(0x10ECU);
 	LD_DE(mEnemyText);  // ld de, EnemyText
 	CALL(mPlaceString);  // call PlaceString
@@ -460,13 +460,13 @@ int PlaceEnemysName(){
 
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
 	AND_A_A;  // and a
-	IF_NZ goto _linkbattle;  // jr nz, .linkbattle
+	IF_NZ goto linkbattle;  // jr nz, .linkbattle
 
 	LD_A_addr(wTrainerClass);  // ld a, [wTrainerClass]
 	CP_A(RIVAL1);  // cp RIVAL1
-	IF_Z goto _rival;  // jr z, .rival
+	IF_Z goto rival;  // jr z, .rival
 	CP_A(RIVAL2);  // cp RIVAL2
-	IF_Z goto _rival;  // jr z, .rival
+	IF_Z goto rival;  // jr z, .rival
 
 	LD_DE(wOTClassName);  // ld de, wOTClassName
 	CALL(mPlaceString);  // call PlaceString
@@ -481,13 +481,13 @@ int PlaceEnemysName(){
 	JR(mPlaceCommandCharacter);  // jr PlaceCommandCharacter
 
 
-_rival:
+rival:
 	SET_PC(0x1126U);
 	LD_DE(wRivalName);  // ld de, wRivalName
 	JR(mPlaceCommandCharacter);  // jr PlaceCommandCharacter
 
 
-_linkbattle:
+linkbattle:
 	SET_PC(0x112BU);
 	LD_DE(wOTClassName);  // ld de, wOTClassName
 	JR(mPlaceCommandCharacter);  // jr PlaceCommandCharacter
@@ -604,11 +604,11 @@ int Paragraph(){
 
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
 	CP_A(LINK_COLOSSEUM);  // cp LINK_COLOSSEUM
-	IF_Z goto _linkbattle;  // jr z, .linkbattle
+	IF_Z goto linkbattle;  // jr z, .linkbattle
 	CALL(mLoadBlinkingCursor);  // call LoadBlinkingCursor
 
 
-_linkbattle:
+linkbattle:
 	SET_PC(0x1190U);
 	CALL(mText_WaitBGMap);  // call Text_WaitBGMap
 	CALL(mPromptButton);  // call PromptButton
@@ -624,14 +624,14 @@ _linkbattle:
 
 }
 
-int _ContText(){
+int v_ContText(){
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
 	OR_A_A;  // or a
-	IF_NZ goto _communication;  // jr nz, .communication
+	IF_NZ goto communication;  // jr nz, .communication
 	CALL(mLoadBlinkingCursor);  // call LoadBlinkingCursor
 
 
-_communication:
+communication:
 	SET_PC(0x11B7U);
 	CALL(mText_WaitBGMap);  // call Text_WaitBGMap
 
@@ -644,10 +644,10 @@ _communication:
 	CALL_Z (mUnloadBlinkingCursor);  // call z, UnloadBlinkingCursor
 // ; fallthrough
 
-	return m_ContTextNoPause;
+	return mv_ContTextNoPause;
 }
 
-int _ContTextNoPause(){
+int v_ContTextNoPause(){
 	PUSH_DE;  // push de
 	CALL(mTextScroll);  // call TextScroll
 	CALL(mTextScroll);  // call TextScroll
@@ -669,7 +669,7 @@ int ContText(){
 	JP(mNextChar);  // jp NextChar
 
 
-_cont:
+cont:
 // db "<_CONT>@"
 	SET_PC(0x11E3U);
 
@@ -688,11 +688,11 @@ int PlaceDexEnd(){
 int PromptText(){
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
 	CP_A(LINK_COLOSSEUM);  // cp LINK_COLOSSEUM
-	IF_Z goto _ok;  // jr z, .ok
+	IF_Z goto ok;  // jr z, .ok
 	CALL(mLoadBlinkingCursor);  // call LoadBlinkingCursor
 
 
-_ok:
+ok:
 	SET_PC(0x11F3U);
 	CALL(mText_WaitBGMap);  // call Text_WaitBGMap
 	CALL(mPromptButton);  // call PromptButton
@@ -710,7 +710,7 @@ int DoneText(){
 	RET;  // ret
 
 
-_stop:
+stop:
 	SET_PC(0x1209U);
 	//text_end ['?']  // text_end
 
@@ -726,7 +726,7 @@ int NullChar(){
 	RET;  // ret
 
 
-_ErrorText:
+ErrorText:
 	SET_PC(0x1212U);
 	//text_decimal ['hObjectStructIndex', '1', '2']  // text_decimal hObjectStructIndex, 1, 2
 	//text ['"エラー"']  // text "エラー"
@@ -814,7 +814,7 @@ int PokeFluteTerminator(){
 	RET;  // ret
 
 
-_stop:
+stop:
 	SET_PC(0x126FU);
 	//text_end ['?']  // text_end
 
@@ -843,7 +843,7 @@ int DoTextUntilTerminator(){
 	JR(mDoTextUntilTerminator);  // jr DoTextUntilTerminator
 
 
-_TextCommand:
+TextCommand:
 	SET_PC(0x128AU);
 	PUSH_HL;  // push hl
 	PUSH_BC;  // push bc
@@ -1077,11 +1077,11 @@ int TextCommand_PAUSE(){
 	CALL(mGetJoypad);  // call GetJoypad
 	LDH_A_addr(hJoyDown);  // ldh a, [hJoyDown]
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
-	IF_NZ goto _done;  // jr nz, .done
+	IF_NZ goto done;  // jr nz, .done
 	LD_C(30);  // ld c, 30
 	CALL(mDelayFrames);  // call DelayFrames
 
-_done:
+done:
 	SET_PC(0x137BU);
 	POP_BC;  // pop bc
 	POP_HL;  // pop hl
@@ -1098,19 +1098,19 @@ int TextCommand_SOUND(){
 	PUSH_HL;  // push hl
 	LD_HL(mTextSFX);  // ld hl, TextSFX
 
-_loop:
+loop:
 	SET_PC(0x1386U);
 	LD_A_hli;  // ld a, [hli]
 	CP_A(-1);  // cp -1
-	IF_Z goto _done;  // jr z, .done
+	IF_Z goto done;  // jr z, .done
 	CP_A_B;  // cp b
-	IF_Z goto _play;  // jr z, .play
+	IF_Z goto play;  // jr z, .play
 	INC_HL;  // inc hl
 	INC_HL;  // inc hl
-	goto _loop;  // jr .loop
+	goto loop;  // jr .loop
 
 
-_play:
+play:
 	SET_PC(0x1392U);
 	PUSH_DE;  // push de
 	LD_E_hl;  // ld e, [hl]
@@ -1121,7 +1121,7 @@ _play:
 	POP_DE;  // pop de
 
 
-_done:
+done:
 	SET_PC(0x139DU);
 	POP_HL;  // pop hl
 	POP_BC;  // pop bc
@@ -1166,7 +1166,7 @@ int TextCommand_DOTS(){
 	LD_L_C;  // ld l, c
 
 
-_loop:
+loop:
 	SET_PC(0x13C6U);
 	PUSH_DE;  // push de
 	LD_A(0x75);  // ld a, "…"
@@ -1174,15 +1174,15 @@ _loop:
 	CALL(mGetJoypad);  // call GetJoypad
 	LDH_A_addr(hJoyDown);  // ldh a, [hJoyDown]
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
-	IF_NZ goto _next;  // jr nz, .next
+	IF_NZ goto next;  // jr nz, .next
 	LD_C(10);  // ld c, 10
 	CALL(mDelayFrames);  // call DelayFrames
 
-_next:
+next:
 	SET_PC(0x13D8U);
 	POP_DE;  // pop de
 	DEC_D;  // dec d
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 
 	LD_B_H;  // ld b, h
 	LD_C_L;  // ld c, l
@@ -1255,7 +1255,7 @@ int TextCommand_DAY(){
 	RET;  // ret
 
 
-_Days:
+Days:
 	SET_PC(0x1420U);
 	//dw ['.Sun'];  // dw .Sun
 	//dw ['.Mon'];  // dw .Mon
@@ -1266,35 +1266,35 @@ _Days:
 	//dw ['.Satur'];  // dw .Satur
 
 
-_Sun:
+Sun:
 //    db "SUN@"
 	SET_PC(0x142EU);
 
-_Mon:
+Mon:
 //    db "MON@"
 	SET_PC(0x1432U);
 
-_Tues:
+Tues:
 //   db "TUES@"
 	SET_PC(0x1436U);
 
-_Wednes:
+Wednes:
 // db "WEDNES@"
 	SET_PC(0x143BU);
 
-_Thurs:
+Thurs:
 //  db "THURS@"
 	SET_PC(0x1442U);
 
-_Fri:
+Fri:
 //    db "FRI@"
 	SET_PC(0x1448U);
 
-_Satur:
+Satur:
 //  db "SATUR@"
 	SET_PC(0x144CU);
 
-_Day:
+Day:
 //    db "DAY@"
 	SET_PC(0x1452U);
 

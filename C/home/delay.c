@@ -7,13 +7,13 @@ int DelayFrame(){
 
 //  Wait for the next VBlank, halting to conserve battery
 
-_halt:
+halt:
 	SET_PC(0x0333U);
 	RST(0x18);  // rst $18 ; rgbasm adds a nop after this instruction by default
 	  // nop
 	LD_A_addr(wVBlankOccurred);  // ld a, [wVBlankOccurred]
 	AND_A_A;  // and a
-	IF_NZ goto _halt;  // jr nz, .halt
+	IF_NZ goto halt;  // jr nz, .halt
 	RET;  // ret
 
 }

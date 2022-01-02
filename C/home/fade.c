@@ -9,11 +9,11 @@ int TimeOfDayFade(){  //  unreferenced
 	LD_A_L;  // ld a, l
 	SUB_A_B;  // sub b
 	LD_L_A;  // ld l, a
-	IF_NC goto _okay;  // jr nc, .okay
+	IF_NC goto okay;  // jr nc, .okay
 	DEC_H;  // dec h
 
 
-_okay:
+okay:
 	SET_PC(0x036DU);
 	LD_A_hli;  // ld a, [hli]
 	LDH_addr_A(rBGP);  // ldh [rBGP], a
@@ -28,13 +28,13 @@ _okay:
 int RotateFourPalettesRight(){
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
-	IF_Z goto _dmg;  // jr z, .dmg
+	IF_Z goto dmg;  // jr z, .dmg
 	LD_HL(mIncGradGBPalTable_00);  // ld hl, IncGradGBPalTable_00
 	LD_B(4);  // ld b, 4
 	JR(mRotatePalettesRight);  // jr RotatePalettesRight
 
 
-_dmg:
+dmg:
 	SET_PC(0x0383U);
 	LD_HL(mIncGradGBPalTable_08);  // ld hl, IncGradGBPalTable_08
 	LD_B(4);  // ld b, 4
@@ -45,13 +45,13 @@ _dmg:
 int RotateThreePalettesRight(){
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
-	IF_Z goto _dmg;  // jr z, .dmg
+	IF_Z goto dmg;  // jr z, .dmg
 	LD_HL(mIncGradGBPalTable_05);  // ld hl, IncGradGBPalTable_05
 	LD_B(3);  // ld b, 3
 	JR(mRotatePalettesRight);  // jr RotatePalettesRight
 
 
-_dmg:
+dmg:
 	SET_PC(0x0396U);
 	LD_HL(mIncGradGBPalTable_13);  // ld hl, IncGradGBPalTable_13
 	LD_B(3);  // ld b, 3
@@ -81,13 +81,13 @@ int RotatePalettesRight(){
 int RotateFourPalettesLeft(){
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
-	IF_Z goto _dmg;  // jr z, .dmg
+	IF_Z goto dmg;  // jr z, .dmg
 	LD_HL(mIncGradGBPalTable_04 - 1);  // ld hl, IncGradGBPalTable_04 - 1
 	LD_B(4);  // ld b, 4
 	JR(mRotatePalettesLeft);  // jr RotatePalettesLeft
 
 
-_dmg:
+dmg:
 	SET_PC(0x03BDU);
 	LD_HL(mIncGradGBPalTable_12 - 1);  // ld hl, IncGradGBPalTable_12 - 1
 	LD_B(4);  // ld b, 4
@@ -98,13 +98,13 @@ _dmg:
 int RotateThreePalettesLeft(){
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
-	IF_Z goto _dmg;  // jr z, .dmg
+	IF_Z goto dmg;  // jr z, .dmg
 	LD_HL(mIncGradGBPalTable_07 - 1);  // ld hl, IncGradGBPalTable_07 - 1
 	LD_B(3);  // ld b, 3
 	JR(mRotatePalettesLeft);  // jr RotatePalettesLeft
 
 
-_dmg:
+dmg:
 	SET_PC(0x03D0U);
 	LD_HL(mIncGradGBPalTable_15 - 1);  // ld hl, IncGradGBPalTable_15 - 1
 	LD_B(3);  // ld b, 3

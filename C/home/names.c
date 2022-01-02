@@ -25,7 +25,7 @@ int GetName(){
 
 	LD_A_addr(wNamedObjectType);  // ld a, [wNamedObjectType]
 	CP_A(MON_NAME);  // cp MON_NAME
-	IF_NZ goto _NotPokeName;  // jr nz, .NotPokeName
+	IF_NZ goto NotPokeName;  // jr nz, .NotPokeName
 
 	LD_A_addr(wCurSpecies);  // ld a, [wCurSpecies]
 	LD_addr_A(wNamedObjectIndex);  // ld [wNamedObjectIndex], a
@@ -34,10 +34,10 @@ int GetName(){
 	ADD_HL_DE;  // add hl, de
 	LD_E_L;  // ld e, l
 	LD_D_H;  // ld d, h
-	goto _done;  // jr .done
+	goto done;  // jr .done
 
 
-_NotPokeName:
+NotPokeName:
 	SET_PC(0x3620U);
 	LD_A_addr(wNamedObjectType);  // ld a, [wNamedObjectType]
 	DEC_A;  // dec a
@@ -62,7 +62,7 @@ _NotPokeName:
 	CALL(mCopyBytes);  // call CopyBytes
 
 
-_done:
+done:
 	SET_PC(0x3642U);
 	LD_A_E;  // ld a, e
 	LD_addr_A(wUnusedNamesPointer);  // ld [wUnusedNamesPointer], a
@@ -89,13 +89,13 @@ int GetNthString(){
 	LD_B_A;  // ld b, a
 	LD_C(0x50);  // ld c, "@"
 
-_readChar:
+readChar:
 	SET_PC(0x3656U);
 	LD_A_hli;  // ld a, [hli]
 	CP_A_C;  // cp c
-	IF_NZ goto _readChar;  // jr nz, .readChar
+	IF_NZ goto readChar;  // jr nz, .readChar
 	DEC_B;  // dec b
-	IF_NZ goto _readChar;  // jr nz, .readChar
+	IF_NZ goto readChar;  // jr nz, .readChar
 	POP_BC;  // pop bc
 	RET;  // ret
 
@@ -109,23 +109,23 @@ int GetBasePokemonName(){
 
 	LD_HL(wStringBuffer1);  // ld hl, wStringBuffer1
 
-_loop:
+loop:
 	SET_PC(0x3666U);
 	LD_A_hl;  // ld a, [hl]
 	CP_A(0x50);  // cp "@"
-	IF_Z goto _quit;  // jr z, .quit
+	IF_Z goto quit;  // jr z, .quit
 	CP_A(0xef);  // cp "♂"
-	IF_Z goto _end;  // jr z, .end
+	IF_Z goto end;  // jr z, .end
 	CP_A(0xf5);  // cp "♀"
-	IF_Z goto _end;  // jr z, .end
+	IF_Z goto end;  // jr z, .end
 	INC_HL;  // inc hl
-	goto _loop;  // jr .loop
+	goto loop;  // jr .loop
 
-_end:
+end:
 	SET_PC(0x3676U);
 	LD_hl(0x50);  // ld [hl], "@"
 
-_quit:
+quit:
 	SET_PC(0x3678U);
 	POP_HL;  // pop hl
 	RET;  // ret
@@ -176,19 +176,19 @@ int GetItemName(){
 	LD_A_addr(wNamedObjectIndex);  // ld a, [wNamedObjectIndex]
 
 	CP_A(TM01);  // cp TM01
-	IF_NC goto _TM;  // jr nc, .TM
+	IF_NC goto TM;  // jr nc, .TM
 
 	LD_addr_A(wCurSpecies);  // ld [wCurSpecies], a
 	LD_A(ITEM_NAME);  // ld a, ITEM_NAME
 	LD_addr_A(wNamedObjectType);  // ld [wNamedObjectType], a
 	CALL(mGetName);  // call GetName
-	goto _Copied;  // jr .Copied
+	goto Copied;  // jr .Copied
 
-_TM:
+TM:
 	SET_PC(0x36BFU);
 	CALL(mGetTMHMName);  // call GetTMHMName
 
-_Copied:
+Copied:
 	SET_PC(0x36C2U);
 	LD_DE(wStringBuffer1);  // ld de, wStringBuffer1
 	POP_BC;  // pop bc
@@ -209,20 +209,20 @@ int GetTMHMName(){
 //  TM/HM prefix
 	CP_A(HM01);  // cp HM01
 	PUSH_AF;  // push af
-	IF_C goto _TM;  // jr c, .TM
+	IF_C goto TM;  // jr c, .TM
 
 	LD_HL(mGetTMHMName_HMText);  // ld hl, .HMText
 	LD_BC(mGetTMHMName_HMTextEnd - mGetTMHMName_HMText);  // ld bc, .HMTextEnd - .HMText
-	goto _copy;  // jr .copy
+	goto copy;  // jr .copy
 
 
-_TM:
+TM:
 	SET_PC(0x36DCU);
 	LD_HL(mGetTMHMName_TMText);  // ld hl, .TMText
 	LD_BC(mGetTMHMName_TMTextEnd - mGetTMHMName_TMText);  // ld bc, .TMTextEnd - .TMText
 
 
-_copy:
+copy:
 	SET_PC(0x36E2U);
 	LD_DE(wStringBuffer1);  // ld de, wStringBuffer1
 	CALL(mCopyBytes);  // call CopyBytes
@@ -237,24 +237,24 @@ _copy:
 //  HM numbers start from 51, not 1
 	POP_AF;  // pop af
 	LD_A_C;  // ld a, c
-	IF_C goto _not_hm;  // jr c, .not_hm
+	IF_C goto not_hm;  // jr c, .not_hm
 	SUB_A(NUM_TMS);  // sub NUM_TMS
 
-_not_hm:
+not_hm:
 	SET_PC(0x36FAU);
 
 //  Divide and mod by 10 to get the top and bottom digits respectively
 	LD_B(0xf6);  // ld b, "0"
 
-_mod10:
+mod10:
 	SET_PC(0x36FCU);
 	SUB_A(10);  // sub 10
-	IF_C goto _done_mod;  // jr c, .done_mod
+	IF_C goto done_mod;  // jr c, .done_mod
 	INC_B;  // inc b
-	goto _mod10;  // jr .mod10
+	goto mod10;  // jr .mod10
 
 
-_done_mod:
+done_mod:
 	SET_PC(0x3703U);
 	ADD_A(10);  // add 10
 	PUSH_AF;  // push af
@@ -280,20 +280,20 @@ _done_mod:
 	RET;  // ret
 
 
-_TMText:
+TMText:
 	SET_PC(0x371AU);
 	//db ['"TM"'];  // db "TM"
 
-_TMTextEnd:
+TMTextEnd:
 	SET_PC(0x371CU);
 	//db ['"@"'];  // db "@"
 
 
-_HMText:
+HMText:
 	SET_PC(0x371DU);
 	//db ['"HM"'];  // db "HM"
 
-_HMTextEnd:
+HMTextEnd:
 	SET_PC(0x371FU);
 	//db ['"@"'];  // db "@"
 

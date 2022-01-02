@@ -44,20 +44,20 @@ int AppendToMovementBufferNTimes(){
 	PUSH_AF;  // push af
 	LD_A_C;  // ld a, c
 	AND_A_A;  // and a
-	IF_NZ goto _okay;  // jr nz, .okay
+	IF_NZ goto okay;  // jr nz, .okay
 	POP_AF;  // pop af
 	RET;  // ret
 
 
-_okay:
+okay:
 	SET_PC(0x19F2U);
 	POP_AF;  // pop af
 
-_loop:
+loop:
 	SET_PC(0x19F3U);
 	CALL(mAppendToMovementBuffer);  // call AppendToMovementBuffer
 	DEC_C;  // dec c
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 	RET;  // ret
 
 }
@@ -68,31 +68,31 @@ int ComputePathToWalkToPlayer(){
 	LD_A_B;  // ld a, b
 	SUB_A_D;  // sub d
 	LD_H(LEFT);  // ld h, LEFT
-	IF_NC goto _got_x_distance;  // jr nc, .got_x_distance
+	IF_NC goto got_x_distance;  // jr nc, .got_x_distance
 	DEC_A;  // dec a
 	CPL;  // cpl
 	LD_H(RIGHT);  // ld h, RIGHT
 
 
-_got_x_distance:
+got_x_distance:
 	SET_PC(0x1A05U);
 	LD_D_A;  // ld d, a
 //  compare y coords, load up/down into l, and y distance into e
 	LD_A_C;  // ld a, c
 	SUB_A_E;  // sub e
 	LD_L(UP);  // ld l, UP
-	IF_NC goto _got_y_distance;  // jr nc, .got_y_distance
+	IF_NC goto got_y_distance;  // jr nc, .got_y_distance
 	DEC_A;  // dec a
 	CPL;  // cpl
 	LD_L(DOWN);  // ld l, DOWN
 
 
-_got_y_distance:
+got_y_distance:
 	SET_PC(0x1A10U);
 	LD_E_A;  // ld e, a
 //  if the x distance is less than the y distance, swap h and l, and swap d and e
 	CP_A_D;  // cp d
-	IF_NC goto _done;  // jr nc, .done
+	IF_NC goto done;  // jr nc, .done
 	LD_A_H;  // ld a, h
 	LD_H_L;  // ld h, l
 	LD_L_A;  // ld l, a
@@ -101,7 +101,7 @@ _got_y_distance:
 	LD_E_A;  // ld e, a
 
 
-_done:
+done:
 	SET_PC(0x1A1AU);
 	POP_AF;  // pop af
 	LD_B_A;  // ld b, a
@@ -118,7 +118,7 @@ _done:
 	RET;  // ret
 
 
-_GetMovementData:
+GetMovementData:
 	SET_PC(0x1A2DU);
 	PUSH_DE;  // push de
 	PUSH_HL;  // push hl
@@ -137,7 +137,7 @@ _GetMovementData:
 	RET;  // ret
 
 
-_MovementData:
+MovementData:
 	SET_PC(0x1A40U);
 	//slow_step ['DOWN']  // slow_step DOWN
 	//slow_step ['UP']  // slow_step UP

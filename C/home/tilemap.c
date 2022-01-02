@@ -19,7 +19,7 @@ int WaitBGMap(){
 int WaitBGMap2(){
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
-	IF_Z goto _bg0;  // jr z, .bg0
+	IF_Z goto bg0;  // jr z, .bg0
 
 	LD_A(2);  // ld a, 2
 	LDH_addr_A(hBGMapMode);  // ldh [hBGMapMode], a
@@ -27,7 +27,7 @@ int WaitBGMap2(){
 	CALL(mDelayFrames);  // call DelayFrames
 
 
-_bg0:
+bg0:
 	SET_PC(0x3460U);
 	LD_A(1);  // ld a, 1
 	LDH_addr_A(hBGMapMode);  // ldh [hBGMapMode], a
@@ -47,18 +47,18 @@ int IsCGB(){
 int ApplyTilemap(){
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
-	IF_Z goto _dmg;  // jr z, .dmg
+	IF_Z goto dmg;  // jr z, .dmg
 
 	LD_A_addr(wSpriteUpdatesEnabled);  // ld a, [wSpriteUpdatesEnabled]
 	CP_A(0);  // cp 0
-	IF_Z goto _dmg;  // jr z, .dmg
+	IF_Z goto dmg;  // jr z, .dmg
 
 	LD_A(1);  // ld a, 1
 	LDH_addr_A(hBGMapMode);  // ldh [hBGMapMode], a
 	JR(mCopyTilemapAtOnce);  // jr CopyTilemapAtOnce
 
 
-_dmg:
+dmg:
 	SET_PC(0x3480U);
 //  WaitBGMap
 	LD_A(1);  // ld a, 1
@@ -88,11 +88,11 @@ int CopyTilemapAtOnce(){
 	LDH_addr_A(hMapAnims);  // ldh [hMapAnims], a
 
 
-_wait:
+wait:
 	SET_PC(0x349BU);
 	LDH_A_addr(rLY);  // ldh a, [rLY]
 	CP_A(0x80 - 1);  // cp $80 - 1
-	IF_C goto _wait;  // jr c, .wait
+	IF_C goto wait;  // jr c, .wait
 
 	NOP;  // di
 	LD_A(BANK(vBGMap2));  // ld a, BANK(vBGMap2)
@@ -105,11 +105,11 @@ _wait:
 	CALL(mCopyTilemapAtOnce_CopyBGMapViaStack);  // call .CopyBGMapViaStack
 
 
-_wait2:
+wait2:
 	SET_PC(0x34B6U);
 	LDH_A_addr(rLY);  // ldh a, [rLY]
 	CP_A(0x80 - 1);  // cp $80 - 1
-	IF_C goto _wait2;  // jr c, .wait2
+	IF_C goto wait2;  // jr c, .wait2
 	NOP;  // ei
 
 	POP_AF;  // pop af
@@ -119,7 +119,7 @@ _wait2:
 	RET;  // ret
 
 
-_CopyBGMapViaStack:
+CopyBGMapViaStack:
 	SET_PC(0x34C4U);
 //  Copy all tiles to vBGMap
 	LD_addr_SP(hSPBuffer);  // ld [hSPBuffer], sp
@@ -133,16 +133,16 @@ _CopyBGMapViaStack:
 	LD_C(LOW(rSTAT));  // ld c, LOW(rSTAT)
 
 
-_loop:
+loop:
 	SET_PC(0x34D5U);
 	POP_DE;  // pop de
 //  if in v/hblank, wait until not in v/hblank
 
-_loop_u8221:
+loop_u8221:
 	SET_PC(0x34D6U);
 	LDH_A_c;  // ldh a, [c]
 	AND_A_B;  // and b
-	IF_NZ goto _loop_u8221;  // jr nz, .loop_u8221
+	IF_NZ goto loop_u8221;  // jr nz, .loop_u8221
 //  load vBGMap
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -151,11 +151,11 @@ _loop_u8221:
 	POP_DE;  // pop de
 //  if in v/hblank, wait until not in v/hblank
 
-_loop_u8222:
+loop_u8222:
 	SET_PC(0x34DFU);
 	LDH_A_c;  // ldh a, [c]
 	AND_A_B;  // and b
-	IF_NZ goto _loop_u8222;  // jr nz, .loop_u8222
+	IF_NZ goto loop_u8222;  // jr nz, .loop_u8222
 //  load vBGMap
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -164,11 +164,11 @@ _loop_u8222:
 	POP_DE;  // pop de
 //  if in v/hblank, wait until not in v/hblank
 
-_loop_u8223:
+loop_u8223:
 	SET_PC(0x34E8U);
 	LDH_A_c;  // ldh a, [c]
 	AND_A_B;  // and b
-	IF_NZ goto _loop_u8223;  // jr nz, .loop_u8223
+	IF_NZ goto loop_u8223;  // jr nz, .loop_u8223
 //  load vBGMap
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -177,11 +177,11 @@ _loop_u8223:
 	POP_DE;  // pop de
 //  if in v/hblank, wait until not in v/hblank
 
-_loop_u8224:
+loop_u8224:
 	SET_PC(0x34F1U);
 	LDH_A_c;  // ldh a, [c]
 	AND_A_B;  // and b
-	IF_NZ goto _loop_u8224;  // jr nz, .loop_u8224
+	IF_NZ goto loop_u8224;  // jr nz, .loop_u8224
 //  load vBGMap
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -190,11 +190,11 @@ _loop_u8224:
 	POP_DE;  // pop de
 //  if in v/hblank, wait until not in v/hblank
 
-_loop_u8225:
+loop_u8225:
 	SET_PC(0x34FAU);
 	LDH_A_c;  // ldh a, [c]
 	AND_A_B;  // and b
-	IF_NZ goto _loop_u8225;  // jr nz, .loop_u8225
+	IF_NZ goto loop_u8225;  // jr nz, .loop_u8225
 //  load vBGMap
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -203,11 +203,11 @@ _loop_u8225:
 	POP_DE;  // pop de
 //  if in v/hblank, wait until not in v/hblank
 
-_loop_u8226:
+loop_u8226:
 	SET_PC(0x3503U);
 	LDH_A_c;  // ldh a, [c]
 	AND_A_B;  // and b
-	IF_NZ goto _loop_u8226;  // jr nz, .loop_u8226
+	IF_NZ goto loop_u8226;  // jr nz, .loop_u8226
 //  load vBGMap
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -216,11 +216,11 @@ _loop_u8226:
 	POP_DE;  // pop de
 //  if in v/hblank, wait until not in v/hblank
 
-_loop_u8227:
+loop_u8227:
 	SET_PC(0x350CU);
 	LDH_A_c;  // ldh a, [c]
 	AND_A_B;  // and b
-	IF_NZ goto _loop_u8227;  // jr nz, .loop_u8227
+	IF_NZ goto loop_u8227;  // jr nz, .loop_u8227
 //  load vBGMap
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -229,11 +229,11 @@ _loop_u8227:
 	POP_DE;  // pop de
 //  if in v/hblank, wait until not in v/hblank
 
-_loop_u8228:
+loop_u8228:
 	SET_PC(0x3515U);
 	LDH_A_c;  // ldh a, [c]
 	AND_A_B;  // and b
-	IF_NZ goto _loop_u8228;  // jr nz, .loop_u8228
+	IF_NZ goto loop_u8228;  // jr nz, .loop_u8228
 //  load vBGMap
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -242,11 +242,11 @@ _loop_u8228:
 	POP_DE;  // pop de
 //  if in v/hblank, wait until not in v/hblank
 
-_loop_u8229:
+loop_u8229:
 	SET_PC(0x351EU);
 	LDH_A_c;  // ldh a, [c]
 	AND_A_B;  // and b
-	IF_NZ goto _loop_u8229;  // jr nz, .loop_u8229
+	IF_NZ goto loop_u8229;  // jr nz, .loop_u8229
 //  load vBGMap
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -255,11 +255,11 @@ _loop_u8229:
 	POP_DE;  // pop de
 //  if in v/hblank, wait until not in v/hblank
 
-_loop_u8230:
+loop_u8230:
 	SET_PC(0x3527U);
 	LDH_A_c;  // ldh a, [c]
 	AND_A_B;  // and b
-	IF_NZ goto _loop_u8230;  // jr nz, .loop_u8230
+	IF_NZ goto loop_u8230;  // jr nz, .loop_u8230
 //  load vBGMap
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -271,7 +271,7 @@ _loop_u8230:
 	LDH_A_addr(hTilesPerCycle);  // ldh a, [hTilesPerCycle]
 	DEC_A;  // dec a
 	LDH_addr_A(hTilesPerCycle);  // ldh [hTilesPerCycle], a
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 
 	LDH_A_addr(hSPBuffer);  // ldh a, [hSPBuffer]
 	LD_L_A;  // ld l, a
@@ -287,7 +287,7 @@ int SetPalettes(){
 //  depending on the system the monochromes palettes or color palettes
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
-	IF_NZ goto _SetPalettesForGameBoyColor;  // jr nz, .SetPalettesForGameBoyColor
+	IF_NZ goto SetPalettesForGameBoyColor;  // jr nz, .SetPalettesForGameBoyColor
 	LD_A(0b11100100);  // ld a, %11100100
 	LDH_addr_A(rBGP);  // ldh [rBGP], a
 	LD_A(0b11010000);  // ld a, %11010000
@@ -296,7 +296,7 @@ int SetPalettes(){
 	RET;  // ret
 
 
-_SetPalettesForGameBoyColor:
+SetPalettesForGameBoyColor:
 	SET_PC(0x3552U);
 	PUSH_DE;  // push de
 	LD_A(0b11100100);  // ld a, %11100100
@@ -314,7 +314,7 @@ int ClearPalettes(){
 //  CGB: make all the palette colors white
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
-	IF_NZ goto _cgb;  // jr nz, .cgb
+	IF_NZ goto cgb;  // jr nz, .cgb
 
 //  DMG: just change palettes to 0 (white)
 	XOR_A_A;  // xor a
@@ -324,7 +324,7 @@ int ClearPalettes(){
 	RET;  // ret
 
 
-_cgb:
+cgb:
 	SET_PC(0x356DU);
 //  Fill wBGPals2 and wOBPals2 with $ffff (white)
 	LD_HL(wBGPals2);  // ld hl, wBGPals2
@@ -348,14 +348,14 @@ int GetSGBLayout(){
 
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
-	IF_NZ goto _sgb;  // jr nz, .sgb
+	IF_NZ goto sgb;  // jr nz, .sgb
 
 	LDH_A_addr(hSGB);  // ldh a, [hSGB]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
 
 
-_sgb:
+sgb:
 	SET_PC(0x3588U);
 	PREDEF_JUMP(pLoadSGBLayout);  // predef_jump LoadSGBLayout
 

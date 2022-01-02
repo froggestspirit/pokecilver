@@ -1,7 +1,7 @@
 #include "../constants.h"
 
 int PrinterReceive(){
-	HOMECALL(a_PrinterReceive);  // homecall _PrinterReceive
+	HOMECALL(av_PrinterReceive);  // homecall _PrinterReceive
 	RET;  // ret
 
 }

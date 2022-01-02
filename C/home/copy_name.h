@@ -1,2 +1,2 @@
-CopyName1();
-CopyName2();
+int CopyName1();
+int CopyName2();

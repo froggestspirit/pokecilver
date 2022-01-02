@@ -31,7 +31,7 @@ int VBlank(){
 	JP_hl;  // jp hl
 
 
-_return:
+l_return:
 	SET_PC(0x0168U);
 	CALL(mGameTimer);  // call GameTimer
 
@@ -42,7 +42,7 @@ _return:
 	RET;  // ret
 
 
-_VBlanks:
+VBlanks:
 	SET_PC(0x0170U);
 	//dw ['VBlank0'];  // dw VBlank0
 	//dw ['VBlank1'];  // dw VBlank1
@@ -103,9 +103,9 @@ int VBlank0(){
 // ; Calls are in order of priority.
 
 	CALL(mUpdateBGMapBuffer);  // call UpdateBGMapBuffer
-	IF_C goto _done;  // jr c, .done
+	IF_C goto done;  // jr c, .done
 	CALL(mUpdatePalsIfCGB);  // call UpdatePalsIfCGB
-	IF_C goto _done;  // jr c, .done
+	IF_C goto done;  // jr c, .done
 	CALL(mUpdateBGMap);  // call UpdateBGMap
 
 // ; These have their own timing checks.
@@ -116,15 +116,15 @@ int VBlank0(){
 	CALL(mFillBGMap0WithBlack);  // call FillBGMap0WithBlack
 
 
-_done:
+done:
 	SET_PC(0x01C2U);
 
 	LDH_A_addr(hOAMUpdate);  // ldh a, [hOAMUpdate]
 	AND_A_A;  // and a
-	IF_NZ goto _done_oam;  // jr nz, .done_oam
+	IF_NZ goto done_oam;  // jr nz, .done_oam
 	CALL(hTransferVirtualOAM);  // call hTransferVirtualOAM
 
-_done_oam:
+done_oam:
 	SET_PC(0x01CAU);
 
 // ; vblank-sensitive operations are done
@@ -134,27 +134,27 @@ _done_oam:
 
 	LD_A_addr(wOverworldDelay);  // ld a, [wOverworldDelay]
 	AND_A_A;  // and a
-	IF_Z goto _ok;  // jr z, .ok
+	IF_Z goto ok;  // jr z, .ok
 	DEC_A;  // dec a
 	LD_addr_A(wOverworldDelay);  // ld [wOverworldDelay], a
 
-_ok:
+ok:
 	SET_PC(0x01D8U);
 
 	LD_A_addr(wTextDelayFrames);  // ld a, [wTextDelayFrames]
 	AND_A_A;  // and a
-	IF_Z goto _ok2;  // jr z, .ok2
+	IF_Z goto ok2;  // jr z, .ok2
 	DEC_A;  // dec a
 	LD_addr_A(wTextDelayFrames);  // ld [wTextDelayFrames], a
 
-_ok2:
+ok2:
 	SET_PC(0x01E2U);
 
 	CALL(mUpdateJoypad);  // call UpdateJoypad
 
-	LD_A(BANK(a_UpdateSound));  // ld a, BANK(_UpdateSound)
+	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
 	RST(mBankswitch);  // rst Bankswitch
-	CALL(m_UpdateSound);  // call _UpdateSound
+	CALL(mv_UpdateSound);  // call _UpdateSound
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
 	RST(mBankswitch);  // rst Bankswitch
 
@@ -180,7 +180,7 @@ int VBlank1(){
 	LDH_A_addr(hSCY);  // ldh a, [hSCY]
 	LDH_addr_A(rSCY);  // ldh [rSCY], a
 	CALL(mUpdatePals);  // call UpdatePals
-	IF_C goto _done;  // jr c, .done
+	IF_C goto done;  // jr c, .done
 
 	CALL(mUpdateBGMap);  // call UpdateBGMap
 	CALL(mServe2bppRequest);  // call Serve2bppRequest
@@ -188,17 +188,17 @@ int VBlank1(){
 	CALL(hTransferVirtualOAM);  // call hTransferVirtualOAM
 
 
-_done:
+done:
 	SET_PC(0x020FU);
 	LDH_A_addr(hLCDCPointer);  // ldh a, [hLCDCPointer]
 	OR_A_A;  // or a
-	IF_Z goto _skip_lcd;  // jr z, .skip_lcd
+	IF_Z goto skip_lcd;  // jr z, .skip_lcd
 	LD_C_A;  // ld c, a
 	LD_A_addr(wLYOverrides);  // ld a, [wLYOverrides]
 	LDH_c_A;  // ldh [c], a
 
 
-_skip_lcd:
+skip_lcd:
 	SET_PC(0x0219U);
 	XOR_A_A;  // xor a
 	LD_addr_A(wVBlankOccurred);  // ld [wVBlankOccurred], a
@@ -220,9 +220,9 @@ _skip_lcd:
 	LDH_addr_A(rIF);  // ldh [rIF], a
 
 	  // ei
-	LD_A(BANK(a_UpdateSound));  // ld a, BANK(_UpdateSound)
+	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
 	RST(mBankswitch);  // rst Bankswitch
-	CALL(m_UpdateSound);  // call _UpdateSound
+	CALL(mv_UpdateSound);  // call _UpdateSound
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
 	RST(mBankswitch);  // rst Bankswitch
 // ; enable ints
@@ -275,9 +275,9 @@ int VBlank4(){
 
 	CALL(mAskSerial);  // call AskSerial
 
-	LD_A(BANK(a_UpdateSound));  // ld a, BANK(_UpdateSound)
+	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
 	RST(mBankswitch);  // rst Bankswitch
-	CALL(m_UpdateSound);  // call _UpdateSound
+	CALL(mv_UpdateSound);  // call _UpdateSound
 
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
 	RST(mBankswitch);  // rst Bankswitch
@@ -300,12 +300,12 @@ int VBlank5(){
 	LDH_addr_A(rSCX);  // ldh [rSCX], a
 
 	CALL(mUpdatePalsIfCGB);  // call UpdatePalsIfCGB
-	IF_C goto _done;  // jr c, .done
+	IF_C goto done;  // jr c, .done
 
 	CALL(mUpdateBGMap);  // call UpdateBGMap
 	CALL(mServe2bppRequest);  // call Serve2bppRequest
 
-_done:
+done:
 	SET_PC(0x028CU);
 
 	XOR_A_A;  // xor a
@@ -321,9 +321,9 @@ _done:
 	LDH_addr_A(rIF);  // ldh [rIF], a
 
 	  // ei
-	LD_A(BANK(a_UpdateSound));  // ld a, BANK(_UpdateSound)
+	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
 	RST(mBankswitch);  // rst Bankswitch
-	CALL(m_UpdateSound);  // call _UpdateSound
+	CALL(mv_UpdateSound);  // call _UpdateSound
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
 	RST(mBankswitch);  // rst Bankswitch
 	  // di
@@ -343,9 +343,9 @@ int VBlank2(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	LD_addr_A(wROMBankBackup);  // ld [wROMBankBackup], a
 
-	LD_A(BANK(a_UpdateSound));  // ld a, BANK(_UpdateSound)
+	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
 	RST(mBankswitch);  // rst Bankswitch
-	CALL(m_UpdateSound);  // call _UpdateSound
+	CALL(mv_UpdateSound);  // call _UpdateSound
 
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
 	RST(mBankswitch);  // rst Bankswitch
@@ -408,12 +408,12 @@ int VBlank3(){
 
 	LD_A_addr(wTextDelayFrames);  // ld a, [wTextDelayFrames]
 	AND_A_A;  // and a
-	IF_Z goto _okay;  // jr z, .okay
+	IF_Z goto okay;  // jr z, .okay
 	DEC_A;  // dec a
 	LD_addr_A(wTextDelayFrames);  // ld [wTextDelayFrames], a
 
 
-_okay:
+okay:
 	SET_PC(0x0311U);
 // ; discard requested ints
 	XOR_A_A;  // xor a
@@ -425,9 +425,9 @@ _okay:
 	LDH_addr_A(rIF);  // ldh [rIF], a
 
 	  // ei
-	LD_A(BANK(a_UpdateSound));  // ld a, BANK(_UpdateSound)
+	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
 	RST(mBankswitch);  // rst Bankswitch
-	CALL(m_UpdateSound);  // call _UpdateSound
+	CALL(mv_UpdateSound);  // call _UpdateSound
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
 	RST(mBankswitch);  // rst Bankswitch
 	  // di

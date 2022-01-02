@@ -13,36 +13,36 @@ int HandleStoneQueue(){
 	RET;  // ret
 
 
-_WarpAction:
+WarpAction:
 	SET_PC(0x37B5U);
 	LD_HL(OBJECT_MAP_OBJECT_INDEX);  // ld hl, OBJECT_MAP_OBJECT_INDEX
 	ADD_HL_DE;  // add hl, de
 	LD_A_hl;  // ld a, [hl]
 	CP_A(0xff);  // cp $ff
-	IF_Z goto _nope;  // jr z, .nope
+	IF_Z goto nope;  // jr z, .nope
 
 	LD_L_A;  // ld l, a
 	PUSH_HL;  // push hl
 	CALL(mHandleStoneQueue_IsObjectOnWarp);  // call .IsObjectOnWarp
 	POP_HL;  // pop hl
-	IF_NC goto _nope;  // jr nc, .nope
+	IF_NC goto nope;  // jr nc, .nope
 	LD_D_A;  // ld d, a
 	LD_E_L;  // ld e, l
 	CALL(mHandleStoneQueue_IsObjectInStoneTable);  // call .IsObjectInStoneTable
-	IF_NC goto _nope;  // jr nc, .nope
+	IF_NC goto nope;  // jr nc, .nope
 	CALL(mCallMapScript);  // call CallMapScript
 	FARCALL(aEnableScriptMode);  // farcall EnableScriptMode
 	SCF;  // scf
 	RET;  // ret
 
 
-_nope:
+nope:
 	SET_PC(0x37D8U);
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_IsObjectOnWarp:
+IsObjectOnWarp:
 	SET_PC(0x37DAU);
 	PUSH_DE;  // push de
 
@@ -64,7 +64,7 @@ _IsObjectOnWarp:
 	RET;  // ret
 
 
-_check_on_warp:
+check_on_warp:
 	SET_PC(0x37F1U);
 	LD_HL(wCurMapWarpsPointer);  // ld hl, wCurMapWarpsPointer
 	LD_A_hli;  // ld a, [hli]
@@ -72,45 +72,45 @@ _check_on_warp:
 	LD_L_A;  // ld l, a
 	LD_A_addr(wCurMapWarpCount);  // ld a, [wCurMapWarpCount]
 	AND_A_A;  // and a
-	IF_Z goto _nope2;  // jr z, .nope2
+	IF_Z goto nope2;  // jr z, .nope2
 
 
-_loop:
+loop:
 	SET_PC(0x37FDU);
 	PUSH_AF;  // push af
 	LD_A_hl;  // ld a, [hl]
 	CP_A_E;  // cp e
-	IF_NZ goto _not_on_warp;  // jr nz, .not_on_warp
+	IF_NZ goto not_on_warp;  // jr nz, .not_on_warp
 	INC_HL;  // inc hl
 	LD_A_hld;  // ld a, [hld]
 	CP_A_D;  // cp d
-	IF_NZ goto _not_on_warp;  // jr nz, .not_on_warp
-	goto _found_warp;  // jr .found_warp
+	IF_NZ goto not_on_warp;  // jr nz, .not_on_warp
+	goto found_warp;  // jr .found_warp
 
 
-_not_on_warp:
+not_on_warp:
 	SET_PC(0x3809U);
 	LD_A(WARP_EVENT_SIZE);  // ld a, WARP_EVENT_SIZE
 	ADD_A_L;  // add l
 	LD_L_A;  // ld l, a
-	IF_NC goto _no_carry;  // jr nc, .no_carry
+	IF_NC goto no_carry;  // jr nc, .no_carry
 	INC_H;  // inc h
 
-_no_carry:
+no_carry:
 	SET_PC(0x3810U);
 
 	POP_AF;  // pop af
 	DEC_A;  // dec a
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 
 
-_nope2:
+nope2:
 	SET_PC(0x3814U);
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_found_warp:
+found_warp:
 	SET_PC(0x3816U);
 	POP_AF;  // pop af
 	LD_D_A;  // ld d, a
@@ -121,7 +121,7 @@ _found_warp:
 	RET;  // ret
 
 
-_IsObjectInStoneTable:
+IsObjectInStoneTable:
 	SET_PC(0x381FU);
 	LD_HL(CMDQUEUE_ADDR);  // ld hl, CMDQUEUE_ADDR
 	ADD_HL_BC;  // add hl, bc
@@ -129,41 +129,41 @@ _IsObjectInStoneTable:
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
 
-_loop2:
+loop2:
 	SET_PC(0x3826U);
 	LD_A_hli;  // ld a, [hli]
 	CP_A(0xff);  // cp $ff
-	IF_Z goto _nope3;  // jr z, .nope3
+	IF_Z goto nope3;  // jr z, .nope3
 	CP_A_D;  // cp d
-	IF_NZ goto _next_inc3;  // jr nz, .next_inc3
+	IF_NZ goto next_inc3;  // jr nz, .next_inc3
 	LD_A_hli;  // ld a, [hli]
 	CP_A_E;  // cp e
-	IF_NZ goto _next_inc2;  // jr nz, .next_inc2
+	IF_NZ goto next_inc2;  // jr nz, .next_inc2
 	LD_A_hli;  // ld a, [hli]
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
-	goto _yes;  // jr .yes
+	goto yes;  // jr .yes
 
 
-_next_inc3:
+next_inc3:
 	SET_PC(0x3837U);
 	INC_HL;  // inc hl
 
 
-_next_inc2:
+next_inc2:
 	SET_PC(0x3838U);
 	INC_HL;  // inc hl
 	INC_HL;  // inc hl
-	goto _loop2;  // jr .loop2
+	goto loop2;  // jr .loop2
 
 
-_nope3:
+nope3:
 	SET_PC(0x383CU);
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_yes:
+yes:
 	SET_PC(0x383EU);
 	SCF;  // scf
 	RET;  // ret

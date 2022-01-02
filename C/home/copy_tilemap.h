@@ -1,3 +1,3 @@
-LoadTilemapToTempTilemap();
-SafeLoadTempTilemapToTilemap();
-LoadTempTilemapToTilemap();
+int LoadTilemapToTempTilemap();
+int SafeLoadTempTilemapToTilemap();
+int LoadTempTilemapToTilemap();

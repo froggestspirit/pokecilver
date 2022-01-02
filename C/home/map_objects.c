@@ -8,7 +8,7 @@ int GetSpritePalette(){
 	PUSH_BC;  // push bc
 	LD_C_A;  // ld c, a
 
-	FARCALL(a_GetSpritePalette);  // farcall _GetSpritePalette
+	FARCALL(av_GetSpritePalette);  // farcall _GetSpritePalette
 
 	LD_A_C;  // ld a, c
 	POP_BC;  // pop bc
@@ -26,36 +26,36 @@ int GetSpriteVTile(){
 	LD_B_A;  // ld b, a
 	LDH_A_addr(hMapObjectIndex);  // ldh a, [hMapObjectIndex]
 	CP_A(0);  // cp 0
-	IF_Z goto _nope;  // jr z, .nope
+	IF_Z goto nope;  // jr z, .nope
 	LD_A_B;  // ld a, b
 
-_loop:
+loop:
 	SET_PC(0x16B8U);
 	CP_A_hl;  // cp [hl]
-	IF_Z goto _found;  // jr z, .found
+	IF_Z goto found;  // jr z, .found
 	INC_HL;  // inc hl
 	INC_HL;  // inc hl
 	DEC_C;  // dec c
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 	LD_A_addr(wUsedSprites + 1);  // ld a, [wUsedSprites + 1]
 	SCF;  // scf
-	goto _done;  // jr .done
+	goto done;  // jr .done
 
 
-_nope:
+nope:
 	SET_PC(0x16C6U);
 	LD_A_addr(wUsedSprites + 1);  // ld a, [wUsedSprites + 1]
-	goto _done;  // jr .done
+	goto done;  // jr .done
 
 
-_found:
+found:
 	SET_PC(0x16CBU);
 	INC_HL;  // inc hl
 	XOR_A_A;  // xor a
 	LD_A_hl;  // ld a, [hl]
 
 
-_done:
+done:
 	SET_PC(0x16CEU);
 	POP_BC;  // pop bc
 	POP_HL;  // pop hl
@@ -70,11 +70,11 @@ int DoesSpriteHaveFacings(){
 	LD_B_A;  // ld b, a
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
-	LD_A(BANK(a_DoesSpriteHaveFacings));  // ld a, BANK(_DoesSpriteHaveFacings)
+	LD_A(BANK(av_DoesSpriteHaveFacings));  // ld a, BANK(_DoesSpriteHaveFacings)
 	RST(mBankswitch);  // rst Bankswitch
 
 	LD_A_B;  // ld a, b
-	CALL(m_DoesSpriteHaveFacings);  // call _DoesSpriteHaveFacings
+	CALL(mv_DoesSpriteHaveFacings);  // call _DoesSpriteHaveFacings
 	LD_C_A;  // ld c, a
 
 	POP_DE;  // pop de
@@ -137,14 +137,14 @@ int CheckGrassTile(){
 	LD_D_A;  // ld d, a
 	AND_A(0xf0);  // and $f0
 	CP_A(HI_NYBBLE_TALL_GRASS);  // cp HI_NYBBLE_TALL_GRASS
-	IF_Z goto _grass;  // jr z, .grass
+	IF_Z goto grass;  // jr z, .grass
 	CP_A(HI_NYBBLE_WATER);  // cp HI_NYBBLE_WATER
-	IF_Z goto _water;  // jr z, .water
+	IF_Z goto water;  // jr z, .water
 	SCF;  // scf
 	RET;  // ret
 
 
-_grass:
+grass:
 	SET_PC(0x171DU);
 	LD_A_D;  // ld a, d
 	AND_A(LO_NYBBLE_GRASS);  // and LO_NYBBLE_GRASS
@@ -153,7 +153,7 @@ _grass:
 	RET;  // ret
 //  For some reason, the above code is duplicated down here.
 
-_water:
+water:
 	SET_PC(0x1723U);
 	LD_A_D;  // ld a, d
 	AND_A(LO_NYBBLE_GRASS);  // and LO_NYBBLE_GRASS
@@ -264,14 +264,14 @@ int CheckObjectVisibility(){
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
 	CP_A(-1);  // cp -1
-	IF_Z goto _not_visible;  // jr z, .not_visible
+	IF_Z goto not_visible;  // jr z, .not_visible
 	LDH_addr_A(hObjectStructIndex);  // ldh [hObjectStructIndex], a
 	CALL(mGetObjectStruct);  // call GetObjectStruct
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_not_visible:
+not_visible:
 	SET_PC(0x178EU);
 	SCF;  // scf
 	RET;  // ret
@@ -283,38 +283,38 @@ int CheckObjectTime(){
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
 	CP_A(-1);  // cp -1
-	IF_NZ goto _check_hour;  // jr nz, .check_hour
+	IF_NZ goto check_hour;  // jr nz, .check_hour
 	LD_HL(MAPOBJECT_TIMEOFDAY);  // ld hl, MAPOBJECT_TIMEOFDAY
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
 	CP_A(-1);  // cp -1
-	IF_Z goto _timeofday_always;  // jr z, .timeofday_always
+	IF_Z goto timeofday_always;  // jr z, .timeofday_always
 	LD_HL(mCheckObjectTime_TimesOfDay);  // ld hl, .TimesOfDay
 	LD_A_addr(wTimeOfDay);  // ld a, [wTimeOfDay]
 	ADD_A_L;  // add l
 	LD_L_A;  // ld l, a
-	IF_NC goto _ok;  // jr nc, .ok
+	IF_NC goto ok;  // jr nc, .ok
 	INC_H;  // inc h
 
 
-_ok:
+ok:
 	SET_PC(0x17ADU);
 	LD_A_hl;  // ld a, [hl]
 	LD_HL(MAPOBJECT_TIMEOFDAY);  // ld hl, MAPOBJECT_TIMEOFDAY
 	ADD_HL_BC;  // add hl, bc
 	AND_A_hl;  // and [hl]
-	IF_NZ goto _timeofday_always;  // jr nz, .timeofday_always
+	IF_NZ goto timeofday_always;  // jr nz, .timeofday_always
 	SCF;  // scf
 	RET;  // ret
 
 
-_timeofday_always:
+timeofday_always:
 	SET_PC(0x17B7U);
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_TimesOfDay:
+TimesOfDay:
 	SET_PC(0x17B9U);
 //  entries correspond to TimeOfDay values
 	//db ['MORN'];  // db MORN
@@ -322,7 +322,7 @@ _TimesOfDay:
 	//db ['NITE'];  // db NITE
 
 
-_check_hour:
+check_hour:
 	SET_PC(0x17BCU);
 	LD_HL(MAPOBJECT_HOUR);  // ld hl, MAPOBJECT_HOUR
 	ADD_HL_BC;  // add hl, bc
@@ -333,35 +333,35 @@ _check_hour:
 	LD_HL(hHours);  // ld hl, hHours
 	LD_A_D;  // ld a, d
 	CP_A_E;  // cp e
-	IF_Z goto _yes;  // jr z, .yes
-	IF_C goto _check_timeofday;  // jr c, .check_timeofday
+	IF_Z goto yes;  // jr z, .yes
+	IF_C goto check_timeofday;  // jr c, .check_timeofday
 	LD_A_hl;  // ld a, [hl]
 	CP_A_D;  // cp d
-	IF_NC goto _yes;  // jr nc, .yes
+	IF_NC goto yes;  // jr nc, .yes
 	CP_A_E;  // cp e
-	IF_C goto _yes;  // jr c, .yes
-	IF_Z goto _yes;  // jr z, .yes
-	goto _no;  // jr .no
+	IF_C goto yes;  // jr c, .yes
+	IF_Z goto yes;  // jr z, .yes
+	goto no;  // jr .no
 
 
-_check_timeofday:
+check_timeofday:
 	SET_PC(0x17DAU);
 	LD_A_E;  // ld a, e
 	CP_A_hl;  // cp [hl]
-	IF_C goto _no;  // jr c, .no
+	IF_C goto no;  // jr c, .no
 	LD_A_hl;  // ld a, [hl]
 	CP_A_D;  // cp d
-	IF_NC goto _yes;  // jr nc, .yes
-	goto _no;  // jr .no
+	IF_NC goto yes;  // jr nc, .yes
+	goto no;  // jr .no
 
 
-_yes:
+yes:
 	SET_PC(0x17E4U);
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_no:
+no:
 	SET_PC(0x17E6U);
 	SCF;  // scf
 	RET;  // ret
@@ -404,16 +404,16 @@ int ApplyDeletionToMapObject(){
 	RET;  // ret
 
 
-_CheckStopFollow:
+CheckStopFollow:
 	SET_PC(0x1820U);
 	LD_HL(wObjectFollow_Leader);  // ld hl, wObjectFollow_Leader
 	CP_A_hl;  // cp [hl]
-	IF_Z goto _ok;  // jr z, .ok
+	IF_Z goto ok;  // jr z, .ok
 	LD_HL(wObjectFollow_Follower);  // ld hl, wObjectFollow_Follower
 	CP_A_hl;  // cp [hl]
 	RET_NZ ;  // ret nz
 
-_ok:
+ok:
 	SET_PC(0x182BU);
 	FARCALL(aStopFollow);  // farcall StopFollow
 	LD_A(-1);  // ld a, -1
@@ -465,12 +465,12 @@ int DeleteFollowerMapObject(){
 	LD_B_A;  // ld b, a
 	LD_A_addr(wObjectFollow_Leader);  // ld a, [wObjectFollow_Leader]
 	CP_A_B;  // cp b
-	IF_NZ goto _ok;  // jr nz, .ok
+	IF_NZ goto ok;  // jr nz, .ok
 	LD_A(-1);  // ld a, -1
 	LD_addr_A(wObjectFollow_Leader);  // ld [wObjectFollow_Leader], a
 
 
-_ok:
+ok:
 	SET_PC(0x1879U);
 	LD_A_B;  // ld a, b
 	CALL(mGetObjectStruct);  // call GetObjectStruct
@@ -517,26 +517,26 @@ int FindFirstEmptyObjectStruct(){
 	LD_DE(OBJECT_LENGTH);  // ld de, OBJECT_LENGTH
 	LD_C(NUM_OBJECT_STRUCTS);  // ld c, NUM_OBJECT_STRUCTS
 
-_loop:
+loop:
 	SET_PC(0x18B8U);
 	LD_A_hl;  // ld a, [hl]
 	AND_A_A;  // and a
-	IF_Z goto _break;  // jr z, .break
+	IF_Z goto l_break;  // jr z, .break
 	ADD_HL_DE;  // add hl, de
 	DEC_C;  // dec c
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 	XOR_A_A;  // xor a
-	goto _done;  // jr .done
+	goto done;  // jr .done
 
 
-_break:
+l_break:
 	SET_PC(0x18C3U);
 	LD_A(NUM_OBJECT_STRUCTS);  // ld a, NUM_OBJECT_STRUCTS
 	SUB_A_C;  // sub c
 	SCF;  // scf
 
 
-_done:
+done:
 	SET_PC(0x18C7U);
 	POP_DE;  // pop de
 	POP_BC;  // pop bc
@@ -549,11 +549,11 @@ int GetSpriteMovementFunction(){
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
 	CP_A(NUM_SPRITEMOVEDATA);  // cp NUM_SPRITEMOVEDATA
-	IF_C goto _ok;  // jr c, .ok
+	IF_C goto ok;  // jr c, .ok
 	XOR_A_A;  // xor a
 
 
-_ok:
+ok:
 	SET_PC(0x18D4U);
 	LD_HL(mSpriteMovementData + SPRITEMOVEATTR_MOVEMENT);  // ld hl, SpriteMovementData + SPRITEMOVEATTR_MOVEMENT
 	LD_E_A;  // ld e, a
@@ -604,7 +604,7 @@ int CopySpriteMovementData(){
 	RET;  // ret
 
 
-_CopyData:
+CopyData:
 	SET_PC(0x190CU);
 	LD_HL(OBJECT_MOVEMENTTYPE);  // ld hl, OBJECT_MOVEMENTTYPE
 	ADD_HL_DE;  // add hl, de
@@ -657,7 +657,7 @@ for(int rept = 0; rept < NUM_SPRITEMOVEDATA_FIELDS; rept++){
 
 }
 
-int _GetMovementByte(){
+int v_GetMovementByte(){
 //  Switch to the movement data bank
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
@@ -706,7 +706,7 @@ int UpdateSprites(){
 	RET_Z ;  // ret z
 
 	FARCALL(aUpdateAllObjectsFrozen);  // farcall UpdateAllObjectsFrozen
-	FARCALL(a_UpdateSprites);  // farcall _UpdateSprites
+	FARCALL(av_UpdateSprites);  // farcall _UpdateSprites
 	RET;  // ret
 
 }

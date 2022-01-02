@@ -1,2 +1,2 @@
-ResetGameTime();
-GameTimer();
+int ResetGameTime();
+int GameTimer();

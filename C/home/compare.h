@@ -1,2 +1,2 @@
-CompareBytes();
-CompareBytesLong();
+int CompareBytes();
+int CompareBytesLong();

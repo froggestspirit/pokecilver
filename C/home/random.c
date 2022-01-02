@@ -40,10 +40,10 @@ int BattleRandom(){
 
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
-	LD_A(BANK(a_BattleRandom));  // ld a, BANK(_BattleRandom)
+	LD_A(BANK(av_BattleRandom));  // ld a, BANK(_BattleRandom)
 	RST(mBankswitch);  // rst Bankswitch
 
-	CALL(m_BattleRandom);  // call _BattleRandom
+	CALL(mv_BattleRandom);  // call _BattleRandom
 
 	LD_addr_A(wPredefHL + 1);  // ld [wPredefHL + 1], a
 	POP_AF;  // pop af
@@ -63,10 +63,10 @@ int RandomRange(){
 	XOR_A_A;  // xor a
 	SUB_A_C;  // sub c
 
-_mod:
+mod:
 	SET_PC(0x30C9U);
 	SUB_A_C;  // sub c
-	IF_NC goto _mod;  // jr nc, .mod
+	IF_NC goto mod;  // jr nc, .mod
 	ADD_A_C;  // add c
 	LD_B_A;  // ld b, a
 
@@ -74,13 +74,13 @@ _mod:
 // ; from 0 to $ff - b.
 	PUSH_BC;  // push bc
 
-_loop:
+loop:
 	SET_PC(0x30CFU);
 	CALL(mRandom);  // call Random
 	LDH_A_addr(hRandomAdd);  // ldh a, [hRandomAdd]
 	LD_C_A;  // ld c, a
 	ADD_A_B;  // add b
-	IF_C goto _loop;  // jr c, .loop
+	IF_C goto loop;  // jr c, .loop
 	LD_A_C;  // ld a, c
 	POP_BC;  // pop bc
 

@@ -13,7 +13,7 @@ void init_function_pointers(){
 	
 	// home/init.c
 	REDIRECT(Reset);
-	REDIRECT(_Start);
+	REDIRECT(v_Start);
 	REDIRECT(Init);
 	REDIRECT(ClearVRAM);
 	REDIRECT(BlankBGMap);
@@ -23,7 +23,7 @@ void init_function_pointers(){
 	// home/audio.c
 	REDIRECT(InitSound);
 	REDIRECT(UpdateSound);
-	REDIRECT(_LoadMusicByte);
+	REDIRECT(v_LoadMusicByte);
 	REDIRECT(PlayMusic);
 	REDIRECT(PlayMusic2);
 	REDIRECT(PlayCry);
@@ -77,8 +77,8 @@ void init_function_pointers(){
 	REDIRECT(AddNTimes);
 
 	// home/call_regs.c
-	REDIRECT(_hl_);
-	REDIRECT(_de_);
+	REDIRECT(v_hl_);
+	REDIRECT(v_de_);
 
 	// home/clear_sprites.c
 	REDIRECT(ClearSprites);
@@ -247,7 +247,7 @@ void init_function_pointers(){
 	// home/string.c
 	REDIRECT(InitString);
 	REDIRECT(InitName);
-	REDIRECT(_InitString);
+	REDIRECT(v_InitString);
 
 	// home/time_palettes.c
 	REDIRECT(UpdateTimeAndPals);
@@ -256,7 +256,7 @@ void init_function_pointers(){
 
 	// home/trainers.c
 	REDIRECT(CheckTrainerBattle);
-	REDIRECT(_CheckTrainerBattle);
+	REDIRECT(v_CheckTrainerBattle);
 	REDIRECT(TalkToTrainer);
 	REDIRECT(LoadTrainer_continue);
 	REDIRECT(FacingPlayerDistance_bc);
@@ -268,7 +268,7 @@ void init_function_pointers(){
 	REDIRECT(RefreshScreen);
 	REDIRECT(CloseText);
 	REDIRECT(OpenText);
-	REDIRECT(_OpenAndCloseMenu_HDMATransferTilemapAndAttrmap);
+	REDIRECT(v_OpenAndCloseMenu_HDMATransferTilemapAndAttrmap);
 	REDIRECT(SafeUpdateSprites);
 	REDIRECT(SetCarryFlag);
 
@@ -382,10 +382,10 @@ void init_function_pointers(){
 	// home/pokemon.c
 	REDIRECT(DrawBattleHPBar);
 	REDIRECT(PrepMonFrontpic);
-	REDIRECT(_PrepMonFrontpic);
+	REDIRECT(v_PrepMonFrontpic);
 	REDIRECT(PlayStereoCry);
 	REDIRECT(PlayMonCry);
-	REDIRECT(_PlayMonCry);
+	REDIRECT(v_PlayMonCry);
 	REDIRECT(LoadCry);
 	REDIRECT(GetCryIndex);
 	REDIRECT(PrintLevel);
@@ -462,8 +462,8 @@ void init_function_pointers(){
 	REDIRECT(LineFeedChar);
 	REDIRECT(LineChar);
 	REDIRECT(Paragraph);
-	REDIRECT(_ContText);
-	REDIRECT(_ContTextNoPause);
+	REDIRECT(v_ContText);
+	REDIRECT(v_ContTextNoPause);
 	REDIRECT(ContText);
 	REDIRECT(PlaceDexEnd);
 	REDIRECT(PromptText);
@@ -530,7 +530,7 @@ void init_function_pointers(){
 	REDIRECT(GetSpriteMovementFunction);
 	REDIRECT(GetInitialFacing);
 	REDIRECT(CopySpriteMovementData);
-	REDIRECT(_GetMovementByte);
+	REDIRECT(v_GetMovementByte);
 	REDIRECT(SetVramState_Bit0);
 	REDIRECT(ResetVramState_Bit0);
 	REDIRECT(UpdateSprites);
@@ -577,11 +577,11 @@ void init_function_pointers(){
 	REDIRECT(YesNoBox);
 	REDIRECT(PlaceYesNoBox);
 	REDIRECT(PlaceGenericTwoOptionBox);
-	REDIRECT(_YesNoBox);
+	REDIRECT(v_YesNoBox);
 	REDIRECT(InterpretTwoOptionMenu);
 	REDIRECT(YesNoMenuHeader);
 	REDIRECT(OffsetMenuHeader);
-	REDIRECT(_OffsetMenuHeader);
+	REDIRECT(v_OffsetMenuHeader);
 	REDIRECT(DoNthMenu);
 	REDIRECT(SetUpMenu);
 	REDIRECT(DrawVariableLengthMenuBox);
@@ -603,7 +603,7 @@ void init_function_pointers(){
 	REDIRECT(PlayClickSFX);
 	REDIRECT(MenuTextboxWaitButton);
 	REDIRECT(Place2DMenuItemName);
-	REDIRECT(_2DMenu);
+	REDIRECT(v_2DMenu);
 	REDIRECT(ResetBGWindow);
 
 	// home/map.c
@@ -759,13 +759,13 @@ void init_function_pointers(){
 
 
 	// audio/engine.c
-	REDIRECT(_InitSound);
+	REDIRECT(v_InitSound);
 	REDIRECT(MusicFadeRestart);
 	REDIRECT(MusicOn);
 	REDIRECT(MusicOff);
-	REDIRECT(_UpdateSound);
+	REDIRECT(v_UpdateSound);
 	REDIRECT(UpdateChannels);
-	REDIRECT(_CheckSFX);
+	REDIRECT(v_CheckSFX);
 	REDIRECT(PlayDanger);
 	REDIRECT(DangerSoundHigh);
 	REDIRECT(DangerSoundLow);
@@ -836,9 +836,9 @@ void init_function_pointers(){
 	REDIRECT(Tempo);
 	REDIRECT(StartChannel);
 	REDIRECT(SetLRTracks);
-	REDIRECT(_PlayMusic);
-	REDIRECT(_PlayCry);
-	REDIRECT(_PlaySFX);
+	REDIRECT(v_PlayMusic);
+	REDIRECT(v_PlayCry);
+	REDIRECT(v_PlaySFX);
 	REDIRECT(PlayStereoSFX);
 	REDIRECT(LoadChannel);
 	REDIRECT(ChannelInit);

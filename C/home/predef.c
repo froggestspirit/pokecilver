@@ -36,7 +36,7 @@ int Predef(){
 	RET;  // ret
 
 
-_Return:
+Return:
 	SET_PC(0x2E6AU);
 //  Clean up after the Predef call
 

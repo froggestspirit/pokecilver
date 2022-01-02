@@ -39,13 +39,13 @@ int GameTimer(){
 	INC_A;  // inc a
 
 	CP_A(60);  // cp 60 ; frames/second
-	IF_NC goto _second;  // jr nc, .second
+	IF_NC goto second;  // jr nc, .second
 
 	LD_hl_A;  // ld [hl], a
 	RET;  // ret
 
 
-_second:
+second:
 	SET_PC(0x1F15U);
 	XOR_A_A;  // xor a
 	LD_hl_A;  // ld [hl], a
@@ -56,13 +56,13 @@ _second:
 	INC_A;  // inc a
 
 	CP_A(60);  // cp 60 ; seconds/minute
-	IF_NC goto _minute;  // jr nc, .minute
+	IF_NC goto minute;  // jr nc, .minute
 
 	LD_hl_A;  // ld [hl], a
 	RET;  // ret
 
 
-_minute:
+minute:
 	SET_PC(0x1F22U);
 	XOR_A_A;  // xor a
 	LD_hl_A;  // ld [hl], a
@@ -73,13 +73,13 @@ _minute:
 	INC_A;  // inc a
 
 	CP_A(60);  // cp 60 ; minutes/hour
-	IF_NC goto _hour;  // jr nc, .hour
+	IF_NC goto hour;  // jr nc, .hour
 
 	LD_hl_A;  // ld [hl], a
 	RET;  // ret
 
 
-_hour:
+hour:
 	SET_PC(0x1F2FU);
 	XOR_A_A;  // xor a
 	LD_hl_A;  // ld [hl], a
@@ -94,11 +94,11 @@ _hour:
 //  Cap the timer after 1000 hours.
 	LD_A_H;  // ld a, h
 	CP_A(HIGH(1000));  // cp HIGH(1000)
-	IF_C goto _ok;  // jr c, .ok
+	IF_C goto ok;  // jr c, .ok
 
 	LD_A_L;  // ld a, l
 	CP_A(LOW(1000));  // cp LOW(1000)
-	IF_C goto _ok;  // jr c, .ok
+	IF_C goto ok;  // jr c, .ok
 
 	LD_HL(wGameTimeCap);  // ld hl, wGameTimeCap
 	SET_hl(0);  // set 0, [hl]
@@ -109,7 +109,7 @@ _hour:
 	RET;  // ret
 
 
-_ok:
+ok:
 	SET_PC(0x1F52U);
 	LD_A_H;  // ld a, h
 	LD_addr_A(wGameTimeHours);  // ld [wGameTimeHours], a

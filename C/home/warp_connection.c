@@ -32,7 +32,7 @@ int LoadMapTimeOfDay(){
 	RET;  // ret
 
 
-_ClearBGMap:
+ClearBGMap:
 	SET_PC(0x20C5U);
 	LD_A(HIGH(vBGMap0));  // ld a, HIGH(vBGMap0)
 	LD_addr_A(wBGMapAnchor + 1);  // ld [wBGMapAnchor + 1], a
@@ -49,7 +49,7 @@ _ClearBGMap:
 	RET;  // ret
 
 
-_PushAttrmap:
+PushAttrmap:
 	SET_PC(0x20E4U);
 	decoord(0, 0, wTilemap);  // decoord 0, 0
 	CALL(mLoadMapTimeOfDay_copy);  // call .copy
@@ -61,28 +61,28 @@ _PushAttrmap:
 	LD_A(0x1);  // ld a, $1
 	LDH_addr_A(rVBK);  // ldh [rVBK], a
 
-_copy:
+copy:
 	SET_PC(0x20F5U);
 	hlbgcoord(0, 0, vBGMap0);  // hlbgcoord 0, 0
 	LD_C(SCREEN_WIDTH);  // ld c, SCREEN_WIDTH
 	LD_B(SCREEN_HEIGHT);  // ld b, SCREEN_HEIGHT
 
-_row:
+row:
 	SET_PC(0x20FCU);
 	PUSH_BC;  // push bc
 
-_column:
+column:
 	SET_PC(0x20FDU);
 	LD_A_de;  // ld a, [de]
 	INC_DE;  // inc de
 	LD_hli_A;  // ld [hli], a
 	DEC_C;  // dec c
-	IF_NZ goto _column;  // jr nz, .column
+	IF_NZ goto column;  // jr nz, .column
 	LD_BC(BG_MAP_WIDTH - SCREEN_WIDTH);  // ld bc, BG_MAP_WIDTH - SCREEN_WIDTH
 	ADD_HL_BC;  // add hl, bc
 	POP_BC;  // pop bc
 	DEC_B;  // dec b
-	IF_NZ goto _row;  // jr nz, .row
+	IF_NZ goto row;  // jr nz, .row
 	LD_A(0x0);  // ld a, $0
 	LDH_addr_A(rVBK);  // ldh [rVBK], a
 	RET;  // ret
@@ -116,12 +116,12 @@ int RefreshMapSprites(){
 	FARCALL(aCheckUpdatePlayerSprite);  // farcall CheckUpdatePlayerSprite
 	LD_HL(wPlayerSpriteSetupFlags);  // ld hl, wPlayerSpriteSetupFlags
 	BIT_hl(PLAYERSPRITESETUP_SKIP_RELOAD_GFX_F);  // bit PLAYERSPRITESETUP_SKIP_RELOAD_GFX_F, [hl]
-	IF_NZ goto _skip;  // jr nz, .skip
+	IF_NZ goto skip;  // jr nz, .skip
 	LD_HL(wVramState);  // ld hl, wVramState
 	SET_hl(0);  // set 0, [hl]
 	CALL(mSafeUpdateSprites);  // call SafeUpdateSprites
 
-_skip:
+skip:
 	SET_PC(0x214FU);
 	XOR_A_A;  // xor a
 	LD_addr_A(wPlayerSpriteSetupFlags);  // ld [wPlayerSpriteSetupFlags], a
@@ -134,18 +134,18 @@ int CheckMovingOffEdgeOfMap(){
 	CP_A(STANDING);  // cp STANDING
 	RET_Z ;  // ret z
 	AND_A_A;  // and a ; DOWN
-	IF_Z goto _down;  // jr z, .down
+	IF_Z goto down;  // jr z, .down
 	CP_A(UP);  // cp UP
-	IF_Z goto _up;  // jr z, .up
+	IF_Z goto up;  // jr z, .up
 	CP_A(LEFT);  // cp LEFT
-	IF_Z goto _left;  // jr z, .left
+	IF_Z goto left;  // jr z, .left
 	CP_A(RIGHT);  // cp RIGHT
-	IF_Z goto _right;  // jr z, .right
+	IF_Z goto right;  // jr z, .right
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_down:
+down:
 	SET_PC(0x216BU);
 	LD_A_addr(wPlayerStandingMapY);  // ld a, [wPlayerStandingMapY]
 	SUB_A(4);  // sub 4
@@ -153,32 +153,32 @@ _down:
 	LD_A_addr(wMapHeight);  // ld a, [wMapHeight]
 	ADD_A_A;  // add a
 	CP_A_B;  // cp b
-	IF_Z goto _ok;  // jr z, .ok
+	IF_Z goto ok;  // jr z, .ok
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_up:
+up:
 	SET_PC(0x217AU);
 	LD_A_addr(wPlayerStandingMapY);  // ld a, [wPlayerStandingMapY]
 	SUB_A(4);  // sub 4
 	CP_A(-1);  // cp -1
-	IF_Z goto _ok;  // jr z, .ok
+	IF_Z goto ok;  // jr z, .ok
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_left:
+left:
 	SET_PC(0x2185U);
 	LD_A_addr(wPlayerStandingMapX);  // ld a, [wPlayerStandingMapX]
 	SUB_A(4);  // sub 4
 	CP_A(-1);  // cp -1
-	IF_Z goto _ok;  // jr z, .ok
+	IF_Z goto ok;  // jr z, .ok
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_right:
+right:
 	SET_PC(0x2190U);
 	LD_A_addr(wPlayerStandingMapX);  // ld a, [wPlayerStandingMapX]
 	SUB_A(4);  // sub 4
@@ -186,12 +186,12 @@ _right:
 	LD_A_addr(wMapWidth);  // ld a, [wMapWidth]
 	ADD_A_A;  // add a
 	CP_A_B;  // cp b
-	IF_Z goto _ok;  // jr z, .ok
+	IF_Z goto ok;  // jr z, .ok
 	AND_A_A;  // and a
 	RET;  // ret
 
 
-_ok:
+ok:
 	SET_PC(0x219FU);
 	SCF;  // scf
 	RET;  // ret
@@ -212,7 +212,7 @@ int EnterMapConnection(){
 	RET;  // ret
 
 
-_west:
+west:
 	SET_PC(0x21B8U);
 	LD_A_addr(wWestConnectedMapGroup);  // ld a, [wWestConnectedMapGroup]
 	LD_addr_A(wMapGroup);  // ld [wMapGroup], a
@@ -230,21 +230,21 @@ _west:
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
 	SRL_C;  // srl c
-	IF_Z goto _skip_to_load;  // jr z, .skip_to_load
+	IF_Z goto skip_to_load;  // jr z, .skip_to_load
 	LD_A_addr(wWestConnectedMapWidth);  // ld a, [wWestConnectedMapWidth]
 	ADD_A(6);  // add 6
 	LD_E_A;  // ld e, a
 	LD_D(0);  // ld d, 0
 
 
-_loop:
+loop:
 	SET_PC(0x21E5U);
 	ADD_HL_DE;  // add hl, de
 	DEC_C;  // dec c
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 
 
-_skip_to_load:
+skip_to_load:
 	SET_PC(0x21E9U);
 	LD_A_L;  // ld a, l
 	LD_addr_A(wOverworldMapAnchor);  // ld [wOverworldMapAnchor], a
@@ -253,7 +253,7 @@ _skip_to_load:
 	JP(mEnterMapConnection_done);  // jp .done
 
 
-_east:
+east:
 	SET_PC(0x21F4U);
 	LD_A_addr(wEastConnectedMapGroup);  // ld a, [wEastConnectedMapGroup]
 	LD_addr_A(wMapGroup);  // ld [wMapGroup], a
@@ -271,21 +271,21 @@ _east:
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
 	SRL_C;  // srl c
-	IF_Z goto _skip_to_load2;  // jr z, .skip_to_load2
+	IF_Z goto skip_to_load2;  // jr z, .skip_to_load2
 	LD_A_addr(wEastConnectedMapWidth);  // ld a, [wEastConnectedMapWidth]
 	ADD_A(6);  // add 6
 	LD_E_A;  // ld e, a
 	LD_D(0);  // ld d, 0
 
 
-_loop2:
+loop2:
 	SET_PC(0x2221U);
 	ADD_HL_DE;  // add hl, de
 	DEC_C;  // dec c
-	IF_NZ goto _loop2;  // jr nz, .loop2
+	IF_NZ goto loop2;  // jr nz, .loop2
 
 
-_skip_to_load2:
+skip_to_load2:
 	SET_PC(0x2225U);
 	LD_A_L;  // ld a, l
 	LD_addr_A(wOverworldMapAnchor);  // ld [wOverworldMapAnchor], a
@@ -294,7 +294,7 @@ _skip_to_load2:
 	JP(mEnterMapConnection_done);  // jp .done
 
 
-_north:
+north:
 	SET_PC(0x2230U);
 	LD_A_addr(wNorthConnectedMapGroup);  // ld a, [wNorthConnectedMapGroup]
 	LD_addr_A(wMapGroup);  // ld [wMapGroup], a
@@ -321,7 +321,7 @@ _north:
 	JP(mEnterMapConnection_done);  // jp .done
 
 
-_south:
+south:
 	SET_PC(0x2261U);
 	LD_A_addr(wSouthConnectedMapGroup);  // ld a, [wSouthConnectedMapGroup]
 	LD_addr_A(wMapGroup);  // ld [wMapGroup], a
@@ -346,7 +346,7 @@ _south:
 	LD_A_H;  // ld a, h
 	LD_addr_A(wOverworldMapAnchor + 1);  // ld [wOverworldMapAnchor + 1], a
 
-_done:
+done:
 	SET_PC(0x228FU);
 	SCF;  // scf
 	RET;  // ret
@@ -392,7 +392,7 @@ int GetDestinationWarpNumber(){
 	RET;  // ret
 
 
-_GetDestinationWarpNumber:
+GetDestinationWarpNumber:
 	SET_PC(0x22BFU);
 	LD_A_addr(wPlayerStandingMapY);  // ld a, [wPlayerStandingMapY]
 	SUB_A(4);  // sub 4
@@ -410,37 +410,37 @@ _GetDestinationWarpNumber:
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
 
-_loop:
+loop:
 	SET_PC(0x22D7U);
 	PUSH_HL;  // push hl
 	LD_A_hli;  // ld a, [hli]
 	CP_A_E;  // cp e
-	IF_NZ goto _next;  // jr nz, .next
+	IF_NZ goto next;  // jr nz, .next
 	LD_A_hli;  // ld a, [hli]
 	CP_A_D;  // cp d
-	IF_NZ goto _next;  // jr nz, .next
-	goto _found_warp;  // jr .found_warp
+	IF_NZ goto next;  // jr nz, .next
+	goto found_warp;  // jr .found_warp
 
 
-_next:
+next:
 	SET_PC(0x22E2U);
 	POP_HL;  // pop hl
 	LD_A(WARP_EVENT_SIZE);  // ld a, WARP_EVENT_SIZE
 	ADD_A_L;  // add l
 	LD_L_A;  // ld l, a
-	IF_NC goto _okay;  // jr nc, .okay
+	IF_NC goto okay;  // jr nc, .okay
 	INC_H;  // inc h
 
 
-_okay:
+okay:
 	SET_PC(0x22EAU);
 	DEC_C;  // dec c
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 	XOR_A_A;  // xor a
 	RET;  // ret
 
 
-_found_warp:
+found_warp:
 	SET_PC(0x22EFU);
 	POP_HL;  // pop hl
 	CALL(mGetDestinationWarpNumber_IncreaseHLTwice);  // call .IncreaseHLTwice
@@ -454,7 +454,7 @@ _found_warp:
 	RET;  // ret
 
 
-_IncreaseHLTwice:
+IncreaseHLTwice:
 	SET_PC(0x22FCU);
 	INC_HL;  // inc hl
 	INC_HL;  // inc hl
@@ -476,7 +476,7 @@ int CopyWarpData(){
 	RET;  // ret
 
 
-_CopyWarpData:
+CopyWarpData:
 	SET_PC(0x230DU);
 	PUSH_BC;  // push bc
 	LD_HL(wCurMapWarpsPointer);  // ld hl, wCurMapWarpsPointer
@@ -491,12 +491,12 @@ _CopyWarpData:
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hli;  // ld a, [hli]
 	CP_A(-1);  // cp -1
-	IF_NZ goto _skip;  // jr nz, .skip
+	IF_NZ goto skip;  // jr nz, .skip
 	LD_HL(wBackupWarpNumber);  // ld hl, wBackupWarpNumber
 	LD_A_hli;  // ld a, [hli]
 
 
-_skip:
+skip:
 	SET_PC(0x2329U);
 	POP_BC;  // pop bc
 	LD_addr_A(wNextWarp);  // ld [wNextWarp], a
@@ -528,7 +528,7 @@ int EnterMapWarp(){
 	RET;  // ret
 
 
-_SaveDigWarp:
+SaveDigWarp:
 	SET_PC(0x2360U);
 	CALL(mGetMapEnvironment);  // call GetMapEnvironment
 	CALL(mCheckOutdoorMap);  // call CheckOutdoorMap
@@ -545,7 +545,7 @@ _SaveDigWarp:
 //  Dig and Escape Rope should not take you to them.
 	LD_A_addr(wPrevMapGroup);  // ld a, [wPrevMapGroup]
 	CP_A(GROUP_MOUNT_MOON_SQUARE);  // cp GROUP_MOUNT_MOON_SQUARE
-	IF_NZ goto _not_mt_moon_square_or_tin_tower_roof;  // jr nz, .not_mt_moon_square_or_tin_tower_roof
+	IF_NZ goto not_mt_moon_square_or_tin_tower_roof;  // jr nz, .not_mt_moon_square_or_tin_tower_roof
 	//assert ['GROUP_MOUNT_MOON_SQUARE == GROUP_TIN_TOWER_ROOF'];  // assert GROUP_MOUNT_MOON_SQUARE == GROUP_TIN_TOWER_ROOF
 	LD_A_addr(wPrevMapNumber);  // ld a, [wPrevMapNumber]
 	CP_A(MAP_MOUNT_MOON_SQUARE);  // cp MAP_MOUNT_MOON_SQUARE
@@ -553,7 +553,7 @@ _SaveDigWarp:
 	CP_A(MAP_TIN_TOWER_ROOF);  // cp MAP_TIN_TOWER_ROOF
 	RET_Z ;  // ret z
 
-_not_mt_moon_square_or_tin_tower_roof:
+not_mt_moon_square_or_tin_tower_roof:
 	SET_PC(0x2386U);
 
 	LD_A_addr(wPrevWarp);  // ld a, [wPrevWarp]
@@ -565,7 +565,7 @@ _not_mt_moon_square_or_tin_tower_roof:
 	RET;  // ret
 
 
-_SetSpawn:
+SetSpawn:
 	SET_PC(0x2399U);
 	CALL(mGetMapEnvironment);  // call GetMapEnvironment
 	CALL(mCheckOutdoorMap);  // call CheckOutdoorMap

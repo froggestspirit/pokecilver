@@ -10,13 +10,13 @@ int CopyName1(){
 int CopyName2(){
 //  Copies the name from de to hl
 
-_loop:
+loop:
 	SET_PC(0x317CU);
 	LD_A_de;  // ld a, [de]
 	INC_DE;  // inc de
 	LD_hli_A;  // ld [hli], a
 	CP_A(0x50);  // cp "@"
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 	RET;  // ret
 
 }

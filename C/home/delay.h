@@ -1,2 +1,2 @@
-DelayFrame();
-DelayFrames();
+int DelayFrame();
+int DelayFrames();

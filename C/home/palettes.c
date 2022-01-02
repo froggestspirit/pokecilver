@@ -28,7 +28,7 @@ int UpdateCGBPals(){
 	LDH_addr_A(rBGPI);  // ldh [rBGPI], a
 	LD_C(8 / 2);  // ld c, 8 / 2
 
-_bgp:
+bgp:
 	SET_PC(0x0BEEU);
 for(int rept = 0; rept < (1 * PALETTE_SIZE) * 2; rept++){
 	LD_A_hli;  // ld a, [hli]
@@ -36,7 +36,7 @@ for(int rept = 0; rept < (1 * PALETTE_SIZE) * 2; rept++){
 }
 
 	DEC_C;  // dec c
-	IF_NZ goto _bgp;  // jr nz, .bgp
+	IF_NZ goto bgp;  // jr nz, .bgp
 
 //  hl is now wOBPals2
 
@@ -45,7 +45,7 @@ for(int rept = 0; rept < (1 * PALETTE_SIZE) * 2; rept++){
 	LDH_addr_A(rOBPI);  // ldh [rOBPI], a
 	LD_C(8 / 2);  // ld c, 8 / 2
 
-_obp:
+obp:
 	SET_PC(0x0C27U);
 for(int rept = 0; rept < (1 * PALETTE_SIZE) * 2; rept++){
 	LD_A_hli;  // ld a, [hli]
@@ -53,7 +53,7 @@ for(int rept = 0; rept < (1 * PALETTE_SIZE) * 2; rept++){
 }
 
 	DEC_C;  // dec c
-	IF_NZ goto _obp;  // jr nz, .obp
+	IF_NZ goto obp;  // jr nz, .obp
 
 //  clear pal update queue
 	XOR_A_A;  // xor a
@@ -75,7 +75,7 @@ int DmgToCgbBGPals(){
 //  Don't need to be here if DMG
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
-	IF_Z goto _end;  // jr z, .end
+	IF_Z goto end;  // jr z, .end
 
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
@@ -98,7 +98,7 @@ int DmgToCgbBGPals(){
 	POP_DE;  // pop de
 	POP_HL;  // pop hl
 
-_end:
+end:
 	SET_PC(0x0C7FU);
 	POP_AF;  // pop af
 	RET;  // ret
@@ -151,7 +151,7 @@ int DmgToCgbObjPal0(){
 //  Don't need to be here if not CGB
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
-	IF_Z goto _dmg;  // jr z, .dmg
+	IF_Z goto dmg;  // jr z, .dmg
 
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
@@ -171,7 +171,7 @@ int DmgToCgbObjPal0(){
 	POP_HL;  // pop hl
 
 
-_dmg:
+dmg:
 	SET_PC(0x0CC4U);
 	POP_AF;  // pop af
 	RET;  // ret
@@ -184,7 +184,7 @@ int DmgToCgbObjPal1(){
 
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
-	IF_Z goto _dmg;  // jr z, .dmg
+	IF_Z goto dmg;  // jr z, .dmg
 
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
@@ -204,7 +204,7 @@ int DmgToCgbObjPal1(){
 	POP_HL;  // pop hl
 
 
-_dmg:
+dmg:
 	SET_PC(0x0CE6U);
 	POP_AF;  // pop af
 	RET;  // ret
@@ -217,7 +217,7 @@ int CopyPals(){
 	PUSH_BC;  // push bc
 	LD_C(NUM_PAL_COLORS);  // ld c, NUM_PAL_COLORS
 
-_loop:
+loop:
 	SET_PC(0x0CEBU);
 	PUSH_DE;  // push de
 	PUSH_HL;  // push hl
@@ -249,15 +249,15 @@ for(int rept = 0; rept < PAL_COLOR_SIZE; rept++){
 	POP_DE;  // pop de
 //  done pal?
 	DEC_C;  // dec c
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 
 //  de += 8 (next pal)
 	LD_A(PALETTE_SIZE);  // ld a, PALETTE_SIZE
 	ADD_A_E;  // add e
-	IF_NC goto _ok;  // jr nc, .ok
+	IF_NC goto ok;  // jr nc, .ok
 	INC_D;  // inc d
 
-_ok:
+ok:
 	SET_PC(0x0D0BU);
 	LD_E_A;  // ld e, a
 
@@ -293,21 +293,21 @@ int ReloadPalettes(){
 	decoord(0, 0, wAttrmap);  // decoord 0, 0, wAttrmap
 	LD_BC(SCREEN_WIDTH * SCREEN_HEIGHT);  // ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 
-_loop:
+loop:
 	SET_PC(0x0D31U);
 	LD_A_hli;  // ld a, [hli]
 	CP_A(0x60);  // cp "■"
-	IF_C goto _skip;  // jr c, .skip
+	IF_C goto skip;  // jr c, .skip
 	LD_A(PAL_BG_TEXT);  // ld a, PAL_BG_TEXT
 	LD_de_A;  // ld [de], a
 
-_skip:
+skip:
 	SET_PC(0x0D39U);
 	INC_DE;  // inc de
 	DEC_BC;  // dec bc
 	LD_A_B;  // ld a, b
 	OR_A_C;  // or c
-	IF_NZ goto _loop;  // jr nz, .loop
+	IF_NZ goto loop;  // jr nz, .loop
 	RET;  // ret
 
 }
@@ -328,13 +328,13 @@ int ReloadSpritesNoPalettes(){
 }
 
 int SwapTextboxPalettes(){
-	HOMECALL(a_SwapTextboxPalettes);  // homecall _SwapTextboxPalettes
+	HOMECALL(av_SwapTextboxPalettes);  // homecall _SwapTextboxPalettes
 	RET;  // ret
 
 }
 
 int ScrollBGMapPalettes(){
-	HOMECALL(a_ScrollBGMapPalettes);  // homecall _ScrollBGMapPalettes
+	HOMECALL(av_ScrollBGMapPalettes);  // homecall _ScrollBGMapPalettes
 	RET;  // ret
 
 }
