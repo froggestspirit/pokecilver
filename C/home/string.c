@@ -22,9 +22,9 @@ int v_InitString(){
 loop:
 	SET_PC(0x2FBBU);
 	LD_A_hli;  // ld a, [hli]
-	CP_A("@");  // cp "@"
+	CP_A(0x50);  // cp "@"
 	IF_Z goto blank;  // jr z, .blank
-	CP_A(" ");  // cp " "
+	CP_A(0x7f);  // cp " "
 	IF_NZ goto notblank;  // jr nz, .notblank
 	DEC_C;  // dec c
 	IF_NZ goto loop;  // jr nz, .loop

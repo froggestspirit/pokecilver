@@ -22,7 +22,7 @@ int PrintBCDNumber(){
 	IF_Z goto loop;  // jr z, .loop
 	BIT_B(PRINTNUM_LEADINGZEROS_F);  // bit PRINTNUM_LEADINGZEROS_F, b
 	IF_NZ goto loop;  // jr nz, .loop ; skip currency symbol
-	LD_hl("¥");  // ld [hl], "¥"
+	LD_hl(0xf0);  // ld [hl], "¥"
 	INC_HL;  // inc hl
 
 loop:
@@ -47,12 +47,12 @@ skipLeftAlignmentAdjustment:
 	SET_PC(0x3B03U);
 	BIT_B(PRINTNUM_MONEY_F);  // bit PRINTNUM_MONEY_F, b
 	IF_Z goto skipCurrencySymbol;  // jr z, .skipCurrencySymbol
-	LD_hl("¥");  // ld [hl], "¥" ; currency symbol
+	LD_hl(0xf0);  // ld [hl], "¥" ; currency symbol
 	INC_HL;  // inc hl
 
 skipCurrencySymbol:
 	SET_PC(0x3B0AU);
-	LD_hl("0");  // ld [hl], "0"
+	LD_hl(0xf6);  // ld [hl], "0"
 	CALL(mPrintLetterDelay);  // call PrintLetterDelay
 	INC_HL;  // inc hl
 
@@ -72,7 +72,7 @@ int PrintBCDDigit(){
 //  if bit 7 is set, then no numbers have been printed yet
 	BIT_B(PRINTNUM_MONEY_F);  // bit PRINTNUM_MONEY_F, b
 	IF_Z goto skipCurrencySymbol;  // jr z, .skipCurrencySymbol
-	LD_hl("¥");  // ld [hl], "¥"
+	LD_hl(0xf0);  // ld [hl], "¥"
 	INC_HL;  // inc hl
 	RES_B(PRINTNUM_MONEY_F);  // res PRINTNUM_MONEY_F, b
 
@@ -82,7 +82,7 @@ skipCurrencySymbol:
 
 outputDigit:
 	SET_PC(0x3B25U);
-	ADD_A("0");  // add "0"
+	ADD_A(0xf6);  // add "0"
 	LD_hli_A;  // ld [hli], a
 	JP(mPrintLetterDelay);  // jp PrintLetterDelay
 
@@ -93,7 +93,7 @@ zeroDigit:
 	IF_Z goto outputDigit;  // jr z, .outputDigit ; if so, print a zero digit
 	BIT_B(PRINTNUM_LEFTALIGN_F);  // bit PRINTNUM_LEFTALIGN_F, b
 	RET_NZ ;  // ret nz
-	LD_A(" ");  // ld a, " "
+	LD_A(0x7f);  // ld a, " "
 	LD_hli_A;  // ld [hli], a ; if right-aligned, "print" a space by advancing the pointer
 	RET;  // ret
 

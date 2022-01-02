@@ -23,7 +23,6 @@ labelReserved = ("short", "auto", "break", "return")
 def convert_string(string):
     global charMap
     global charMapEqu
-    print(string)
     strings = string.split('"')
     if len(strings) < 2:
         return string
@@ -60,7 +59,9 @@ def check_if_label(string, prefix):
     parts = string.split(" ")
     ret = ""
     for part in parts:
-        if part[0] == ".":
+        if part[0] == "_":
+            part = f"v{part}"
+        elif part[0] == ".":
             part = f"{currentFunc}_{part[1:]}"
         if part in funcsKnown:
             ret = f"{ret} {prefix}{part}"
@@ -194,10 +195,11 @@ def parse_asm(asm):
         parts = curASM.split("(")
         for p, part in enumerate(parts):
             if part in ("BANK", "LOW", "HIGH"):
-                if f"{parts[p + 1].split(')')[0]}" in funcsKnown:
-                    func = parts[p + 1].split(')')[0]
+                fnc = f"{parts[p + 1].split(')')[0]}"
+                if check_if_label(fnc, '') in funcsKnown:
+                    func = fnc
         if func:
-            asm[i] = curASM.replace(func, f"a{func}")
+            asm[i] = curASM.replace(func, check_if_label(func, 'a'))
 
     if opcode in ("ld", "ldh"):
         op = opcode.upper()
@@ -241,7 +243,7 @@ def parse_asm(asm):
                 return f"{preCond}{cond}goto l_{asm[0][1:]};"
             return f"{preCond}{cond}goto {asm[0][1:]};"
         funcRet = True
-        return f"JR{cond}(m{asm[0]});"
+        return f"JR{cond}({check_if_label(asm[0], 'm')});"
     elif opcode in ("jp"):
         cond = ""
         if asm[0] == "hl":
@@ -251,9 +253,10 @@ def parse_asm(asm):
             cond = f"{condition[asm[0]]} "
             asm = asm[1:]
         if asm[0][0] == ".":
-            return f"JP{cond}(m{currentFunc}_{asm[0][1:]});"
+            fnc = f"{currentFunc}_{asm[0][1:]}"
+            return f"JP{cond}({check_if_label(fnc, 'm')});"
         funcRet = True
-        return f"JP{cond}(m{asm[0]});"
+        return f"JP{cond}({check_if_label(asm[0], 'm')});"
     elif opcode in ("call"):
         cond = ""
         if asm[0] in condition:
@@ -263,7 +266,7 @@ def parse_asm(asm):
     elif opcode in ("rst"):
         return f"RST({check_if_label(asm[0], 'm')});"
     elif opcode in ("callfar", "farcall", "homecall"):
-        return f"{opcode.upper()}(a{asm[0]});"
+        return f"{opcode.upper()}({check_if_label(asm[0], 'a')});"
     elif opcode in ("lda_predef", "predef", "predef_jump"):
         return f"{opcode.upper()}(p{asm[0]});"
     elif opcode in ("add","adc","sub","sbc","and","or","xor","cp"):

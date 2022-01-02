@@ -295,7 +295,8 @@ int MinVolume(){
 
 }
 
-int FadeOutToMusic(){  //  unreferenced
+int FadeOutToMusic(){
+//  //  unreferenced
 	LD_A(4);  // ld a, 4
 	LD_addr_A(wMusicFade);  // ld [wMusicFade], a
 	RET;  // ret
@@ -473,6 +474,7 @@ no:
 
 
 bike:
+// 
 	SET_PC(0x3F34U);  //  unreferenced
 	LD_DE(MUSIC_BICYCLE);  // ld de, MUSIC_BICYCLE
 	SCF;  // scf
@@ -514,7 +516,8 @@ int GetMapMusic_MaybeSpecial(){
 
 }
 
-int PlaceBCDNumberSprite(){  //  unreferenced
+int PlaceBCDNumberSprite(){
+//  //  unreferenced
 //  Places a BCD number at the upper center of the screen.
 	LD_A(4 * TILE_WIDTH);  // ld a, 4 * TILE_WIDTH
 	LD_addr_A(wVirtualOAMSprite38YCoord);  // ld [wVirtualOAMSprite38YCoord], a
@@ -534,18 +537,18 @@ int PlaceBCDNumberSprite(){  //  unreferenced
 	LD_B_A;  // ld b, a
 	SWAP_A;  // swap a
 	AND_A(0xf);  // and $f
-	ADD_A("0");  // add "0"
+	ADD_A(0xf6);  // add "0"
 	LD_addr_A(wVirtualOAMSprite38TileID);  // ld [wVirtualOAMSprite38TileID], a
 	LD_A_B;  // ld a, b
 	AND_A(0xf);  // and $f
-	ADD_A("0");  // add "0"
+	ADD_A(0xf6);  // add "0"
 	LD_addr_A(wVirtualOAMSprite39TileID);  // ld [wVirtualOAMSprite39TileID], a
 	RET;  // ret
 
 
 max:
 	SET_PC(0x3F93U);
-	LD_A("9");  // ld a, "9"
+	LD_A(0xff);  // ld a, "9"
 	LD_addr_A(wVirtualOAMSprite38TileID);  // ld [wVirtualOAMSprite38TileID], a
 	LD_addr_A(wVirtualOAMSprite39TileID);  // ld [wVirtualOAMSprite39TileID], a
 	RET;  // ret
