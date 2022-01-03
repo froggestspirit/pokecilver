@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int ScrollingMenu(){
+	SET_PC(0x374DU);
 	CALL(mCopyMenuData);  // call CopyMenuData
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
@@ -29,6 +30,7 @@ UpdatePalettes:
 }
 
 int InitScrollingMenu(){
+	SET_PC(0x3770U);
 	LD_A_addr(wMenuBorderTopCoord);  // ld a, [wMenuBorderTopCoord]
 	DEC_A;  // dec a
 	LD_B_A;  // ld b, a
@@ -49,6 +51,7 @@ int InitScrollingMenu(){
 }
 
 int JoyTextDelay_ForcehJoyDown(){
+	SET_PC(0x378CU);
 	CALL(mDelayFrame);  // call DelayFrame
 
 	LDH_A_addr(hInMenu);  // ldh a, [hInMenu]

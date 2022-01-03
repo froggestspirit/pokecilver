@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int IsInArray(){
+	SET_PC(0x3184U);
 //  Find value a for every de bytes in array hl.
 //  Return index in b and carry if found.
 
@@ -33,6 +34,7 @@ InArray:
 }
 
 int SkipNames(){
+	SET_PC(0x3197U);
 //  Skip a names.
 	LD_BC(NAME_LENGTH);  // ld bc, NAME_LENGTH
 	AND_A_A;  // and a
@@ -48,6 +50,7 @@ loop:
 }
 
 int AddNTimes(){
+	SET_PC(0x31A1U);
 //  Add bc * a to hl.
 	AND_A_A;  // and a
 	RET_Z ;  // ret z

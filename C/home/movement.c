@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int InitMovementBuffer(){
+	SET_PC(0x19B9U);
 	LD_addr_A(wMovementBufferObject);  // ld [wMovementBufferObject], a
 	XOR_A_A;  // xor a
 	LD_addr_A(wMovementBufferCount);  // ld [wMovementBufferCount], a
@@ -15,6 +16,7 @@ int InitMovementBuffer(){
 }
 
 int DecrementMovementBufferCount(){
+	SET_PC(0x19D0U);
 	LD_A_addr(wMovementBufferCount);  // ld a, [wMovementBufferCount]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -25,6 +27,7 @@ int DecrementMovementBufferCount(){
 }
 
 int AppendToMovementBuffer(){
+	SET_PC(0x19DAU);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	LD_HL(wMovementBufferCount);  // ld hl, wMovementBufferCount
@@ -41,6 +44,7 @@ int AppendToMovementBuffer(){
 }
 
 int AppendToMovementBufferNTimes(){
+	SET_PC(0x19EBU);
 	PUSH_AF;  // push af
 	LD_A_C;  // ld a, c
 	AND_A_A;  // and a
@@ -63,6 +67,7 @@ loop:
 }
 
 int ComputePathToWalkToPlayer(){
+	SET_PC(0x19FAU);
 	PUSH_AF;  // push af
 //  compare x coords, load left/right into h, and x distance into d
 	LD_A_B;  // ld a, b

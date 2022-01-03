@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int InitString(){
+	SET_PC(0x2FB4U);
 //  Init a string of length c.
 	PUSH_HL;  // push hl
 	JR(mv_InitString);  // jr _InitString
@@ -8,6 +9,7 @@ int InitString(){
 }
 
 int InitName(){
+	SET_PC(0x2FB7U);
 //  Intended for names, so this function is limited to ten characters.
 	PUSH_HL;  // push hl
 	LD_C(NAME_LENGTH - 1);  // ld c, NAME_LENGTH - 1
@@ -15,6 +17,7 @@ int InitName(){
 }
 
 int v_InitString(){
+	SET_PC(0x2FBAU);
 //  if the string pointed to by hl is empty (defined as "zero or more spaces
 //  followed by a null"), then initialize it to the string pointed to by de.
 	PUSH_BC;  // push bc

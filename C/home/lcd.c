@@ -3,6 +3,7 @@
 //  LCD handling
 
 int LCD(){
+	SET_PC(0x041BU);
 	PUSH_AF;  // push af
 	LDH_A_addr(hLCDCPointer);  // ldh a, [hLCDCPointer]
 	AND_A_A;  // and a
@@ -29,6 +30,7 @@ done:
 }
 
 int DisableLCD(){
+	SET_PC(0x0432U);
 //  Turn the LCD off
 
 //  Don't need to do anything if the LCD is already off
@@ -46,12 +48,12 @@ int DisableLCD(){
 	LDH_addr_A(rIE);  // ldh [rIE], a
 
 
-wait:
 	SET_PC(0x0441U);
 //  Wait until VBlank would normally happen
 	LDH_A_addr(rLY);  // ldh a, [rLY]
 	CP_A(LY_VBLANK + 1);  // cp LY_VBLANK + 1
-	//IF_NZ goto wait;  // jr nz, .wait
+	IF_NZ goto wait;  // jr nz, .wait
+wait:  // hack to avoid hanging
 
 	LDH_A_addr(rLCDC);  // ldh a, [rLCDC]
 	AND_A(0xff ^ (1 << rLCDC_ENABLE));  // and $ff ^ (1 << rLCDC_ENABLE)
@@ -66,6 +68,7 @@ wait:
 }
 
 int EnableLCD(){
+	SET_PC(0x0454U);
 	LDH_A_addr(rLCDC);  // ldh a, [rLCDC]
 	SET_A(rLCDC_ENABLE);  // set rLCDC_ENABLE, a
 	LDH_addr_A(rLCDC);  // ldh [rLCDC], a

@@ -9,6 +9,7 @@
 //  	PlayStereoSFX
 
 int v_InitSound(){
+	SET_PC(0xE8000U);
 //  restart sound operation
 //  clear all relevant hardware registers & wram
 	PUSH_HL;  // push hl
@@ -66,6 +67,7 @@ clearaudio:
 }
 
 int MusicFadeRestart(){
+	SET_PC(0xE803DU);
 //  restart but keep the music id to fade in to
 	LD_A_addr(wMusicFadeID + 1);  // ld a, [wMusicFadeID + 1]
 	PUSH_AF;  // push af
@@ -81,6 +83,7 @@ int MusicFadeRestart(){
 }
 
 int MusicOn(){
+	SET_PC(0xE8051U);
 	LD_A(1);  // ld a, 1
 	LD_addr_A(wMusicPlaying);  // ld [wMusicPlaying], a
 	RET;  // ret
@@ -88,6 +91,7 @@ int MusicOn(){
 }
 
 int MusicOff(){
+	SET_PC(0xE8057U);
 	XOR_A_A;  // xor a
 	LD_addr_A(wMusicPlaying);  // ld [wMusicPlaying], a
 	RET;  // ret
@@ -95,6 +99,7 @@ int MusicOff(){
 }
 
 int v_UpdateSound(){
+	SET_PC(0xE805CU);
 //  called once per frame
 // ; no use updating audio if it's not playing
 	LD_A_addr(wMusicPlaying);  // ld a, [wMusicPlaying]
@@ -242,6 +247,7 @@ nextchannel:
 }
 
 int UpdateChannels(){
+	SET_PC(0xE8125U);
 	LD_HL(mUpdateChannels_ChannelFunctions);  // ld hl, .ChannelFunctions
 	LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
 	maskbits(NUM_CHANNELS, 0);  // maskbits NUM_CHANNELS
@@ -387,6 +393,7 @@ Channel6:
 
 
 ch2_frequency_override:
+// 
 	SET_PC(0xE81DBU);  //  unreferenced
 	LD_A_addr(wCurTrackFrequency);  // ld a, [wCurTrackFrequency]
 	LDH_addr_A(rNR23);  // ldh [rNR23], a
@@ -451,6 +458,7 @@ Channel7:
 
 
 ch3_frequency_override:
+// 
 	SET_PC(0xE822FU);  //  unreferenced
 	LD_A_addr(wCurTrackFrequency);  // ld a, [wCurTrackFrequency]
 	LDH_addr_A(rNR33);  // ldh [rNR33], a
@@ -564,6 +572,7 @@ Channel8:
 
 
 ch4_frequency_override:
+// 
 	SET_PC(0xE82C1U);  //  unreferenced
 	LD_A_addr(wCurTrackFrequency);  // ld a, [wCurTrackFrequency]
 	LDH_addr_A(rNR43);  // ldh [rNR43], a
@@ -595,6 +604,7 @@ ch4_noise_sampling:
 }
 
 int v_CheckSFX(){
+	SET_PC(0xE82E7U);
 //  return carry if any sfx channels are active
 	LD_HL(wChannel5Flags1);  // ld hl, wChannel5Flags1
 	BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl]
@@ -620,6 +630,7 @@ sfxon:
 }
 
 int PlayDanger(){
+	SET_PC(0xE8307U);
 	LD_A_addr(wLowHealthAlarm);  // ld a, [wLowHealthAlarm]
 	BIT_A(DANGER_ON_F);  // bit DANGER_ON_F, a
 	RET_Z ;  // ret z
@@ -692,6 +703,7 @@ noreset:
 }
 
 int DangerSoundHigh(){
+	SET_PC(0xE8350U);
 	//db ['0x80'];  // db $80 ; duty 50%
 	//db ['0xe2'];  // db $e2 ; volume 14, envelope decrease sweep 2
 	//db ['0x50'];  // db $50 ; frequency: $750
@@ -701,6 +713,7 @@ int DangerSoundHigh(){
 }
 
 int DangerSoundLow(){
+	SET_PC(0xE8354U);
 	//db ['0x80'];  // db $80 ; duty 50%
 	//db ['0xe2'];  // db $e2 ; volume 14, envelope decrease sweep 2
 	//db ['0xee'];  // db $ee ; frequency: $6ee
@@ -710,6 +723,7 @@ int DangerSoundLow(){
 }
 
 int FadeMusic(){
+	SET_PC(0xE8358U);
 //  fade music if applicable
 //  usage:
 // 	write to wMusicFade
@@ -838,6 +852,7 @@ updatevolume:
 }
 
 int LoadNote(){
+	SET_PC(0xE83D1U);
 // ; wait for pitch slide to finish
 	LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
 	ADD_HL_BC;  // add hl, bc
@@ -970,6 +985,7 @@ quit:
 }
 
 int HandleTrackVibrato(){
+	SET_PC(0xE8466U);
 //  handle duty, cry pitch, and vibrato
 	LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
 	ADD_HL_BC;  // add hl, bc
@@ -1103,6 +1119,7 @@ quit:
 }
 
 int ApplyPitchSlide(){
+	SET_PC(0xE84F9U);
 // ; quit if pitch slide inactive
 	LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
 	ADD_HL_BC;  // add hl, bc
@@ -1228,6 +1245,7 @@ continue_pitch_slide:
 }
 
 int HandleNoise(){
+	SET_PC(0xE858CU);
 // ; is noise sampling on?
 	LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
 	ADD_HL_BC;  // add hl, bc
@@ -1258,6 +1276,7 @@ next:
 }
 
 int ReadNoiseSample(){
+	SET_PC(0xE85AFU);
 //  sample struct:
 // 	[wx] [yy] [zz]
 // 	w: ? either 2 or 3
@@ -1312,6 +1331,7 @@ quit:
 }
 
 int ParseMusic(){
+	SET_PC(0xE85E1U);
 //  parses until a note is read or the song is ended
 	CALL(mGetMusicByte);  // call GetMusicByte ; store next byte in a
 	CP_A(sound_ret_cmd);  // cp sound_ret_cmd
@@ -1433,6 +1453,7 @@ ok:
 }
 
 int RestoreVolume(){
+	SET_PC(0xE8679U);
 // ; ch5 only
 	LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
 	CP_A(CHAN5);  // cp CHAN5
@@ -1454,6 +1475,7 @@ int RestoreVolume(){
 }
 
 int ParseSFXOrCry(){
+	SET_PC(0xE8698U);
 // ; turn noise sampling on
 	LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
 	ADD_HL_BC;  // add hl, bc
@@ -1486,6 +1508,7 @@ int ParseSFXOrCry(){
 }
 
 int GetNoiseSample(){
+	SET_PC(0xE86C5U);
 //  load ptr to sample header in wNoiseSampleAddress
 // ; are we on the last channel?
 	LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
@@ -1548,6 +1571,7 @@ next:
 }
 
 int ParseMusicCommand(){
+	SET_PC(0xE870FU);
 // ; reload command
 	LD_A_addr(wCurMusicByte);  // ld a, [wCurMusicByte]
 // ; get command #
@@ -1567,6 +1591,7 @@ int ParseMusicCommand(){
 }
 
 int MusicCommands(){
+	SET_PC(0xE8720U);
 //  entries correspond to audio constants (see macros/scripts/audio.asm)
 	//table_width ['2', 'MusicCommands']  // table_width 2, MusicCommands
 	//dw ['Music_Octave8'];  // dw Music_Octave8
@@ -1623,39 +1648,48 @@ int MusicCommands(){
 }
 
 int MusicF1(){
+	SET_PC(0xE8780U);
 	return mMusicF2;
 }
 
 int MusicF2(){
+	SET_PC(0xE8780U);
 	return mMusicF3;
 }
 
 int MusicF3(){
+	SET_PC(0xE8780U);
 	return mMusicF4;
 }
 
 int MusicF4(){
+	SET_PC(0xE8780U);
 	return mMusicF5;
 }
 
 int MusicF5(){
+	SET_PC(0xE8780U);
 	return mMusicF6;
 }
 
 int MusicF6(){
+	SET_PC(0xE8780U);
 	return mMusicF7;
 }
 
 int MusicF7(){
+	SET_PC(0xE8780U);
 	return mMusicF8;
 }
 
 int MusicF8(){
+	SET_PC(0xE8780U);
 	RET;  // ret
 
 }
 
 int Music_Ret(){
+	SET_PC(0xE8781U);
 //  called when $ff is encountered w/ subroutine flag set
 //  end music stream
 //  return to caller of the subroutine
@@ -1679,6 +1713,7 @@ int Music_Ret(){
 }
 
 int Music_Call(){
+	SET_PC(0xE8796U);
 //  call music stream (subroutine)
 //  parameters: ll hh
 // ; get pointer from next 2 bytes
@@ -1714,6 +1749,7 @@ int Music_Call(){
 }
 
 int Music_Jump(){
+	SET_PC(0xE87BCU);
 //  jump
 //  parameters: ll hh
 // ; get pointer from next 2 bytes
@@ -1731,6 +1767,7 @@ int Music_Jump(){
 }
 
 int Music_Loop(){
+	SET_PC(0xE87CCU);
 //  loops xx - 1 times
 //  	00: infinite
 //  params: 3
@@ -1800,6 +1837,7 @@ endloop:
 }
 
 int Music_SetCondition(){
+	SET_PC(0xE880EU);
 //  set condition for a jump
 //  used with FB
 //  params: 1
@@ -1815,6 +1853,7 @@ int Music_SetCondition(){
 }
 
 int Music_JumpIf(){
+	SET_PC(0xE8817U);
 //  conditional jump
 //  used with FA
 //  params: 3
@@ -1865,6 +1904,7 @@ jump:
 }
 
 int MusicEE(){
+	SET_PC(0xE883EU);
 //  unused
 //  conditional jump
 //  checks a byte in ram corresponding to the current channel
@@ -1921,6 +1961,7 @@ jump:
 }
 
 int MusicF9(){
+	SET_PC(0xE886DU);
 //  unused
 //  sets some flag
 //  params: 0
@@ -1931,6 +1972,7 @@ int MusicF9(){
 }
 
 int MusicE2(){
+	SET_PC(0xE8873U);
 //  unused
 //  params: 1
 	CALL(mGetMusicByte);  // call GetMusicByte
@@ -1945,6 +1987,7 @@ int MusicE2(){
 }
 
 int Music_Vibrato(){
+	SET_PC(0xE8882U);
 //  vibrato
 //  params: 2
 // 	1: [xx]
@@ -2002,6 +2045,7 @@ int Music_Vibrato(){
 }
 
 int Music_PitchSlide(){
+	SET_PC(0xE88BDU);
 //  set the target for pitch slide
 //  params: 2
 //  note duration
@@ -2035,6 +2079,7 @@ int Music_PitchSlide(){
 }
 
 int Music_PitchOffset(){
+	SET_PC(0xE88E4U);
 //  tone
 //  params: 1 (dw)
 //  offset to add to each note frequency
@@ -2052,6 +2097,7 @@ int Music_PitchOffset(){
 }
 
 int MusicE7(){
+	SET_PC(0xE88F7U);
 //  unused
 //  params: 1
 	LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
@@ -2066,6 +2112,7 @@ int MusicE7(){
 }
 
 int Music_DutyCyclePattern(){
+	SET_PC(0xE8906U);
 //  sequence of 4 duty cycles to be looped
 //  params: 1 (4 2-bit duty cycle arguments)
 	LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
@@ -2088,6 +2135,7 @@ int Music_DutyCyclePattern(){
 }
 
 int MusicE8(){
+	SET_PC(0xE891EU);
 //  unused
 //  params: 1
 	LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
@@ -2102,6 +2150,7 @@ int MusicE8(){
 }
 
 int Music_ToggleSFX(){
+	SET_PC(0xE892DU);
 //  toggle something
 //  params: none
 	LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
@@ -2120,6 +2169,7 @@ on:
 }
 
 int Music_ToggleNoise(){
+	SET_PC(0xE893BU);
 //  toggle music noise sampling
 //  can't be used as a straight toggle since the param is not read from on->off
 //  params:
@@ -2146,6 +2196,7 @@ on:
 }
 
 int Music_SFXToggleNoise(){
+	SET_PC(0xE894FU);
 //  toggle sfx noise sampling
 //  params:
 // 	on: 1
@@ -2171,6 +2222,7 @@ on:
 }
 
 int Music_NoteType(){
+	SET_PC(0xE8963U);
 //  note length
 // 	# frames per 16th note
 //  volume envelope: see Music_VolumeEnvelope
@@ -2191,6 +2243,7 @@ int Music_NoteType(){
 }
 
 int Music_PitchSweep(){
+	SET_PC(0xE8977U);
 //  update pitch sweep
 //  params: 1
 	CALL(mGetMusicByte);  // call GetMusicByte
@@ -2203,6 +2256,7 @@ int Music_PitchSweep(){
 }
 
 int Music_DutyCycle(){
+	SET_PC(0xE8984U);
 //  duty cycle
 //  params: 1
 	CALL(mGetMusicByte);  // call GetMusicByte
@@ -2217,6 +2271,7 @@ int Music_DutyCycle(){
 }
 
 int Music_VolumeEnvelope(){
+	SET_PC(0xE8991U);
 //  volume envelope
 //  params: 1
 // 	hi: volume
@@ -2230,6 +2285,7 @@ int Music_VolumeEnvelope(){
 }
 
 int Music_Tempo(){
+	SET_PC(0xE899AU);
 //  global tempo
 //  params: 2
 // 	de: tempo
@@ -2243,34 +2299,42 @@ int Music_Tempo(){
 }
 
 int Music_Octave8(){
+	SET_PC(0xE89A6U);
 	return mMusic_Octave7;
 }
 
 int Music_Octave7(){
+	SET_PC(0xE89A6U);
 	return mMusic_Octave6;
 }
 
 int Music_Octave6(){
+	SET_PC(0xE89A6U);
 	return mMusic_Octave5;
 }
 
 int Music_Octave5(){
+	SET_PC(0xE89A6U);
 	return mMusic_Octave4;
 }
 
 int Music_Octave4(){
+	SET_PC(0xE89A6U);
 	return mMusic_Octave3;
 }
 
 int Music_Octave3(){
+	SET_PC(0xE89A6U);
 	return mMusic_Octave2;
 }
 
 int Music_Octave2(){
+	SET_PC(0xE89A6U);
 	return mMusic_Octave1;
 }
 
 int Music_Octave1(){
+	SET_PC(0xE89A6U);
 //  set octave based on lo nybble of the command
 	LD_HL(CHANNEL_OCTAVE);  // ld hl, CHANNEL_OCTAVE
 	ADD_HL_BC;  // add hl, bc
@@ -2282,6 +2346,7 @@ int Music_Octave1(){
 }
 
 int Music_Transpose(){
+	SET_PC(0xE89B1U);
 //  set starting octave
 //  this forces all notes up by the starting octave
 //  params: 1
@@ -2294,6 +2359,7 @@ int Music_Transpose(){
 }
 
 int Music_StereoPanning(){
+	SET_PC(0xE89BAU);
 //  stereo panning
 //  params: 1
 // ; stereo on?
@@ -2307,6 +2373,7 @@ int Music_StereoPanning(){
 }
 
 int Music_ForceStereoPanning(){
+	SET_PC(0xE89C5U);
 //  force panning
 //  params: 1
 	CALL(mSetLRTracks);  // call SetLRTracks
@@ -2320,6 +2387,7 @@ int Music_ForceStereoPanning(){
 }
 
 int Music_Volume(){
+	SET_PC(0xE89D2U);
 //  set volume
 //  params: 1
 // 	see Volume
@@ -2338,6 +2406,7 @@ int Music_Volume(){
 }
 
 int Music_TempoRelative(){
+	SET_PC(0xE89E1U);
 //  set global tempo to current channel tempo +/- param
 //  params: 1 signed
 	CALL(mGetMusicByte);  // call GetMusicByte
@@ -2370,6 +2439,7 @@ ok:
 }
 
 int Music_SFXPriorityOn(){
+	SET_PC(0xE89FDU);
 //  turn sfx priority on
 //  params: none
 	LD_A(1);  // ld a, 1
@@ -2379,6 +2449,7 @@ int Music_SFXPriorityOn(){
 }
 
 int Music_SFXPriorityOff(){
+	SET_PC(0xE8A03U);
 //  turn sfx priority off
 //  params: none
 	XOR_A_A;  // xor a
@@ -2388,6 +2459,7 @@ int Music_SFXPriorityOff(){
 }
 
 int Music_RestartChannel(){
+	SET_PC(0xE8A08U);
 //  restart current channel from channel header (same bank)
 //  params: 2 (5)
 //  ll hh: pointer to new channel header
@@ -2424,6 +2496,7 @@ int Music_RestartChannel(){
 }
 
 int Music_NewSong(){
+	SET_PC(0xE8A30U);
 //  new song
 //  params: 2
 // 	de: song id
@@ -2439,6 +2512,7 @@ int Music_NewSong(){
 }
 
 int GetMusicByte(){
+	SET_PC(0xE8A3EU);
 //  returns byte from current address in a
 //  advances to next byte in music data
 //  input: bc = start of current channel
@@ -2467,6 +2541,7 @@ int GetMusicByte(){
 }
 
 int GetFrequency(){
+	SET_PC(0xE8A5DU);
 //  generate frequency
 //  input:
 //  	d: octave
@@ -2525,6 +2600,7 @@ ok:
 }
 
 int SetNoteDuration(){
+	SET_PC(0xE8A8DU);
 //  input: a = note duration in 16ths
 // ; store delay units in de
 	INC_A;  // inc a
@@ -2592,6 +2668,7 @@ skip:
 }
 
 int SetGlobalTempo(){
+	SET_PC(0xE8AC7U);
 	PUSH_BC;  // push bc ; save current channel
 // ; are we dealing with music or sfx?
 	LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
@@ -2627,6 +2704,7 @@ end:
 }
 
 int Tempo(){
+	SET_PC(0xE8B03U);
 //  input:
 //  	de: note length
 // ; update Tempo
@@ -2645,6 +2723,7 @@ int Tempo(){
 }
 
 int StartChannel(){
+	SET_PC(0xE8B11U);
 	CALL(mSetLRTracks);  // call SetLRTracks
 	LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
 	ADD_HL_BC;  // add hl, bc
@@ -2654,6 +2733,7 @@ int StartChannel(){
 }
 
 int SetLRTracks(){
+	SET_PC(0xE8B1BU);
 //  set tracks for a the current channel to default
 //  seems to be redundant since this is overwritten by stereo data later
 	PUSH_DE;  // push de
@@ -2675,6 +2755,7 @@ int SetLRTracks(){
 }
 
 int v_PlayMusic(){
+	SET_PC(0xE8B30U);
 //  load music
 	CALL(mMusicOff);  // call MusicOff
 	LD_HL(wMusicID);  // ld hl, wMusicID
@@ -2721,6 +2802,7 @@ loop:
 }
 
 int v_PlayCry(){
+	SET_PC(0xE8B79U);
 //  Play cry de using parameters:
 // 	wCryPitch
 // 	wCryLength
@@ -2842,6 +2924,7 @@ end:
 }
 
 int v_PlaySFX(){
+	SET_PC(0xE8C04U);
 //  clear channels if they aren't already
 	CALL(mMusicOff);  // call MusicOff
 	LD_HL(wChannel5Flags1);  // ld hl, wChannel5Flags1
@@ -2953,6 +3036,7 @@ startchannels:
 }
 
 int PlayStereoSFX(){
+	SET_PC(0xE8CA6U);
 //  play sfx de
 
 	CALL(mMusicOff);  // call MusicOff
@@ -3060,6 +3144,7 @@ skip:
 }
 
 int LoadChannel(){
+	SET_PC(0xE8D1BU);
 //  input: de = audio pointer
 //  sets bc to current channel pointer
 	CALL(mLoadMusicByte);  // call LoadMusicByte
@@ -3104,6 +3189,7 @@ int LoadChannel(){
 }
 
 int ChannelInit(){
+	SET_PC(0xE8D5BU);
 //  make sure channel is cleared
 //  set default tempo and note length in case nothing is loaded
 //  input:
@@ -3138,6 +3224,7 @@ loop:
 }
 
 int LoadMusicByte(){
+	SET_PC(0xE8D76U);
 //  input:
 //    de = current music address
 //  output:
@@ -3157,6 +3244,7 @@ int LoadMusicByte(){
 }
 
 int GetLRTracks(){
+	SET_PC(0xE8FC2U);
 //  gets the default sound l/r channels
 //  stores mono/stereo table in hl
 	LD_A_addr(wOptions);  // ld a, [wOptions]
@@ -3175,6 +3263,7 @@ stereo:
 }
 
 int MonoTracks(){
+	SET_PC(0xE8FD1U);
 //  bit corresponds to track #
 //  hi: left channel
 //  lo: right channel
@@ -3184,6 +3273,7 @@ int MonoTracks(){
 }
 
 int StereoTracks(){
+	SET_PC(0xE8FD5U);
 //  made redundant
 //  seems to be modified on a per-song basis
 	//db ['0x11', '0x22', '0x44', '0x88'];  // db $11, $22, $44, $88
@@ -3192,6 +3282,7 @@ int StereoTracks(){
 }
 
 int ChannelPointers(){
+	SET_PC(0xE8FD9U);
 	//table_width ['2', 'ChannelPointers']  // table_width 2, ChannelPointers
 //  music channels
 	//dw ['wChannel1'];  // dw wChannel1
@@ -3210,6 +3301,7 @@ int ChannelPointers(){
 }
 
 int ClearChannels(){
+	SET_PC(0xE8FE9U);
 //  runs ClearChannel for all 4 channels
 //  doesn't seem to be used, but functionally identical to InitSound
 	LD_HL(rNR50);  // ld hl, rNR50
@@ -3231,6 +3323,7 @@ loop:
 }
 
 int ClearChannel(){
+	SET_PC(0xE8FFEU);
 //  input: hl = beginning hw sound register (rNR10, rNR20, rNR30, rNR40)
 //  output: 00 00 80 00 80
 
@@ -3250,6 +3343,7 @@ int ClearChannel(){
 }
 
 int PlayTrainerEncounterMusic(){
+	SET_PC(0xE900AU);
 //  input: e = trainer type
 // ; turn fade off
 	XOR_A_A;  // xor a

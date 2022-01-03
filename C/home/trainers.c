@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int CheckTrainerBattle(){
+	SET_PC(0x3840U);
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 
@@ -15,6 +16,7 @@ int CheckTrainerBattle(){
 }
 
 int v_CheckTrainerBattle(){
+	SET_PC(0x384DU);
 //  Check if any trainer on the map sees the player and wants to battle.
 
 //  Skip the player object.
@@ -113,6 +115,7 @@ startbattle:
 }
 
 int TalkToTrainer(){
+	SET_PC(0x38B4U);
 	LD_A(1);  // ld a, 1
 	LD_addr_A(wSeenTrainerDistance);  // ld [wSeenTrainerDistance], a
 	LD_A(-1);  // ld a, -1
@@ -122,6 +125,7 @@ int TalkToTrainer(){
 }
 
 int LoadTrainer_continue(){
+	SET_PC(0x38BEU);
 	CALL(mGetMapScriptsBank);  // call GetMapScriptsBank
 	LD_addr_A(wSeenTrainerBank);  // ld [wSeenTrainerBank], a
 
@@ -144,6 +148,7 @@ int LoadTrainer_continue(){
 }
 
 int FacingPlayerDistance_bc(){
+	SET_PC(0x38E5U);
 	PUSH_DE;  // push de
 	CALL(mFacingPlayerDistance);  // call FacingPlayerDistance
 	LD_B_D;  // ld b, d
@@ -154,6 +159,7 @@ int FacingPlayerDistance_bc(){
 }
 
 int FacingPlayerDistance(){
+	SET_PC(0x38EDU);
 //  Return carry if the sprite at bc is facing the player,
 //  its distance in d, and its direction in e.
 
@@ -236,7 +242,9 @@ NotFacing:
 
 }
 
-int CheckTrainerFlag(){  //  unreferenced
+int CheckTrainerFlag(){
+	SET_PC(0x3935U);
+//  //  unreferenced
 	PUSH_BC;  // push bc
 	LD_HL(OBJECT_MAP_OBJECT_INDEX);  // ld hl, OBJECT_MAP_OBJECT_INDEX
 	ADD_HL_BC;  // add hl, bc
@@ -263,6 +271,7 @@ int CheckTrainerFlag(){  //  unreferenced
 }
 
 int PrintWinLossText(){
+	SET_PC(0x3958U);
 	LD_A_addr(wBattleType);  // ld a, [wBattleType]
 	CP_A(BATTLETYPE_CANLOSE);  // cp BATTLETYPE_CANLOSE
 // ; code was probably dummied out here

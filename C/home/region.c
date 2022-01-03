@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int IsInJohto(){
+	SET_PC(0x2FD5U);
 //  Return 0 if the player is in Johto, and 1 in Kanto.
 
 	LD_A_addr(wMapGroup);  // ld a, [wMapGroup]
@@ -42,6 +43,7 @@ Kanto:
 }
 
 int SetXYCompareFlags(){
+	SET_PC(0x2FFCU);
 	PUSH_HL;  // push hl
 	XOR_A_A;  // xor a
 	LD_HL(wXYCompareFlags);  // ld hl, wXYCompareFlags

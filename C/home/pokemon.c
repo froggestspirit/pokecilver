@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int DrawBattleHPBar(){
+	SET_PC(0x3980U);
 //  Draw an HP bar d tiles long at hl
 //  Fill it up to e pixels
 
@@ -71,6 +72,7 @@ done:
 }
 
 int PrepMonFrontpic(){
+	SET_PC(0x39B6U);
 	LD_A(0x1);  // ld a, $1
 	LD_addr_A(wBoxAlignment);  // ld [wBoxAlignment], a
 
@@ -78,6 +80,7 @@ int PrepMonFrontpic(){
 }
 
 int v_PrepMonFrontpic(){
+	SET_PC(0x39BBU);
 	LD_A_addr(wCurPartySpecies);  // ld a, [wCurPartySpecies]
 //  is a pokemon?
 	AND_A_A;  // and a
@@ -113,6 +116,7 @@ not_pokemon:
 }
 
 int PlayStereoCry(){
+	SET_PC(0x39ECU);
 	PUSH_AF;  // push af
 	LD_A(1);  // ld a, 1
 	LD_addr_A(wStereoPanningMask);  // ld [wStereoPanningMask], a
@@ -122,6 +126,7 @@ int PlayStereoCry(){
 }
 
 int PlayMonCry(){
+	SET_PC(0x39F5U);
 	PUSH_AF;  // push af
 	XOR_A_A;  // xor a
 	LD_addr_A(wStereoPanningMask);  // ld [wStereoPanningMask], a
@@ -132,6 +137,7 @@ int PlayMonCry(){
 }
 
 int v_PlayMonCry(){
+	SET_PC(0x39FEU);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -155,6 +161,7 @@ done:
 }
 
 int LoadCry(){
+	SET_PC(0x3A12U);
 //  Load cry bc.
 
 	CALL(mGetCryIndex);  // call GetCryIndex
@@ -192,6 +199,7 @@ for(int rept = 0; rept < MON_CRY_LENGTH; rept++){
 }
 
 int GetCryIndex(){
+	SET_PC(0x3A3DU);
 	AND_A_A;  // and a
 	IF_Z goto no;  // jr z, .no
 	CP_A(NUM_POKEMON + 1);  // cp NUM_POKEMON + 1
@@ -212,6 +220,7 @@ no:
 }
 
 int PrintLevel(){
+	SET_PC(0x3A4CU);
 //  Print wTempMonLevel at hl
 
 	LD_A_addr(wTempMonLevel);  // ld a, [wTempMonLevel]
@@ -231,6 +240,7 @@ int PrintLevel(){
 }
 
 int PrintLevel_Force3Digits(){
+	SET_PC(0x3A5CU);
 //  Print :L and all 3 digits
 	LD_hl(0x6e);  // ld [hl], "<LV>"
 	INC_HL;  // inc hl
@@ -240,6 +250,7 @@ int PrintLevel_Force3Digits(){
 }
 
 int Print8BitNumLeftAlign(){
+	SET_PC(0x3A61U);
 	LD_addr_A(wTextDecimalByte);  // ld [wTextDecimalByte], a
 	LD_DE(wTextDecimalByte);  // ld de, wTextDecimalByte
 	LD_B(PRINTNUM_LEFTALIGN | 1);  // ld b, PRINTNUM_LEFTALIGN | 1
@@ -247,7 +258,9 @@ int Print8BitNumLeftAlign(){
 
 }
 
-int GetNthMove(){  //  unreferenced
+int GetNthMove(){
+	SET_PC(0x3A6CU);
+//  //  unreferenced
 	LD_HL(wListMoves_MoveIndicesBuffer);  // ld hl, wListMoves_MoveIndicesBuffer
 	LD_C_A;  // ld c, a
 	LD_B(0);  // ld b, 0
@@ -258,6 +271,7 @@ int GetNthMove(){  //  unreferenced
 }
 
 int GetBaseData(){
+	SET_PC(0x3A75U);
 	PUSH_BC;  // push bc
 	PUSH_DE;  // push de
 	PUSH_HL;  // push hl
@@ -320,6 +334,7 @@ end:
 }
 
 int GetCurNickname(){
+	SET_PC(0x3ABBU);
 	LD_A_addr(wCurPartyMon);  // ld a, [wCurPartyMon]
 	LD_HL(wPartyMonNicknames);  // ld hl, wPartyMonNicknames
 
@@ -327,6 +342,7 @@ int GetCurNickname(){
 }
 
 int GetNickname(){
+	SET_PC(0x3AC1U);
 //  Get nickname a from list hl.
 
 	PUSH_HL;  // push hl

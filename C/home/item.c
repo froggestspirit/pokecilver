@@ -1,12 +1,14 @@
 #include "../constants.h"
 
 int DoItemEffect(){
+	SET_PC(0x3053U);
 	FARCALL(av_DoItemEffect);  // farcall _DoItemEffect
 	RET;  // ret
 
 }
 
 int CheckTossableItem(){
+	SET_PC(0x305AU);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -19,6 +21,7 @@ int CheckTossableItem(){
 }
 
 int TossItem(){
+	SET_PC(0x3067U);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -40,6 +43,7 @@ int TossItem(){
 }
 
 int ReceiveItem(){
+	SET_PC(0x307AU);
 	PUSH_BC;  // push bc
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
@@ -61,6 +65,7 @@ int ReceiveItem(){
 }
 
 int CheckItem(){
+	SET_PC(0x308DU);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc

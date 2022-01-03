@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int FarCall_hl(){
+	SET_PC(0x2E25U);
 //  Call a:hl.
 //  Preserves other registers.
 	LD_addr_A(wTempBank);  // ld [wTempBank], a
@@ -32,6 +33,7 @@ int FarCall_hl(){
 }
 
 int FarCall_JumpToHL(){
+	SET_PC(0x2E46U);
 	JP_hl;  // jp hl
 
 }

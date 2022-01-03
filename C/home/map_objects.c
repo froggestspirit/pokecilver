@@ -3,6 +3,7 @@
 //  Functions handling map objects.
 
 int GetSpritePalette(){
+	SET_PC(0x169AU);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -19,6 +20,7 @@ int GetSpritePalette(){
 }
 
 int GetSpriteVTile(){
+	SET_PC(0x16A9U);
 	PUSH_HL;  // push hl
 	PUSH_BC;  // push bc
 	LD_HL(wUsedSprites + 2);  // ld hl, wUsedSprites + 2
@@ -64,6 +66,7 @@ done:
 }
 
 int DoesSpriteHaveFacings(){
+	SET_PC(0x16D1U);
 	PUSH_DE;  // push de
 	PUSH_HL;  // push hl
 
@@ -88,6 +91,7 @@ int DoesSpriteHaveFacings(){
 }
 
 int GetPlayerStandingTile(){
+	SET_PC(0x16E5U);
 	LD_A_addr(wPlayerStandingTile);  // ld a, [wPlayerStandingTile]
 	CALL(mGetTileCollision);  // call GetTileCollision
 	LD_B_A;  // ld b, a
@@ -96,6 +100,7 @@ int GetPlayerStandingTile(){
 }
 
 int CheckOnWater(){
+	SET_PC(0x16EDU);
 	LD_A_addr(wPlayerStandingTile);  // ld a, [wPlayerStandingTile]
 	CALL(mGetTileCollision);  // call GetTileCollision
 	SUB_A(WATER_TILE);  // sub WATER_TILE
@@ -106,6 +111,7 @@ int CheckOnWater(){
 }
 
 int GetTileCollision(){
+	SET_PC(0x16F8U);
 //  Get the collision type of tile a.
 
 	PUSH_DE;  // push de
@@ -134,6 +140,7 @@ int GetTileCollision(){
 }
 
 int CheckGrassTile(){
+	SET_PC(0x1710U);
 	LD_D_A;  // ld d, a
 	AND_A(0xf0);  // and $f0
 	CP_A(HI_NYBBLE_TALL_GRASS);  // cp HI_NYBBLE_TALL_GRASS
@@ -164,6 +171,7 @@ water:
 }
 
 int CheckSuperTallGrassTile(){
+	SET_PC(0x1729U);
 	CP_A(COLL_LONG_GRASS);  // cp COLL_LONG_GRASS
 	RET_Z ;  // ret z
 	CP_A(COLL_LONG_GRASS_1C);  // cp COLL_LONG_GRASS_1C
@@ -172,6 +180,7 @@ int CheckSuperTallGrassTile(){
 }
 
 int CheckCutTreeTile(){
+	SET_PC(0x172FU);
 	CP_A(COLL_CUT_TREE);  // cp COLL_CUT_TREE
 	RET_Z ;  // ret z
 	CP_A(COLL_CUT_TREE_1A);  // cp COLL_CUT_TREE_1A
@@ -180,6 +189,7 @@ int CheckCutTreeTile(){
 }
 
 int CheckHeadbuttTreeTile(){
+	SET_PC(0x1735U);
 	CP_A(COLL_HEADBUTT_TREE);  // cp COLL_HEADBUTT_TREE
 	RET_Z ;  // ret z
 	CP_A(COLL_HEADBUTT_TREE_1D);  // cp COLL_HEADBUTT_TREE_1D
@@ -188,6 +198,7 @@ int CheckHeadbuttTreeTile(){
 }
 
 int CheckCounterTile(){
+	SET_PC(0x173BU);
 	CP_A(COLL_COUNTER);  // cp COLL_COUNTER
 	RET_Z ;  // ret z
 	CP_A(COLL_COUNTER_98);  // cp COLL_COUNTER_98
@@ -196,6 +207,7 @@ int CheckCounterTile(){
 }
 
 int CheckPitTile(){
+	SET_PC(0x1741U);
 	CP_A(COLL_PIT);  // cp COLL_PIT
 	RET_Z ;  // ret z
 	CP_A(COLL_PIT_68);  // cp COLL_PIT_68
@@ -204,6 +216,7 @@ int CheckPitTile(){
 }
 
 int CheckIceTile(){
+	SET_PC(0x1747U);
 	CP_A(COLL_ICE);  // cp COLL_ICE
 	RET_Z ;  // ret z
 	CP_A(COLL_ICE_2B);  // cp COLL_ICE_2B
@@ -214,6 +227,7 @@ int CheckIceTile(){
 }
 
 int CheckWhirlpoolTile(){
+	SET_PC(0x174FU);
 	NOP;  // nop
 	CP_A(COLL_WHIRLPOOL);  // cp COLL_WHIRLPOOL
 	RET_Z ;  // ret z
@@ -225,6 +239,7 @@ int CheckWhirlpoolTile(){
 }
 
 int CheckWaterfallTile(){
+	SET_PC(0x1758U);
 	CP_A(COLL_WATERFALL);  // cp COLL_WATERFALL
 	RET_Z ;  // ret z
 	CP_A(COLL_CURRENT_DOWN);  // cp COLL_CURRENT_DOWN
@@ -233,6 +248,7 @@ int CheckWaterfallTile(){
 }
 
 int CheckStandingOnEntrance(){
+	SET_PC(0x175EU);
 	LD_A_addr(wPlayerStandingTile);  // ld a, [wPlayerStandingTile]
 	CP_A(COLL_DOOR);  // cp COLL_DOOR
 	RET_Z ;  // ret z
@@ -246,6 +262,7 @@ int CheckStandingOnEntrance(){
 }
 
 int GetMapObject(){
+	SET_PC(0x176DU);
 //  Return the location of map object a in bc.
 	LD_HL(wMapObjects);  // ld hl, wMapObjects
 	LD_BC(MAPOBJECT_LENGTH);  // ld bc, MAPOBJECT_LENGTH
@@ -257,6 +274,7 @@ int GetMapObject(){
 }
 
 int CheckObjectVisibility(){
+	SET_PC(0x1779U);
 //  Sets carry if the object is not visible on the screen.
 	LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
 	CALL(mGetMapObject);  // call GetMapObject
@@ -279,6 +297,7 @@ not_visible:
 }
 
 int CheckObjectTime(){
+	SET_PC(0x1790U);
 	LD_HL(MAPOBJECT_HOUR);  // ld hl, MAPOBJECT_HOUR
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
@@ -369,6 +388,7 @@ no:
 }
 
 int CopyMapObjectStruct(){
+	SET_PC(0x17E8U);
 //  //  unreferenced
 	LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
 	CALL(mGetMapObject);  // call GetMapObject
@@ -378,6 +398,7 @@ int CopyMapObjectStruct(){
 }
 
 int UnmaskCopyMapObjectStruct(){
+	SET_PC(0x17F1U);
 	LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
 	CALL(mUnmaskObject);  // call UnmaskObject
 	LDH_A_addr(hMapObjectIndex);  // ldh a, [hMapObjectIndex]
@@ -388,6 +409,7 @@ int UnmaskCopyMapObjectStruct(){
 }
 
 int ApplyDeletionToMapObject(){
+	SET_PC(0x1802U);
 	LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
 	CALL(mGetMapObject);  // call GetMapObject
 	LD_HL(MAPOBJECT_OBJECT_STRUCT_ID);  // ld hl, MAPOBJECT_OBJECT_STRUCT_ID
@@ -424,6 +446,7 @@ ok:
 }
 
 int DeleteObjectStruct(){
+	SET_PC(0x183AU);
 	CALL(mApplyDeletionToMapObject);  // call ApplyDeletionToMapObject
 	CALL(mMaskObject);  // call MaskObject
 	RET;  // ret
@@ -431,6 +454,7 @@ int DeleteObjectStruct(){
 }
 
 int CopyPlayerObjectTemplate(){
+	SET_PC(0x1841U);
 	PUSH_HL;  // push hl
 	CALL(mGetMapObject);  // call GetMapObject
 	LD_D_B;  // ld d, b
@@ -446,6 +470,7 @@ int CopyPlayerObjectTemplate(){
 }
 
 int DeleteFollowerMapObject(){
+	SET_PC(0x1853U);
 //  //  unreferenced
 	CALL(mGetMapObject);  // call GetMapObject
 	LD_HL(MAPOBJECT_OBJECT_STRUCT_ID);  // ld hl, MAPOBJECT_OBJECT_STRUCT_ID
@@ -480,6 +505,7 @@ ok:
 }
 
 int LoadMovementDataPointer(){
+	SET_PC(0x1884U);
 //  Load the movement data pointer for object a.
 	LD_addr_A(wMovementObject);  // ld [wMovementObject], a
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -508,6 +534,7 @@ int LoadMovementDataPointer(){
 }
 
 int FindFirstEmptyObjectStruct(){
+	SET_PC(0x18AEU);
 //  Returns the index of the first empty object struct in A and its address in HL, then sets carry.
 //  If all object structs are occupied, A = 0 and Z is set.
 //  Preserves BC and DE.
@@ -545,6 +572,7 @@ done:
 }
 
 int GetSpriteMovementFunction(){
+	SET_PC(0x18CAU);
 	LD_HL(OBJECT_MOVEMENTTYPE);  // ld hl, OBJECT_MOVEMENTTYPE
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
@@ -567,6 +595,7 @@ for(int rept = 0; rept < NUM_SPRITEMOVEDATA_FIELDS; rept++){
 }
 
 int GetInitialFacing(){
+	SET_PC(0x18E2U);
 	PUSH_BC;  // push bc
 	PUSH_DE;  // push de
 	LD_E_A;  // ld e, a
@@ -587,6 +616,7 @@ for(int rept = 0; rept < NUM_SPRITEMOVEDATA_FIELDS; rept++){
 }
 
 int CopySpriteMovementData(){
+	SET_PC(0x18FCU);
 	LD_L_A;  // ld l, a
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
@@ -658,6 +688,7 @@ for(int rept = 0; rept < NUM_SPRITEMOVEDATA_FIELDS; rept++){
 }
 
 int v_GetMovementByte(){
+	SET_PC(0x1949U);
 //  Switch to the movement data bank
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
@@ -685,6 +716,7 @@ int v_GetMovementByte(){
 }
 
 int SetVramState_Bit0(){
+	SET_PC(0x1961U);
 //  //  unreferenced
 	LD_HL(wVramState);  // ld hl, wVramState
 	SET_hl(0);  // set 0, [hl]
@@ -693,6 +725,7 @@ int SetVramState_Bit0(){
 }
 
 int ResetVramState_Bit0(){
+	SET_PC(0x1967U);
 //  //  unreferenced
 	LD_HL(wVramState);  // ld hl, wVramState
 	RES_hl(0);  // res 0, [hl]
@@ -701,6 +734,7 @@ int ResetVramState_Bit0(){
 }
 
 int UpdateSprites(){
+	SET_PC(0x196DU);
 	LD_A_addr(wVramState);  // ld a, [wVramState]
 	BIT_A(0);  // bit 0, a
 	RET_Z ;  // ret z
@@ -712,6 +746,7 @@ int UpdateSprites(){
 }
 
 int GetObjectStruct(){
+	SET_PC(0x1980U);
 	LD_BC(OBJECT_LENGTH);  // ld bc, OBJECT_LENGTH
 	LD_HL(wObjectStructs);  // ld hl, wObjectStructs
 	CALL(mAddNTimes);  // call AddNTimes
@@ -722,6 +757,7 @@ int GetObjectStruct(){
 }
 
 int DoesObjectHaveASprite(){
+	SET_PC(0x198CU);
 	LD_HL(OBJECT_SPRITE);  // ld hl, OBJECT_SPRITE
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
@@ -731,6 +767,7 @@ int DoesObjectHaveASprite(){
 }
 
 int SetSpriteDirection(){
+	SET_PC(0x1993U);
 // ; preserves other flags
 	PUSH_AF;  // push af
 	LD_HL(OBJECT_FACING);  // ld hl, OBJECT_FACING
@@ -747,6 +784,7 @@ int SetSpriteDirection(){
 }
 
 int GetSpriteDirection(){
+	SET_PC(0x19A2U);
 	LD_HL(OBJECT_FACING);  // ld hl, OBJECT_FACING
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]

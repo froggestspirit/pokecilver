@@ -3,6 +3,7 @@
 //  Functions dealing with palettes.
 
 int UpdatePalsIfCGB(){
+	SET_PC(0x0BDDU);
 //  update bgp data from wBGPals2
 //  update obp data from wOBPals2
 //  return carry if successful
@@ -15,6 +16,7 @@ int UpdatePalsIfCGB(){
 }
 
 int UpdateCGBPals(){
+	SET_PC(0x0BE1U);
 //  return carry if successful
 //  any pals to update?
 	LDH_A_addr(hCGBPalUpdate);  // ldh a, [hCGBPalUpdate]
@@ -30,7 +32,7 @@ int UpdateCGBPals(){
 
 bgp:
 	SET_PC(0x0BEEU);
-for(int rept = 0; rept < (1 * PALETTE_SIZE) * 2; rept++){
+for(int rept = 0; rept < (PALETTE_SIZE) * 2; rept++){
 	LD_A_hli;  // ld a, [hli]
 	LDH_addr_A(rBGPD);  // ldh [rBGPD], a
 }
@@ -47,7 +49,7 @@ for(int rept = 0; rept < (1 * PALETTE_SIZE) * 2; rept++){
 
 obp:
 	SET_PC(0x0C27U);
-for(int rept = 0; rept < (1 * PALETTE_SIZE) * 2; rept++){
+for(int rept = 0; rept < (PALETTE_SIZE) * 2; rept++){
 	LD_A_hli;  // ld a, [hli]
 	LDH_addr_A(rOBPD);  // ldh [rOBPD], a
 }
@@ -65,6 +67,7 @@ for(int rept = 0; rept < (1 * PALETTE_SIZE) * 2; rept++){
 }
 
 int DmgToCgbBGPals(){
+	SET_PC(0x0C5FU);
 //  exists to forego reinserting cgb-converted image data
 
 //  input: a -> bgp
@@ -106,6 +109,7 @@ end:
 }
 
 int DmgToCgbObjPals(){
+	SET_PC(0x0C81U);
 //  exists to forego reinserting cgb-converted image data
 
 //  input: d -> obp1
@@ -145,6 +149,7 @@ int DmgToCgbObjPals(){
 }
 
 int DmgToCgbObjPal0(){
+	SET_PC(0x0CA4U);
 	LDH_addr_A(rOBP0);  // ldh [rOBP0], a
 	PUSH_AF;  // push af
 
@@ -157,8 +162,8 @@ int DmgToCgbObjPal0(){
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
 
-	LD_HL(wOBPals2 + PALETTE_SIZE * 0);  // ld hl, wOBPals2 palette 0
-	LD_DE(wOBPals1 + PALETTE_SIZE * 0);  // ld de, wOBPals1 palette 0
+	LD_HL(wOBPals2);  // ld hl, wOBPals2 palette 0
+	LD_DE(wOBPals1);  // ld de, wOBPals1 palette 0
 	LDH_A_addr(rOBP0);  // ldh a, [rOBP0]
 	LD_B_A;  // ld b, a
 	LD_C(1);  // ld c, 1
@@ -179,6 +184,7 @@ dmg:
 }
 
 int DmgToCgbObjPal1(){
+	SET_PC(0x0CC6U);
 	LDH_addr_A(rOBP1);  // ldh [rOBP1], a
 	PUSH_AF;  // push af
 
@@ -190,8 +196,8 @@ int DmgToCgbObjPal1(){
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
 
-	LD_HL(wOBPals2 + PALETTE_SIZE * 1);  // ld hl, wOBPals2 palette 1
-	LD_DE(wOBPals1 + PALETTE_SIZE * 1);  // ld de, wOBPals1 palette 1
+	LD_HL(wOBPals2 + PALETTE_SIZE);  // ld hl, wOBPals2 palette 1
+	LD_DE(wOBPals1 + PALETTE_SIZE);  // ld de, wOBPals1 palette 1
 	LDH_A_addr(rOBP1);  // ldh a, [rOBP1]
 	LD_B_A;  // ld b, a
 	LD_C(1);  // ld c, 1
@@ -212,6 +218,7 @@ dmg:
 }
 
 int CopyPals(){
+	SET_PC(0x0CE8U);
 //  copy c palettes in order b from de to hl
 
 	PUSH_BC;  // push bc
@@ -270,6 +277,7 @@ ok:
 }
 
 int ClearVBank1(){
+	SET_PC(0x0D11U);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -289,6 +297,7 @@ int ClearVBank1(){
 }
 
 int ReloadPalettes(){
+	SET_PC(0x0D28U);
 	hlcoord(0, 0, wTilemap);  // hlcoord 0, 0
 	decoord(0, 0, wAttrmap);  // decoord 0, 0, wAttrmap
 	LD_BC(SCREEN_WIDTH * SCREEN_HEIGHT);  // ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
@@ -313,6 +322,7 @@ skip:
 }
 
 int ReloadSpritesNoPalettes(){
+	SET_PC(0x0D40U);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -328,12 +338,14 @@ int ReloadSpritesNoPalettes(){
 }
 
 int SwapTextboxPalettes(){
+	SET_PC(0x0D56U);
 	HOMECALL(av_SwapTextboxPalettes);  // homecall _SwapTextboxPalettes
 	RET;  // ret
 
 }
 
 int ScrollBGMapPalettes(){
+	SET_PC(0x0D62U);
 	HOMECALL(av_ScrollBGMapPalettes);  // homecall _ScrollBGMapPalettes
 	RET;  // ret
 

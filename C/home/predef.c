@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int Predef(){
+	SET_PC(0x2E47U);
 //  Call predefined function a.
 //  Preserves bc, de, hl and f.
 

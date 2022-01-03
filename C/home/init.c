@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int Reset(){
+	SET_PC(0x05B0U);
 	CALL(mInitSound);  // call InitSound
 	XOR_A_A;  // xor a
 	LDH_addr_A(hMapAnims);  // ldh [hMapAnims], a
@@ -18,6 +19,7 @@ int Reset(){
 }
 
 int v_Start(){
+	SET_PC(0x05C6U);
 	CP_A(0x11);  // cp $11
 	IF_Z goto cgb;  // jr z, .cgb
 	XOR_A_A;  // xor a ; FALSE
@@ -37,6 +39,7 @@ load:
 }
 
 int Init(){
+	SET_PC(0x05D1U);
 	NOP;  // di
 
 	XOR_A_A;  // xor a
@@ -60,12 +63,11 @@ int Init(){
 	LDH_addr_A(rTAC);  // ldh [rTAC], a
 
 
-//_wait:
 	SET_PC(0x05F6U);
 	LDH_A_addr(rLY);  // ldh a, [rLY]
 	CP_A(LY_VBLANK + 1);  // cp LY_VBLANK + 1
 	IF_NZ goto wait;  // jr nz, .wait
-wait:  // moved to prevent hanging
+wait:  // Hack to avoid hanging
 
 	XOR_A_A;  // xor a
 	LDH_addr_A(rLCDC);  // ldh [rLCDC], a
@@ -171,6 +173,7 @@ ByteFill:
 }
 
 int ClearVRAM(){
+	SET_PC(0x068EU);
 	LD_HL(VRAM_Begin);  // ld hl, VRAM_Begin
 	LD_BC(VRAM_End - VRAM_Begin);  // ld bc, VRAM_End - VRAM_Begin
 	XOR_A_A;  // xor a
@@ -180,12 +183,15 @@ int ClearVRAM(){
 }
 
 int BlankBGMap(){
+	SET_PC(0x0699U);
 	LD_A(0x7f);  // ld a, " "
 	JR(mFillBGMap);  // jr FillBGMap
 
 }
 
-int FillBGMap_l(){  //  unreferenced
+int FillBGMap_l(){
+	SET_PC(0x069DU);
+//  //  unreferenced
 	LD_A_L;  // ld a, l
 // ; fallthrough
 
@@ -193,6 +199,7 @@ int FillBGMap_l(){  //  unreferenced
 }
 
 int FillBGMap(){
+	SET_PC(0x069EU);
 	LD_DE(vBGMap1 - vBGMap0);  // ld de, vBGMap1 - vBGMap0
 	LD_L_E;  // ld l, e
 

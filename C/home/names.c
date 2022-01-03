@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int NamesPointers(){
+	SET_PC(0x35EAU);
 //  entries correspond to GetName constants (see constants/text_constants.asm)
 	//dba ['PokemonNames']  // dba PokemonNames        ; MON_NAME (not used; jumps to GetPokemonName)
 	//dba ['MoveNames']  // dba MoveNames           ; MOVE_NAME
@@ -15,6 +16,7 @@ int NamesPointers(){
 }
 
 int GetName(){
+	SET_PC(0x3602U);
 //  Return name wCurSpecies from name list wNamedObjectType in wStringBuffer1.
 
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -79,6 +81,7 @@ done:
 }
 
 int GetNthString(){
+	SET_PC(0x3650U);
 //  Return the address of the
 //  ath string starting from hl.
 
@@ -102,6 +105,7 @@ readChar:
 }
 
 int GetBasePokemonName(){
+	SET_PC(0x365FU);
 //  Discards gender (Nidoran).
 
 	PUSH_HL;  // push hl
@@ -133,6 +137,7 @@ quit:
 }
 
 int GetPokemonName(){
+	SET_PC(0x367AU);
 //  Get Pokemon name for wNamedObjectIndex.
 
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -169,6 +174,7 @@ for(int rept = 0; rept < MON_NAME_LENGTH - 1; rept++){
 }
 
 int GetItemName(){
+	SET_PC(0x36A9U);
 //  Get item name for wNamedObjectIndex.
 
 	PUSH_HL;  // push hl
@@ -198,6 +204,7 @@ Copied:
 }
 
 int GetTMHMName(){
+	SET_PC(0x36C8U);
 //  Get TM/HM name for item wNamedObjectIndex.
 
 	PUSH_HL;  // push hl
@@ -297,11 +304,13 @@ HMTextEnd:
 	SET_PC(0x371FU);
 	//db ['"@"'];  // db "@"
 
-//#include "hm_moves.h"
+// INCLUDE "home/hm_moves.asm"
+
 	return mGetMoveName;
 }
 
 int GetMoveName(){
+	SET_PC(0x3739U);
 	PUSH_HL;  // push hl
 
 	LD_A(MOVE_NAME);  // ld a, MOVE_NAME

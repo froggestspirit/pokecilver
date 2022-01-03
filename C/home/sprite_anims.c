@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int InitSpriteAnimStruct(){
+	SET_PC(0x3D27U);
 	LD_addr_A(wSpriteAnimID);  // ld [wSpriteAnimID], a
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
@@ -18,7 +19,9 @@ int InitSpriteAnimStruct(){
 
 }
 
-int ReinitSpriteAnimFrame(){  //  unreferenced
+int ReinitSpriteAnimFrame(){
+	SET_PC(0x3D39U);
+//  //  unreferenced
 	LD_addr_A(wSpriteAnimID);  // ld [wSpriteAnimID], a
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af

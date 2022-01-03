@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int CompareBytes(){
+	SET_PC(0x342DU);
 //  Compare c bytes at de and hl.
 //  Return z if they all match.
 
@@ -18,6 +19,7 @@ loop:
 }
 
 int CompareBytesLong(){
+	SET_PC(0x3436U);
 //  Compare bc bytes at de and hl.
 //  Return carry if they all match.
 

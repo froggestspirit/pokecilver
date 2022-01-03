@@ -2,7 +2,9 @@
 
 #define TILES_PER_CYCLE 8
 
-int FarDecompressBufferedPic(){  //  unreferenced
+int FarDecompressBufferedPic(){
+	SET_PC(0x0D6EU);
+//  //  unreferenced
 	LD_B_A;  // ld b, a
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
@@ -31,30 +33,35 @@ int FarDecompressBufferedPic(){  //  unreferenced
 }
 
 int UpdatePlayerSprite(){
+	SET_PC(0x0D95U);
 	FARCALL(av_UpdatePlayerSprite);  // farcall _UpdatePlayerSprite
 	RET;  // ret
 
 }
 
 int LoadStandardFont(){
+	SET_PC(0x0D9CU);
 	FARCALL(av_LoadStandardFont);  // farcall _LoadStandardFont
 	RET;  // ret
 
 }
 
 int LoadFontsBattleExtra(){
+	SET_PC(0x0DA3U);
 	FARCALL(av_LoadFontsBattleExtra);  // farcall _LoadFontsBattleExtra
 	RET;  // ret
 
 }
 
 int LoadFontsExtra(){
+	SET_PC(0x0DAAU);
 	FARCALL(av_LoadFontsExtra);  // farcall _LoadFontsExtra
 	RET;  // ret
 
 }
 
 int DecompressRequest2bpp(){
+	SET_PC(0x0DB1U);
 	PUSH_DE;  // push de
 	LD_A(BANK(sScratch));  // ld a, BANK(sScratch)
 	CALL(mOpenSRAM);  // call OpenSRAM
@@ -75,6 +82,7 @@ int DecompressRequest2bpp(){
 }
 
 int FarCopyBytes(){
+	SET_PC(0x0DCBU);
 //  copy bc bytes from a:hl to de
 
 	LD_addr_A(wTempBank);  // ld [wTempBank], a
@@ -92,6 +100,7 @@ int FarCopyBytes(){
 }
 
 int FarCopyBytesDouble(){
+	SET_PC(0x0DDBU);
 //  Copy bc bytes from a:hl to bc*2 bytes at de,
 //  doubling each byte in the process.
 
@@ -135,6 +144,7 @@ dec:
 }
 
 int Request2bpp(){
+	SET_PC(0x0DFCU);
 //  Load 2bpp at b:de to occupy c tiles of hl.
 	LDH_A_addr(hBGMapMode);  // ldh a, [hBGMapMode]
 	PUSH_AF;  // push af
@@ -187,6 +197,7 @@ cycle:
 }
 
 int Request1bpp(){
+	SET_PC(0x0E36U);
 //  Load 1bpp at b:de to occupy c tiles of hl.
 	LDH_A_addr(hBGMapMode);  // ldh a, [hBGMapMode]
 	PUSH_AF;  // push af
@@ -239,6 +250,7 @@ cycle:
 }
 
 int Get2bpp(){
+	SET_PC(0x0E70U);
 //  copy c 2bpp tiles from b:de to hl
 	LDH_A_addr(rLCDC);  // ldh a, [rLCDC]
 	BIT_A(rLCDC_ENABLE);  // bit rLCDC_ENABLE, a
@@ -268,6 +280,7 @@ int Get2bpp(){
 }
 
 int Get1bpp(){
+	SET_PC(0x0E8BU);
 //  copy c 1bpp tiles from b:de to hl
 	LDH_A_addr(rLCDC);  // ldh a, [rLCDC]
 	BIT_A(rLCDC_ENABLE);  // bit rLCDC_ENABLE, a
@@ -296,7 +309,9 @@ int Get1bpp(){
 
 }
 
-int DuplicateGet2bpp(){  //  unreferenced
+int DuplicateGet2bpp(){
+	SET_PC(0x0EA4U);
+//  //  unreferenced
 	LDH_A_addr(rLCDC);  // ldh a, [rLCDC]
 	ADD_A_A;  // add a
 	JP_C (mRequest2bpp);  // jp c, Request2bpp

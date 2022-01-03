@@ -1,11 +1,13 @@
 #include "../constants.h"
 
 int ClearBGPalettes(){
+	SET_PC(0x3445U);
 	CALL(mClearPalettes);  // call ClearPalettes
 	return mWaitBGMap;
 }
 
 int WaitBGMap(){
+	SET_PC(0x3448U);
 //  Tell VBlank to update BG Map
 	LD_A(1);  // ld a, 1 ; BG Map 0 tiles
 	LDH_addr_A(hBGMapMode);  // ldh [hBGMapMode], a
@@ -17,6 +19,7 @@ int WaitBGMap(){
 }
 
 int WaitBGMap2(){
+	SET_PC(0x3452U);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
 	IF_Z goto bg0;  // jr z, .bg0
@@ -38,6 +41,7 @@ bg0:
 }
 
 int IsCGB(){
+	SET_PC(0x346AU);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
 	RET;  // ret
@@ -45,6 +49,7 @@ int IsCGB(){
 }
 
 int ApplyTilemap(){
+	SET_PC(0x346EU);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
 	IF_Z goto dmg;  // jr z, .dmg
@@ -70,6 +75,7 @@ dmg:
 }
 
 int CGBOnly_CopyTilemapAtOnce(){
+	SET_PC(0x348AU);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
 	JR_Z (mWaitBGMap);  // jr z, WaitBGMap
@@ -77,6 +83,7 @@ int CGBOnly_CopyTilemapAtOnce(){
 }
 
 int CopyTilemapAtOnce(){
+	SET_PC(0x348FU);
 	LDH_A_addr(hBGMapMode);  // ldh a, [hBGMapMode]
 	PUSH_AF;  // push af
 	XOR_A_A;  // xor a
@@ -283,6 +290,7 @@ loop_u8230:
 }
 
 int SetPalettes(){
+	SET_PC(0x3542U);
 //  Inits the Palettes
 //  depending on the system the monochromes palettes or color palettes
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
@@ -309,6 +317,7 @@ SetPalettesForGameBoyColor:
 }
 
 int ClearPalettes(){
+	SET_PC(0x3560U);
 //  Make all palettes white
 
 //  CGB: make all the palette colors white
@@ -339,11 +348,13 @@ cgb:
 }
 
 int GetMemSGBLayout(){
+	SET_PC(0x357DU);
 	LD_B(SCGB_DEFAULT);  // ld b, SCGB_DEFAULT
 	return mGetSGBLayout;
 }
 
 int GetSGBLayout(){
+	SET_PC(0x357FU);
 //  load sgb packets unless dmg
 
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
@@ -363,6 +374,7 @@ sgb:
 }
 
 int SetHPPal(){
+	SET_PC(0x358DU);
 //  Set palette for hp bar pixel length e at hl.
 	CALL(mGetHPPal);  // call GetHPPal
 	LD_hl_D;  // ld [hl], d
@@ -371,6 +383,7 @@ int SetHPPal(){
 }
 
 int GetHPPal(){
+	SET_PC(0x3592U);
 //  Get palette for hp bar pixel length e in d.
 	LD_D(HP_GREEN);  // ld d, HP_GREEN
 	LD_A_E;  // ld a, e

@@ -9,6 +9,7 @@
 //  This prevents the display and audio output from lagging.
 
 int VBlank(){
+	SET_PC(0x0150U);
 	PUSH_AF;  // push af
 	PUSH_BC;  // push bc
 	PUSH_DE;  // push de
@@ -57,6 +58,7 @@ VBlanks:
 }
 
 int VBlank0(){
+	SET_PC(0x0180U);
 //  normal operation
 
 //  rng
@@ -166,6 +168,7 @@ ok2:
 }
 
 int VBlank1(){
+	SET_PC(0x01F4U);
 //  scx, scy
 //  palettes
 //  bg map
@@ -219,7 +222,7 @@ skip_lcd:
 	OR_A(1 << LCD_STAT);  // or 1 << LCD_STAT
 	LDH_addr_A(rIF);  // ldh [rIF], a
 
-	  // ei
+	NOP;  // ei
 	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
 	RST(mBankswitch);  // rst Bankswitch
 	CALL(mv_UpdateSound);  // call _UpdateSound
@@ -233,6 +236,7 @@ skip_lcd:
 }
 
 int UpdatePals(){
+	SET_PC(0x023EU);
 //  update pals for either dmg or cgb
 
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
@@ -253,6 +257,7 @@ int UpdatePals(){
 }
 
 int VBlank4(){
+	SET_PC(0x0255U);
 //  bg map
 //  tiles
 //  oam
@@ -286,6 +291,7 @@ int VBlank4(){
 }
 
 int VBlank5(){
+	SET_PC(0x0278U);
 //  scx
 //  palettes
 //  bg map
@@ -320,13 +326,13 @@ done:
 // ; request lcd stat
 	LDH_addr_A(rIF);  // ldh [rIF], a
 
-	  // ei
+	NOP;  // ei
 	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
 	RST(mBankswitch);  // rst Bankswitch
 	CALL(mv_UpdateSound);  // call _UpdateSound
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
 	RST(mBankswitch);  // rst Bankswitch
-	  // di
+	NOP;  // di
 
 	XOR_A_A;  // xor a
 	LDH_addr_A(rIF);  // ldh [rIF], a
@@ -338,6 +344,7 @@ done:
 }
 
 int VBlank2(){
+	SET_PC(0x02B0U);
 //  sound only
 
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -357,6 +364,7 @@ int VBlank2(){
 }
 
 int VBlank3(){
+	SET_PC(0x02C4U);
 //  scx, scy
 //  palettes
 //  bg map
@@ -424,13 +432,13 @@ okay:
 // ; request lcd stat
 	LDH_addr_A(rIF);  // ldh [rIF], a
 
-	  // ei
+	NOP;  // ei
 	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
 	RST(mBankswitch);  // rst Bankswitch
 	CALL(mv_UpdateSound);  // call _UpdateSound
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
 	RST(mBankswitch);  // rst Bankswitch
-	  // di
+	NOP;  // di
 
 // ; discard requested ints
 	XOR_A_A;  // xor a

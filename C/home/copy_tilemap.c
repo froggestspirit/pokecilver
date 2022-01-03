@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int LoadTilemapToTempTilemap(){
+	SET_PC(0x3156U);
 //  Load wTilemap into wTempTilemap
 	hlcoord(0, 0, wTilemap);  // hlcoord 0, 0
 	decoord(0, 0, wTempTilemap);  // decoord 0, 0, wTempTilemap
@@ -10,6 +11,7 @@ int LoadTilemapToTempTilemap(){
 }
 
 int SafeLoadTempTilemapToTilemap(){
+	SET_PC(0x3162U);
 	XOR_A_A;  // xor a
 	LDH_addr_A(hBGMapMode);  // ldh [hBGMapMode], a
 	CALL(mLoadTempTilemapToTilemap);  // call LoadTempTilemapToTilemap
@@ -20,6 +22,7 @@ int SafeLoadTempTilemapToTilemap(){
 }
 
 int LoadTempTilemapToTilemap(){
+	SET_PC(0x316DU);
 //  Load wTempTilemap into wTilemap
 	hlcoord(0, 0, wTempTilemap);  // hlcoord 0, 0, wTempTilemap
 	decoord(0, 0, wTilemap);  // decoord 0, 0

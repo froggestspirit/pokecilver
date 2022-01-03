@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int CountSetBits(){
+	SET_PC(0x359EU);
 //  Count the number of set bits in b bytes starting from hl.
 //  Return in a, c and [wNumSetBits].
 	LD_C(0);  // ld c, 0
@@ -31,6 +32,7 @@ count:
 }
 
 int GetWeekday(){
+	SET_PC(0x35B5U);
 	LD_A_addr(wCurDay);  // ld a, [wCurDay]
 
 mod:
@@ -43,6 +45,7 @@ mod:
 }
 
 int SetSeenAndCaughtMon(){
+	SET_PC(0x35BFU);
 	PUSH_AF;  // push af
 	LD_C_A;  // ld c, a
 	LD_HL(wPokedexCaught);  // ld hl, wPokedexCaught
@@ -55,6 +58,7 @@ int SetSeenAndCaughtMon(){
 }
 
 int SetSeenMon(){
+	SET_PC(0x35CAU);
 	LD_C_A;  // ld c, a
 	LD_HL(wPokedexSeen);  // ld hl, wPokedexSeen
 	LD_B(SET_FLAG);  // ld b, SET_FLAG
@@ -63,6 +67,7 @@ int SetSeenMon(){
 }
 
 int CheckCaughtMon(){
+	SET_PC(0x35D2U);
 	LD_C_A;  // ld c, a
 	LD_HL(wPokedexCaught);  // ld hl, wPokedexCaught
 	LD_B(CHECK_FLAG);  // ld b, CHECK_FLAG
@@ -71,6 +76,7 @@ int CheckCaughtMon(){
 }
 
 int CheckSeenMon(){
+	SET_PC(0x35DAU);
 	LD_C_A;  // ld c, a
 	LD_HL(wPokedexSeen);  // ld hl, wPokedexSeen
 	LD_B(CHECK_FLAG);  // ld b, CHECK_FLAG
@@ -80,6 +86,7 @@ int CheckSeenMon(){
 }
 
 int PokedexFlagAction(){
+	SET_PC(0x35E0U);
 	LD_D(0);  // ld d, 0
 	PREDEF(pSmallFarFlagAction);  // predef SmallFarFlagAction
 	LD_A_C;  // ld a, c

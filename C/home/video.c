@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int UpdateBGMapBuffer(){
+	SET_PC(0x1456U);
 //  Copy [hBGMapTileCount] 16x8 tiles from wBGMapBuffer
 //  to bg map addresses in wBGMapBufferPointers.
 
@@ -78,6 +79,7 @@ for(int rept = 0; rept < 2; rept++){
 }
 
 int WaitTop(){
+	SET_PC(0x14A7U);
 //  Wait until the top third of the BG Map is being updated.
 
 	LDH_A_addr(hBGMapMode);  // ldh a, [hBGMapMode]
@@ -101,6 +103,7 @@ done:
 }
 
 int UpdateBGMap(){
+	SET_PC(0x14B9U);
 //  Update the BG Map, in thirds, from wTilemap and wAttrmap.
 
 	LDH_A_addr(hBGMapMode);  // ldh a, [hBGMapMode]
@@ -266,6 +269,7 @@ for(int rept = 0; rept < SCREEN_WIDTH / 2 - 1; rept++){
 }
 
 int Serve1bppRequest(){
+	SET_PC(0x1577U);
 	LD_A_addr(wRequested1bppSize);  // ld a, [wRequested1bppSize]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -339,6 +343,7 @@ for(int rept = 0; rept < 3; rept++){
 }
 
 int Serve2bppRequest(){
+	SET_PC(0x15CEU);
 	LD_A_addr(wRequested2bppSize);  // ld a, [wRequested2bppSize]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -404,6 +409,7 @@ for(int rept = 0; rept < 7; rept++){
 }
 
 int AnimateTileset(){
+	SET_PC(0x1629U);
 	LDH_A_addr(hMapAnims);  // ldh a, [hMapAnims]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -421,12 +427,16 @@ int AnimateTileset(){
 
 }
 
-int Video_DummyFunction(){  //  unreferenced
+int Video_DummyFunction(){
+	SET_PC(0x1639U);
+//  //  unreferenced
 	RET;  // ret
 
 }
 
-int EnableSpriteDisplay(){  //  unreferenced
+int EnableSpriteDisplay(){
+	SET_PC(0x163AU);
+//  //  unreferenced
 	LD_HL(rLCDC);  // ld hl, rLCDC
 	SET_hl(1);  // set 1, [hl]
 	RET;  // ret
@@ -434,6 +444,7 @@ int EnableSpriteDisplay(){  //  unreferenced
 }
 
 int FillBGMap0WithBlack(){
+	SET_PC(0x1640U);
 	NOP;  // nop
 	LDH_A_addr(hBlackOutBGMapThird);  // ldh a, [hBlackOutBGMapThird]
 	AND_A_A;  // and a ; 0

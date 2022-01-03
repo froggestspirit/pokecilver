@@ -810,6 +810,7 @@ void gb_step_cpu()
 	if(gb.cpu_reg.pc == 0x18) gb.gb_frame = 1;
 	if(gb.cpu_reg.pc < 0x8000){
 		if(func[gb.cpu_reg.pc + ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE)] != NULL){
+			//printf("%x\n", gb.cpu_reg.pc + ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE));
 			int result = func[gb.cpu_reg.pc + ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE)]();
 			if(result >= 0) gb.cpu_reg.pc = result;
 			if(gb.cpu_reg.pc == 0x18) gb.gb_frame = 1;

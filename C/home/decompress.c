@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int FarDecompress(){
+	SET_PC(0x0AEEU);
 //  Decompress graphics data from a:hl to de.
 
 	LD_addr_A(wLZBank);  // ld [wLZBank], a
@@ -18,6 +19,7 @@ int FarDecompress(){
 }
 
 int Decompress(){
+	SET_PC(0x0AFEU);
 //  Pokemon GSC uses an lz variant (lz3) for compression.
 //  This is mainly (but not necessarily) used for graphics.
 
@@ -34,26 +36,26 @@ int Decompress(){
 
 //  Commands:
 
-#define LZ_LITERAL 0  //  Read literal data for n bytes.
-#define LZ_ITERATE 1  //  Write the same byte for n bytes.
-#define LZ_ALTERNATE 2  //  Alternate two bytes for n bytes.
-#define LZ_ZERO 3  //  Write 0 for n bytes.
+#define LZ_LITERAL 0 << 5  //  Read literal data for n bytes.
+#define LZ_ITERATE 1 << 5  //  Write the same byte for n bytes.
+#define LZ_ALTERNATE 2 << 5  //  Alternate two bytes for n bytes.
+#define LZ_ZERO 3 << 5  //  Write 0 for n bytes.
 
 //  Another class of commands reuses data from the decompressed output.
-#define LZ_RW 2  //  bit
+#define LZ_RW 2 + 5  //  bit
 
 //  These commands take a signed offset to start copying from.
 //  Wraparound is simulated.
 //  Positive offsets (15-bit) are added to the start address.
 //  Negative offsets (7-bit) are subtracted from the current position.
 
-#define LZ_REPEAT 4  //  Repeat n bytes from the offset.
-#define LZ_FLIP 5  //  Repeat n bitflipped bytes.
-#define LZ_REVERSE 6  //  Repeat n bytes in reverse.
+#define LZ_REPEAT 4 << 5  //  Repeat n bytes from the offset.
+#define LZ_FLIP 5 << 5  //  Repeat n bitflipped bytes.
+#define LZ_REVERSE 6 << 5  //  Repeat n bytes in reverse.
 
 //  If the value in the count needs to be larger than 5 bits,
 //  LZ_LONG can be used to expand the count to 10 bits.
-#define LZ_LONG 7
+#define LZ_LONG 7 << 5
 
 //  A new control command is read in bits 2-4.
 //  The top two bits of the length are bits 0-1.
@@ -329,7 +331,7 @@ fnext:
 	SET_PC(0x0BB6U);
 	LD_A_hli;  // ld a, [hli]
 	PUSH_BC;  // push bc
-	LD_BC(8);  // lb bc, 0, 8
+	LD_BC((0 << 8) | 8);  // lb bc, 0, 8
 
 
 floop:

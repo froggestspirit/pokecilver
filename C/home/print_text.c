@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int PrintLetterDelay(){
+	SET_PC(0x31E0U);
 //  Wait before printing the next letter.
 
 //  The text speed setting in wOptions is actually a frame count:
@@ -99,6 +100,7 @@ end:
 }
 
 int CopyDataUntil(){
+	SET_PC(0x322DU);
 //  Copy [hl .. bc) to de.
 
 //  In other words, the source data is
@@ -116,11 +118,13 @@ int CopyDataUntil(){
 	JR_NZ (mCopyDataUntil);  // jr nz, CopyDataUntil
 	RET;  // ret
 
-//#include "print_num.h"
+// INCLUDE "home/print_num.asm"
+
 	return mFarPrintText;
 }
 
 int FarPrintText(){
+	SET_PC(0x3400U);
 	LD_addr_A(wTempBank);  // ld [wTempBank], a
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
@@ -136,6 +140,7 @@ int FarPrintText(){
 }
 
 int CallPointerAt(){
+	SET_PC(0x3410U);
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A_hli;  // ld a, [hli]

@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int HandleStoneQueue(){
+	SET_PC(0x37A8U);
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 

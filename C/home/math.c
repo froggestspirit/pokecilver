@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int SimpleMultiply(){
+	SET_PC(0x31A8U);
 //  Return a * c.
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -20,6 +21,7 @@ loop:
 }
 
 int SimpleDivide(){
+	SET_PC(0x31B3U);
 //  Divide a by c. Return quotient b and remainder a.
 	LD_B(0);  // ld b, 0
 
@@ -35,6 +37,7 @@ loop:
 }
 
 int Multiply(){
+	SET_PC(0x31BCU);
 //  Multiply hMultiplicand (3 bytes) by hMultiplier. Result in hProduct.
 //  All values are big endian.
 	PUSH_HL;  // push hl
@@ -49,6 +52,7 @@ int Multiply(){
 }
 
 int Divide(){
+	SET_PC(0x31C7U);
 //  Divide hDividend length b (max 4 bytes) by hDivisor. Result in hQuotient.
 //  All values are big endian.
 	PUSH_HL;  // push hl
@@ -62,7 +66,9 @@ int Divide(){
 
 }
 
-int SubtractAbsolute(){  //  unreferenced
+int SubtractAbsolute(){
+	SET_PC(0x31D9U);
+//  //  unreferenced
 //  Return |a - b|, sign in carry.
 	SUB_A_B;  // sub b
 	RET_NC ;  // ret nc

@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int ResetGameTime(){
+	SET_PC(0x1EE4U);
 	XOR_A_A;  // xor a
 	LD_addr_A(wGameTimeCap);  // ld [wGameTimeCap], a
 	LD_addr_A(wGameTimeHours);  // ld [wGameTimeHours], a
@@ -13,7 +14,8 @@ int ResetGameTime(){
 }
 
 int GameTimer(){
-	  // nop
+	SET_PC(0x1EF8U);
+	NOP;  // nop
 
 //  Increment the game timer by one frame.
 //  The game timer is capped at 999:59:59.00.

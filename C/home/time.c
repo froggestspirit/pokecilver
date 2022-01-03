@@ -2,12 +2,15 @@
 
 //  Functions relating to the timer interrupt and the real-time-clock.
 
-int Timer(){  //  unreferenced
+int Timer(){
+	SET_PC(0x045BU);
+//  //  unreferenced
 	RET;  // ret
 
 }
 
 int LatchClock(){
+	SET_PC(0x045CU);
 //  latch clock counter data
 	LD_A(0);  // ld a, 0
 	LD_addr_A(MBC3LatchClock);  // ld [MBC3LatchClock], a
@@ -18,6 +21,7 @@ int LatchClock(){
 }
 
 int UpdateTime(){
+	SET_PC(0x0467U);
 	CALL(mGetClock);  // call GetClock
 	CALL(mFixDays);  // call FixDays
 	CALL(mFixTime);  // call FixTime
@@ -27,6 +31,7 @@ int UpdateTime(){
 }
 
 int GetClock(){
+	SET_PC(0x0477U);
 //  store clock data in hRTCDayHi-hRTCSeconds
 
 //  enable clock r/w
@@ -69,6 +74,7 @@ int GetClock(){
 }
 
 int FixDays(){
+	SET_PC(0x04A8U);
 //  fix day count
 //  mod by 140
 
@@ -144,6 +150,7 @@ quit:
 }
 
 int FixTime(){
+	SET_PC(0x04DEU);
 //  add ingame time (set at newgame) to current time
 //  store time in wCurDay, hHours, hMinutes, hSeconds
 
@@ -200,6 +207,7 @@ updatehr:
 }
 
 int InitTimeOfDay(){
+	SET_PC(0x0519U);
 	XOR_A_A;  // xor a
 	LD_addr_A(wStringBuffer2);  // ld [wStringBuffer2], a
 	LD_A(0);  // ld a, 0 ; useless
@@ -209,6 +217,7 @@ int InitTimeOfDay(){
 }
 
 int InitDayOfWeek(){
+	SET_PC(0x0524U);
 	CALL(mUpdateTime);  // call UpdateTime
 	LDH_A_addr(hHours);  // ldh a, [hHours]
 	LD_addr_A(wStringBuffer2 + 1);  // ld [wStringBuffer2 + 1], a
@@ -221,12 +230,14 @@ int InitDayOfWeek(){
 }
 
 int InitTime(){
+	SET_PC(0x0538U);
 	FARCALL(av_InitTime);  // farcall _InitTime
 	RET;  // ret
 
 }
 
 int ClearClock(){
+	SET_PC(0x053FU);
 	CALL(mClearClock_ClearhRTC);  // call .ClearhRTC
 	CALL(mSetClock);  // call SetClock
 	RET;  // ret
@@ -245,6 +256,7 @@ ClearhRTC:
 }
 
 int SetClock(){
+	SET_PC(0x0552U);
 //  set clock data from hram
 
 //  enable clock r/w
@@ -293,7 +305,9 @@ int SetClock(){
 
 }
 
-int ClearRTCStatus(){  //  unreferenced
+int ClearRTCStatus(){
+	SET_PC(0x0585U);
+//  //  unreferenced
 //  clear sRTCStatusFlags
 	XOR_A_A;  // xor a
 	PUSH_AF;  // push af
@@ -307,6 +321,7 @@ int ClearRTCStatus(){  //  unreferenced
 }
 
 int RecordRTCStatus(){
+	SET_PC(0x0594U);
 //  append flags to sRTCStatusFlags
 	LD_HL(sRTCStatusFlags);  // ld hl, sRTCStatusFlags
 	PUSH_AF;  // push af
@@ -321,6 +336,7 @@ int RecordRTCStatus(){
 }
 
 int CheckRTCStatus(){
+	SET_PC(0x05A4U);
 //  check sRTCStatusFlags
 	LD_A(BANK(sRTCStatusFlags));  // ld a, BANK(sRTCStatusFlags)
 	CALL(mOpenSRAM);  // call OpenSRAM

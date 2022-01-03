@@ -3,6 +3,7 @@
 //  Audio interfaces.
 
 int InitSound(){
+	SET_PC(0x3D4BU);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -29,6 +30,7 @@ int InitSound(){
 }
 
 int UpdateSound(){
+	SET_PC(0x3D67U);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -55,6 +57,7 @@ int UpdateSound(){
 }
 
 int v_LoadMusicByte(){
+	SET_PC(0x3D83U);
 //  [wCurMusicByte] = [a:de]
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
@@ -70,6 +73,7 @@ int v_LoadMusicByte(){
 }
 
 int PlayMusic(){
+	SET_PC(0x3D94U);
 //  Play music de.
 
 	PUSH_HL;  // push hl
@@ -110,6 +114,7 @@ end:
 }
 
 int PlayMusic2(){
+	SET_PC(0x3DB9U);
 //  Stop playing music, then play music de.
 
 	PUSH_HL;  // push hl
@@ -143,6 +148,7 @@ int PlayMusic2(){
 }
 
 int PlayCry(){
+	SET_PC(0x3DE0U);
 //  Play cry de.
 
 	PUSH_HL;  // push hl
@@ -196,6 +202,7 @@ for(int rept = 0; rept < MON_CRY_LENGTH; rept++){
 }
 
 int PlaySFX(){
+	SET_PC(0x3E20U);
 //  Play sound effect de.
 //  Sound effects are ordered by priority (highest to lowest)
 
@@ -242,6 +249,7 @@ done:
 }
 
 int WaitPlaySFX(){
+	SET_PC(0x3E4BU);
 	CALL(mWaitSFX);  // call WaitSFX
 	CALL(mPlaySFX);  // call PlaySFX
 	RET;  // ret
@@ -249,6 +257,7 @@ int WaitPlaySFX(){
 }
 
 int WaitSFX(){
+	SET_PC(0x3E52U);
 //  infinite loop until sfx is done playing
 
 	PUSH_HL;  // push hl
@@ -275,6 +284,7 @@ wait:
 }
 
 int MaxVolume(){
+	SET_PC(0x3E55U);
 	LD_A(MAX_VOLUME);  // ld a, MAX_VOLUME
 	LD_addr_A(wVolume);  // ld [wVolume], a
 	RET;  // ret
@@ -282,6 +292,7 @@ int MaxVolume(){
 }
 
 int LowVolume(){
+	SET_PC(0x3E5BU);
 	LD_A(0x33);  // ld a, $33 ; 50%
 	LD_addr_A(wVolume);  // ld [wVolume], a
 	RET;  // ret
@@ -289,6 +300,7 @@ int LowVolume(){
 }
 
 int MinVolume(){
+	SET_PC(0x3E61U);
 	XOR_A_A;  // xor a
 	LD_addr_A(wVolume);  // ld [wVolume], a
 	RET;  // ret
@@ -296,6 +308,7 @@ int MinVolume(){
 }
 
 int FadeOutToMusic(){
+	SET_PC(0x3E66U);
 //  //  unreferenced
 	LD_A(4);  // ld a, 4
 	LD_addr_A(wMusicFade);  // ld [wMusicFade], a
@@ -304,6 +317,7 @@ int FadeOutToMusic(){
 }
 
 int FadeInToMusic(){
+	SET_PC(0x3E6CU);
 	LD_A(4 | (1 << MUSIC_FADE_IN_F));  // ld a, 4 | (1 << MUSIC_FADE_IN_F)
 	LD_addr_A(wMusicFade);  // ld [wMusicFade], a
 	RET;  // ret
@@ -311,6 +325,7 @@ int FadeInToMusic(){
 }
 
 int SkipMusic(){
+	SET_PC(0x3E72U);
 //  Skip a frames of music.
 
 loop:
@@ -324,6 +339,7 @@ loop:
 }
 
 int FadeToMapMusic(){
+	SET_PC(0x3E7AU);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -355,6 +371,7 @@ done:
 }
 
 int PlayMapMusic(){
+	SET_PC(0x3E9DU);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -386,6 +403,7 @@ done:
 }
 
 int PlayMapMusicBike(){
+	SET_PC(0x3EC1U);
 //  If the player's on a bike, play the bike music instead of the map music
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
@@ -421,6 +439,7 @@ play:
 }
 
 int TryRestartMapMusic(){
+	SET_PC(0x3EEDU);
 	LD_A_addr(wDontPlayMapMusicOnReload);  // ld a, [wDontPlayMapMusicOnReload]
 	AND_A_A;  // and a
 	JR_Z (mRestartMapMusic);  // jr z, RestartMapMusic
@@ -436,6 +455,7 @@ int TryRestartMapMusic(){
 }
 
 int RestartMapMusic(){
+	SET_PC(0x3F05U);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -456,6 +476,7 @@ int RestartMapMusic(){
 }
 
 int SpecialMapMusic(){
+	SET_PC(0x3F20U);
 	LD_A_addr(wPlayerState);  // ld a, [wPlayerState]
 	CP_A(PLAYER_SURF);  // cp PLAYER_SURF
 	IF_Z goto surf;  // jr z, .surf
@@ -509,6 +530,7 @@ ranking:
 }
 
 int GetMapMusic_MaybeSpecial(){
+	SET_PC(0x3F55U);
 	CALL(mSpecialMapMusic);  // call SpecialMapMusic
 	RET_C ;  // ret c
 	CALL(mGetMapMusic);  // call GetMapMusic
@@ -517,6 +539,7 @@ int GetMapMusic_MaybeSpecial(){
 }
 
 int PlaceBCDNumberSprite(){
+	SET_PC(0x3F5DU);
 //  //  unreferenced
 //  Places a BCD number at the upper center of the screen.
 	LD_A(4 * TILE_WIDTH);  // ld a, 4 * TILE_WIDTH
@@ -556,6 +579,7 @@ max:
 }
 
 int CheckSFX(){
+	SET_PC(0x3F9CU);
 //  Return carry if any SFX channels are active.
 	LD_A_addr(wChannel5Flags1);  // ld a, [wChannel5Flags1]
 	BIT_A(0);  // bit 0, a
@@ -580,6 +604,7 @@ playing:
 }
 
 int TerminateExpBarSound(){
+	SET_PC(0x3FBCU);
 	XOR_A_A;  // xor a
 	LD_addr_A(wChannel5Flags1);  // ld [wChannel5Flags1], a
 	LD_addr_A(wPitchSweep);  // ld [wPitchSweep], a

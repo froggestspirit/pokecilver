@@ -117,7 +117,8 @@ def parse_line_label(string):
             if not funcRet:
                 asm = f"\treturn m{currentFunc};\n"
             asm = f"{asm}}}\n\n"
-        asm = f"{asm}int {currentFunc}(){{"
+        funcID = funcsKnown.index(currentFunc)
+        asm = f"{asm}int {currentFunc}(){{\n\tSET_PC({funcsKnownAddr[funcID]});"
         if len(parts) > 1:
             asm = f"{asm}\n//{' '.join(parts[1:])}"
     elif len(string[0]) and string[0][0] == ".":
@@ -127,7 +128,7 @@ def parse_line_label(string):
             parts[0] = f"{parts[0]}\n//"
         localLabel = " ".join(parts)
         localLabelID = funcsKnown.index(f"{currentFunc}_{localLabel.split(':')[0]}")
-        if localLabel in labelReserved:
+        if localLabel.split(':')[0] in labelReserved:
             localLabel = f"l_{localLabel}"
         asm = f"\n{localLabel}\n\tSET_PC({funcsKnownAddr[localLabelID]});"
     else:

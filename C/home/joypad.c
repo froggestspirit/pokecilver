@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int Joypad(){
+	SET_PC(0x08DFU);
 //  Replaced by UpdateJoypad, called from VBlank instead of the useless
 //  joypad interrupt.
 
@@ -10,6 +11,7 @@ int Joypad(){
 }
 
 int ClearJoypad(){
+	SET_PC(0x08E0U);
 	XOR_A_A;  // xor a
 //  Pressed this frame (delta)
 	LDH_addr_A(hJoyPressed);  // ldh [hJoyPressed], a
@@ -20,6 +22,7 @@ int ClearJoypad(){
 }
 
 int UpdateJoypad(){
+	SET_PC(0x08E6U);
 //  This is called automatically every frame in VBlank.
 //  Read the joypad register and translate it to something more
 //  workable for use in-game. There are 8 buttons, so we can use
@@ -112,6 +115,7 @@ for(int rept = 0; rept < 6; rept++){
 }
 
 int GetJoypad(){
+	SET_PC(0x0935U);
 //  Update mirror joypad input from hJoypadDown (real input)
 
 //  hJoyReleased: released this frame (delta)
@@ -253,6 +257,7 @@ finishauto:
 }
 
 int StartAutoInput(){
+	SET_PC(0x099FU);
 //  Start reading automated input stream at a:hl.
 
 	LD_addr_A(wAutoInputBank);  // ld [wAutoInputBank], a
@@ -276,6 +281,7 @@ int StartAutoInput(){
 }
 
 int StopAutoInput(){
+	SET_PC(0x09BBU);
 //  Clear variables related to automated input.
 	XOR_A_A;  // xor a
 	LD_addr_A(wAutoInputBank);  // ld [wAutoInputBank], a
@@ -288,7 +294,9 @@ int StopAutoInput(){
 
 }
 
-int JoyTitleScreenInput(){  //  unreferenced
+int JoyTitleScreenInput(){
+	SET_PC(0x09CCU);
+//  //  unreferenced
 
 loop:
 	SET_PC(0x09CCU);
@@ -323,6 +331,7 @@ keycombo:
 }
 
 int JoyWaitAorB(){
+	SET_PC(0x09E7U);
 
 loop:
 	SET_PC(0x09E7U);
@@ -337,6 +346,7 @@ loop:
 }
 
 int WaitButton(){
+	SET_PC(0x09F7U);
 	LDH_A_addr(hOAMUpdate);  // ldh a, [hOAMUpdate]
 	PUSH_AF;  // push af
 	LD_A(1);  // ld a, 1
@@ -350,6 +360,7 @@ int WaitButton(){
 }
 
 int JoyTextDelay(){
+	SET_PC(0x0A08U);
 	CALL(mGetJoypad);  // call GetJoypad
 	LDH_A_addr(hInMenu);  // ldh a, [hInMenu]
 	AND_A_A;  // and a
@@ -387,6 +398,7 @@ restartframedelay:
 }
 
 int WaitPressAorB_BlinkCursor(){
+	SET_PC(0x0A31U);
 //  Show a blinking cursor in the lower right-hand
 //  corner of a textbox and wait until A or B is
 //  pressed.
@@ -424,6 +436,7 @@ loop:
 }
 
 int SimpleWaitPressAorB(){
+	SET_PC(0x0A54U);
 
 loop:
 	SET_PC(0x0A54U);
@@ -436,6 +449,7 @@ loop:
 }
 
 int PromptButton(){
+	SET_PC(0x0A5EU);
 //  Show a blinking cursor in the lower right-hand
 //  corner of a textbox and wait until A or B is
 //  pressed, afterwards, play a sound.
@@ -511,6 +525,7 @@ load_cursor_state:
 }
 
 int BlinkCursor(){
+	SET_PC(0x0AB4U);
 	PUSH_BC;  // push bc
 	LD_A_hl;  // ld a, [hl]
 	LD_B_A;  // ld b, a

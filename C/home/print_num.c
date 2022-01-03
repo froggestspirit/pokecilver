@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int PrintNum(){
+	SET_PC(0x3239U);
 //  Print c digits of the b-byte value from de to hl.
 //  Allows 2 to 7 digits. For 1-digit numbers, add
 //  the value to char "0" instead of calling PrintNum.
@@ -22,6 +23,7 @@ int PrintNum(){
 
 
 moneyflag:
+// 
 	SET_PC(0x3246U);  //  101xxxxx or 011xxxxx
 	LD_A(0xf0);  // ld a, "¥"
 	LD_hli_A;  // ld [hli], a
@@ -365,6 +367,7 @@ inc:
 }
 
 int PrintHexNumber(){
+	SET_PC(0x33CAU);
 //  Print the c-byte value from de to hl as hexadecimal digits.
 
 loop:

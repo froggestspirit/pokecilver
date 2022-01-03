@@ -1,6 +1,7 @@
 #include "../constants.h"
 
 int CopyBytes(){
+	SET_PC(0x3118U);
 //  copy bc bytes from hl to de
 	INC_B;  // inc b ; we bail the moment b hits 0, so include the last run
 	INC_C;  // inc c ; same thing; include last byte
@@ -23,6 +24,7 @@ HandleLoop:
 }
 
 int GetFarByte(){
+	SET_PC(0x3126U);
 //  retrieve a single byte from a:hl, and return it in a.
 // ; bankswitch to new bank
 	LD_addr_A(wTempBank);  // ld [wTempBank], a
@@ -46,6 +48,7 @@ int GetFarByte(){
 }
 
 int GetFarWord(){
+	SET_PC(0x313AU);
 //  retrieve a halfword from a:hl, and return it in hl.
 // ; bankswitch to new bank
 	LD_addr_A(wTempBank);  // ld [wTempBank], a
@@ -67,6 +70,7 @@ int GetFarWord(){
 }
 
 int ByteFill(){
+	SET_PC(0x314AU);
 //  fill bc bytes with the value of a, starting at hl
 	INC_B;  // inc b ; we bail the moment b hits 0, so include the last run
 	INC_C;  // inc c ; same thing; include last byte
