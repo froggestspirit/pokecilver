@@ -1,9 +1,4 @@
-
-#define ROM_SIZE 0x200000
-
 #define REDIRECT(x) func[a##x] = x
-
-static int (*func[ROM_SIZE])();
 
 #include "home.h"
 #include "audio/engine.h"

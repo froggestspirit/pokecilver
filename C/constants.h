@@ -1,5 +1,6 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
+extern int (*func[])();
 #include "../peanut-gb/peanut_gb.h"
 
 //#include "charmap.h"
@@ -53,6 +54,5 @@
 #include "constants/trainer_data_constants.h"
 #include "constants/type_constants.h"
 
-extern int (*func[])();
 extern struct gb_s gb;
 #endif

@@ -117,7 +117,7 @@ loop:
 	LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
 	ADD_HL_BC;  // add hl, bc
 	BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl]
-	JP_Z (mv_UpdateSound_nextchannel);  // jp z, .nextchannel
+	IF_Z goto nextchannel;  // jp z, .nextchannel
 // ; check time left in the current note
 	LD_HL(CHANNEL_NOTE_DURATION);  // ld hl, CHANNEL_NOTE_DURATION
 	ADD_HL_BC;  // add hl, bc
@@ -231,7 +231,7 @@ nextchannel:
 	INC_A;  // inc a
 	LD_addr_A(wCurChannel);  // ld [wCurChannel], a
 	CP_A(NUM_CHANNELS);  // cp NUM_CHANNELS ; are we done?
-	JP_NZ (mv_UpdateSound_loop);  // jp nz, .loop ; do it all again
+	IF_NZ goto loop;  // jp nz, .loop ; do it all again
 
 	CALL(mPlayDanger);  // call PlayDanger
 // ; fade music in/out

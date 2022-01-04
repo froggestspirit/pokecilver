@@ -21,6 +21,8 @@
 #endif
 
 struct gb_s gb;
+#define ROM_SIZE 0x200000
+int (*func[ROM_SIZE])();
 #include "peanut_gb.h"
 
 /**

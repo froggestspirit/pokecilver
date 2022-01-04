@@ -251,25 +251,25 @@
                         PUSH_PC;\
                         gb.cpu_reg.pc = dest;\
                         finish_gb_cycle();\
-                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))]();} while(0)
+                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))](););} while(0)
 #define CCALL_NC(x)	do {INC_PC(3);\
                         IF2_NC(uint16_t dest = x;\
                         PUSH_PC;\
                         gb.cpu_reg.pc = dest;\
                         finish_gb_cycle();\
-                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))]();} while(0)
+                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))](););} while(0)
 #define CCALL_Z(x)	do {INC_PC(3);\
                         IF2_Z(uint16_t dest = x;\
                         PUSH_PC;\
                         gb.cpu_reg.pc = dest;\
                         finish_gb_cycle();\
-                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))]();} while(0)
+                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))](););} while(0)
 #define CCALL_NZ(x)	do {INC_PC(3);\
                         IF2_NZ(uint16_t dest = x;\
                         PUSH_PC;\
                         gb.cpu_reg.pc = dest;\
                         finish_gb_cycle();\
-                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))]();} while(0)
+                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))](););} while(0)
 #define RST(x)	do {INC_PC(1);\
                     uint16_t dest = ((x) & 0x38);\
                     PUSH_PC;\
