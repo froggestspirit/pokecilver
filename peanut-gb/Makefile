@@ -78,7 +78,7 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(EXEOUT)$@ $^ $(LDFLAGS) $(LDLIBS) 
 
 %.obj: %.c
-	$(CC) $(CFLAGS) /Fo$@ /c /TC $^
+	$(CC) $(CFLAGS) $^
 
 %.res: %.rc
 	rc /nologo /DCOMPANY="$(COMPANY)" /DDESCRIPTION="$(DESCRIPTION)" \

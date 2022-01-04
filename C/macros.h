@@ -6,6 +6,9 @@
                         gb.cpu_reg.pc = gb.cpu_reg.pc >= 0x4000 ? (gb.cpu_reg.pc & 0x3FFF) | 0x4000 : (gb.cpu_reg.pc & 0x3FFF);} while(0)
 #define INC_PC(x) gb.cpu_reg.pc += x;
 
+#define PEEK(message)    do {uint16_t temp = gb_read(gb.cpu_reg.sp);\
+                            temp |= (gb_read(gb.cpu_reg.sp + 1) << 8 );\
+                            printf("%X: %s%x\n", gb.cpu_reg.sp, message, temp);} while(0)
 //---- Only use these for the goto commands ----
 #define IF_C	INC_PC(2) if(gb.cpu_reg.f_bits.c)
 #define IF_NC	INC_PC(2) if(!gb.cpu_reg.f_bits.c)
@@ -237,6 +240,36 @@
                         PUSH_PC;\
                         gb.cpu_reg.pc = dest;\
                         return -1;);} while(0)
+#define CCALL(x)	do {INC_PC(3);\
+                    uint16_t dest = x;\
+                    PUSH_PC;\
+                    gb.cpu_reg.pc = dest;\
+                    finish_gb_cycle();\
+                    func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))]();} while(0)
+#define CCALL_C(x)	do {INC_PC(3);\
+                        IF2_C(uint16_t dest = x;\
+                        PUSH_PC;\
+                        gb.cpu_reg.pc = dest;\
+                        finish_gb_cycle();\
+                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))]();} while(0)
+#define CCALL_NC(x)	do {INC_PC(3);\
+                        IF2_NC(uint16_t dest = x;\
+                        PUSH_PC;\
+                        gb.cpu_reg.pc = dest;\
+                        finish_gb_cycle();\
+                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))]();} while(0)
+#define CCALL_Z(x)	do {INC_PC(3);\
+                        IF2_Z(uint16_t dest = x;\
+                        PUSH_PC;\
+                        gb.cpu_reg.pc = dest;\
+                        finish_gb_cycle();\
+                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))]();} while(0)
+#define CCALL_NZ(x)	do {INC_PC(3);\
+                        IF2_NZ(uint16_t dest = x;\
+                        PUSH_PC;\
+                        gb.cpu_reg.pc = dest;\
+                        finish_gb_cycle();\
+                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))]();} while(0)
 #define RST(x)	do {INC_PC(1);\
                     uint16_t dest = ((x) & 0x38);\
                     PUSH_PC;\
@@ -855,18 +888,18 @@
 
 #define FARCALL(x)	do {uint32_t val = x;\
                         LD_A(BANK(val));\
-                        LD_HL((val & 0x3FFF) | 0x4000);\
+                        LD_HL((val & 0x3FFF) | (val < 0x4000 ? 0 : 0x4000));\
                         RST(mFarCall);} while(0)
 #define CALLFAR(x)	do {uint32_t val = x;\
-                        LD_HL((val & 0x3FFF) | 0x4000);\
+                        LD_HL((val & 0x3FFF) | (val < 0x4000 ? 0 : 0x4000));\
                         LD_A(BANK(val));\
                         RST(mFarCall);} while(0)
 #define HOMECALL(x)	do {uint32_t val = x;\
-                        LD_A_addr(hROMBank);\
+                        LDH_A_addr(hROMBank);\
                         PUSH_AF;\
                         LD_A(BANK(val));\
                         RST(mBankswitch);\
-                        CALL((val & 0x3FFF) | 0x4000);\
+                        CALL((val & 0x3FFF) | (val < 0x4000 ? 0 : 0x4000));\
                         POP_AF;\
                         RST(mBankswitch);} while(0)
 

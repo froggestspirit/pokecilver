@@ -1,5 +1,5 @@
 #include "../constants.h"
-
+#include "vblank.h"
 //  VBlank is the interrupt responsible for updating VRAM.
 
 //  In Pokemon Gold and Silver, VBlank has been hijacked to act as the
@@ -8,28 +8,25 @@
 
 //  This prevents the display and audio output from lagging.
 
+
 int VBlank(){
 	SET_PC(0x0150U);
+	static int (*VBlanks[8])() = {VBlank0,
+								VBlank1,
+								VBlank2,
+								VBlank3,
+								VBlank4,
+								VBlank5,
+								VBlank0,
+								VBlank0};
 	PUSH_AF;  // push af
 	PUSH_BC;  // push bc
 	PUSH_DE;  // push de
 	PUSH_HL;  // push hl
 
-	LDH_A_addr(hVBlank);  // ldh a, [hVBlank]
-	AND_A(7);  // and 7
-
-	LD_E_A;  // ld e, a
-	LD_D(0);  // ld d, 0
-	LD_HL(mVBlank_VBlanks);  // ld hl, .VBlanks
-	ADD_HL_DE;  // add hl, de
-	ADD_HL_DE;  // add hl, de
-	LD_A_hli;  // ld a, [hli]
-	LD_H_hl;  // ld h, [hl]
-	LD_L_A;  // ld l, a
-
 	LD_DE(mVBlank_return);  // ld de, .return
 	PUSH_DE;  // push de
-	JP_hl;  // jp hl
+	return VBlanks[gb_read(hVBlank)]();
 
 
 l_return:
@@ -41,20 +38,6 @@ l_return:
 	POP_BC;  // pop bc
 	POP_AF;  // pop af
 	RET;  // ret
-
-
-VBlanks:
-	SET_PC(0x0170U);
-	//dw ['VBlank0'];  // dw VBlank0
-	//dw ['VBlank1'];  // dw VBlank1
-	//dw ['VBlank2'];  // dw VBlank2
-	//dw ['VBlank3'];  // dw VBlank3
-	//dw ['VBlank4'];  // dw VBlank4
-	//dw ['VBlank5'];  // dw VBlank5
-	//dw ['VBlank0'];  // dw VBlank0 ; just in case
-	//dw ['VBlank0'];  // dw VBlank0 ; just in case
-
-	return mVBlank0;
 }
 
 int VBlank0(){

@@ -806,13 +806,15 @@ extern int (*func[ROM_SIZE])();
 
 void gb_step_cpu()
 {
-	uint8_t opcode, inst_cycles;
+	uint8_t opcode;
 	if(gb.cpu_reg.pc == 0x18) gb.gb_frame = 1;
 	if(gb.cpu_reg.pc < 0x8000){
-		if(func[gb.cpu_reg.pc + ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE)] != NULL){
-			//printf("%x\n", gb.cpu_reg.pc + ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE));
-			int result = func[gb.cpu_reg.pc + ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE)]();
+		int absAddress = gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE));
+		if(func[absAddress] != NULL){
+			//printf("FUN: %x\n", absAddress);
+			int result = func[absAddress]();
 			if(result >= 0) gb.cpu_reg.pc = result;
+			//printf("RET: %x\n", gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE)));
 			if(gb.cpu_reg.pc == 0x18) gb.gb_frame = 1;
 		}
 	}
@@ -1333,7 +1335,11 @@ void gb_step_cpu()
 	default:
 		(gb.gb_error)(GB_INVALID_OPCODE, opcode);
 	}
+	finish_gb_cycle();
+}
 
+void finish_gb_cycle(){
+	uint8_t inst_cycles;
 	inst_cycles = 4; // make this static to remove a dependancy on it
 
 	/* DIV register timing */

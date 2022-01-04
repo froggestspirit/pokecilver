@@ -3,7 +3,7 @@
 
 #define REDIRECT(x) func[a##x] = x
 
-int (*func[ROM_SIZE])();
+static int (*func[ROM_SIZE])();
 
 #include "home.h"
 #include "audio/engine.h"
