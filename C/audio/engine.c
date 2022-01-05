@@ -16,7 +16,7 @@ int v_InitSound(){
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
 	PUSH_AF;  // push af
-	CALL(mMusicOff);  // call MusicOff
+	CCALL(aMusicOff);  // call MusicOff
 	LD_HL(rNR50);  // ld hl, rNR50 ; channel control registers
 	XOR_A_A;  // xor a
 	LD_hli_A;  // ld [hli], a ; rNR50 ; volume/vin
@@ -57,13 +57,12 @@ clearaudio:
 
 	LD_A(MAX_VOLUME);  // ld a, MAX_VOLUME
 	LD_addr_A(wVolume);  // ld [wVolume], a
-	CALL(mMusicOn);  // call MusicOn
+	CCALL(aMusicOn);  // call MusicOn
 	POP_AF;  // pop af
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
 	POP_HL;  // pop hl
-	RET;  // ret
-
+	return;  // ret
 }
 
 int MusicFadeRestart(){
@@ -73,7 +72,7 @@ int MusicFadeRestart(){
 	PUSH_AF;  // push af
 	LD_A_addr(wMusicFadeID);  // ld a, [wMusicFadeID]
 	PUSH_AF;  // push af
-	CALL(mv_InitSound);  // call _InitSound
+	v_InitSound();  // call _InitSound
 	POP_AF;  // pop af
 	LD_addr_A(wMusicFadeID);  // ld [wMusicFadeID], a
 	POP_AF;  // pop af
@@ -2757,7 +2756,7 @@ int SetLRTracks(){
 int v_PlayMusic(){
 	SET_PC(0xE8B30U);
 //  load music
-	CALL(mMusicOff);  // call MusicOff
+	CCALL(aMusicOff);  // call MusicOff
 	LD_HL(wMusicID);  // ld hl, wMusicID
 	LD_hl_E;  // ld [hl], e ; song number
 	INC_HL;  // inc hl
@@ -2796,7 +2795,7 @@ loop:
 	LD_addr_A(wNoiseSampleAddress + 1);  // ld [wNoiseSampleAddress + 1], a
 	LD_addr_A(wNoiseSampleDelay);  // ld [wNoiseSampleDelay], a
 	LD_addr_A(wMusicNoiseSampleSet);  // ld [wMusicNoiseSampleSet], a
-	CALL(mMusicOn);  // call MusicOn
+	CCALL(aMusicOn);  // call MusicOn
 	RET;  // ret
 
 }
@@ -2807,7 +2806,7 @@ int v_PlayCry(){
 // 	wCryPitch
 // 	wCryLength
 
-	CALL(mMusicOff);  // call MusicOff
+	CCALL(aMusicOff);  // call MusicOff
 
 //  Overload the music id with the cry id
 	LD_HL(wMusicID);  // ld hl, wMusicID
@@ -2918,7 +2917,7 @@ end:
 	SET_PC(0xE8BFBU);
 	LD_A(1);  // ld a, 1 ; stop playing music
 	LD_addr_A(wSFXPriority);  // ld [wSFXPriority], a
-	CALL(mMusicOn);  // call MusicOn
+	CCALL(aMusicOn);  // call MusicOn
 	RET;  // ret
 
 }
@@ -2926,7 +2925,7 @@ end:
 int v_PlaySFX(){
 	SET_PC(0xE8C04U);
 //  clear channels if they aren't already
-	CALL(mMusicOff);  // call MusicOff
+	CCALL(aMusicOff);  // call MusicOff
 	LD_HL(wChannel5Flags1);  // ld hl, wChannel5Flags1
 	BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl] ; ch5 on?
 	IF_Z goto ch6;  // jr z, .ch6
@@ -3028,7 +3027,7 @@ startchannels:
 	POP_AF;  // pop af
 	DEC_A;  // dec a
 	IF_NZ goto startchannels;  // jr nz, .startchannels
-	CALL(mMusicOn);  // call MusicOn
+	CCALL(aMusicOn);  // call MusicOn
 	XOR_A_A;  // xor a
 	LD_addr_A(wSFXPriority);  // ld [wSFXPriority], a
 	RET;  // ret
@@ -3039,7 +3038,7 @@ int PlayStereoSFX(){
 	SET_PC(0xE8CA6U);
 //  play sfx de
 
-	CALL(mMusicOff);  // call MusicOff
+	CCALL(aMusicOff);  // call MusicOff
 
 //  standard procedure if stereo's off
 	LD_A_addr(wOptions);  // ld a, [wOptions]
@@ -3138,7 +3137,7 @@ skip:
 	IF_NZ goto loop;  // jr nz, .loop
 
 //  we're done
-	CALL(mMusicOn);  // call MusicOn
+	CCALL(aMusicOn);  // call MusicOn
 	RET;  // ret
 
 }

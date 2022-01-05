@@ -754,7 +754,7 @@ void init_function_pointers(){
 
 
 	// audio/engine.c
-	REDIRECT(v_InitSound);
+	//REDIRECT(v_InitSound);
 	REDIRECT(MusicFadeRestart);
 	REDIRECT(MusicOn);
 	REDIRECT(MusicOff);

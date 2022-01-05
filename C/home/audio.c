@@ -4,27 +4,7 @@
 
 int InitSound(){
 	SET_PC(0x3D4BU);
-	PUSH_HL;  // push hl
-	PUSH_DE;  // push de
-	PUSH_BC;  // push bc
-	PUSH_AF;  // push af
-
-	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
-	PUSH_AF;  // push af
-	LD_A(BANK(av_InitSound));  // ld a, BANK(_InitSound)
-	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
-	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
-
-	CALL(mv_InitSound);  // call _InitSound
-
-	POP_AF;  // pop af
-	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
-	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
-
-	POP_AF;  // pop af
-	POP_BC;  // pop bc
-	POP_DE;  // pop de
-	POP_HL;  // pop hl
+	v_InitSound();  // call _InitSound
 	RET;  // ret
 
 }
@@ -97,7 +77,7 @@ int PlayMusic(){
 
 nomusic:
 	SET_PC(0x3DABU);
-	CALL(mv_InitSound);  // call _InitSound
+	v_InitSound();  // call _InitSound
 
 
 end:

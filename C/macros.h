@@ -3,12 +3,15 @@
 #include "funcmap.h"
 
 #define SET_PC(x)   do {gb.cpu_reg.pc = (uint16_t) (x);\
-                        gb.cpu_reg.pc = gb.cpu_reg.pc >= 0x4000 ? (gb.cpu_reg.pc & 0x3FFF) | 0x4000 : (gb.cpu_reg.pc & 0x3FFF);} while(0)
+                        gb.cpu_reg.pc = gb.cpu_reg.pc < 0x4000 ? gb.cpu_reg.pc : ((gb.cpu_reg.pc & 0x3FFF) | 0x4000);} while(0)
 #define INC_PC(x) gb.cpu_reg.pc += x;
 
 #define PEEK(message)    do {uint16_t temp = gb_read(gb.cpu_reg.sp);\
                             temp |= (gb_read(gb.cpu_reg.sp + 1) << 8 );\
                             printf("%X: %s%x\n", gb.cpu_reg.sp, message, temp);} while(0)
+
+#define CHIRP   printf("%s test\n", __func__);
+
 //---- Only use these for the goto commands ----
 #define IF_C	INC_PC(2) if(gb.cpu_reg.f_bits.c)
 #define IF_NC	INC_PC(2) if(!gb.cpu_reg.f_bits.c)
@@ -241,35 +244,30 @@
                         gb.cpu_reg.pc = dest;\
                         return -1;);} while(0)
 #define CCALL(x)	do {INC_PC(3);\
-                    uint16_t dest = x;\
-                    PUSH_PC;\
-                    gb.cpu_reg.pc = dest;\
-                    finish_gb_cycle();\
-                    func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))]();} while(0)
+                        int dest = x;\
+                        PUSH_PC;\
+                        gb.cpu_reg.pc = dest < 0x4000 ? dest : ((dest & 0x3FFF) | 0x4000);\
+                        func[dest]();} while(0)
 #define CCALL_C(x)	do {INC_PC(3);\
-                        IF2_C(uint16_t dest = x;\
+                        IF2_C(int dest = x;\
                         PUSH_PC;\
-                        gb.cpu_reg.pc = dest;\
-                        finish_gb_cycle();\
-                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))](););} while(0)
+                        gb.cpu_reg.pc = dest < 0x4000 ? dest : ((dest & 0x3FFF) | 0x4000);\
+                        func[dest](););} while(0)
 #define CCALL_NC(x)	do {INC_PC(3);\
-                        IF2_NC(uint16_t dest = x;\
+                        IF2_NC(int dest = x;\
                         PUSH_PC;\
-                        gb.cpu_reg.pc = dest;\
-                        finish_gb_cycle();\
-                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))](););} while(0)
+                        gb.cpu_reg.pc = dest < 0x4000 ? dest : ((dest & 0x3FFF) | 0x4000);\
+                        func[dest](););} while(0)
 #define CCALL_Z(x)	do {INC_PC(3);\
-                        IF2_Z(uint16_t dest = x;\
+                        IF2_Z(int dest = x;\
                         PUSH_PC;\
-                        gb.cpu_reg.pc = dest;\
-                        finish_gb_cycle();\
-                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))](););} while(0)
+                        gb.cpu_reg.pc = dest < 0x4000 ? dest : ((dest & 0x3FFF) | 0x4000);\
+                        func[dest](););} while(0)
 #define CCALL_NZ(x)	do {INC_PC(3);\
-                        IF2_NZ(uint16_t dest = x;\
+                        IF2_NZ(int dest = x;\
                         PUSH_PC;\
-                        gb.cpu_reg.pc = dest;\
-                        finish_gb_cycle();\
-                        func[gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE))](););} while(0)
+                        gb.cpu_reg.pc = dest < 0x4000 ? dest : ((dest & 0x3FFF) | 0x4000);\
+                        func[dest](););} while(0)
 #define RST(x)	do {INC_PC(1);\
                     uint16_t dest = ((x) & 0x38);\
                     PUSH_PC;\
