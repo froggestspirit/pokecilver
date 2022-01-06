@@ -9,7 +9,7 @@ int HandleNewMap(){
 	CALL(mResetBikeFlags);  // call ResetBikeFlags
 	LD_A(MAPCALLBACK_NEWMAP);  // ld a, MAPCALLBACK_NEWMAP
 	CALL(mRunMapCallback);  // call RunMapCallback
-	return mHandleContinueMap;
+	return HandleContinueMap();
 }
 
 int HandleContinueMap(){

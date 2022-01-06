@@ -5,7 +5,7 @@ int CopyName1(){
 //  Copies the name from de to wStringBuffer2
 	LD_HL(wStringBuffer2);  // ld hl, wStringBuffer2
 
-	return mCopyName2;
+	return CopyName2();
 }
 
 int CopyName2(){

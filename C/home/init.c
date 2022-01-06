@@ -35,7 +35,7 @@ load:
 	SET_PC(0x05CFU);
 	LDH_addr_A(hCGB);  // ldh [hCGB], a
 
-	return mInit;
+	return Init();
 }
 
 int Init(){
@@ -195,7 +195,7 @@ int FillBGMap_l(){
 	LD_A_L;  // ld a, l
 // ; fallthrough
 
-	return mFillBGMap;
+	return FillBGMap();
 }
 
 int FillBGMap(){

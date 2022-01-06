@@ -59,7 +59,7 @@ dmg:
 	SET_PC(0x0396U);
 	LD_HL(mIncGradGBPalTable_13);  // ld hl, IncGradGBPalTable_13
 	LD_B(3);  // ld b, 3
-	return mRotatePalettesRight;
+	return RotatePalettesRight();
 }
 
 int RotatePalettesRight(){
@@ -115,7 +115,7 @@ dmg:
 	SET_PC(0x03D0U);
 	LD_HL(mIncGradGBPalTable_15 - 1);  // ld hl, IncGradGBPalTable_15 - 1
 	LD_B(3);  // ld b, 3
-	return mRotatePalettesLeft;
+	return RotatePalettesLeft();
 }
 
 int RotatePalettesLeft(){
@@ -142,96 +142,96 @@ int RotatePalettesLeft(){
 int IncGradGBPalTable_00(){
 	SET_PC(0x03EBU);
 //dc 3,3,3,3, 3,3,3,3, 3,3,3,3
-	return mIncGradGBPalTable_01;
+	return IncGradGBPalTable_01();
 }
 
 int IncGradGBPalTable_01(){
 	SET_PC(0x03EEU);
 //dc 3,3,3,2, 3,3,3,2, 3,3,3,2
-	return mIncGradGBPalTable_02;
+	return IncGradGBPalTable_02();
 }
 
 int IncGradGBPalTable_02(){
 	SET_PC(0x03F1U);
 //dc 3,3,2,1, 3,3,2,1, 3,3,2,1
-	return mIncGradGBPalTable_03;
+	return IncGradGBPalTable_03();
 }
 
 int IncGradGBPalTable_03(){
 	SET_PC(0x03F4U);
 //dc 3,2,1,0, 3,2,1,0, 3,2,1,0
 
-	return mIncGradGBPalTable_04;
+	return IncGradGBPalTable_04();
 }
 
 int IncGradGBPalTable_04(){
 	SET_PC(0x03F7U);
 //dc 3,2,1,0, 3,2,1,0, 3,2,1,0
-	return mIncGradGBPalTable_05;
+	return IncGradGBPalTable_05();
 }
 
 int IncGradGBPalTable_05(){
 	SET_PC(0x03FAU);
 //dc 2,1,0,0, 2,1,0,0, 2,1,0,0
-	return mIncGradGBPalTable_06;
+	return IncGradGBPalTable_06();
 }
 
 int IncGradGBPalTable_06(){
 	SET_PC(0x03FDU);
 //dc 1,0,0,0, 1,0,0,0, 1,0,0,0
 
-	return mIncGradGBPalTable_07;
+	return IncGradGBPalTable_07();
 }
 
 int IncGradGBPalTable_07(){
 	SET_PC(0x0400U);
 //dc 0,0,0,0, 0,0,0,0, 0,0,0,0
 //                            bgp      obp1     obp2
-	return mIncGradGBPalTable_08;
+	return IncGradGBPalTable_08();
 }
 
 int IncGradGBPalTable_08(){
 	SET_PC(0x0403U);
 //dc 3,3,3,3, 3,3,3,3, 3,3,3,3
-	return mIncGradGBPalTable_09;
+	return IncGradGBPalTable_09();
 }
 
 int IncGradGBPalTable_09(){
 	SET_PC(0x0406U);
 //dc 3,3,3,2, 3,3,3,2, 3,3,2,0
-	return mIncGradGBPalTable_10;
+	return IncGradGBPalTable_10();
 }
 
 int IncGradGBPalTable_10(){
 	SET_PC(0x0409U);
 //dc 3,3,2,1, 3,2,1,0, 3,2,1,0
-	return mIncGradGBPalTable_11;
+	return IncGradGBPalTable_11();
 }
 
 int IncGradGBPalTable_11(){
 	SET_PC(0x040CU);
 //dc 3,2,1,0, 3,1,0,0, 3,2,0,0
 
-	return mIncGradGBPalTable_12;
+	return IncGradGBPalTable_12();
 }
 
 int IncGradGBPalTable_12(){
 	SET_PC(0x040FU);
 //dc 3,2,1,0, 3,1,0,0, 3,2,0,0
-	return mIncGradGBPalTable_13;
+	return IncGradGBPalTable_13();
 }
 
 int IncGradGBPalTable_13(){
 	SET_PC(0x0412U);
 //dc 2,1,0,0, 2,0,0,0, 2,1,0,0
-	return mIncGradGBPalTable_14;
+	return IncGradGBPalTable_14();
 }
 
 int IncGradGBPalTable_14(){
 	SET_PC(0x0415U);
 //dc 1,0,0,0, 1,0,0,0, 1,0,0,0
 
-	return mIncGradGBPalTable_15;
+	return IncGradGBPalTable_15();
 }
 
 int IncGradGBPalTable_15(){

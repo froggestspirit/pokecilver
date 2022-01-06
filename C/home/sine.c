@@ -6,7 +6,7 @@ int Cosine(){
 //  a = d * cos(a * pi/32)
 	ADD_A(0b010000);  // add %010000 ; cos(x) = sin(x + pi/2)
 // ; fallthrough
-	return mSine;
+	return Sine();
 }
 
 int Sine(){

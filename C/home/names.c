@@ -12,7 +12,7 @@ int NamesPointers(){
 	//dba ['TrainerClassNames']  // dba TrainerClassNames   ; TRAINER_NAME
 	//dbw ['4', 'MoveDescriptions']  // dbw 4, MoveDescriptions ; MOVE_DESC_NAME_BROKEN (wrong bank)
 
-	return mGetName;
+	return GetName();
 }
 
 int GetName(){
@@ -306,7 +306,7 @@ HMTextEnd:
 
 // INCLUDE "home/hm_moves.asm"
 
-	return mGetMoveName;
+	return GetMoveName();
 }
 
 int GetMoveName(){

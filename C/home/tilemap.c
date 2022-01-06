@@ -3,7 +3,7 @@
 int ClearBGPalettes(){
 	SET_PC(0x3445U);
 	CALL(mClearPalettes);  // call ClearPalettes
-	return mWaitBGMap;
+	return WaitBGMap();
 }
 
 int WaitBGMap(){
@@ -350,7 +350,7 @@ cgb:
 int GetMemSGBLayout(){
 	SET_PC(0x357DU);
 	LD_B(SCGB_DEFAULT);  // ld b, SCGB_DEFAULT
-	return mGetSGBLayout;
+	return GetSGBLayout();
 }
 
 int GetSGBLayout(){
@@ -370,7 +370,7 @@ sgb:
 	SET_PC(0x3588U);
 	PREDEF_JUMP(pLoadSGBLayout);  // predef_jump LoadSGBLayout
 
-	return mSetHPPal;
+	return SetHPPal();
 }
 
 int SetHPPal(){

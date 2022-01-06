@@ -285,7 +285,7 @@ int ReturnToMapFromSubmenu(){
 
 // INCLUDE "home/warp_connection.asm"
 
-	return mCheckOutdoorMap;
+	return CheckOutdoorMap();
 }
 
 int CheckOutdoorMap(){
@@ -954,7 +954,7 @@ Done:
 
 int FillNorthConnectionStrip(){
 	SET_PC(0x26FAU);
-	return mFillSouthConnectionStrip;
+	return FillSouthConnectionStrip();
 }
 
 int FillSouthConnectionStrip(){
@@ -1001,7 +1001,7 @@ okay:
 
 int FillWestConnectionStrip(){
 	SET_PC(0x271DU);
-	return mFillEastConnectionStrip;
+	return FillEastConnectionStrip();
 }
 
 int FillEastConnectionStrip(){
@@ -1264,7 +1264,7 @@ int ObjectEvent(){
 	SET_PC(0x2810U);
 	//jumptextfaceplayer ['ObjectEventText']  // jumptextfaceplayer ObjectEventText
 
-	return mObjectEventText;
+	return ObjectEventText();
 }
 
 int ObjectEventText(){
@@ -1272,7 +1272,7 @@ int ObjectEventText(){
 	//text_far ['_ObjectEventText']  // text_far _ObjectEventText
 	//text_end ['?']  // text_end
 
-	return mBGEvent;
+	return BGEvent();
 }
 
 int BGEvent(){
@@ -1280,7 +1280,7 @@ int BGEvent(){
 //  //  unreferenced
 	//jumptext ['BGEventText']  // jumptext BGEventText
 
-	return mBGEventText;
+	return BGEventText();
 }
 
 int BGEventText(){
@@ -1288,7 +1288,7 @@ int BGEventText(){
 	//text_far ['_BGEventText']  // text_far _BGEventText
 	//text_end ['?']  // text_end
 
-	return mCoordinatesEvent;
+	return CoordinatesEvent();
 }
 
 int CoordinatesEvent(){
@@ -1296,7 +1296,7 @@ int CoordinatesEvent(){
 //  //  unreferenced
 	//jumptext ['CoordinatesEventText']  // jumptext CoordinatesEventText
 
-	return mCoordinatesEventText;
+	return CoordinatesEventText();
 }
 
 int CoordinatesEventText(){
@@ -1304,7 +1304,7 @@ int CoordinatesEventText(){
 	//text_far ['_CoordinatesEventText']  // text_far _CoordinatesEventText
 	//text_end ['?']  // text_end
 
-	return mCheckObjectMask;
+	return CheckObjectMask();
 }
 
 int CheckObjectMask(){
@@ -1696,7 +1696,7 @@ int LoadConnectionBlockData(){
 	LD_B(SCREEN_META_WIDTH);  // ld b, SCREEN_META_WIDTH
 	LD_C(SCREEN_META_HEIGHT);  // ld c, SCREEN_META_HEIGHT
 
-	return mSaveScreen_LoadConnection;
+	return SaveScreen_LoadConnection();
 }
 
 int SaveScreen_LoadConnection(){
@@ -1962,7 +1962,7 @@ Directions:
 	//db ['1', '0'];  // db  1,  0
 	//dw ['wTileRight'];  // dw wTileRight
 
-	return mGetCoordTile;
+	return GetCoordTile();
 }
 
 int GetCoordTile(){
@@ -2241,7 +2241,7 @@ int ExitAllMenus(){
 	CALL(mReloadTilesetAndPalettes);  // call ReloadTilesetAndPalettes
 	CALL(mUpdateSprites);  // call UpdateSprites
 	CALL(mReloadPalettes);  // call ReloadPalettes
-	return mFinishExitMenu;
+	return FinishExitMenu();
 }
 
 int FinishExitMenu(){
@@ -2314,7 +2314,7 @@ int GetMapPointer(){
 	LD_B_A;  // ld b, a
 	LD_A_addr(wMapNumber);  // ld a, [wMapNumber]
 	LD_C_A;  // ld c, a
-	return mGetAnyMapPointer;
+	return GetAnyMapPointer();
 }
 
 int GetAnyMapPointer(){
@@ -2366,7 +2366,7 @@ int GetMapField(){
 	LD_B_A;  // ld b, a
 	LD_A_addr(wMapNumber);  // ld a, [wMapNumber]
 	LD_C_A;  // ld c, a
-	return mGetAnyMapField;
+	return GetAnyMapField();
 }
 
 int GetAnyMapField(){
@@ -2396,7 +2396,7 @@ int SwitchToMapAttributesBank(){
 	LD_B_A;  // ld b, a
 	LD_A_addr(wMapNumber);  // ld a, [wMapNumber]
 	LD_C_A;  // ld c, a
-	return mSwitchToAnyMapAttributesBank;
+	return SwitchToAnyMapAttributesBank();
 }
 
 int SwitchToAnyMapAttributesBank(){
@@ -2414,7 +2414,7 @@ int GetMapAttributesBank(){
 	LD_B_A;  // ld b, a
 	LD_A_addr(wMapNumber);  // ld a, [wMapNumber]
 	LD_C_A;  // ld c, a
-	return mGetAnyMapAttributesBank;
+	return GetAnyMapAttributesBank();
 }
 
 int GetAnyMapAttributesBank(){
@@ -2630,7 +2630,7 @@ clearedmahogany:
 	LD_DE(MUSIC_CHERRYGROVE_CITY);  // ld de, MUSIC_CHERRYGROVE_CITY
 	goto done;  // jr .done
 
-	return mGetMapTimeOfDay;
+	return GetMapTimeOfDay();
 }
 
 int GetMapTimeOfDay(){

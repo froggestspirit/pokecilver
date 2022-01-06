@@ -54,7 +54,7 @@ int SetSeenAndCaughtMon(){
 	POP_AF;  // pop af
 // ; fallthrough
 
-	return mSetSeenMon;
+	return SetSeenMon();
 }
 
 int SetSeenMon(){
@@ -82,7 +82,7 @@ int CheckSeenMon(){
 	LD_B(CHECK_FLAG);  // ld b, CHECK_FLAG
 // ; fallthrough
 
-	return mPokedexFlagAction;
+	return PokedexFlagAction();
 }
 
 int PokedexFlagAction(){

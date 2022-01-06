@@ -5,7 +5,7 @@ int QueueScript(){
 //  Push pointer hl in the current bank to wQueuedScriptBank.
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 
-	return mFarQueueScript;
+	return FarQueueScript();
 }
 
 int FarQueueScript(){

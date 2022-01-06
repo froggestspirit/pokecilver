@@ -121,7 +121,7 @@ int TalkToTrainer(){
 	LD_A(-1);  // ld a, -1
 	LD_addr_A(wSeenTrainerDirection);  // ld [wSeenTrainerDirection], a
 
-	return mLoadTrainer_continue;
+	return LoadTrainer_continue();
 }
 
 int LoadTrainer_continue(){

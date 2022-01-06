@@ -115,7 +115,7 @@ def parse_line_label(string):
         funcList.append(currentFunc)
         if prevFunc != "":
             if not funcRet:
-                asm = f"\treturn m{currentFunc};\n"
+                asm = f"\treturn {currentFunc}();\n"
             asm = f"{asm}}}\n\n"
         funcID = funcsKnown.index(currentFunc)
         asm = f"{asm}int {currentFunc}(){{\n\tSET_PC({funcsKnownAddr[funcID]});"

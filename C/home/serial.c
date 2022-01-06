@@ -294,7 +294,7 @@ int CheckLinkTimeoutFramesNonzero(){
 
 //  This sets wLinkTimeoutFrames to $ffff, since
 //  a is always 0 when it is called.
-	return mSerialDisconnected;
+	return SerialDisconnected();
 }
 
 int SerialDisconnected(){
@@ -305,7 +305,7 @@ int SerialDisconnected(){
 	RET;  // ret
 
 //  This is used to check that both players entered the same Cable Club room.
-	return mSerial_ExchangeSyncBytes;
+	return Serial_ExchangeSyncBytes();
 }
 
 int Serial_ExchangeSyncBytes(){

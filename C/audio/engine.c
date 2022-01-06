@@ -708,7 +708,7 @@ int DangerSoundHigh(){
 	//db ['0x50'];  // db $50 ; frequency: $750
 	//db ['0x87'];  // db $87 ; restart sound
 
-	return mDangerSoundLow;
+	return DangerSoundLow();
 }
 
 int DangerSoundLow(){
@@ -718,7 +718,7 @@ int DangerSoundLow(){
 	//db ['0xee'];  // db $ee ; frequency: $6ee
 	//db ['0x86'];  // db $86 ; restart sound
 
-	return mFadeMusic;
+	return FadeMusic();
 }
 
 int FadeMusic(){
@@ -1643,42 +1643,42 @@ int MusicCommands(){
 	//dw ['Music_Ret'];  // dw Music_Ret
 	//assert_table_length ['0x100 - FIRST_MUSIC_CMD']  // assert_table_length $100 - FIRST_MUSIC_CMD
 
-	return mMusicF1;
+	return MusicF1();
 }
 
 int MusicF1(){
 	SET_PC(0xE8780U);
-	return mMusicF2;
+	return MusicF2();
 }
 
 int MusicF2(){
 	SET_PC(0xE8780U);
-	return mMusicF3;
+	return MusicF3();
 }
 
 int MusicF3(){
 	SET_PC(0xE8780U);
-	return mMusicF4;
+	return MusicF4();
 }
 
 int MusicF4(){
 	SET_PC(0xE8780U);
-	return mMusicF5;
+	return MusicF5();
 }
 
 int MusicF5(){
 	SET_PC(0xE8780U);
-	return mMusicF6;
+	return MusicF6();
 }
 
 int MusicF6(){
 	SET_PC(0xE8780U);
-	return mMusicF7;
+	return MusicF7();
 }
 
 int MusicF7(){
 	SET_PC(0xE8780U);
-	return mMusicF8;
+	return MusicF8();
 }
 
 int MusicF8(){
@@ -2299,37 +2299,37 @@ int Music_Tempo(){
 
 int Music_Octave8(){
 	SET_PC(0xE89A6U);
-	return mMusic_Octave7;
+	return Music_Octave7();
 }
 
 int Music_Octave7(){
 	SET_PC(0xE89A6U);
-	return mMusic_Octave6;
+	return Music_Octave6();
 }
 
 int Music_Octave6(){
 	SET_PC(0xE89A6U);
-	return mMusic_Octave5;
+	return Music_Octave5();
 }
 
 int Music_Octave5(){
 	SET_PC(0xE89A6U);
-	return mMusic_Octave4;
+	return Music_Octave4();
 }
 
 int Music_Octave4(){
 	SET_PC(0xE89A6U);
-	return mMusic_Octave3;
+	return Music_Octave3();
 }
 
 int Music_Octave3(){
 	SET_PC(0xE89A6U);
-	return mMusic_Octave2;
+	return Music_Octave2();
 }
 
 int Music_Octave2(){
 	SET_PC(0xE89A6U);
-	return mMusic_Octave1;
+	return Music_Octave1();
 }
 
 int Music_Octave1(){
@@ -3239,7 +3239,7 @@ int LoadMusicByte(){
 
 // INCLUDE "audio/drumkits.asm"
 
-	return mGetLRTracks;
+	return GetLRTracks();
 }
 
 int GetLRTracks(){
@@ -3268,7 +3268,7 @@ int MonoTracks(){
 //  lo: right channel
 	//db ['0x11', '0x22', '0x44', '0x88'];  // db $11, $22, $44, $88
 
-	return mStereoTracks;
+	return StereoTracks();
 }
 
 int StereoTracks(){
@@ -3277,7 +3277,7 @@ int StereoTracks(){
 //  seems to be modified on a per-song basis
 	//db ['0x11', '0x22', '0x44', '0x88'];  // db $11, $22, $44, $88
 
-	return mChannelPointers;
+	return ChannelPointers();
 }
 
 int ChannelPointers(){
@@ -3296,7 +3296,7 @@ int ChannelPointers(){
 	//dw ['wChannel8'];  // dw wChannel8
 	//assert_table_length ['NUM_CHANNELS']  // assert_table_length NUM_CHANNELS
 
-	return mClearChannels;
+	return ClearChannels();
 }
 
 int ClearChannels(){

@@ -168,7 +168,7 @@ LastMoveOpp:
 //    db ENEMY_LAST_MOVE,       PLAYER_LAST_MOVE
 	SET_PC(0x3C7AU);
 
-	return mBattleVarLocations;
+	return BattleVarLocations();
 }
 
 int BattleVarLocations(){

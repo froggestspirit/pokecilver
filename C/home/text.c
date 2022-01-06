@@ -168,7 +168,7 @@ int GameFreakText(){
 	//text ['"ゲームフりーク！"']  // text "ゲームフりーク！" ; "GAMEFREAK!"
 	//done ['?']  // done
 
-	return mRadioTerminator;
+	return RadioTerminator();
 }
 
 int RadioTerminator(){
@@ -181,7 +181,7 @@ stop:
 	SET_PC(0x0F5BU);
 	//text_end ['?']  // text_end
 
-	return mPrintText;
+	return PrintText();
 }
 
 int PrintText(){
@@ -189,7 +189,7 @@ int PrintText(){
 	CALL(mSetUpTextbox);  // call SetUpTextbox
 // ; fallthrough
 
-	return mPrintTextboxText;
+	return PrintTextboxText();
 }
 
 int PrintTextboxText(){
@@ -216,7 +216,7 @@ int PlaceString(){
 	PUSH_HL;  // push hl
 // ; fallthrough
 
-	return mPlaceNextChar;
+	return PlaceNextChar();
 }
 
 int PlaceNextChar(){
@@ -237,7 +237,7 @@ int DummyChar(){
 	POP_DE;  // pop de
 // ; fallthrough
 
-	return mNextChar;
+	return NextChar();
 }
 
 int NextChar(){
@@ -468,7 +468,7 @@ int PlaceMoveUsersName(){
 	LDH_A_addr(hBattleTurn);  // ldh a, [hBattleTurn]
 // ; fallthrough
 
-	return mPlaceBattlersName;
+	return PlaceBattlersName();
 }
 
 int PlaceBattlersName(){
@@ -545,85 +545,85 @@ int PlaceCommandCharacter(){
 int TMCharText(){
 	SET_PC(0x1139U);
 //     db "TM@"
-	return mTrainerCharText;
+	return TrainerCharText();
 }
 
 int TrainerCharText(){
 	SET_PC(0x113CU);
 //db "TRAINER@"
-	return mPCCharText;
+	return PCCharText();
 }
 
 int PCCharText(){
 	SET_PC(0x1144U);
 //     db "PC@"
-	return mRocketCharText;
+	return RocketCharText();
 }
 
 int RocketCharText(){
 	SET_PC(0x1147U);
 // db "ROCKET@"
-	return mPlacePOKeText;
+	return PlacePOKeText();
 }
 
 int PlacePOKeText(){
 	SET_PC(0x114EU);
 //  db "POKé@"
-	return mKougekiText;
+	return KougekiText();
 }
 
 int KougekiText(){
 	SET_PC(0x1153U);
 //    db "こうげき@"
-	return mSixDotsCharText;
+	return SixDotsCharText();
 }
 
 int SixDotsCharText(){
 	SET_PC(0x1158U);
 //db "……@"
-	return mEnemyText;
+	return EnemyText();
 }
 
 int EnemyText(){
 	SET_PC(0x115BU);
 //      db "Enemy @"
-	return mPlacePKMNText;
+	return PlacePKMNText();
 }
 
 int PlacePKMNText(){
 	SET_PC(0x1162U);
 //  db "<PK><MN>@"
-	return mPlacePOKEText;
+	return PlacePOKEText();
 }
 
 int PlacePOKEText(){
 	SET_PC(0x1165U);
 //  db "<PO><KE>@"
-	return mString_Space;
+	return String_Space();
 }
 
 int String_Space(){
 	SET_PC(0x1168U);
 //   db " @"
 //  These strings have been dummied out.
-	return mPlaceJPRouteText;
+	return PlaceJPRouteText();
 }
 
 int PlaceJPRouteText(){
 	SET_PC(0x116AU);
-	return mPlaceWatashiText;
+	return PlaceWatashiText();
 }
 
 int PlaceWatashiText(){
 	SET_PC(0x116AU);
-	return mPlaceKokoWaText;
+	return PlaceKokoWaText();
 }
 
 int PlaceKokoWaText(){
 	SET_PC(0x116AU);
 //db "@"
 
-	return mNextLineChar;
+	return NextLineChar();
 }
 
 int NextLineChar(){
@@ -702,7 +702,7 @@ communication:
 	CALL_Z (mUnloadBlinkingCursor);  // call z, UnloadBlinkingCursor
 // ; fallthrough
 
-	return mv_ContTextNoPause;
+	return v_ContTextNoPause();
 }
 
 int v_ContTextNoPause(){
@@ -733,7 +733,7 @@ cont:
 // db "<_CONT>@"
 	SET_PC(0x11E3U);
 
-	return mPlaceDexEnd;
+	return PlaceDexEnd();
 }
 
 int PlaceDexEnd(){
@@ -777,7 +777,7 @@ stop:
 	SET_PC(0x1209U);
 	//text_end ['?']  // text_end
 
-	return mNullChar;
+	return NullChar();
 }
 
 int NullChar(){
@@ -796,7 +796,7 @@ ErrorText:
 	//text ['"エラー"']  // text "エラー"
 	//done ['?']  // done
 
-	return mTextScroll;
+	return TextScroll();
 }
 
 int TextScroll(){
@@ -889,7 +889,7 @@ stop:
 	SET_PC(0x126FU);
 	//text_end ['?']  // text_end
 
-	return mPlaceHLTextAtBC;
+	return PlaceHLTextAtBC();
 }
 
 int PlaceHLTextAtBC(){
@@ -966,7 +966,7 @@ int TextCommands(){
 	//dw ['TextCommand_FAR'];  // dw TextCommand_FAR           ; TX_FAR
 	//assert_table_length ['NUM_TEXT_CMDS']  // assert_table_length NUM_TEXT_CMDS
 
-	return mTextCommand_START;
+	return TextCommand_START();
 }
 
 int TextCommand_START(){
@@ -1243,7 +1243,7 @@ int TextSFX(){
 	//dbw ['TX_SOUND_SLOT_MACHINE_START', 'SFX_SLOT_MACHINE_START']  // dbw TX_SOUND_SLOT_MACHINE_START, SFX_SLOT_MACHINE_START
 	//db ['-1'];  // db -1
 
-	return mTextCommand_DOTS;
+	return TextCommand_DOTS();
 }
 
 int TextCommand_DOTS(){

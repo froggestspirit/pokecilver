@@ -157,7 +157,7 @@ int UpdateBattleMonInParty(){
 
 	LD_A_addr(wCurBattleMon);  // ld a, [wCurBattleMon]
 
-	return mUpdateBattleMon;
+	return UpdateBattleMon();
 }
 
 int UpdateBattleMon(){
@@ -211,7 +211,7 @@ int UpdateBattleHuds(){
 
 // INCLUDE "home/battle_vars.asm"
 
-	return mFarCopyRadioText;
+	return FarCopyRadioText();
 }
 
 int FarCopyRadioText(){

@@ -330,7 +330,7 @@ int MenuBoxCoord2Tile(){
 	LD_B_A;  // ld b, a
 // ; fallthrough
 
-	return mCoord2Tile;
+	return Coord2Tile();
 }
 
 int Coord2Tile(){
@@ -411,7 +411,7 @@ MenuHeader:
 	//dw ['vTiles0'];  // dw vTiles0
 	//db ['0'];  // db 0 ; default option
 
-	return mMenuTextboxBackup;
+	return MenuTextboxBackup();
 }
 
 int MenuTextboxBackup(){
@@ -436,7 +436,7 @@ MenuHeader:
 	//dw ['0'];  // dw 0
 	//db ['1'];  // db 1 ; default option
 
-	return mCall_ExitMenu;
+	return Call_ExitMenu();
 }
 
 int Call_ExitMenu(){
@@ -513,7 +513,7 @@ int YesNoBox(){
 	SET_PC(0x1C3FU);
 	LD_BC((SCREEN_WIDTH - 6 << 8) | 7);  // lb bc, SCREEN_WIDTH - 6, 7
 
-	return mPlaceYesNoBox;
+	return PlaceYesNoBox();
 }
 
 int PlaceYesNoBox(){
@@ -548,7 +548,7 @@ int v_YesNoBox(){
 	LD_addr_A(wMenuBorderBottomCoord);  // ld [wMenuBorderBottomCoord], a
 	CALL(mPushWindow);  // call PushWindow
 
-	return mInterpretTwoOptionMenu;
+	return InterpretTwoOptionMenu();
 }
 
 int InterpretTwoOptionMenu(){
@@ -591,7 +591,7 @@ MenuData:
 	//db ['"YES@"'];  // db "YES@"
 	//db ['"NO@"'];  // db "NO@"
 
-	return mOffsetMenuHeader;
+	return OffsetMenuHeader();
 }
 
 int OffsetMenuHeader(){
@@ -804,7 +804,7 @@ int GetStaticMenuJoypad(){
 	LD_addr_A(wMenuJoypad);  // ld [wMenuJoypad], a
 	CALL(mStaticMenuJoypad);  // call StaticMenuJoypad
 
-	return mContinueGettingMenuJoypad;
+	return ContinueGettingMenuJoypad();
 }
 
 int ContinueGettingMenuJoypad(){

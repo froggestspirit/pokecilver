@@ -120,7 +120,7 @@ int CopyDataUntil(){
 
 // INCLUDE "home/print_num.asm"
 
-	return mFarPrintText;
+	return FarPrintText();
 }
 
 int FarPrintText(){

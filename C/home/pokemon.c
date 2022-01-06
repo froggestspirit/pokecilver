@@ -76,7 +76,7 @@ int PrepMonFrontpic(){
 	LD_A(0x1);  // ld a, $1
 	LD_addr_A(wBoxAlignment);  // ld [wBoxAlignment], a
 
-	return mv_PrepMonFrontpic;
+	return v_PrepMonFrontpic();
 }
 
 int v_PrepMonFrontpic(){
@@ -133,7 +133,7 @@ int PlayMonCry(){
 	LD_addr_A(wCryTracks);  // ld [wCryTracks], a
 	POP_AF;  // pop af
 
-	return mv_PlayMonCry;
+	return v_PlayMonCry();
 }
 
 int v_PlayMonCry(){
@@ -246,7 +246,7 @@ int PrintLevel_Force3Digits(){
 	INC_HL;  // inc hl
 	LD_C(3);  // ld c, 3
 
-	return mPrint8BitNumLeftAlign;
+	return Print8BitNumLeftAlign();
 }
 
 int Print8BitNumLeftAlign(){
@@ -338,7 +338,7 @@ int GetCurNickname(){
 	LD_A_addr(wCurPartyMon);  // ld a, [wCurPartyMon]
 	LD_HL(wPartyMonNicknames);  // ld hl, wPartyMonNicknames
 
-	return mGetNickname;
+	return GetNickname();
 }
 
 int GetNickname(){

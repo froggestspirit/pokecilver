@@ -253,7 +253,7 @@ finishauto:
 	LDH_addr_A(hJoyDown);  // ldh [hJoyDown], a ; input
 	goto quit;  // jr .quit
 
-	return mStartAutoInput;
+	return StartAutoInput();
 }
 
 int StartAutoInput(){

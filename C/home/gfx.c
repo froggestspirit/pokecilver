@@ -193,7 +193,7 @@ cycle:
 	LD_C_A;  // ld c, a
 	goto loop;  // jr .loop
 
-	return mRequest1bpp;
+	return Request1bpp();
 }
 
 int Request1bpp(){
@@ -246,7 +246,7 @@ cycle:
 	LD_C_A;  // ld c, a
 	goto loop;  // jr .loop
 
-	return mGet2bpp;
+	return Get2bpp();
 }
 
 int Get2bpp(){

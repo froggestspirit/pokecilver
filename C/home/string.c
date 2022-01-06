@@ -13,7 +13,7 @@ int InitName(){
 //  Intended for names, so this function is limited to ten characters.
 	PUSH_HL;  // push hl
 	LD_C(NAME_LENGTH - 1);  // ld c, NAME_LENGTH - 1
-	return mv_InitString;
+	return v_InitString();
 }
 
 int v_InitString(){
