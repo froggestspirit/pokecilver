@@ -31,7 +31,8 @@ def main():
                 line = line.strip("\t").split("(")[0].split(" ")[0]
                 if line in ("CALL", "CALL_Z", "CALL_NZ", "CALL_C", "CALL_NC",
                             "JP", "JP_Z", "JP_NZ", "JP_C", "JP_NC", "JP_hl;",
-                            "JR", "JR_Z", "JR_NZ", "JR_C", "JR_NC"):
+                            "JR", "JR_Z", "JR_NZ", "JR_C", "JR_NC", "RST",
+                            "FARCALL", "CALLFAR", "HOMECALL", "PREDEF", "PREDEF_JUMP"):
                     currentFunc = None
     return 0
 
