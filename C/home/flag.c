@@ -62,10 +62,10 @@ int FlagAction(){
 	AND_A(7);  // and 7
 
 // ; shift de right by three bits (get the index within memory)
-for(int rept = 0; rept < 3; rept++){
+	for(int rept = 0; rept < 3; rept++){
 	SRL_D;  // srl d
 	RR_E;  // rr e
-}
+	}
 	ADD_HL_DE;  // add hl, de
 
 // ; implement a decoder

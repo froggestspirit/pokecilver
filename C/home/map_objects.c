@@ -586,9 +586,9 @@ ok:
 	LD_HL(mSpriteMovementData + SPRITEMOVEATTR_MOVEMENT);  // ld hl, SpriteMovementData + SPRITEMOVEATTR_MOVEMENT
 	LD_E_A;  // ld e, a
 	LD_D(0);  // ld d, 0
-for(int rept = 0; rept < NUM_SPRITEMOVEDATA_FIELDS; rept++){
+	for(int rept = 0; rept < NUM_SPRITEMOVEDATA_FIELDS; rept++){
 	ADD_HL_DE;  // add hl, de
-}
+	}
 	LD_A_hl;  // ld a, [hl]
 	RET;  // ret
 
@@ -601,9 +601,9 @@ int GetInitialFacing(){
 	LD_E_A;  // ld e, a
 	LD_D(0);  // ld d, 0
 	LD_HL(mSpriteMovementData + SPRITEMOVEATTR_FACING);  // ld hl, SpriteMovementData + SPRITEMOVEATTR_FACING
-for(int rept = 0; rept < NUM_SPRITEMOVEDATA_FIELDS; rept++){
+	for(int rept = 0; rept < NUM_SPRITEMOVEDATA_FIELDS; rept++){
 	ADD_HL_DE;  // add hl, de
-}
+	}
 	LD_A(BANK(aSpriteMovementData));  // ld a, BANK(SpriteMovementData)
 	CALL(mGetFarByte);  // call GetFarByte
 	ADD_A_A;  // add a
@@ -644,9 +644,9 @@ CopyData:
 	LD_E_A;  // ld e, a
 	LD_D(0);  // ld d, 0
 	LD_HL(mSpriteMovementData + SPRITEMOVEATTR_FACING);  // ld hl, SpriteMovementData + SPRITEMOVEATTR_FACING
-for(int rept = 0; rept < NUM_SPRITEMOVEDATA_FIELDS; rept++){
+	for(int rept = 0; rept < NUM_SPRITEMOVEDATA_FIELDS; rept++){
 	ADD_HL_DE;  // add hl, de
-}
+	}
 	LD_B_H;  // ld b, h
 	LD_C_L;  // ld c, l
 	POP_DE;  // pop de

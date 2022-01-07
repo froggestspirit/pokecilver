@@ -145,9 +145,9 @@ int PlayCry(){
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
 
 	LD_HL(mPokemonCries);  // ld hl, PokemonCries
-for(int rept = 0; rept < MON_CRY_LENGTH; rept++){
+	for(int rept = 0; rept < MON_CRY_LENGTH; rept++){
 	ADD_HL_DE;  // add hl, de
-}
+	}
 
 	LD_E_hl;  // ld e, [hl]
 	INC_HL;  // inc hl

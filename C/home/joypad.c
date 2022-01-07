@@ -67,9 +67,9 @@ int UpdateJoypad(){
 	LD_A(R_BUTTONS);  // ld a, R_BUTTONS
 	LDH_addr_A(rJOYP);  // ldh [rJOYP], a
 //  Wait for input to stabilize.
-for(int rept = 0; rept < 6; rept++){
+	for(int rept = 0; rept < 6; rept++){
 	LDH_A_addr(rJOYP);  // ldh a, [rJOYP]
-}
+	}
 //  Buttons take the lo nybble.
 	CPL;  // cpl
 	AND_A(0xf);  // and $f

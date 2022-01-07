@@ -28,7 +28,7 @@ next:
 	SET_PC(0x1467U);
 //  Copy a pair of 16x8 blocks (one 16x16 block)
 
-for(int rept = 0; rept < 2; rept++){
+	for(int rept = 0; rept < 2; rept++){
 //  Get our BG Map address
 	POP_BC;  // pop bc
 
@@ -54,7 +54,7 @@ for(int rept = 0; rept < 2; rept++){
 	LD_A_de;  // ld a, [de]
 	INC_DE;  // inc de
 	LD_bc_A;  // ld [bc], a
-}
+	}
 
 //  We've done 2 16x8 blocks
 	LDH_A_addr(hBGMapTileCount);  // ldh a, [hBGMapTileCount]
@@ -243,13 +243,13 @@ start:
 row:
 	SET_PC(0x153AU);
 //  Copy a row of 20 tiles
-for(int rept = 0; rept < SCREEN_WIDTH / 2 - 1; rept++){
+	for(int rept = 0; rept < SCREEN_WIDTH / 2 - 1; rept++){
 	POP_DE;  // pop de
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
 	LD_hl_D;  // ld [hl], d
 	INC_L;  // inc l
-}
+	}
 	POP_DE;  // pop de
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -302,7 +302,7 @@ int Serve1bppRequest(){
 next:
 	SET_PC(0x1594U);
 
-for(int rept = 0; rept < 3; rept++){
+	for(int rept = 0; rept < 3; rept++){
 	POP_DE;  // pop de
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -312,7 +312,7 @@ for(int rept = 0; rept < 3; rept++){
 	INC_L;  // inc l
 	LD_hl_D;  // ld [hl], d
 	INC_L;  // inc l
-}
+	}
 	POP_DE;  // pop de
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -376,13 +376,13 @@ int Serve2bppRequest(){
 next:
 	SET_PC(0x15EBU);
 
-for(int rept = 0; rept < 7; rept++){
+	for(int rept = 0; rept < 7; rept++){
 	POP_DE;  // pop de
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
 	LD_hl_D;  // ld [hl], d
 	INC_L;  // inc l
-}
+	}
 	POP_DE;  // pop de
 	LD_hl_E;  // ld [hl], e
 	INC_L;  // inc l
@@ -472,9 +472,9 @@ int FillBGMap0WithBlack(){
 
 loop1:
 	SET_PC(0x165DU);
-for(int rept = 0; rept < BG_MAP_WIDTH - SCREEN_WIDTH; rept++){
+	for(int rept = 0; rept < BG_MAP_WIDTH - SCREEN_WIDTH; rept++){
 	LD_hli_A;  // ld [hli], a
-}
+	}
 	ADD_HL_DE;  // add hl, de
 	DEC_B;  // dec b
 	IF_NZ goto loop1;  // jr nz, .loop1
@@ -509,9 +509,9 @@ go:
 
 loop2:
 	SET_PC(0x1686U);
-for(int rept = 0; rept < BG_MAP_WIDTH / 2; rept++){
+	for(int rept = 0; rept < BG_MAP_WIDTH / 2; rept++){
 	LD_hli_A;  // ld [hli], a
-}
+	}
 	DEC_B;  // dec b
 	IF_NZ goto loop2;  // jr nz, .loop2
 	RET;  // ret

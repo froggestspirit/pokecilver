@@ -136,9 +136,9 @@ def parse_line_label(string):
         if not parts:
             parts = [""]
         if parts[0] == "rept":
-            asm = f"for(int rept = 0; rept < {' '.join(parts[1:])}; rept++){{"
+            asm = f"\tfor(int rept = 0; rept < {' '.join(parts[1:])}; rept++){{"
         elif parts[0] == "endr":
-            asm = "}"
+            asm = "\t}"
         elif parts[0] in ("INCLUDE","INCBIN"):
             asm = f"// {asm}{string[0]}"
             includes.append(" ".join(parts[1:]))

@@ -173,9 +173,9 @@ int LoadCry(){
 	RST(mBankswitch);  // rst Bankswitch
 
 	LD_HL(mPokemonCries);  // ld hl, PokemonCries
-for(int rept = 0; rept < MON_CRY_LENGTH; rept++){
+	for(int rept = 0; rept < MON_CRY_LENGTH; rept++){
 	ADD_HL_BC;  // add hl, bc
-}
+	}
 
 	LD_E_hl;  // ld e, [hl]
 	INC_HL;  // inc hl

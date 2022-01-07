@@ -32,10 +32,10 @@ int UpdateCGBPals(){
 
 bgp:
 	SET_PC(0x0BEEU);
-for(int rept = 0; rept < (PALETTE_SIZE) * 2; rept++){
+	for(int rept = 0; rept < (PALETTE_SIZE) * 2; rept++){
 	LD_A_hli;  // ld a, [hli]
 	LDH_addr_A(rBGPD);  // ldh [rBGPD], a
-}
+	}
 
 	DEC_C;  // dec c
 	IF_NZ goto bgp;  // jr nz, .bgp
@@ -49,10 +49,10 @@ for(int rept = 0; rept < (PALETTE_SIZE) * 2; rept++){
 
 obp:
 	SET_PC(0x0C27U);
-for(int rept = 0; rept < (PALETTE_SIZE) * 2; rept++){
+	for(int rept = 0; rept < (PALETTE_SIZE) * 2; rept++){
 	LD_A_hli;  // ld a, [hli]
 	LDH_addr_A(rOBPD);  // ldh [rOBPD], a
-}
+	}
 
 	DEC_C;  // dec c
 	IF_NZ goto obp;  // jr nz, .obp
@@ -249,9 +249,9 @@ loop:
 	LD_hl_D;  // ld [hl], d
 	INC_HL;  // inc hl
 //  next pal color
-for(int rept = 0; rept < PAL_COLOR_SIZE; rept++){
+	for(int rept = 0; rept < PAL_COLOR_SIZE; rept++){
 	SRL_B;  // srl b
-}
+	}
 //  source
 	POP_DE;  // pop de
 //  done pal?

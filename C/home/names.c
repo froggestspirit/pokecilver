@@ -153,9 +153,9 @@ int GetPokemonName(){
 	LD_E_A;  // ld e, a
 	LD_D(0);  // ld d, 0
 
-for(int rept = 0; rept < MON_NAME_LENGTH - 1; rept++){
+	for(int rept = 0; rept < MON_NAME_LENGTH - 1; rept++){
 	ADD_HL_DE;  // add hl, de
-}
+	}
 
 //  Terminator
 	LD_DE(wStringBuffer1);  // ld de, wStringBuffer1

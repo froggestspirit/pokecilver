@@ -202,11 +202,11 @@ ok:
 	LD_H_A;  // ld h, a
 
 // ; copy the 4x4 metatile
-for(int rept = 0; rept < METATILE_WIDTH; rept++){
+	for(int rept = 0; rept < METATILE_WIDTH; rept++){
 	LD_A_hli;  // ld a, [hli]
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
-}
+	}
 	LD_A_E;  // ld a, e
 	ADD_A(SURROUNDING_WIDTH - METATILE_WIDTH);  // add SURROUNDING_WIDTH - METATILE_WIDTH
 	LD_E_A;  // ld e, a
@@ -215,11 +215,11 @@ for(int rept = 0; rept < METATILE_WIDTH; rept++){
 
 next_u8129:
 	SET_PC(0x2024U);
-for(int rept = 0; rept < METATILE_WIDTH; rept++){
+	for(int rept = 0; rept < METATILE_WIDTH; rept++){
 	LD_A_hli;  // ld a, [hli]
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
-}
+	}
 	LD_A_E;  // ld a, e
 	ADD_A(SURROUNDING_WIDTH - METATILE_WIDTH);  // add SURROUNDING_WIDTH - METATILE_WIDTH
 	LD_E_A;  // ld e, a
@@ -228,11 +228,11 @@ for(int rept = 0; rept < METATILE_WIDTH; rept++){
 
 next_u8134:
 	SET_PC(0x2037U);
-for(int rept = 0; rept < METATILE_WIDTH; rept++){
+	for(int rept = 0; rept < METATILE_WIDTH; rept++){
 	LD_A_hli;  // ld a, [hli]
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
-}
+	}
 	LD_A_E;  // ld a, e
 	ADD_A(SURROUNDING_WIDTH - METATILE_WIDTH);  // add SURROUNDING_WIDTH - METATILE_WIDTH
 	LD_E_A;  // ld e, a
@@ -241,11 +241,11 @@ for(int rept = 0; rept < METATILE_WIDTH; rept++){
 
 next_u8139:
 	SET_PC(0x204AU);
-for(int rept = 0; rept < METATILE_WIDTH; rept++){
+	for(int rept = 0; rept < METATILE_WIDTH; rept++){
 	LD_A_hli;  // ld a, [hli]
 	LD_de_A;  // ld [de], a
 	INC_DE;  // inc de
-}
+	}
 // ; Next metatile
 	POP_HL;  // pop hl
 	LD_DE(METATILE_WIDTH);  // ld de, METATILE_WIDTH
@@ -680,9 +680,9 @@ int GetWarpDestCoords(){
 	LD_A_hli;  // ld a, [hli]
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
-for(int rept = 0; rept < 3; rept++){  //  get to the warp coords
+	for(int rept = 0; rept < 3; rept++){  //  get to the warp coords
 	INC_HL;  // inc hl
-}
+	}
 	LD_A_addr(wWarpNumber);  // ld a, [wWarpNumber]
 	DEC_A;  // dec a
 	LD_C_A;  // ld c, a
@@ -2707,9 +2707,9 @@ int LoadMapTileset(){
 int DummyEndPredef(){
 	SET_PC(0x2E14U);
 //  Unused function at the end of PredefPointers.
-for(int rept = 0; rept < 16; rept++){
+	for(int rept = 0; rept < 16; rept++){
 	NOP;  // nop
-}
+	}
 	RET;  // ret
 
 }
