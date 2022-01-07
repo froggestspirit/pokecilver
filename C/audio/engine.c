@@ -160,7 +160,7 @@ continue_sound_update:
 	LD_A_hl;  // ld a, [hl]
 	LD_addr_A(wCurTrackFrequency + 1);  // ld [wCurTrackFrequency + 1], a
 // ; vibrato, noise
-	CCALL(aHandleTrackVibrato);  // call HandleTrackVibrato ; handle vibrato and other things
+	CALL(mHandleTrackVibrato);  // call HandleTrackVibrato ; handle vibrato and other things
 	CALL(mHandleNoise);  // call HandleNoise
 // ; turn off music when playing sfx?
 	LD_A_addr(wSFXPriority);  // ld a, [wSFXPriority]
@@ -347,7 +347,7 @@ ch1_rest:
 	AND_A(0b10001110);  // and %10001110 ; ch1 off
 	LDH_addr_A(rNR52);  // ldh [rNR52], a
 	LD_HL(rNR10);  // ld hl, rNR10
-	CCALL(aClearChannel);  // call ClearChannel
+	CALL(mClearChannel);  // call ClearChannel
 	RET;  // ret
 
 
@@ -420,7 +420,7 @@ ch2_rest:
 	AND_A(0b10001101);  // and %10001101 ; ch2 off
 	LDH_addr_A(rNR52);  // ldh [rNR52], a
 	LD_HL(rNR20);  // ld hl, rNR20
-	CCALL(aClearChannel);  // call ClearChannel
+	CALL(mClearChannel);  // call ClearChannel
 	RET;  // ret
 
 
@@ -479,7 +479,7 @@ ch3_rest:
 	AND_A(0b10001011);  // and %10001011 ; ch3 off
 	LDH_addr_A(rNR52);  // ldh [rNR52], a
 	LD_HL(rNR30);  // ld hl, rNR30
-	CCALL(aClearChannel);  // call ClearChannel
+	CALL(mClearChannel);  // call ClearChannel
 	RET;  // ret
 
 
@@ -584,7 +584,7 @@ ch4_rest:
 	AND_A(0b10000111);  // and %10000111 ; ch4 off
 	LDH_addr_A(rNR52);  // ldh [rNR52], a
 	LD_HL(rNR40);  // ld hl, rNR40
-	CCALL(aClearChannel);  // call ClearChannel
+	CALL(mClearChannel);  // call ClearChannel
 	RET;  // ret
 
 
@@ -637,7 +637,7 @@ int PlayDanger(){
 // ; Don't do anything if SFX is being played
 	AND_A(0xff ^ (1 << DANGER_ON_F));  // and $ff ^ (1 << DANGER_ON_F)
 	LD_D_A;  // ld d, a
-	CCALL(av_CheckSFX);  // call _CheckSFX
+	CALL(mv_CheckSFX);  // call _CheckSFX
 	IF_C goto increment;  // jr c, .increment
 
 // ; Play the high tone
@@ -777,7 +777,7 @@ novolume:
 	IF_Z goto bicycle;  // jr z, .bicycle
 	PUSH_BC;  // push bc
 // ; restart sound
-	CCALL(aMusicFadeRestart);  // call MusicFadeRestart
+	CALL(mMusicFadeRestart);  // call MusicFadeRestart
 // ; get new song id
 	LD_A_addr(wMusicFadeID);  // ld a, [wMusicFadeID]
 	AND_A_A;  // and a
@@ -802,7 +802,7 @@ bicycle:
 	SET_PC(0xE83A3U);
 	PUSH_BC;  // push bc
 // ; restart sound
-	CCALL(aMusicFadeRestart);  // call MusicFadeRestart
+	CALL(mMusicFadeRestart);  // call MusicFadeRestart
 // ; this turns the volume up
 // ; turn it back down
 	XOR_A_A;  // xor a
@@ -1377,7 +1377,7 @@ readnote:
 	ADD_HL_BC;  // add hl, bc
 	LD_D_hl;  // ld d, [hl]
 // ; update frequency
-	CCALL(aGetFrequency);  // call GetFrequency
+	CALL(mGetFrequency);  // call GetFrequency
 	LD_HL(CHANNEL_FREQUENCY);  // ld hl, CHANNEL_FREQUENCY
 	ADD_HL_BC;  // add hl, bc
 	LD_hl_E;  // ld [hl], e
@@ -2063,7 +2063,7 @@ int Music_PitchSlide(){
 	SWAP_A;  // swap a
 	AND_A(0xf);  // and $f
 	LD_D_A;  // ld d, a
-	CCALL(aGetFrequency);  // call GetFrequency
+	CALL(mGetFrequency);  // call GetFrequency
 	LD_HL(CHANNEL_PITCH_SLIDE_TARGET);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET
 	ADD_HL_BC;  // add hl, bc
 	LD_hl_E;  // ld [hl], e
@@ -2525,7 +2525,7 @@ int GetMusicByte(){
 	LD_HL(CHANNEL_MUSIC_BANK);  // ld hl, CHANNEL_MUSIC_BANK
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
-	CCALL(av_LoadMusicByte);  // call _LoadMusicByte ; load data into [wCurMusicByte]
+	CALL(mv_LoadMusicByte);  // call _LoadMusicByte ; load data into [wCurMusicByte]
 	INC_DE;  // inc de ; advance to next byte for next time this is called
 	LD_HL(CHANNEL_MUSIC_ADDRESS);  // ld hl, CHANNEL_MUSIC_ADDRESS
 	ADD_HL_BC;  // add hl, bc
@@ -2674,26 +2674,26 @@ int SetGlobalTempo(){
 	CP_A(CHAN5);  // cp CHAN5
 	IF_NC goto sfxchannels;  // jr nc, .sfxchannels
 	LD_BC(wChannel1);  // ld bc, wChannel1
-	CCALL(aTempo);  // call Tempo
+	CALL(mTempo);  // call Tempo
 	LD_BC(wChannel2);  // ld bc, wChannel2
-	CCALL(aTempo);  // call Tempo
+	CALL(mTempo);  // call Tempo
 	LD_BC(wChannel3);  // ld bc, wChannel3
-	CCALL(aTempo);  // call Tempo
+	CALL(mTempo);  // call Tempo
 	LD_BC(wChannel4);  // ld bc, wChannel4
-	CCALL(aTempo);  // call Tempo
+	CALL(mTempo);  // call Tempo
 	goto end;  // jr .end
 
 
 sfxchannels:
 	SET_PC(0xE8AE9U);
 	LD_BC(wChannel5);  // ld bc, wChannel5
-	CCALL(aTempo);  // call Tempo
+	CALL(mTempo);  // call Tempo
 	LD_BC(wChannel6);  // ld bc, wChannel6
-	CCALL(aTempo);  // call Tempo
+	CALL(mTempo);  // call Tempo
 	LD_BC(wChannel7);  // ld bc, wChannel7
-	CCALL(aTempo);  // call Tempo
+	CALL(mTempo);  // call Tempo
 	LD_BC(wChannel8);  // ld bc, wChannel8
-	CCALL(aTempo);  // call Tempo
+	CALL(mTempo);  // call Tempo
 
 end:
 	SET_PC(0xE8B01U);
@@ -2741,7 +2741,7 @@ int SetLRTracks(){
 	maskbits(NUM_MUSIC_CHANS, 0);  // maskbits NUM_MUSIC_CHANS
 	LD_E_A;  // ld e, a
 	LD_D(0);  // ld d, 0
-	CCALL(aGetLRTracks);  // call GetLRTracks
+	CALL(mGetLRTracks);  // call GetLRTracks
 	ADD_HL_DE;  // add hl, de ; de = channel 0-3
 	LD_A_hl;  // ld a, [hl]
 // ; load lr tracks into Tracks
@@ -3088,7 +3088,7 @@ loop:
 	maskbits(NUM_MUSIC_CHANS, 0);  // maskbits NUM_MUSIC_CHANS
 	LD_E_A;  // ld e, a
 	LD_D(0);  // ld d, 0
-	CCALL(aGetLRTracks);  // call GetLRTracks
+	CALL(mGetLRTracks);  // call GetLRTracks
 	ADD_HL_DE;  // add hl, de
 	LD_A_hl;  // ld a, [hl]
 	LD_HL(wStereoPanningMask);  // ld hl, wStereoPanningMask
@@ -3161,7 +3161,7 @@ int LoadChannel(){
 	LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
 	ADD_HL_BC;  // add hl, bc
 	RES_hl(SOUND_CHANNEL_ON);  // res SOUND_CHANNEL_ON, [hl] ; channel off
-	CCALL(aChannelInit);  // call ChannelInit
+	CALL(mChannelInit);  // call ChannelInit
 // ; load music pointer
 	LD_HL(CHANNEL_MUSIC_ADDRESS);  // ld hl, CHANNEL_MUSIC_ADDRESS
 	ADD_HL_BC;  // add hl, bc
@@ -3229,7 +3229,7 @@ int LoadMusicByte(){
 //  output:
 //    a = wCurMusicByte
 	LD_A_addr(wMusicBank);  // ld a, [wMusicBank]
-	CCALL(av_LoadMusicByte);  // call _LoadMusicByte
+	CALL(mv_LoadMusicByte);  // call _LoadMusicByte
 	LD_A_addr(wCurMusicByte);  // ld a, [wCurMusicByte]
 	RET;  // ret
 
@@ -3314,7 +3314,7 @@ int ClearChannels(){
 
 loop:
 	SET_PC(0xE8FF7U);
-	CCALL(aClearChannel);  // call ClearChannel
+	CALL(mClearChannel);  // call ClearChannel
 	DEC_E;  // dec e
 	IF_NZ goto loop;  // jr nz, .loop
 	RET;  // ret
@@ -3353,7 +3353,7 @@ int PlayTrainerEncounterMusic(){
 	CALL(mPlayMusic);  // call PlayMusic
 	CALL(mDelayFrame);  // call DelayFrame
 // ; play new song
-	CCALL(aMaxVolume);  // call MaxVolume
+	CALL(mMaxVolume);  // call MaxVolume
 	POP_DE;  // pop de
 	LD_D(0x00);  // ld d, $00
 	LD_HL(mTrainerEncounterMusic);  // ld hl, TrainerEncounterMusic
