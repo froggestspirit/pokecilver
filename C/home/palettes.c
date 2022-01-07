@@ -288,7 +288,7 @@ int ClearVBank1(){
 	LD_HL(VRAM_Begin);  // ld hl, VRAM_Begin
 	LD_BC(VRAM_End - VRAM_Begin);  // ld bc, VRAM_End - VRAM_Begin
 	XOR_A_A;  // xor a
-	CALL(mByteFill);  // call ByteFill
+	CCALL(aByteFill);  // call ByteFill
 
 	LD_A(0);  // ld a, 0
 	LDH_addr_A(rVBK);  // ldh [rVBK], a
@@ -329,7 +329,7 @@ int ReloadSpritesNoPalettes(){
 	LD_HL(wBGPals2);  // ld hl, wBGPals2
 	LD_BC((8 * PALETTE_SIZE) + (2 * PALETTE_SIZE));  // ld bc, (8 palettes) + (2 palettes)
 	XOR_A_A;  // xor a
-	CALL(mByteFill);  // call ByteFill
+	CCALL(aByteFill);  // call ByteFill
 	LD_A(TRUE);  // ld a, TRUE
 	LDH_addr_A(hCGBPalUpdate);  // ldh [hCGBPalUpdate], a
 	CALL(mDelayFrame);  // call DelayFrame

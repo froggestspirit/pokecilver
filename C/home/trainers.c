@@ -126,7 +126,7 @@ int TalkToTrainer(){
 
 int LoadTrainer_continue(){
 	SET_PC(0x38BEU);
-	CALL(mGetMapScriptsBank);  // call GetMapScriptsBank
+	CCALL(aGetMapScriptsBank);  // call GetMapScriptsBank
 	LD_addr_A(wSeenTrainerBank);  // ld [wSeenTrainerBank], a
 
 	LDH_A_addr(hLastTalked);  // ldh a, [hLastTalked]
@@ -228,7 +228,7 @@ Left:
 
 CheckFacing:
 	SET_PC(0x392BU);
-	CALL(mGetSpriteDirection);  // call GetSpriteDirection
+	CCALL(aGetSpriteDirection);  // call GetSpriteDirection
 	CP_A_E;  // cp e
 	IF_NZ goto NotFacing;  // jr nz, .NotFacing
 	SCF;  // scf
@@ -255,7 +255,7 @@ int CheckTrainerFlag(){
 	LD_A_hli;  // ld a, [hli]
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
-	CALL(mGetMapScriptsBank);  // call GetMapScriptsBank
+	CCALL(aGetMapScriptsBank);  // call GetMapScriptsBank
 	CALL(mGetFarWord);  // call GetFarWord
 	LD_D_H;  // ld d, h
 	LD_E_L;  // ld e, l
@@ -296,7 +296,7 @@ ok:
 	LD_A_hli;  // ld a, [hli]
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
-	CALL(mGetMapScriptsBank);  // call GetMapScriptsBank
+	CCALL(aGetMapScriptsBank);  // call GetMapScriptsBank
 	CALL(mFarPrintText);  // call FarPrintText
 	CALL(mWaitBGMap);  // call WaitBGMap
 	CALL(mWaitPressAorB_BlinkCursor);  // call WaitPressAorB_BlinkCursor

@@ -44,7 +44,7 @@ int InitScrollingMenu(){
 	SUB_A_C;  // sub c
 	LD_E_A;  // ld e, a
 	PUSH_DE;  // push de
-	CALL(mCoord2Tile);  // call Coord2Tile
+	CCALL(aCoord2Tile);  // call Coord2Tile
 	POP_BC;  // pop bc
 	JP(mTextbox);  // jp Textbox
 

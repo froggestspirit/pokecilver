@@ -339,7 +339,7 @@ cgb:
 	LD_HL(wBGPals2);  // ld hl, wBGPals2
 	LD_BC(16 * PALETTE_SIZE);  // ld bc, 16 palettes
 	LD_A(0xff);  // ld a, $ff
-	CALL(mByteFill);  // call ByteFill
+	CCALL(aByteFill);  // call ByteFill
 //  Request palette update
 	LD_A(TRUE);  // ld a, TRUE
 	LDH_addr_A(hCGBPalUpdate);  // ldh [hCGBPalUpdate], a
@@ -376,7 +376,7 @@ sgb:
 int SetHPPal(){
 	SET_PC(0x358DU);
 //  Set palette for hp bar pixel length e at hl.
-	CALL(mGetHPPal);  // call GetHPPal
+	CCALL(aGetHPPal);  // call GetHPPal
 	LD_hl_D;  // ld [hl], d
 	RET;  // ret
 

@@ -32,7 +32,7 @@ int ClearTilemap(){
 	hlcoord(0, 0, wTilemap);  // hlcoord 0, 0
 	LD_A(0x7f);  // ld a, " "
 	LD_BC(wTilemapEnd - wTilemap);  // ld bc, wTilemapEnd - wTilemap
-	CALL(mByteFill);  // call ByteFill
+	CCALL(aByteFill);  // call ByteFill
 
 // ; Update the BG Map.
 	LDH_A_addr(rLCDC);  // ldh a, [rLCDC]
@@ -47,7 +47,7 @@ int ClearScreen(){
 	LD_A(PAL_BG_TEXT);  // ld a, PAL_BG_TEXT
 	hlcoord(0, 0, wAttrmap);  // hlcoord 0, 0, wAttrmap
 	LD_BC(SCREEN_WIDTH * SCREEN_HEIGHT);  // ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
-	CALL(mByteFill);  // call ByteFill
+	CCALL(aByteFill);  // call ByteFill
 	JR(mClearTilemap);  // jr ClearTilemap
 
 }
@@ -310,7 +310,7 @@ int CheckDict(){
 diacritic:
 	SET_PC(0x102EU);
 	LD_B_A;  // ld b, a
-	CALL(mDiacritic);  // call Diacritic
+	CCALL(aDiacritic);  // call Diacritic
 	JP(mNextChar);  // jp NextChar
 
 
@@ -336,7 +336,7 @@ hiragana_dakuten:
 place_dakuten:
 	SET_PC(0x1047U);
 	LD_B(0xe5);  // ld b, "ﾞ" ; dakuten
-	CALL(mDiacritic);  // call Diacritic
+	CCALL(aDiacritic);  // call Diacritic
 	goto place;  // jr .place
 
 
@@ -356,7 +356,7 @@ hiragana_handakuten:
 place_handakuten:
 	SET_PC(0x1058U);
 	LD_B(0xe4);  // ld b, "ﾟ" ; handakuten
-	CALL(mDiacritic);  // call Diacritic
+	CCALL(aDiacritic);  // call Diacritic
 
 
 place:
@@ -662,7 +662,7 @@ int Paragraph(){
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
 	CP_A(LINK_COLOSSEUM);  // cp LINK_COLOSSEUM
 	IF_Z goto linkbattle;  // jr z, .linkbattle
-	CALL(mLoadBlinkingCursor);  // call LoadBlinkingCursor
+	CCALL(aLoadBlinkingCursor);  // call LoadBlinkingCursor
 
 
 linkbattle:
@@ -671,8 +671,8 @@ linkbattle:
 	CALL(mPromptButton);  // call PromptButton
 	hlcoord(TEXTBOX_INNERX, TEXTBOX_INNERY, wTilemap);  // hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY
 	LD_BC((TEXTBOX_INNERH - 1 << 8) | TEXTBOX_INNERW);  // lb bc, TEXTBOX_INNERH - 1, TEXTBOX_INNERW
-	CALL(mClearBox);  // call ClearBox
-	CALL(mUnloadBlinkingCursor);  // call UnloadBlinkingCursor
+	CCALL(aClearBox);  // call ClearBox
+	CCALL(aUnloadBlinkingCursor);  // call UnloadBlinkingCursor
 	LD_C(20);  // ld c, 20
 	CALL(mDelayFrames);  // call DelayFrames
 	hlcoord(TEXTBOX_INNERX, TEXTBOX_INNERY, wTilemap);  // hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY
@@ -686,7 +686,7 @@ int v_ContText(){
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
 	OR_A_A;  // or a
 	IF_NZ goto communication;  // jr nz, .communication
-	CALL(mLoadBlinkingCursor);  // call LoadBlinkingCursor
+	CCALL(aLoadBlinkingCursor);  // call LoadBlinkingCursor
 
 
 communication:
@@ -751,7 +751,7 @@ int PromptText(){
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
 	CP_A(LINK_COLOSSEUM);  // cp LINK_COLOSSEUM
 	IF_Z goto ok;  // jr z, .ok
-	CALL(mLoadBlinkingCursor);  // call LoadBlinkingCursor
+	CCALL(aLoadBlinkingCursor);  // call LoadBlinkingCursor
 
 
 ok:
@@ -761,7 +761,7 @@ ok:
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
 	CP_A(LINK_COLOSSEUM);  // cp LINK_COLOSSEUM
 	JR_Z (mDoneText);  // jr z, DoneText
-	CALL(mUnloadBlinkingCursor);  // call UnloadBlinkingCursor
+	CCALL(aUnloadBlinkingCursor);  // call UnloadBlinkingCursor
 
 }
 
@@ -804,11 +804,11 @@ int TextScroll(){
 	hlcoord(TEXTBOX_X, TEXTBOX_INNERY, wTilemap);  // hlcoord TEXTBOX_X, TEXTBOX_INNERY
 	decoord(TEXTBOX_X, TEXTBOX_INNERY - 1, wTilemap);  // decoord TEXTBOX_X, TEXTBOX_INNERY - 1
 	LD_BC(3 * SCREEN_WIDTH);  // ld bc, 3 * SCREEN_WIDTH
-	CALL(mCopyBytes);  // call CopyBytes
+	CCALL(aCopyBytes);  // call CopyBytes
 	hlcoord(TEXTBOX_INNERX, TEXTBOX_INNERY + 2, wTilemap);  // hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY + 2
 	LD_A(0x7f);  // ld a, " "
 	LD_BC(TEXTBOX_INNERW);  // ld bc, TEXTBOX_INNERW
-	CALL(mByteFill);  // call ByteFill
+	CCALL(aByteFill);  // call ByteFill
 	LD_C(5);  // ld c, 5
 	CALL(mDelayFrames);  // call DelayFrames
 	RET;  // ret
@@ -1097,11 +1097,11 @@ int TextCommand_PROMPT_BUTTON(){
 	JP_Z (mTextCommand_WAIT_BUTTON);  // jp z, TextCommand_WAIT_BUTTON
 
 	PUSH_HL;  // push hl
-	CALL(mLoadBlinkingCursor);  // call LoadBlinkingCursor
+	CCALL(aLoadBlinkingCursor);  // call LoadBlinkingCursor
 	PUSH_BC;  // push bc
 	CALL(mPromptButton);  // call PromptButton
 	POP_BC;  // pop bc
-	CALL(mUnloadBlinkingCursor);  // call UnloadBlinkingCursor
+	CCALL(aUnloadBlinkingCursor);  // call UnloadBlinkingCursor
 	POP_HL;  // pop hl
 	RET;  // ret
 
@@ -1112,7 +1112,7 @@ int TextCommand_SCROLL(){
 //  pushes text up two lines and sets the BC cursor to the border tile
 //  below the first character column of the text box.
 	PUSH_HL;  // push hl
-	CALL(mUnloadBlinkingCursor);  // call UnloadBlinkingCursor
+	CCALL(aUnloadBlinkingCursor);  // call UnloadBlinkingCursor
 	CALL(mTextScroll);  // call TextScroll
 	CALL(mTextScroll);  // call TextScroll
 	POP_HL;  // pop hl
@@ -1204,7 +1204,7 @@ play:
 	INC_HL;  // inc hl
 	LD_D_hl;  // ld d, [hl]
 	CALL(mPlaySFX);  // call PlaySFX
-	CALL(mWaitSFX);  // call WaitSFX
+	CCALL(aWaitSFX);  // call WaitSFX
 	POP_DE;  // pop de
 
 
@@ -1325,7 +1325,7 @@ int TextCommand_STRINGBUFFER(){
 int TextCommand_DAY(){
 	SET_PC(0x1400U);
 //  print the day of the week
-	CALL(mGetWeekday);  // call GetWeekday
+	CCALL(aGetWeekday);  // call GetWeekday
 	PUSH_HL;  // push hl
 	PUSH_BC;  // push bc
 	LD_C_A;  // ld c, a

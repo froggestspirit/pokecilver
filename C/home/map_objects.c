@@ -266,7 +266,7 @@ int GetMapObject(){
 //  Return the location of map object a in bc.
 	LD_HL(wMapObjects);  // ld hl, wMapObjects
 	LD_BC(MAPOBJECT_LENGTH);  // ld bc, MAPOBJECT_LENGTH
-	CALL(mAddNTimes);  // call AddNTimes
+	CCALL(aAddNTimes);  // call AddNTimes
 	LD_B_H;  // ld b, h
 	LD_C_L;  // ld c, l
 	RET;  // ret
@@ -400,7 +400,7 @@ int CopyMapObjectStruct(){
 int UnmaskCopyMapObjectStruct(){
 	SET_PC(0x17F1U);
 	LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
-	CALL(mUnmaskObject);  // call UnmaskObject
+	CCALL(aUnmaskObject);  // call UnmaskObject
 	LDH_A_addr(hMapObjectIndex);  // ldh a, [hMapObjectIndex]
 	CALL(mGetMapObject);  // call GetMapObject
 	FARCALL(aCopyObjectStruct);  // farcall CopyObjectStruct
@@ -448,7 +448,7 @@ ok:
 int DeleteObjectStruct(){
 	SET_PC(0x183AU);
 	CALL(mApplyDeletionToMapObject);  // call ApplyDeletionToMapObject
-	CALL(mMaskObject);  // call MaskObject
+	CCALL(aMaskObject);  // call MaskObject
 	RET;  // ret
 
 }
@@ -464,7 +464,7 @@ int CopyPlayerObjectTemplate(){
 	INC_DE;  // inc de
 	POP_HL;  // pop hl
 	LD_BC(MAPOBJECT_LENGTH - 1);  // ld bc, MAPOBJECT_LENGTH - 1
-	CALL(mCopyBytes);  // call CopyBytes
+	CCALL(aCopyBytes);  // call CopyBytes
 	RET;  // ret
 
 }
@@ -481,7 +481,7 @@ int DeleteFollowerMapObject(){
 	INC_HL;  // inc hl
 	LD_BC(MAPOBJECT_LENGTH - 1);  // ld bc, MAPOBJECT_LENGTH - 1
 	XOR_A_A;  // xor a
-	CALL(mByteFill);  // call ByteFill
+	CCALL(aByteFill);  // call ByteFill
 	POP_AF;  // pop af
 	CP_A(-1);  // cp -1
 	RET_Z ;  // ret z
@@ -749,7 +749,7 @@ int GetObjectStruct(){
 	SET_PC(0x1980U);
 	LD_BC(OBJECT_LENGTH);  // ld bc, OBJECT_LENGTH
 	LD_HL(wObjectStructs);  // ld hl, wObjectStructs
-	CALL(mAddNTimes);  // call AddNTimes
+	CCALL(aAddNTimes);  // call AddNTimes
 	LD_B_H;  // ld b, h
 	LD_C_L;  // ld c, l
 	RET;  // ret

@@ -2,7 +2,7 @@
 
 int Reset(){
 	SET_PC(0x05B0U);
-	CALL(mInitSound);  // call InitSound
+	CCALL(aInitSound);  // call InitSound
 	XOR_A_A;  // xor a
 	LDH_addr_A(hMapAnims);  // ldh [hMapAnims], a
 	CALL(mClearPalettes);  // call ClearPalettes
@@ -95,11 +95,11 @@ ByteFill:
 	XOR_A_A;  // xor a
 	LD_HL(HRAM_Begin);  // ld hl, HRAM_Begin
 	LD_BC(HRAM_End - HRAM_Begin);  // ld bc, HRAM_End - HRAM_Begin
-	CALL(mByteFill);  // call ByteFill
+	CCALL(aByteFill);  // call ByteFill
 	POP_AF;  // pop af
 	LDH_addr_A(hCGB);  // ldh [hCGB], a
 
-	CALL(mClearSprites);  // call ClearSprites
+	CCALL(aClearSprites);  // call ClearSprites
 
 	LD_A(BANK(aWriteOAMDMACodeToHRAM));  // ld a, BANK(WriteOAMDMACodeToHRAM) ; aka BANK(GameInit)
 	RST(mBankswitch);  // rst Bankswitch
@@ -165,7 +165,7 @@ ByteFill:
 
 	PREDEF(pInitSGBBorder);  // predef InitSGBBorder
 
-	CALL(mInitSound);  // call InitSound
+	CCALL(aInitSound);  // call InitSound
 	XOR_A_A;  // xor a
 	LD_addr_A(wMapMusic);  // ld [wMapMusic], a
 	JP(mGameInit);  // jp GameInit
@@ -177,7 +177,7 @@ int ClearVRAM(){
 	LD_HL(VRAM_Begin);  // ld hl, VRAM_Begin
 	LD_BC(VRAM_End - VRAM_Begin);  // ld bc, VRAM_End - VRAM_Begin
 	XOR_A_A;  // xor a
-	CALL(mByteFill);  // call ByteFill
+	CCALL(aByteFill);  // call ByteFill
 	RET;  // ret
 
 }

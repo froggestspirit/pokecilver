@@ -3,7 +3,7 @@
 int GetBattleVar(){
 	SET_PC(0x3C01U);
 	PUSH_HL;  // push hl
-	CALL(mGetBattleVarAddr);  // call GetBattleVarAddr
+	CCALL(aGetBattleVarAddr);  // call GetBattleVarAddr
 	POP_HL;  // pop hl
 	RET;  // ret
 

@@ -59,7 +59,7 @@ okay:
 
 loop:
 	SET_PC(0x19F3U);
-	CALL(mAppendToMovementBuffer);  // call AppendToMovementBuffer
+	CCALL(aAppendToMovementBuffer);  // call AppendToMovementBuffer
 	DEC_C;  // dec c
 	IF_NZ goto loop;  // jr nz, .loop
 	RET;  // ret

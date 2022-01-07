@@ -12,11 +12,11 @@ int FarDecompressBufferedPic(){
 	RST(mBankswitch);  // rst Bankswitch
 
 	LD_A(BANK(sDecompressBuffer));  // ld a, BANK(sDecompressBuffer)
-	CALL(mOpenSRAM);  // call OpenSRAM
+	CCALL(aOpenSRAM);  // call OpenSRAM
 	LD_HL(sDecompressBuffer);  // ld hl, sDecompressBuffer
 	LD_BC(7 * 7 * LEN_2BPP_TILE);  // ld bc, 7 * 7 tiles
 	XOR_A_A;  // xor a
-	CALL(mByteFill);  // call ByteFill
+	CCALL(aByteFill);  // call ByteFill
 
 	LD_HL(wFarDecompressPicPointer);  // ld hl, wFarDecompressPicPointer
 	LD_A_hli;  // ld a, [hli]
@@ -25,7 +25,7 @@ int FarDecompressBufferedPic(){
 	LD_DE(sDecompressBuffer);  // ld de, sDecompressBuffer
 	CALL(mDecompress);  // call Decompress
 
-	CALL(mCloseSRAM);  // call CloseSRAM
+	CCALL(aCloseSRAM);  // call CloseSRAM
 	POP_AF;  // pop af
 	RST(mBankswitch);  // rst Bankswitch
 	RET;  // ret
@@ -64,7 +64,7 @@ int DecompressRequest2bpp(){
 	SET_PC(0x0DB1U);
 	PUSH_DE;  // push de
 	LD_A(BANK(sScratch));  // ld a, BANK(sScratch)
-	CALL(mOpenSRAM);  // call OpenSRAM
+	CCALL(aOpenSRAM);  // call OpenSRAM
 	PUSH_BC;  // push bc
 
 	LD_DE(sScratch);  // ld de, sScratch
@@ -76,7 +76,7 @@ int DecompressRequest2bpp(){
 
 	LD_DE(sScratch);  // ld de, sScratch
 	CALL(mRequest2bpp);  // call Request2bpp
-	CALL(mCloseSRAM);  // call CloseSRAM
+	CCALL(aCloseSRAM);  // call CloseSRAM
 	RET;  // ret
 
 }
@@ -91,7 +91,7 @@ int FarCopyBytes(){
 	LD_A_addr(wTempBank);  // ld a, [wTempBank]
 	RST(mBankswitch);  // rst Bankswitch
 
-	CALL(mCopyBytes);  // call CopyBytes
+	CCALL(aCopyBytes);  // call CopyBytes
 
 	POP_AF;  // pop af
 	RST(mBankswitch);  // rst Bankswitch

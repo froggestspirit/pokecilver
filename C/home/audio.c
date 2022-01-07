@@ -192,7 +192,7 @@ int PlaySFX(){
 	PUSH_AF;  // push af
 
 // ; Is something already playing?
-	CALL(mCheckSFX);  // call CheckSFX
+	CCALL(aCheckSFX);  // call CheckSFX
 	IF_NC goto play;  // jr nc, .play
 
 // ; Does it have priority?
@@ -230,7 +230,7 @@ done:
 
 int WaitPlaySFX(){
 	SET_PC(0x3E4BU);
-	CALL(mWaitSFX);  // call WaitSFX
+	CCALL(aWaitSFX);  // call WaitSFX
 	CALL(mPlaySFX);  // call PlaySFX
 	RET;  // ret
 
@@ -511,7 +511,7 @@ ranking:
 
 int GetMapMusic_MaybeSpecial(){
 	SET_PC(0x3F55U);
-	CALL(mSpecialMapMusic);  // call SpecialMapMusic
+	CCALL(aSpecialMapMusic);  // call SpecialMapMusic
 	RET_C ;  // ret c
 	CALL(mGetMapMusic);  // call GetMapMusic
 	RET;  // ret
