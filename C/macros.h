@@ -6,9 +6,9 @@
                         gb.cpu_reg.pc = gb.cpu_reg.pc < 0x4000 ? gb.cpu_reg.pc : ((gb.cpu_reg.pc & 0x3FFF) | 0x4000);} while(0)
 #define INC_PC(x) gb.cpu_reg.pc += x;
 
-#define PEEK(message)    do {uint16_t temp = gb_read(gb.cpu_reg.sp);\
-                            temp |= (gb_read(gb.cpu_reg.sp + 1) << 8 );\
-                            printf("%X: %s%x\n", gb.cpu_reg.sp, message, temp);} while(0)
+#define PEEK(message)    do {uint16_t temp = gb_read(REG_SP);\
+                            temp |= (gb_read(REG_SP + 1) << 8 );\
+                            printf("%s: SP@%X:%X PC:%X, AF:%X, BC:%X, DE:%X, HL:%X,\n", message, REG_SP, temp, REG_PC, REG_AF, REG_BC, REG_DE, REG_HL);} while(0)
 
 #define CHIRP   printf("%s test\n", __func__);
 
