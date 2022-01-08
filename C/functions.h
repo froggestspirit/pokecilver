@@ -775,15 +775,7 @@ void init_function_pointers(){
 	REDIRECT(ParseSFXOrCry);
 	REDIRECT(GetNoiseSample);
 	REDIRECT(ParseMusicCommand);
-	REDIRECT(MusicCommands);
-	/*REDIRECT(MusicF1);
-	REDIRECT(MusicF2);
-	REDIRECT(MusicF3);
-	REDIRECT(MusicF4);
-	REDIRECT(MusicF5);
-	REDIRECT(MusicF6);
-	REDIRECT(MusicF7);
-	REDIRECT(MusicF8);
+	REDIRECT(MusicNone);
 	REDIRECT(Music_Ret);
 	REDIRECT(Music_Call);
 	REDIRECT(Music_Jump);
@@ -807,14 +799,7 @@ void init_function_pointers(){
 	REDIRECT(Music_DutyCycle);
 	REDIRECT(Music_VolumeEnvelope);
 	REDIRECT(Music_Tempo);
-	REDIRECT(Music_Octave8);
-	REDIRECT(Music_Octave7);
-	REDIRECT(Music_Octave6);
-	REDIRECT(Music_Octave5);
-	REDIRECT(Music_Octave4);
-	REDIRECT(Music_Octave3);
-	REDIRECT(Music_Octave2);
-	REDIRECT(Music_Octave1);
+	REDIRECT(Music_Octave);
 	REDIRECT(Music_Transpose);
 	REDIRECT(Music_StereoPanning);
 	REDIRECT(Music_ForceStereoPanning);
@@ -823,7 +808,7 @@ void init_function_pointers(){
 	REDIRECT(Music_SFXPriorityOn);
 	REDIRECT(Music_SFXPriorityOff);
 	REDIRECT(Music_RestartChannel);
-	REDIRECT(Music_NewSong);*/
+	REDIRECT(Music_NewSong);
 	REDIRECT(GetMusicByte);
 	REDIRECT(GetFrequency);
 	REDIRECT(SetNoteDuration);

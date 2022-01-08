@@ -32,14 +32,15 @@ def main():
                             print(f"{cFunc}")
                     currentFunc = []
                     fallthrough = False
-            elif line[:7] == "\treturn":
+            elif line[:7] == "\treturn" and "[" not in line:
                 fallthrough = True
             elif line[0] == "\t":
                 line = line.strip("\t").split("(")[0].split(" ")[0]
                 if line in ("CALL", "CALL_Z", "CALL_NZ", "CALL_C", "CALL_NC",
                             "JP", "JP_Z", "JP_NZ", "JP_C", "JP_NC", "JP_hl;",
                             "JR", "JR_Z", "JR_NZ", "JR_C", "JR_NC", "RST",
-                            "FARCALL", "CALLFAR", "HOMECALL", "PREDEF", "PREDEF_JUMP"):
+                            "FARCALL", "CALLFAR", "HOMECALL", "PREDEF", "PREDEF_JUMP",
+                            "return", "return;"):
                     currentFunc = []
                     fallthrough = False
     return 0

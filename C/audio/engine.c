@@ -1,5 +1,5 @@
 #include "../constants.h"
-
+#include "engine.h"
 //  The entire sound engine. Uses section "audio" in WRAM.
 
 //  Interfaces are in bank 0.
@@ -1571,120 +1571,60 @@ next:
 
 int ParseMusicCommand(){
 	SET_PC(0xE870FU);
-// ; reload command
-	LD_A_addr(wCurMusicByte);  // ld a, [wCurMusicByte]
-// ; get command #
-	SUB_A(FIRST_MUSIC_CMD);  // sub FIRST_MUSIC_CMD
-	LD_E_A;  // ld e, a
-	LD_D(0);  // ld d, 0
-// ; seek command pointer
-	LD_HL(mMusicCommands);  // ld hl, MusicCommands
-	ADD_HL_DE;  // add hl, de
-	ADD_HL_DE;  // add hl, de
-// ; jump to the new pointer
-	LD_A_hli;  // ld a, [hli]
-	LD_H_hl;  // ld h, [hl]
-	LD_L_A;  // ld l, a
-	JP_hl;  // jp hl
-
+	static int (*MusicCommands[48])() = {Music_Octave,
+										Music_Octave,
+										Music_Octave,
+										Music_Octave,
+										Music_Octave,
+										Music_Octave,
+										Music_Octave,
+										Music_Octave,
+										Music_NoteType,
+										Music_Transpose,
+										Music_Tempo,
+										Music_DutyCycle,
+										Music_VolumeEnvelope,
+										Music_PitchSweep,
+										Music_DutyCyclePattern,
+										Music_ToggleSFX,
+										Music_PitchSlide,
+										Music_Vibrato,
+										MusicE2,
+										Music_ToggleNoise,
+										Music_ForceStereoPanning,
+										Music_Volume,
+										Music_PitchOffset,
+										MusicE7,
+										MusicE8,
+										Music_TempoRelative,
+										Music_RestartChannel,
+										Music_NewSong,
+										Music_SFXPriorityOn,
+										Music_SFXPriorityOff,
+										MusicEE,
+										Music_StereoPanning,
+										Music_SFXToggleNoise,
+										MusicNone,
+										MusicNone,
+										MusicNone,
+										MusicNone,
+										MusicNone,
+										MusicNone,
+										MusicNone,
+										MusicNone,
+										MusicF9,
+										Music_SetCondition,
+										Music_JumpIf,
+										Music_Jump,
+										Music_Loop,
+										Music_Call,
+										Music_Ret};
+										
+	return MusicCommands[gb_read(wCurMusicByte) - FIRST_MUSIC_CMD]();
 }
 
-int MusicCommands(){
-	SET_PC(0xE8720U);
-//  entries correspond to audio constants (see macros/scripts/audio.asm)
-	//table_width ['2', 'MusicCommands']  // table_width 2, MusicCommands
-	//dw ['Music_Octave8'];  // dw Music_Octave8
-	//dw ['Music_Octave7'];  // dw Music_Octave7
-	//dw ['Music_Octave6'];  // dw Music_Octave6
-	//dw ['Music_Octave5'];  // dw Music_Octave5
-	//dw ['Music_Octave4'];  // dw Music_Octave4
-	//dw ['Music_Octave3'];  // dw Music_Octave3
-	//dw ['Music_Octave2'];  // dw Music_Octave2
-	//dw ['Music_Octave1'];  // dw Music_Octave1
-	//dw ['Music_NoteType'];  // dw Music_NoteType ; note length + volume envelope
-	//dw ['Music_Transpose'];  // dw Music_Transpose
-	//dw ['Music_Tempo'];  // dw Music_Tempo
-	//dw ['Music_DutyCycle'];  // dw Music_DutyCycle
-	//dw ['Music_VolumeEnvelope'];  // dw Music_VolumeEnvelope
-	//dw ['Music_PitchSweep'];  // dw Music_PitchSweep
-	//dw ['Music_DutyCyclePattern'];  // dw Music_DutyCyclePattern
-	//dw ['Music_ToggleSFX'];  // dw Music_ToggleSFX
-	//dw ['Music_PitchSlide'];  // dw Music_PitchSlide
-	//dw ['Music_Vibrato'];  // dw Music_Vibrato
-	//dw ['MusicE2'];  // dw MusicE2 ; unused
-	//dw ['Music_ToggleNoise'];  // dw Music_ToggleNoise
-	//dw ['Music_ForceStereoPanning'];  // dw Music_ForceStereoPanning
-	//dw ['Music_Volume'];  // dw Music_Volume
-	//dw ['Music_PitchOffset'];  // dw Music_PitchOffset
-	//dw ['MusicE7'];  // dw MusicE7 ; unused
-	//dw ['MusicE8'];  // dw MusicE8 ; unused
-	//dw ['Music_TempoRelative'];  // dw Music_TempoRelative
-	//dw ['Music_RestartChannel'];  // dw Music_RestartChannel
-	//dw ['Music_NewSong'];  // dw Music_NewSong
-	//dw ['Music_SFXPriorityOn'];  // dw Music_SFXPriorityOn
-	//dw ['Music_SFXPriorityOff'];  // dw Music_SFXPriorityOff
-	//dw ['MusicEE'];  // dw MusicEE ; unused
-	//dw ['Music_StereoPanning'];  // dw Music_StereoPanning
-	//dw ['Music_SFXToggleNoise'];  // dw Music_SFXToggleNoise
-	//dw ['MusicF1'];  // dw MusicF1 ; nothing
-	//dw ['MusicF2'];  // dw MusicF2 ; nothing
-	//dw ['MusicF3'];  // dw MusicF3 ; nothing
-	//dw ['MusicF4'];  // dw MusicF4 ; nothing
-	//dw ['MusicF5'];  // dw MusicF5 ; nothing
-	//dw ['MusicF6'];  // dw MusicF6 ; nothing
-	//dw ['MusicF7'];  // dw MusicF7 ; nothing
-	//dw ['MusicF8'];  // dw MusicF8 ; nothing
-	//dw ['MusicF9'];  // dw MusicF9 ; unused
-	//dw ['Music_SetCondition'];  // dw Music_SetCondition
-	//dw ['Music_JumpIf'];  // dw Music_JumpIf
-	//dw ['Music_Jump'];  // dw Music_Jump
-	//dw ['Music_Loop'];  // dw Music_Loop
-	//dw ['Music_Call'];  // dw Music_Call
-	//dw ['Music_Ret'];  // dw Music_Ret
-	//assert_table_length ['0x100 - FIRST_MUSIC_CMD']  // assert_table_length $100 - FIRST_MUSIC_CMD
-
-	return MusicF1();
-}
-
-int MusicF1(){
-	SET_PC(0xE8780U);
-	return MusicF2();
-}
-
-int MusicF2(){
-	SET_PC(0xE8780U);
-	return MusicF3();
-}
-
-int MusicF3(){
-	SET_PC(0xE8780U);
-	return MusicF4();
-}
-
-int MusicF4(){
-	SET_PC(0xE8780U);
-	return MusicF5();
-}
-
-int MusicF5(){
-	SET_PC(0xE8780U);
-	return MusicF6();
-}
-
-int MusicF6(){
-	SET_PC(0xE8780U);
-	return MusicF7();
-}
-
-int MusicF7(){
-	SET_PC(0xE8780U);
-	return MusicF8();
-}
-
-int MusicF8(){
-	SET_PC(0xE8780U);
-	RET;  // ret
-
+int MusicNone(){
+	RET;
 }
 
 int Music_Ret(){
@@ -2297,42 +2237,7 @@ int Music_Tempo(){
 
 }
 
-int Music_Octave8(){
-	SET_PC(0xE89A6U);
-	return Music_Octave7();
-}
-
-int Music_Octave7(){
-	SET_PC(0xE89A6U);
-	return Music_Octave6();
-}
-
-int Music_Octave6(){
-	SET_PC(0xE89A6U);
-	return Music_Octave5();
-}
-
-int Music_Octave5(){
-	SET_PC(0xE89A6U);
-	return Music_Octave4();
-}
-
-int Music_Octave4(){
-	SET_PC(0xE89A6U);
-	return Music_Octave3();
-}
-
-int Music_Octave3(){
-	SET_PC(0xE89A6U);
-	return Music_Octave2();
-}
-
-int Music_Octave2(){
-	SET_PC(0xE89A6U);
-	return Music_Octave1();
-}
-
-int Music_Octave1(){
+int Music_Octave(){
 	SET_PC(0xE89A6U);
 //  set octave based on lo nybble of the command
 	LD_HL(CHANNEL_OCTAVE);  // ld hl, CHANNEL_OCTAVE
@@ -2341,7 +2246,6 @@ int Music_Octave1(){
 	AND_A(7);  // and 7
 	LD_hl_A;  // ld [hl], a
 	RET;  // ret
-
 }
 
 int Music_Transpose(){
@@ -2366,9 +2270,8 @@ int Music_StereoPanning(){
 	BIT_A(STEREO);  // bit STEREO, a
 	JR_NZ (mMusic_ForceStereoPanning);  // jr nz, Music_ForceStereoPanning
 // ; skip param
-	CALL(mGetMusicByte);  // call GetMusicByte
-	RET;  // ret
-
+	JP(mGetMusicByte);  // call GetMusicByte
+	//RET;  // ret
 }
 
 int Music_ForceStereoPanning(){
