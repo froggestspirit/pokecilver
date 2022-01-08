@@ -16,7 +16,7 @@ void init_function_pointers(){
 	REDIRECT(FillBGMap);
 
 	// home/audio.c
-	/*REDIRECT(InitSound);
+	REDIRECT(InitSound);
 	REDIRECT(UpdateSound);
 	REDIRECT(v_LoadMusicByte);
 	REDIRECT(PlayMusic);
@@ -40,7 +40,7 @@ void init_function_pointers(){
 	REDIRECT(GetMapMusic_MaybeSpecial);
 	REDIRECT(PlaceBCDNumberSprite);
 	REDIRECT(CheckSFX);
-	REDIRECT(TerminateExpBarSound);*/
+	REDIRECT(TerminateExpBarSound);
 
 	// home/battle.c
 	REDIRECT(GetPartyParamLocation);
@@ -755,7 +755,7 @@ void init_function_pointers(){
 
 	// audio/engine.c
 	//REDIRECT(v_InitSound);
-	/*REDIRECT(MusicFadeRestart);
+	REDIRECT(MusicFadeRestart);
 	REDIRECT(MusicOn);
 	REDIRECT(MusicOff);
 	REDIRECT(v_UpdateSound);
@@ -776,7 +776,7 @@ void init_function_pointers(){
 	REDIRECT(GetNoiseSample);
 	REDIRECT(ParseMusicCommand);
 	REDIRECT(MusicCommands);
-	REDIRECT(MusicF1);
+	/*REDIRECT(MusicF1);
 	REDIRECT(MusicF2);
 	REDIRECT(MusicF3);
 	REDIRECT(MusicF4);
@@ -823,7 +823,7 @@ void init_function_pointers(){
 	REDIRECT(Music_SFXPriorityOn);
 	REDIRECT(Music_SFXPriorityOff);
 	REDIRECT(Music_RestartChannel);
-	REDIRECT(Music_NewSong);
+	REDIRECT(Music_NewSong);*/
 	REDIRECT(GetMusicByte);
 	REDIRECT(GetFrequency);
 	REDIRECT(SetNoteDuration);
@@ -844,6 +844,6 @@ void init_function_pointers(){
 	REDIRECT(ChannelPointers);
 	REDIRECT(ClearChannels);
 	REDIRECT(ClearChannel);
-	REDIRECT(PlayTrainerEncounterMusic);*/
+	REDIRECT(PlayTrainerEncounterMusic);
 
 }
