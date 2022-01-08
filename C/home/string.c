@@ -40,7 +40,7 @@ blank:
 	POP_DE;  // pop de
 	LD_B(0);  // ld b, 0
 	INC_C;  // inc c
-	CCALL(aCopyBytes);  // call CopyBytes
+	CALL(mCopyBytes);  // call CopyBytes
 	RET;  // ret
 
 

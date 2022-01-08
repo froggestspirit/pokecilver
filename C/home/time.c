@@ -24,7 +24,7 @@ int UpdateTime(){
 	SET_PC(0x0467U);
 	CALL(mGetClock);  // call GetClock
 	CALL(mFixDays);  // call FixDays
-	CCALL(aFixTime);  // call FixTime
+	CALL(mFixTime);  // call FixTime
 	FARCALL(aGetTimeOfDay);  // farcall GetTimeOfDay
 	RET;  // ret
 
@@ -40,7 +40,7 @@ int GetClock(){
 
 //  clock data is 'backwards' in hram
 
-	CCALL(aLatchClock);  // call LatchClock
+	CALL(mLatchClock);  // call LatchClock
 	LD_HL(MBC3SRamBank);  // ld hl, MBC3SRamBank
 	LD_DE(MBC3RTC);  // ld de, MBC3RTC
 
@@ -68,7 +68,7 @@ int GetClock(){
 	LDH_addr_A(hRTCDayHi);  // ldh [hRTCDayHi], a
 
 //  unlatch clock / disable clock r/w
-	CCALL(aCloseSRAM);  // call CloseSRAM
+	CALL(mCloseSRAM);  // call CloseSRAM
 	RET;  // ret
 
 }
@@ -266,7 +266,7 @@ int SetClock(){
 //  set clock data
 //  stored 'backwards' in hram
 
-	CCALL(aLatchClock);  // call LatchClock
+	CALL(mLatchClock);  // call LatchClock
 	LD_HL(MBC3SRamBank);  // ld hl, MBC3SRamBank
 	LD_DE(MBC3RTC);  // ld de, MBC3RTC
 
@@ -300,7 +300,7 @@ int SetClock(){
 	LD_de_A;  // ld [de], a
 
 //  cleanup
-	CCALL(aCloseSRAM);  // call CloseSRAM ; unlatch clock, disable clock r/w
+	CALL(mCloseSRAM);  // call CloseSRAM ; unlatch clock, disable clock r/w
 	RET;  // ret
 
 }
@@ -312,10 +312,10 @@ int ClearRTCStatus(){
 	XOR_A_A;  // xor a
 	PUSH_AF;  // push af
 	LD_A(BANK(sRTCStatusFlags));  // ld a, BANK(sRTCStatusFlags)
-	CCALL(aOpenSRAM);  // call OpenSRAM
+	CALL(mOpenSRAM);  // call OpenSRAM
 	POP_AF;  // pop af
 	LD_addr_A(sRTCStatusFlags);  // ld [sRTCStatusFlags], a
-	CCALL(aCloseSRAM);  // call CloseSRAM
+	CALL(mCloseSRAM);  // call CloseSRAM
 	RET;  // ret
 
 }
@@ -326,11 +326,11 @@ int RecordRTCStatus(){
 	LD_HL(sRTCStatusFlags);  // ld hl, sRTCStatusFlags
 	PUSH_AF;  // push af
 	LD_A(BANK(sRTCStatusFlags));  // ld a, BANK(sRTCStatusFlags)
-	CCALL(aOpenSRAM);  // call OpenSRAM
+	CALL(mOpenSRAM);  // call OpenSRAM
 	POP_AF;  // pop af
 	OR_A_hl;  // or [hl]
 	LD_hl_A;  // ld [hl], a
-	CCALL(aCloseSRAM);  // call CloseSRAM
+	CALL(mCloseSRAM);  // call CloseSRAM
 	RET;  // ret
 
 }
@@ -339,9 +339,9 @@ int CheckRTCStatus(){
 	SET_PC(0x05A4U);
 //  check sRTCStatusFlags
 	LD_A(BANK(sRTCStatusFlags));  // ld a, BANK(sRTCStatusFlags)
-	CCALL(aOpenSRAM);  // call OpenSRAM
+	CALL(mOpenSRAM);  // call OpenSRAM
 	LD_A_addr(sRTCStatusFlags);  // ld a, [sRTCStatusFlags]
-	CCALL(aCloseSRAM);  // call CloseSRAM
+	CALL(mCloseSRAM);  // call CloseSRAM
 	RET;  // ret
 
 }

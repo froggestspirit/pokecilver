@@ -240,7 +240,7 @@ next:
 
 stopauto:
 	SET_PC(0x0991U);
-	CCALL(aStopAutoInput);  // call StopAutoInput
+	CALL(mStopAutoInput);  // call StopAutoInput
 	LD_B(NO_INPUT);  // ld b, NO_INPUT
 
 
@@ -419,7 +419,7 @@ loop:
 	SET_PC(0x0A3EU);
 	PUSH_HL;  // push hl
 	hlcoord(18, 17, wTilemap);  // hlcoord 18, 17
-	CCALL(aBlinkCursor);  // call BlinkCursor
+	CALL(mBlinkCursor);  // call BlinkCursor
 	POP_HL;  // pop hl
 
 	CALL(mJoyTextDelay);  // call JoyTextDelay

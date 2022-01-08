@@ -48,7 +48,7 @@ CloseText:
 	CALL(mUpdatePlayerSprite);  // call UpdatePlayerSprite
 	LD_HL(wEnteredMapFromContinue);  // ld hl, wEnteredMapFromContinue
 	RES_hl(7);  // res 7, [hl]
-	CCALL(aResetBGWindow);  // call ResetBGWindow
+	CALL(mResetBGWindow);  // call ResetBGWindow
 	RET;  // ret
 
 }

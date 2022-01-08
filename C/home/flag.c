@@ -40,7 +40,7 @@ outdoors:
 int EventFlagAction(){
 	SET_PC(0x2F2DU);
 	LD_HL(wEventFlags);  // ld hl, wEventFlags
-	CCALL(aFlagAction);  // call FlagAction
+	CALL(mFlagAction);  // call FlagAction
 	RET;  // ret
 
 }

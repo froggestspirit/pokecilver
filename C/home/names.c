@@ -57,11 +57,11 @@ NotPokeName:
 
 	LD_A_addr(wCurSpecies);  // ld a, [wCurSpecies]
 	DEC_A;  // dec a
-	CCALL(aGetNthString);  // call GetNthString
+	CALL(mGetNthString);  // call GetNthString
 
 	LD_DE(wStringBuffer1);  // ld de, wStringBuffer1
 	LD_BC(ITEM_NAME_LENGTH);  // ld bc, ITEM_NAME_LENGTH
-	CCALL(aCopyBytes);  // call CopyBytes
+	CALL(mCopyBytes);  // call CopyBytes
 
 
 done:
@@ -161,7 +161,7 @@ int GetPokemonName(){
 	LD_DE(wStringBuffer1);  // ld de, wStringBuffer1
 	PUSH_DE;  // push de
 	LD_BC(MON_NAME_LENGTH - 1);  // ld bc, MON_NAME_LENGTH - 1
-	CCALL(aCopyBytes);  // call CopyBytes
+	CALL(mCopyBytes);  // call CopyBytes
 	LD_HL(wStringBuffer1 + MON_NAME_LENGTH - 1);  // ld hl, wStringBuffer1 + MON_NAME_LENGTH - 1
 	LD_hl(0x50);  // ld [hl], "@"
 	POP_DE;  // pop de
@@ -232,7 +232,7 @@ TM:
 copy:
 	SET_PC(0x36E2U);
 	LD_DE(wStringBuffer1);  // ld de, wStringBuffer1
-	CCALL(aCopyBytes);  // call CopyBytes
+	CALL(mCopyBytes);  // call CopyBytes
 
 //  TM/HM number
 	PUSH_DE;  // push de

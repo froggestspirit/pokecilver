@@ -31,7 +31,7 @@ int VBlank(){
 
 l_return:
 	SET_PC(0x0168U);
-	CCALL(aGameTimer);  // call GameTimer
+	CALL(mGameTimer);  // call GameTimer
 
 	POP_HL;  // pop hl
 	POP_DE;  // pop de
@@ -87,18 +87,18 @@ int VBlank0(){
 // ; There's only time to call one of these in one vblank.
 // ; Calls are in order of priority.
 
-	CCALL(aUpdateBGMapBuffer);  // call UpdateBGMapBuffer
+	CALL(mUpdateBGMapBuffer);  // call UpdateBGMapBuffer
 	IF_C goto done;  // jr c, .done
-	CCALL(aUpdatePalsIfCGB);  // call UpdatePalsIfCGB
+	CALL(mUpdatePalsIfCGB);  // call UpdatePalsIfCGB
 	IF_C goto done;  // jr c, .done
 	CALL(mUpdateBGMap);  // call UpdateBGMap
 
 // ; These have their own timing checks.
 
-	CCALL(aServe2bppRequest);  // call Serve2bppRequest
-	CCALL(aServe1bppRequest);  // call Serve1bppRequest
+	CALL(mServe2bppRequest);  // call Serve2bppRequest
+	CALL(mServe1bppRequest);  // call Serve1bppRequest
 	CALL(mAnimateTileset);  // call AnimateTileset
-	CCALL(aFillBGMap0WithBlack);  // call FillBGMap0WithBlack
+	CALL(mFillBGMap0WithBlack);  // call FillBGMap0WithBlack
 
 
 done:
@@ -169,7 +169,7 @@ int VBlank1(){
 	IF_C goto done;  // jr c, .done
 
 	CALL(mUpdateBGMap);  // call UpdateBGMap
-	CCALL(aServe2bppRequest);  // call Serve2bppRequest
+	CALL(mServe2bppRequest);  // call Serve2bppRequest
 
 	CALL(hTransferVirtualOAM);  // call hTransferVirtualOAM
 
@@ -252,7 +252,7 @@ int VBlank4(){
 	LD_addr_A(wROMBankBackup);  // ld [wROMBankBackup], a
 
 	CALL(mUpdateBGMap);  // call UpdateBGMap
-	CCALL(aServe2bppRequest);  // call Serve2bppRequest
+	CALL(mServe2bppRequest);  // call Serve2bppRequest
 
 	CALL(hTransferVirtualOAM);  // call hTransferVirtualOAM
 
@@ -261,7 +261,7 @@ int VBlank4(){
 	XOR_A_A;  // xor a
 	LD_addr_A(wVBlankOccurred);  // ld [wVBlankOccurred], a
 
-	CCALL(aAskSerial);  // call AskSerial
+	CALL(mAskSerial);  // call AskSerial
 
 	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
 	RST(mBankswitch);  // rst Bankswitch
@@ -288,11 +288,11 @@ int VBlank5(){
 	LDH_A_addr(hSCX);  // ldh a, [hSCX]
 	LDH_addr_A(rSCX);  // ldh [rSCX], a
 
-	CCALL(aUpdatePalsIfCGB);  // call UpdatePalsIfCGB
+	CALL(mUpdatePalsIfCGB);  // call UpdatePalsIfCGB
 	IF_C goto done;  // jr c, .done
 
 	CALL(mUpdateBGMap);  // call UpdateBGMap
-	CCALL(aServe2bppRequest);  // call Serve2bppRequest
+	CALL(mServe2bppRequest);  // call Serve2bppRequest
 
 done:
 	SET_PC(0x028CU);
@@ -387,10 +387,10 @@ int VBlank3(){
 	LDH_addr_A(rWX);  // ldh [rWX], a
 
 	CALL(mUpdateBGMap);  // call UpdateBGMap
-	CCALL(aUpdateBGMapBuffer);  // call UpdateBGMapBuffer
+	CALL(mUpdateBGMapBuffer);  // call UpdateBGMapBuffer
 
-	CCALL(aServe2bppRequest);  // call Serve2bppRequest
-	CCALL(aServe1bppRequest);  // call Serve1bppRequest
+	CALL(mServe2bppRequest);  // call Serve2bppRequest
+	CALL(mServe1bppRequest);  // call Serve1bppRequest
 	CALL(mAnimateTileset);  // call AnimateTileset
 	CALL(hTransferVirtualOAM);  // call hTransferVirtualOAM
 

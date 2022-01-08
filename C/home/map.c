@@ -7,7 +7,7 @@ int ClearUnusedMapBuffer(){
 	LD_HL(wUnusedMapBuffer);  // ld hl, wUnusedMapBuffer
 	LD_BC(wUnusedMapBufferEnd - wUnusedMapBuffer);  // ld bc, wUnusedMapBufferEnd - wUnusedMapBuffer
 	LD_A(0);  // ld a, 0
-	CCALL(aByteFill);  // call ByteFill
+	CALL(mByteFill);  // call ByteFill
 	RET;  // ret
 
 }
@@ -137,7 +137,7 @@ int LoadMapPart(){
 	LD_A(0x60);  // ld a, "■"
 	hlcoord(0, 0, wTilemap);  // hlcoord 0, 0
 	LD_BC(SCREEN_WIDTH * SCREEN_HEIGHT);  // ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
-	CCALL(aByteFill);  // call ByteFill
+	CALL(mByteFill);  // call ByteFill
 
 	LD_A(BANK(av_LoadMapPart));  // ld a, BANK(_LoadMapPart)
 	RST(mBankswitch);  // rst Bankswitch
@@ -349,7 +349,7 @@ int CopyMapPartialAndAttributes(){
 	CALL(mCopyMapPartial);  // call CopyMapPartial
 	CALL(mSwitchToMapAttributesBank);  // call SwitchToMapAttributesBank
 	CALL(mGetMapAttributesPointer);  // call GetMapAttributesPointer
-	CCALL(aCopyMapAttributes);  // call CopyMapAttributes
+	CALL(mCopyMapAttributes);  // call CopyMapAttributes
 	CALL(mGetMapConnections);  // call GetMapConnections
 	RET;  // ret
 
@@ -419,7 +419,7 @@ int GetMapConnections(){
 	BIT_B(NORTH_F);  // bit NORTH_F, b
 	IF_Z goto no_north;  // jr z, .no_north
 	LD_DE(wNorthMapConnection);  // ld de, wNorthMapConnection
-	CCALL(aGetMapConnection);  // call GetMapConnection
+	CALL(mGetMapConnection);  // call GetMapConnection
 
 no_north:
 	SET_PC(0x2461U);
@@ -427,7 +427,7 @@ no_north:
 	BIT_B(SOUTH_F);  // bit SOUTH_F, b
 	IF_Z goto no_south;  // jr z, .no_south
 	LD_DE(wSouthMapConnection);  // ld de, wSouthMapConnection
-	CCALL(aGetMapConnection);  // call GetMapConnection
+	CALL(mGetMapConnection);  // call GetMapConnection
 
 no_south:
 	SET_PC(0x246BU);
@@ -435,7 +435,7 @@ no_south:
 	BIT_B(WEST_F);  // bit WEST_F, b
 	IF_Z goto no_west;  // jr z, .no_west
 	LD_DE(wWestMapConnection);  // ld de, wWestMapConnection
-	CCALL(aGetMapConnection);  // call GetMapConnection
+	CALL(mGetMapConnection);  // call GetMapConnection
 
 no_west:
 	SET_PC(0x2475U);
@@ -443,7 +443,7 @@ no_west:
 	BIT_B(EAST_F);  // bit EAST_F, b
 	IF_Z goto no_east;  // jr z, .no_east
 	LD_DE(wEastMapConnection);  // ld de, wEastMapConnection
-	CCALL(aGetMapConnection);  // call GetMapConnection
+	CALL(mGetMapConnection);  // call GetMapConnection
 
 no_east:
 	SET_PC(0x247FU);
@@ -482,7 +482,7 @@ int ReadMapSceneScripts(){
 	RET_Z ;  // ret z
 
 	LD_BC(SCENE_SCRIPT_SIZE);  // ld bc, SCENE_SCRIPT_SIZE
-	CCALL(aAddNTimes);  // call AddNTimes
+	CALL(mAddNTimes);  // call AddNTimes
 	RET;  // ret
 
 }
@@ -501,7 +501,7 @@ int ReadMapCallbacks(){
 	RET_Z ;  // ret z
 
 	LD_BC(CALLBACK_SIZE);  // ld bc, CALLBACK_SIZE
-	CCALL(aAddNTimes);  // call AddNTimes
+	CALL(mAddNTimes);  // call AddNTimes
 	RET;  // ret
 
 }
@@ -519,7 +519,7 @@ int ReadWarps(){
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
 	LD_BC(WARP_EVENT_SIZE);  // ld bc, WARP_EVENT_SIZE
-	CCALL(aAddNTimes);  // call AddNTimes
+	CALL(mAddNTimes);  // call AddNTimes
 	RET;  // ret
 
 }
@@ -539,7 +539,7 @@ int ReadCoordEvents(){
 	RET_Z ;  // ret z
 
 	LD_BC(COORD_EVENT_SIZE);  // ld bc, COORD_EVENT_SIZE
-	CCALL(aAddNTimes);  // call AddNTimes
+	CALL(mAddNTimes);  // call AddNTimes
 	RET;  // ret
 
 }
@@ -559,7 +559,7 @@ int ReadBGEvents(){
 	RET_Z ;  // ret z
 
 	LD_BC(BG_EVENT_SIZE);  // ld bc, BG_EVENT_SIZE
-	CCALL(aAddNTimes);  // call AddNTimes
+	CALL(mAddNTimes);  // call AddNTimes
 	RET;  // ret
 
 }
@@ -579,7 +579,7 @@ int ReadObjectEvents(){
 	LD_addr_A(wCurMapObjectEventsPointer + 1);  // ld [wCurMapObjectEventsPointer + 1], a
 
 	LD_A_addr(wCurMapObjectEventCount);  // ld a, [wCurMapObjectEventCount]
-	CCALL(aCopyMapObjectEvents);  // call CopyMapObjectEvents
+	CALL(mCopyMapObjectEvents);  // call CopyMapObjectEvents
 
 //  get NUM_OBJECTS - [wCurMapObjectEventCount]
 	LD_A_addr(wCurMapObjectEventCount);  // ld a, [wCurMapObjectEventCount]
@@ -653,7 +653,7 @@ int ClearObjectStructs(){
 	LD_HL(wObject1Struct);  // ld hl, wObject1Struct
 	LD_BC(OBJECT_LENGTH * (NUM_OBJECT_STRUCTS - 1));  // ld bc, OBJECT_LENGTH * (NUM_OBJECT_STRUCTS - 1)
 	XOR_A_A;  // xor a
-	CCALL(aByteFill);  // call ByteFill
+	CALL(mByteFill);  // call ByteFill
 
 //  Just to make sure (this is rather pointless)
 	LD_HL(wObject1Struct);  // ld hl, wObject1Struct
@@ -673,7 +673,7 @@ loop:
 
 int GetWarpDestCoords(){
 	SET_PC(0x2567U);
-	CCALL(aGetMapScriptsBank);  // call GetMapScriptsBank
+	CALL(mGetMapScriptsBank);  // call GetMapScriptsBank
 	RST(mBankswitch);  // rst Bankswitch
 
 	LD_HL(wMapEventsPointer);  // ld hl, wMapEventsPointer
@@ -688,7 +688,7 @@ int GetWarpDestCoords(){
 	LD_C_A;  // ld c, a
 	LD_B(0);  // ld b, 0
 	LD_A(WARP_EVENT_SIZE);  // ld a, WARP_EVENT_SIZE
-	CCALL(aAddNTimes);  // call AddNTimes
+	CALL(mAddNTimes);  // call AddNTimes
 	LD_A_hli;  // ld a, [hli]
 	LD_addr_A(wYCoord);  // ld [wYCoord], a
 	LD_A_hli;  // ld a, [hli]
@@ -758,7 +758,7 @@ odd_y:
 
 got_block_y:
 	SET_PC(0x25D8U);
-	CCALL(aAddNTimes);  // call AddNTimes
+	CALL(mAddNTimes);  // call AddNTimes
 	LD_A_L;  // ld a, l
 	LD_addr_A(wOverworldMapAnchor);  // ld [wOverworldMapAnchor], a
 	LD_A_H;  // ld a, h
@@ -778,7 +778,7 @@ int LoadBlockData(){
 	LD_HL(wOverworldMapBlocks);  // ld hl, wOverworldMapBlocks
 	LD_BC(wOverworldMapBlocksEnd - wOverworldMapBlocks);  // ld bc, wOverworldMapBlocksEnd - wOverworldMapBlocks
 	LD_A(0);  // ld a, 0
-	CCALL(aByteFill);  // call ByteFill
+	CALL(mByteFill);  // call ByteFill
 	CALL(mChangeMap);  // call ChangeMap
 	CALL(mFillMapConnections);  // call FillMapConnections
 	LD_A(MAPCALLBACK_TILES);  // ld a, MAPCALLBACK_TILES
@@ -868,7 +868,7 @@ int FillMapConnections(){
 	LDH_addr_A(hConnectionStripLength);  // ldh [hConnectionStripLength], a
 	LD_A_addr(wNorthConnectedMapWidth);  // ld a, [wNorthConnectedMapWidth]
 	LDH_addr_A(hConnectedMapWidth);  // ldh [hConnectedMapWidth], a
-	CCALL(aFillNorthConnectionStrip);  // call FillNorthConnectionStrip
+	CALL(mFillNorthConnectionStrip);  // call FillNorthConnectionStrip
 
 
 South:
@@ -893,7 +893,7 @@ South:
 	LDH_addr_A(hConnectionStripLength);  // ldh [hConnectionStripLength], a
 	LD_A_addr(wSouthConnectedMapWidth);  // ld a, [wSouthConnectedMapWidth]
 	LDH_addr_A(hConnectedMapWidth);  // ldh [hConnectedMapWidth], a
-	CCALL(aFillSouthConnectionStrip);  // call FillSouthConnectionStrip
+	CALL(mFillSouthConnectionStrip);  // call FillSouthConnectionStrip
 
 
 West:
@@ -918,7 +918,7 @@ West:
 	LD_B_A;  // ld b, a
 	LD_A_addr(wWestConnectedMapWidth);  // ld a, [wWestConnectedMapWidth]
 	LDH_addr_A(hConnectionStripLength);  // ldh [hConnectionStripLength], a
-	CCALL(aFillWestConnectionStrip);  // call FillWestConnectionStrip
+	CALL(mFillWestConnectionStrip);  // call FillWestConnectionStrip
 
 
 East:
@@ -943,7 +943,7 @@ East:
 	LD_B_A;  // ld b, a
 	LD_A_addr(wEastConnectedMapWidth);  // ld a, [wEastConnectedMapWidth]
 	LDH_addr_A(hConnectionStripLength);  // ldh [hConnectionStripLength], a
-	CCALL(aFillEastConnectionStrip);  // call FillEastConnectionStrip
+	CALL(mFillEastConnectionStrip);  // call FillEastConnectionStrip
 
 
 Done:
@@ -1078,7 +1078,7 @@ int CallMapScript(){
 	LD_A_addr(wScriptRunning);  // ld a, [wScriptRunning]
 	AND_A_A;  // and a
 	RET_NZ ;  // ret nz
-	CCALL(aGetMapScriptsBank);  // call GetMapScriptsBank
+	CALL(mGetMapScriptsBank);  // call GetMapScriptsBank
 	JR(mCallScript);  // jr CallScript
 
 }
@@ -1093,7 +1093,7 @@ int RunMapCallback(){
 	CALL(mRunMapCallback_FindCallback);  // call .FindCallback
 	IF_NC goto done;  // jr nc, .done
 
-	CCALL(aGetMapScriptsBank);  // call GetMapScriptsBank
+	CALL(mGetMapScriptsBank);  // call GetMapScriptsBank
 	LD_B_A;  // ld b, a
 	LD_D_H;  // ld d, h
 	LD_E_L;  // ld e, l
@@ -1347,7 +1347,7 @@ int ScrollMapUp(){
 	SET_PC(0x284BU);
 	hlcoord(0, 0, wTilemap);  // hlcoord 0, 0
 	LD_DE(wBGMapBuffer);  // ld de, wBGMapBuffer
-	CCALL(aBackupBGMapRow);  // call BackupBGMapRow
+	CALL(mBackupBGMapRow);  // call BackupBGMapRow
 	LD_C(2 * SCREEN_WIDTH);  // ld c, 2 * SCREEN_WIDTH
 	CALL(mScrollBGMapPalettes);  // call ScrollBGMapPalettes
 	LD_A_addr(wBGMapAnchor);  // ld a, [wBGMapAnchor]
@@ -1365,7 +1365,7 @@ int ScrollMapDown(){
 	SET_PC(0x2869U);
 	hlcoord(0, SCREEN_HEIGHT - 2, wTilemap);  // hlcoord 0, SCREEN_HEIGHT - 2
 	LD_DE(wBGMapBuffer);  // ld de, wBGMapBuffer
-	CCALL(aBackupBGMapRow);  // call BackupBGMapRow
+	CALL(mBackupBGMapRow);  // call BackupBGMapRow
 	LD_C(2 * SCREEN_WIDTH);  // ld c, 2 * SCREEN_WIDTH
 	CALL(mScrollBGMapPalettes);  // call ScrollBGMapPalettes
 	LD_A_addr(wBGMapAnchor);  // ld a, [wBGMapAnchor]
@@ -1391,14 +1391,14 @@ int ScrollMapLeft(){
 	SET_PC(0x2892U);
 	hlcoord(0, 0, wTilemap);  // hlcoord 0, 0
 	LD_DE(wBGMapBuffer);  // ld de, wBGMapBuffer
-	CCALL(aBackupBGMapColumn);  // call BackupBGMapColumn
+	CALL(mBackupBGMapColumn);  // call BackupBGMapColumn
 	LD_C(2 * SCREEN_HEIGHT);  // ld c, 2 * SCREEN_HEIGHT
 	CALL(mScrollBGMapPalettes);  // call ScrollBGMapPalettes
 	LD_A_addr(wBGMapAnchor);  // ld a, [wBGMapAnchor]
 	LD_E_A;  // ld e, a
 	LD_A_addr(wBGMapAnchor + 1);  // ld a, [wBGMapAnchor + 1]
 	LD_D_A;  // ld d, a
-	CCALL(aUpdateBGMapColumn);  // call UpdateBGMapColumn
+	CALL(mUpdateBGMapColumn);  // call UpdateBGMapColumn
 	LD_A(0x1);  // ld a, $1
 	LDH_addr_A(hBGMapUpdate);  // ldh [hBGMapUpdate], a
 	RET;  // ret
@@ -1409,7 +1409,7 @@ int ScrollMapRight(){
 	SET_PC(0x28B0U);
 	hlcoord(SCREEN_WIDTH - 2, 0, wTilemap);  // hlcoord SCREEN_WIDTH - 2, 0
 	LD_DE(wBGMapBuffer);  // ld de, wBGMapBuffer
-	CCALL(aBackupBGMapColumn);  // call BackupBGMapColumn
+	CALL(mBackupBGMapColumn);  // call BackupBGMapColumn
 	LD_C(2 * SCREEN_HEIGHT);  // ld c, 2 * SCREEN_HEIGHT
 	CALL(mScrollBGMapPalettes);  // call ScrollBGMapPalettes
 	LD_A_addr(wBGMapAnchor);  // ld a, [wBGMapAnchor]
@@ -1423,7 +1423,7 @@ int ScrollMapRight(){
 	LD_E_A;  // ld e, a
 	LD_A_addr(wBGMapAnchor + 1);  // ld a, [wBGMapAnchor + 1]
 	LD_D_A;  // ld d, a
-	CCALL(aUpdateBGMapColumn);  // call UpdateBGMapColumn
+	CALL(mUpdateBGMapColumn);  // call UpdateBGMapColumn
 	LD_A(0x1);  // ld a, $1
 	LDH_addr_A(hBGMapUpdate);  // ldh [hBGMapUpdate], a
 	RET;  // ret
@@ -1549,7 +1549,7 @@ int ClearBGMapBuffer(){
 	LD_HL(wBGMapBuffer);  // ld hl, wBGMapBuffer
 	LD_BC(wBGMapBufferEnd - wBGMapBuffer);  // ld bc, wBGMapBufferEnd - wBGMapBuffer
 	XOR_A_A;  // xor a
-	CCALL(aByteFill);  // call ByteFill
+	CALL(mByteFill);  // call ByteFill
 	RET;  // ret
 
 }
@@ -1968,7 +1968,7 @@ Directions:
 int GetCoordTile(){
 	SET_PC(0x2B1FU);
 //  Get the collision byte for tile d, e
-	CCALL(aGetBlockLocation);  // call GetBlockLocation
+	CALL(mGetBlockLocation);  // call GetBlockLocation
 	LD_A_hl;  // ld a, [hl]
 	AND_A_A;  // and a
 	IF_Z goto nope;  // jr z, .nope
@@ -2118,7 +2118,7 @@ copysign:
 	POP_HL;  // pop hl
 	LD_DE(wCurBGEvent);  // ld de, wCurBGEvent
 	LD_BC(BG_EVENT_SIZE);  // ld bc, BG_EVENT_SIZE
-	CCALL(aCopyBytes);  // call CopyBytes
+	CALL(mCopyBytes);  // call CopyBytes
 	SCF;  // scf
 	RET;  // ret
 
@@ -2150,7 +2150,7 @@ CoordEventCheck:
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
 //  Load the active scene ID into b
-	CCALL(aCheckScenes);  // call CheckScenes
+	CALL(mCheckScenes);  // call CheckScenes
 	LD_B_A;  // ld b, a
 //  Load your current coordinates into de.  This will be used to check if your position is in the coord event table for the current map.
 	LD_A_addr(wPlayerStandingMapX);  // ld a, [wPlayerStandingMapX]
@@ -2205,7 +2205,7 @@ copy_coord_event:
 	POP_HL;  // pop hl
 	LD_DE(wCurCoordEvent);  // ld de, wCurCoordEvent
 	LD_BC(COORD_EVENT_SIZE);  // ld bc, COORD_EVENT_SIZE
-	CCALL(aCopyBytes);  // call CopyBytes
+	CALL(mCopyBytes);  // call CopyBytes
 	SCF;  // scf
 	RET;  // ret
 
@@ -2217,8 +2217,8 @@ int FadeToMenu(){
 	LDH_addr_A(hBGMapMode);  // ldh [hBGMapMode], a
 	CALL(mLoadStandardMenuHeader);  // call LoadStandardMenuHeader
 	FARCALL(aFadeOutPalettes);  // farcall FadeOutPalettes
-	CCALL(aClearSprites);  // call ClearSprites
-	CCALL(aDisableSpriteUpdates);  // call DisableSpriteUpdates
+	CALL(mClearSprites);  // call ClearSprites
+	CALL(mDisableSpriteUpdates);  // call DisableSpriteUpdates
 	RET;  // ret
 
 }
@@ -2229,7 +2229,7 @@ int CloseSubmenu(){
 	CALL(mReloadTilesetAndPalettes);  // call ReloadTilesetAndPalettes
 	CALL(mUpdateSprites);  // call UpdateSprites
 	CALL(mCall_ExitMenu);  // call Call_ExitMenu
-	CCALL(aReloadPalettes);  // call ReloadPalettes
+	CALL(mReloadPalettes);  // call ReloadPalettes
 	JR(mFinishExitMenu);  // jr FinishExitMenu
 
 }
@@ -2240,7 +2240,7 @@ int ExitAllMenus(){
 	CALL(mCall_ExitMenu);  // call Call_ExitMenu
 	CALL(mReloadTilesetAndPalettes);  // call ReloadTilesetAndPalettes
 	CALL(mUpdateSprites);  // call UpdateSprites
-	CCALL(aReloadPalettes);  // call ReloadPalettes
+	CALL(mReloadPalettes);  // call ReloadPalettes
 	return FinishExitMenu();
 }
 
@@ -2250,7 +2250,7 @@ int FinishExitMenu(){
 	CALL(mGetSGBLayout);  // call GetSGBLayout
 	CALL(mWaitBGMap2);  // call WaitBGMap2
 	FARCALL(aFadeInPalettes);  // farcall FadeInPalettes
-	CCALL(aEnableSpriteUpdates);  // call EnableSpriteUpdates
+	CALL(mEnableSpriteUpdates);  // call EnableSpriteUpdates
 	RET;  // ret
 
 }
@@ -2261,7 +2261,7 @@ int ReturnToMapWithSpeechTextbox(){
 	LD_A(0x1);  // ld a, $1
 	LD_addr_A(wSpriteUpdatesEnabled);  // ld [wSpriteUpdatesEnabled], a
 	CALL(mClearBGPalettes);  // call ClearBGPalettes
-	CCALL(aClearSprites);  // call ClearSprites
+	CALL(mClearSprites);  // call ClearSprites
 	CALL(mReloadTilesetAndPalettes);  // call ReloadTilesetAndPalettes
 	hlcoord(0, 12, wTilemap);  // hlcoord 0, 12
 	LD_BC((4 << 8) | 18);  // lb bc, 4, 18
@@ -2283,8 +2283,8 @@ int ReturnToMapWithSpeechTextbox(){
 
 int ReloadTilesetAndPalettes(){
 	SET_PC(0x2C85U);
-	CCALL(aDisableLCD);  // call DisableLCD
-	CCALL(aClearSprites);  // call ClearSprites
+	CALL(mDisableLCD);  // call DisableLCD
+	CALL(mClearSprites);  // call ClearSprites
 	FARCALL(av_RefreshSprites);  // farcall _RefreshSprites
 	CALL(mLoadStandardFont);  // call LoadStandardFont
 	CALL(mLoadFontsExtra);  // call LoadFontsExtra
@@ -2303,7 +2303,7 @@ int ReloadTilesetAndPalettes(){
 	POP_AF;  // pop af
 	RST(mBankswitch);  // rst Bankswitch
 
-	CCALL(aEnableLCD);  // call EnableLCD
+	CALL(mEnableLCD);  // call EnableLCD
 	RET;  // ret
 
 }
@@ -2346,7 +2346,7 @@ int GetAnyMapPointer(){
 	DEC_C;  // dec c
 	LD_B(0);  // ld b, 0
 	LD_A(9);  // ld a, 9
-	CCALL(aAddNTimes);  // call AddNTimes
+	CALL(mAddNTimes);  // call AddNTimes
 	RET;  // ret
 
 }
@@ -2442,7 +2442,7 @@ int CopyMapPartial(){
 	CALL(mGetMapPointer);  // call GetMapPointer
 	LD_DE(wMapPartial);  // ld de, wMapPartial
 	LD_BC(wMapPartialEnd - wMapPartial);  // ld bc, wMapPartialEnd - wMapPartial
-	CCALL(aCopyBytes);  // call CopyBytes
+	CALL(mCopyBytes);  // call CopyBytes
 
 	POP_AF;  // pop af
 	RST(mBankswitch);  // rst Bankswitch
@@ -2690,7 +2690,7 @@ int LoadMapTileset(){
 	LD_HL(mTilesets);  // ld hl, Tilesets
 	LD_BC(TILESET_LENGTH);  // ld bc, TILESET_LENGTH
 	LD_A_addr(wMapTileset);  // ld a, [wMapTileset]
-	CCALL(aAddNTimes);  // call AddNTimes
+	CALL(mAddNTimes);  // call AddNTimes
 
 	LD_DE(wTilesetBank);  // ld de, wTilesetBank
 	LD_BC(TILESET_LENGTH);  // ld bc, TILESET_LENGTH

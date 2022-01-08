@@ -29,16 +29,16 @@ int IHandler(){
 	LD_HL(0xFF44);  // ld hl, $FF44
 	LD_A(144);  // ld a, 144
 
-wait:
 	SET_PC(0x006AU);
 	CP_A_hl;  // cp [hl]
-	IF_NC JR(mIHandler_wait);  // jr nc, .wait
+	IF_NC goto wait;  // jr nc, .wait
+wait:  // hack to avoid hanging
 	POP_HL;  // pop hl
 	POP_AF;  // pop af
 	CALL(mVBlank);  // call VBlank
-	CCALL(aLCD);  // call LCD
+	CALL(mLCD);  // call LCD
 	CALL(mSerial);  // call Serial
-	CCALL(aJoypad);  // call Joypad
+	CALL(mJoypad);  // call Joypad
 	RET;  // ret
 }
 

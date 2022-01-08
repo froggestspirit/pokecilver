@@ -142,13 +142,13 @@ int v_PlayMonCry(){
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
 
-	CCALL(aGetCryIndex);  // call GetCryIndex
+	CALL(mGetCryIndex);  // call GetCryIndex
 	IF_C goto done;  // jr c, .done
 
 	LD_E_C;  // ld e, c
 	LD_D_B;  // ld d, b
 	CALL(mPlayCry);  // call PlayCry
-	CCALL(aWaitSFX);  // call WaitSFX
+	CALL(mWaitSFX);  // call WaitSFX
 
 
 done:
@@ -164,7 +164,7 @@ int LoadCry(){
 	SET_PC(0x3A12U);
 //  Load cry bc.
 
-	CCALL(aGetCryIndex);  // call GetCryIndex
+	CALL(mGetCryIndex);  // call GetCryIndex
 	RET_C ;  // ret c
 
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -289,10 +289,10 @@ int GetBaseData(){
 	DEC_A;  // dec a
 	LD_BC(BASE_DATA_SIZE);  // ld bc, BASE_DATA_SIZE
 	LD_HL(mBaseData);  // ld hl, BaseData
-	CCALL(aAddNTimes);  // call AddNTimes
+	CALL(mAddNTimes);  // call AddNTimes
 	LD_DE(wCurBaseData);  // ld de, wCurBaseData
 	LD_BC(BASE_DATA_SIZE);  // ld bc, BASE_DATA_SIZE
-	CCALL(aCopyBytes);  // call CopyBytes
+	CALL(mCopyBytes);  // call CopyBytes
 	goto end;  // jr .end
 
 
@@ -348,12 +348,12 @@ int GetNickname(){
 	PUSH_HL;  // push hl
 	PUSH_BC;  // push bc
 
-	CCALL(aSkipNames);  // call SkipNames
+	CALL(mSkipNames);  // call SkipNames
 	LD_DE(wStringBuffer1);  // ld de, wStringBuffer1
 
 	PUSH_DE;  // push de
 	LD_BC(MON_NAME_LENGTH);  // ld bc, MON_NAME_LENGTH
-	CCALL(aCopyBytes);  // call CopyBytes
+	CALL(mCopyBytes);  // call CopyBytes
 	POP_DE;  // pop de
 
 	CALLFAR(aCorrectNickErrors);  // callfar CorrectNickErrors

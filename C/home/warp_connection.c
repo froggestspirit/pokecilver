@@ -3,10 +3,10 @@
 int HandleNewMap(){
 	SET_PC(0x2084U);
 	CALL(mClearUnusedMapBuffer);  // call ClearUnusedMapBuffer
-	CCALL(aResetMapBufferEventFlags);  // call ResetMapBufferEventFlags
-	CCALL(aResetFlashIfOutOfCave);  // call ResetFlashIfOutOfCave
+	CALL(mResetMapBufferEventFlags);  // call ResetMapBufferEventFlags
+	CALL(mResetFlashIfOutOfCave);  // call ResetFlashIfOutOfCave
 	CALL(mGetCurrentMapSceneID);  // call GetCurrentMapSceneID
-	CCALL(aResetBikeFlags);  // call ResetBikeFlags
+	CALL(mResetBikeFlags);  // call ResetBikeFlags
 	LD_A(MAPCALLBACK_NEWMAP);  // ld a, MAPCALLBACK_NEWMAP
 	CALL(mRunMapCallback);  // call RunMapCallback
 	return HandleContinueMap();
@@ -48,7 +48,7 @@ ClearBGMap:
 	LD_A(0x60);  // ld a, "■"
 	LD_BC(vBGMap1 - vBGMap0);  // ld bc, vBGMap1 - vBGMap0
 	hlbgcoord(0, 0, vBGMap0);  // hlbgcoord 0, 0
-	CCALL(aByteFill);  // call ByteFill
+	CALL(mByteFill);  // call ByteFill
 	RET;  // ret
 
 
@@ -115,8 +115,8 @@ int LoadMapPalettes(){
 
 int RefreshMapSprites(){
 	SET_PC(0x212BU);
-	CCALL(aClearSprites);  // call ClearSprites
-	CCALL(aResetBGWindow);  // call ResetBGWindow
+	CALL(mClearSprites);  // call ClearSprites
+	CALL(mResetBGWindow);  // call ResetBGWindow
 	CALL(mGetMovementPermissions);  // call GetMovementPermissions
 	FARCALL(aRefreshPlayerSprite);  // farcall RefreshPlayerSprite
 	FARCALL(aCheckUpdatePlayerSprite);  // farcall CheckUpdatePlayerSprite
@@ -498,7 +498,7 @@ CopyWarpData:
 	LD_A_C;  // ld a, c
 	DEC_A;  // dec a
 	LD_BC(WARP_EVENT_SIZE);  // ld bc, WARP_EVENT_SIZE
-	CCALL(aAddNTimes);  // call AddNTimes
+	CALL(mAddNTimes);  // call AddNTimes
 	LD_BC(2);  // ld bc, 2 ; warp number
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hli;  // ld a, [hli]
@@ -544,14 +544,14 @@ int EnterMapWarp(){
 SaveDigWarp:
 	SET_PC(0x2360U);
 	CALL(mGetMapEnvironment);  // call GetMapEnvironment
-	CCALL(aCheckOutdoorMap);  // call CheckOutdoorMap
+	CALL(mCheckOutdoorMap);  // call CheckOutdoorMap
 	RET_NZ ;  // ret nz
 	LD_A_addr(wNextMapGroup);  // ld a, [wNextMapGroup]
 	LD_B_A;  // ld b, a
 	LD_A_addr(wNextMapNumber);  // ld a, [wNextMapNumber]
 	LD_C_A;  // ld c, a
 	CALL(mGetAnyMapEnvironment);  // call GetAnyMapEnvironment
-	CCALL(aCheckIndoorMap);  // call CheckIndoorMap
+	CALL(mCheckIndoorMap);  // call CheckIndoorMap
 	RET_NZ ;  // ret nz
 
 //  MOUNT_MOON_SQUARE and TIN_TOWER_ROOF are outdoor maps within indoor maps.
@@ -581,14 +581,14 @@ not_mt_moon_square_or_tin_tower_roof:
 SetSpawn:
 	SET_PC(0x2399U);
 	CALL(mGetMapEnvironment);  // call GetMapEnvironment
-	CCALL(aCheckOutdoorMap);  // call CheckOutdoorMap
+	CALL(mCheckOutdoorMap);  // call CheckOutdoorMap
 	RET_NZ ;  // ret nz
 	LD_A_addr(wNextMapGroup);  // ld a, [wNextMapGroup]
 	LD_B_A;  // ld b, a
 	LD_A_addr(wNextMapNumber);  // ld a, [wNextMapNumber]
 	LD_C_A;  // ld c, a
 	CALL(mGetAnyMapEnvironment);  // call GetAnyMapEnvironment
-	CCALL(aCheckIndoorMap);  // call CheckIndoorMap
+	CALL(mCheckIndoorMap);  // call CheckIndoorMap
 	RET_NZ ;  // ret nz
 	LD_A_addr(wNextMapGroup);  // ld a, [wNextMapGroup]
 	LD_B_A;  // ld b, a

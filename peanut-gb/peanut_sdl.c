@@ -531,33 +531,11 @@ void gb_write(const uint_fast16_t addr, const uint8_t val)
 #if ENABLE_LCD
 void gb_draw_line()
 {
+	finish_gb_cycle();
 	uint8_t pixels[160] = {0};
-
 	/* If LCD not initialised by front-end, don't render anything. */
 	if(gb.display.lcd_draw_line == NULL)
 		return;
-
-	if(gb.direct.frame_skip && !gb.display.frame_skip_count)
-		return;
-
-	/* If interlaced mode is activated, check if we need to draw the current
-	 * line. */
-	if(gb.direct.interlace)
-	{
-		if((gb.display.interlace_count == 0
-				&& (gb.gb_reg.LY & 1) == 0)
-				|| (gb.display.interlace_count == 1
-				    && (gb.gb_reg.LY & 1) == 1))
-		{
-			/* Compensate for missing window draw if required. */
-			if(gb.gb_reg.LCDC & LCDC_WINDOW_ENABLE
-					&& gb.gb_reg.LY >= gb.display.WY
-					&& gb.gb_reg.WX <= 166)
-				gb.display.window_clear++;
-
-			return;
-		}
-	}
 
 	/* If background is enabled, draw it. */
 	if(gb.gb_reg.LCDC & LCDC_BG_ENABLE)
@@ -809,6 +787,7 @@ extern int (*func[ROM_SIZE])();
 void gb_step_cpu()
 {
 	uint8_t opcode;
+	gb.gb_reg.LY = (gb.gb_reg.LY + 1) % LCD_VERT_LINES;
 	if(gb.cpu_reg.pc == 0x18) gb.gb_frame = 1;
 	if(gb.cpu_reg.pc < 0x8000){
 		int absAddress = gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE));
@@ -819,6 +798,8 @@ void gb_step_cpu()
 			//PEEK("");
 			//printf("RET: %x\n", gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE)));
 			if(gb.cpu_reg.pc == 0x18) gb.gb_frame = 1;
+			finish_gb_cycle();
+			return;
 		}
 	}
 	/* Obtain opcode */
@@ -1338,13 +1319,11 @@ void gb_step_cpu()
 	default:
 		(gb.gb_error)(GB_INVALID_OPCODE, opcode);
 	}
-	finish_gb_cycle();
 }
 
 void finish_gb_cycle(){
 	uint8_t inst_cycles;
 	inst_cycles = 4; // make this static to remove a dependancy on it
-
 	/* DIV register timing */
 	gb.counter.div_count += inst_cycles;
 
@@ -1424,6 +1403,7 @@ void finish_gb_cycle(){
 		}
 	}
 
+
 	/* TODO Check behaviour of LCD during LCD power off state. */
 	/* If LCD is off, don't update LCD state. */
 	if((gb.gb_reg.LCDC & LCDC_ENABLE) == 0)
@@ -1449,7 +1429,7 @@ void finish_gb_cycle(){
 			gb.gb_reg.STAT &= 0xFB;
 
 		/* Next line */
-		gb.gb_reg.LY = (gb.gb_reg.LY + 1) % LCD_VERT_LINES;
+		//gb.gb_reg.LY = (gb.gb_reg.LY + 1) % LCD_VERT_LINES;
 
 		/* VBLANK Start */
 		if(gb.gb_reg.LY == LCD_HEIGHT)
@@ -1514,9 +1494,6 @@ void finish_gb_cycle(){
 			&& gb.counter.lcd_count >= LCD_MODE_3_CYCLES)
 	{
 		gb.lcd_mode = LCD_TRANSFER;
-#if ENABLE_LCD
-		gb_draw_line();
-#endif
 	}
 }
 
@@ -1524,8 +1501,11 @@ void gb_run_frame()
 {
 	gb.gb_frame = 0;
 
-	while(!gb.gb_frame)
-		gb_step_cpu();
+	while(!gb.gb_frame) gb_step_cpu();
+	for(int line = 0; line < 144; line++){
+		gb.gb_reg.LY = line;
+		gb_draw_line();
+	}
 }
 
 /**
@@ -1940,160 +1920,6 @@ void auto_assign_palette(struct priv_t *priv, uint8_t game_checksum)
 {
 	size_t palette_bytes = 3 * 4 * sizeof(uint16_t);
 
-	switch(game_checksum)
-	{
-	/* Balloon Kid and Tetris Blast */
-	case 0x71:
-	case 0xFF:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x7E60, 0x7C00, 0x0000 }, /* OBJ0 */
-			{ 0x7FFF, 0x7E60, 0x7C00, 0x0000 }, /* OBJ1 */
-			{ 0x7FFF, 0x7E60, 0x7C00, 0x0000 }  /* BG */
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* Pokemon Yellow and Tetris */
-	case 0x15:
-	case 0xDB:
-	case 0x95: /* Not officially */
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x7FE0, 0x7C00, 0x0000 }, /* OBJ0 */
-			{ 0x7FFF, 0x7FE0, 0x7C00, 0x0000 }, /* OBJ1 */
-			{ 0x7FFF, 0x7FE0, 0x7C00, 0x0000 }  /* BG */
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* Donkey Kong */
-	case 0x19:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x7E10, 0x48E7, 0x0000 }, /* OBJ0 */
-			{ 0x7FFF, 0x7E10, 0x48E7, 0x0000 }, /* OBJ1 */
-			{ 0x7FFF, 0x7E60, 0x7C00, 0x0000 }  /* BG */
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* Pokemon Blue */
-	case 0x61:
-	case 0x45:
-
-	/* Pokemon Blue Star */
-	case 0xD8:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x7E10, 0x48E7, 0x0000 }, /* OBJ0 */
-			{ 0x7FFF, 0x329F, 0x001F, 0x0000 }, /* OBJ1 */
-			{ 0x7FFF, 0x329F, 0x001F, 0x0000 }  /* BG */
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* Pokemon Red */
-	case 0x14:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x3FE6, 0x0200, 0x0000 }, /* OBJ0 */
-			{ 0x7FFF, 0x7E10, 0x48E7, 0x0000 }, /* OBJ1 */
-			{ 0x7FFF, 0x7E10, 0x48E7, 0x0000 }  /* BG */
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* Pokemon Red Star */
-	case 0x8B:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x7E10, 0x48E7, 0x0000 }, /* OBJ0 */
-			{ 0x7FFF, 0x329F, 0x001F, 0x0000 }, /* OBJ1 */
-			{ 0x7FFF, 0x3FE6, 0x0200, 0x0000 }  /* BG */
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* Kirby */
-	case 0x27:
-	case 0x49:
-	case 0x5C:
-	case 0xB3:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7D8A, 0x6800, 0x3000, 0x0000 }, /* OBJ0 */
-			{ 0x001F, 0x7FFF, 0x7FEF, 0x021F }, /* OBJ1 */
-			{ 0x527F, 0x7FE0, 0x0180, 0x0000 }  /* BG */
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* Donkey Kong Land [1/2/III] */
-	case 0x18:
-	case 0x6A:
-	case 0x4B:
-	case 0x6B:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7F08, 0x7F40, 0x48E0, 0x2400 }, /* OBJ0 */
-			{ 0x7FFF, 0x2EFF, 0x7C00, 0x001F }, /* OBJ1 */
-			{ 0x7FFF, 0x463B, 0x2951, 0x0000 }  /* BG */
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* Link's Awakening */
-	case 0x70:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x03E0, 0x1A00, 0x0120 }, /* OBJ0 */
-			{ 0x7FFF, 0x329F, 0x001F, 0x001F }, /* OBJ1 */
-			{ 0x7FFF, 0x7E10, 0x48E7, 0x0000 }  /* BG */
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* Mega Man [1/2/3] & others I don't care about. */
-	case 0x01:
-	case 0x10:
-	case 0x29:
-	case 0x52:
-	case 0x5D:
-	case 0x68:
-	case 0x6D:
-	case 0xF6:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x329F, 0x001F, 0x0000 }, /* OBJ0 */
-			{ 0x7FFF, 0x3FE6, 0x0200, 0x0000 }, /* OBJ1 */
-			{ 0x7FFF, 0x7EAC, 0x40C0, 0x0000 }  /* BG */
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	default:
-	{
 		const uint16_t palette[3][4] =
 		{
 			{ 0x7FFF, 0x5294, 0x294A, 0x0000 },
@@ -2102,183 +1928,6 @@ void auto_assign_palette(struct priv_t *priv, uint8_t game_checksum)
 		};
 		printf("No palette found for 0x%02X.\n", game_checksum);
 		memcpy(priv->selected_palette, palette, palette_bytes);
-	}
-	}
-}
-
-/**
- * Assigns a palette. This is used to allow the user to manually select a
- * different colour palette if one was not found automatically, or if the user
- * prefers a different colour palette.
- * selection is the requestion colour palette. This should be a maximum of
- * NUMBER_OF_PALETTES - 1. The default greyscale palette is selected otherwise.
- */
-void manual_assign_palette(struct priv_t *priv, uint8_t selection)
-{
-#define NUMBER_OF_PALETTES 12
-	size_t palette_bytes = 3 * 4 * sizeof(uint16_t);
-
-	switch(selection)
-	{
-	/* 0x05 (Right) */
-	case 0:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x2BE0, 0x7D00, 0x0000 },
-			{ 0x7FFF, 0x2BE0, 0x7D00, 0x0000 },
-			{ 0x7FFF, 0x2BE0, 0x7D00, 0x0000 }
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* 0x07 (A + Down) */
-	case 1:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x7FE0, 0x7C00, 0x0000 },
-			{ 0x7FFF, 0x7FE0, 0x7C00, 0x0000 },
-			{ 0x7FFF, 0x7FE0, 0x7C00, 0x0000 }
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* 0x12 (Up) */
-	case 2:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x7EAC, 0x40C0, 0x0000 },
-			{ 0x7FFF, 0x7EAC, 0x40C0, 0x0000 },
-			{ 0x7FFF, 0x7EAC, 0x40C0, 0x0000 }
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* 0x13 (B + Right) */
-	case 3:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x0000, 0x0210, 0x7F60, 0x7FFF },
-			{ 0x0000, 0x0210, 0x7F60, 0x7FFF },
-			{ 0x0000, 0x0210, 0x7F60, 0x7FFF }
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* 0x16 (B + Left, DMG Palette) */
-	default:
-	case 4:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x5294, 0x294A, 0x0000 },
-			{ 0x7FFF, 0x5294, 0x294A, 0x0000 },
-			{ 0x7FFF, 0x5294, 0x294A, 0x0000 }
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* 0x17 (Down) */
-	case 5:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FF4, 0x7E52, 0x4A5F, 0x0000 },
-			{ 0x7FF4, 0x7E52, 0x4A5F, 0x0000 },
-			{ 0x7FF4, 0x7E52, 0x4A5F, 0x0000 }
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* 0x19 (B + Up) */
-	case 6:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x7EAC, 0x40C0, 0x0000 },
-			{ 0x7FFF, 0x7EAC, 0x40C0, 0x0000 },
-			{ 0x7F98, 0x6670, 0x41A5, 0x2CC1 }
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* 0x1C (A + Right) */
-	case 7:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x7E10, 0x48E7, 0x0000 },
-			{ 0x7FFF, 0x7E10, 0x48E7, 0x0000 },
-			{ 0x7FFF, 0x3FE6, 0x0198, 0x0000 }
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* 0x0D (A + Left) */
-	case 8:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x7E10, 0x48E7, 0x0000 },
-			{ 0x7FFF, 0x7EAC, 0x40C0, 0x0000 },
-			{ 0x7FFF, 0x463B, 0x2951, 0x0000 }
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* 0x10 (A + Up) */
-	case 9:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x3FE6, 0x0200, 0x0000 },
-			{ 0x7FFF, 0x329F, 0x001F, 0x0000 },
-			{ 0x7FFF, 0x7E10, 0x48E7, 0x0000 }
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* 0x18 (Left) */
-	case 10:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x7E10, 0x48E7, 0x0000 },
-			{ 0x7FFF, 0x3FE6, 0x0200, 0x0000 },
-			{ 0x7FFF, 0x329F, 0x001F, 0x0000 }
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-
-	/* 0x1A (B + Down) */
-	case 11:
-	{
-		const uint16_t palette[3][4] =
-		{
-			{ 0x7FFF, 0x329F, 0x001F, 0x0000 },
-			{ 0x7FFF, 0x3FE6, 0x0200, 0x0000 },
-			{ 0x7FFF, 0x7FE0, 0x3D20, 0x0000 }
-		};
-		memcpy(priv->selected_palette, palette, palette_bytes);
-		break;
-	}
-	}
-
-	return;
 }
 
 #if ENABLE_LCD
@@ -2298,42 +1947,6 @@ void lcd_draw_line(const uint8_t pixels[160],
 	}
 }
 #endif
-
-/**
- * Saves the LCD screen as a 15-bit BMP file.
- */
-void save_lcd_bmp(uint16_t fb[LCD_HEIGHT][LCD_WIDTH])
-{
-	/* Should be enough to record up to 828 days worth of frames. */
-	static uint_fast32_t file_num = 0;
-	char file_name[32];
-	char title_str[16];
-	FILE* f;
-
-	snprintf(file_name, 32, "%.16s_%010ld.bmp",
-		 gb_get_rom_name(title_str), file_num);
-
-	f = fopen(file_name, "wb");
-
-	const uint8_t bmp_hdr_rgb555[] = {
-		0x42, 0x4d, 0x36, 0xb4, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x36, 0x00, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0xa0, 0x00,
-		0x00, 0x00, 0x70, 0xff, 0xff, 0xff, 0x01, 0x00, 0x10, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0xb4, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00
-	};
-
-	fwrite(bmp_hdr_rgb555, sizeof(uint8_t), sizeof(bmp_hdr_rgb555), f);
-	fwrite(fb, sizeof(uint16_t), LCD_HEIGHT * LCD_WIDTH, f);
-	fclose(f);
-
-	file_num++;
-
-	/* Each dot shows a new frame being saved. */
-	putc('.', stdout);
-	fflush(stdout);
-}
 
 int get_input(){
 	static SDL_Event event;

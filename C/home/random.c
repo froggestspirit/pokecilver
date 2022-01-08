@@ -79,7 +79,7 @@ mod:
 
 loop:
 	SET_PC(0x30CFU);
-	CCALL(aRandom);  // call Random
+	CALL(mRandom);  // call Random
 	LDH_A_addr(hRandomAdd);  // ldh a, [hRandomAdd]
 	LD_C_A;  // ld c, a
 	ADD_A_B;  // add b
@@ -87,7 +87,7 @@ loop:
 	LD_A_C;  // ld a, c
 	POP_BC;  // pop bc
 
-	CCALL(aSimpleDivide);  // call SimpleDivide
+	CALL(mSimpleDivide);  // call SimpleDivide
 
 	POP_BC;  // pop bc
 	RET;  // ret

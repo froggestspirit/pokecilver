@@ -35,7 +35,7 @@ int GetDexNumber(){
 	ADD_HL_BC;  // add hl, bc
 	LD_HL(mBaseData + BASE_DEX_NO);  // ld hl, BaseData + BASE_DEX_NO
 	LD_BC(BASE_DATA_SIZE);  // ld bc, BASE_DATA_SIZE
-	CCALL(aAddNTimes);  // call AddNTimes
+	CALL(mAddNTimes);  // call AddNTimes
 	POP_BC;  // pop bc
 	LD_A(BANK(aBaseData));  // ld a, BANK(BaseData)
 	CALL(mGetFarWord);  // call GetFarWord
@@ -232,7 +232,7 @@ int FarCopyRadioText(){
 	LD_H_A;  // ld h, a
 	LD_DE(wRadioText);  // ld de, wRadioText
 	LD_BC(2 * SCREEN_WIDTH);  // ld bc, 2 * SCREEN_WIDTH
-	CCALL(aCopyBytes);  // call CopyBytes
+	CALL(mCopyBytes);  // call CopyBytes
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
