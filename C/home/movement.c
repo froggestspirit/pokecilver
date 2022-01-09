@@ -59,7 +59,7 @@ okay:
 
 loop:
 	SET_PC(0x19F3U);
-	CALL(mAppendToMovementBuffer);  // call AppendToMovementBuffer
+	CCALL(aAppendToMovementBuffer);  // call AppendToMovementBuffer
 	DEC_C;  // dec c
 	IF_NZ goto loop;  // jr nz, .loop
 	RET;  // ret
@@ -114,12 +114,12 @@ done:
 	LD_A_H;  // ld a, h
 	CALL(mComputePathToWalkToPlayer_GetMovementData);  // call .GetMovementData
 	LD_C_D;  // ld c, d
-	CALL(mAppendToMovementBufferNTimes);  // call AppendToMovementBufferNTimes
+	CCALL(aAppendToMovementBufferNTimes);  // call AppendToMovementBufferNTimes
 //  ... then add the shorter direction.
 	LD_A_L;  // ld a, l
 	CALL(mComputePathToWalkToPlayer_GetMovementData);  // call .GetMovementData
 	LD_C_E;  // ld c, e
-	CALL(mAppendToMovementBufferNTimes);  // call AppendToMovementBufferNTimes
+	CCALL(aAppendToMovementBufferNTimes);  // call AppendToMovementBufferNTimes
 	RET;  // ret
 
 

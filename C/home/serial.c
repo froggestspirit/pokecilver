@@ -405,7 +405,7 @@ receive:
 acknowledge:
 	SET_PC(0x0862U);
 	CALL(mDelayFrame);  // call DelayFrame
-	CALL(mLinkDataReceived);  // call LinkDataReceived
+	CCALL(aLinkDataReceived);  // call LinkDataReceived
 	DEC_B;  // dec b
 	IF_NZ goto acknowledge;  // jr nz, .acknowledge
 

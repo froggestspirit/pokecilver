@@ -54,8 +54,8 @@ loop:
 	IF_Z goto next;  // jr z, .next
 
 //  Is facing the player...
-	CALL(mGetObjectStruct);  // call GetObjectStruct
-	CALL(mFacingPlayerDistance_bc);  // call FacingPlayerDistance_bc
+	CCALL(aGetObjectStruct);  // call GetObjectStruct
+	CCALL(aFacingPlayerDistance_bc);  // call FacingPlayerDistance_bc
 	IF_NC goto next;  // jr nc, .next
 
 //  ...within their sight range
@@ -77,7 +77,7 @@ loop:
 	INC_HL;  // inc hl
 	LD_D_hl;  // ld d, [hl]
 	LD_B(CHECK_FLAG);  // ld b, CHECK_FLAG
-	CALL(mEventFlagAction);  // call EventFlagAction
+	CCALL(aEventFlagAction);  // call EventFlagAction
 	LD_A_C;  // ld a, c
 	POP_DE;  // pop de
 	POP_BC;  // pop bc
@@ -126,11 +126,11 @@ int TalkToTrainer(){
 
 int LoadTrainer_continue(){
 	SET_PC(0x38BEU);
-	CALL(mGetMapScriptsBank);  // call GetMapScriptsBank
+	CCALL(aGetMapScriptsBank);  // call GetMapScriptsBank
 	LD_addr_A(wSeenTrainerBank);  // ld [wSeenTrainerBank], a
 
 	LDH_A_addr(hLastTalked);  // ldh a, [hLastTalked]
-	CALL(mGetMapObject);  // call GetMapObject
+	CCALL(aGetMapObject);  // call GetMapObject
 
 	LD_HL(MAPOBJECT_SCRIPT_POINTER);  // ld hl, MAPOBJECT_SCRIPT_POINTER
 	ADD_HL_BC;  // add hl, bc
@@ -150,7 +150,7 @@ int LoadTrainer_continue(){
 int FacingPlayerDistance_bc(){
 	SET_PC(0x38E5U);
 	PUSH_DE;  // push de
-	CALL(mFacingPlayerDistance);  // call FacingPlayerDistance
+	CCALL(aFacingPlayerDistance);  // call FacingPlayerDistance
 	LD_B_D;  // ld b, d
 	LD_C_E;  // ld c, e
 	POP_DE;  // pop de
@@ -228,7 +228,7 @@ Left:
 
 CheckFacing:
 	SET_PC(0x392BU);
-	CALL(mGetSpriteDirection);  // call GetSpriteDirection
+	CCALL(aGetSpriteDirection);  // call GetSpriteDirection
 	CP_A_E;  // cp e
 	IF_NZ goto NotFacing;  // jr nz, .NotFacing
 	SCF;  // scf
@@ -249,19 +249,19 @@ int CheckTrainerFlag(){
 	LD_HL(OBJECT_MAP_OBJECT_INDEX);  // ld hl, OBJECT_MAP_OBJECT_INDEX
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
-	CALL(mGetMapObject);  // call GetMapObject
+	CCALL(aGetMapObject);  // call GetMapObject
 	LD_HL(MAPOBJECT_SCRIPT_POINTER);  // ld hl, MAPOBJECT_SCRIPT_POINTER
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hli;  // ld a, [hli]
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
-	CALL(mGetMapScriptsBank);  // call GetMapScriptsBank
+	CCALL(aGetMapScriptsBank);  // call GetMapScriptsBank
 	CALL(mGetFarWord);  // call GetFarWord
 	LD_D_H;  // ld d, h
 	LD_E_L;  // ld e, l
 	PUSH_DE;  // push de
 	LD_B(CHECK_FLAG);  // ld b, CHECK_FLAG
-	CALL(mEventFlagAction);  // call EventFlagAction
+	CCALL(aEventFlagAction);  // call EventFlagAction
 	POP_DE;  // pop de
 	LD_A_C;  // ld a, c
 	AND_A_A;  // and a
@@ -296,7 +296,7 @@ ok:
 	LD_A_hli;  // ld a, [hli]
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
-	CALL(mGetMapScriptsBank);  // call GetMapScriptsBank
+	CCALL(aGetMapScriptsBank);  // call GetMapScriptsBank
 	CALL(mFarPrintText);  // call FarPrintText
 	CALL(mWaitBGMap);  // call WaitBGMap
 	CALL(mWaitPressAorB_BlinkCursor);  // call WaitPressAorB_BlinkCursor

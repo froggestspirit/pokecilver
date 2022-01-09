@@ -266,7 +266,7 @@ int GetMapObject(){
 //  Return the location of map object a in bc.
 	LD_HL(wMapObjects);  // ld hl, wMapObjects
 	LD_BC(MAPOBJECT_LENGTH);  // ld bc, MAPOBJECT_LENGTH
-	CALL(mAddNTimes);  // call AddNTimes
+	CCALL(aAddNTimes);  // call AddNTimes
 	LD_B_H;  // ld b, h
 	LD_C_L;  // ld c, l
 	RET;  // ret
@@ -277,14 +277,14 @@ int CheckObjectVisibility(){
 	SET_PC(0x1779U);
 //  Sets carry if the object is not visible on the screen.
 	LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
-	CALL(mGetMapObject);  // call GetMapObject
+	CCALL(aGetMapObject);  // call GetMapObject
 	LD_HL(MAPOBJECT_OBJECT_STRUCT_ID);  // ld hl, MAPOBJECT_OBJECT_STRUCT_ID
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
 	CP_A(-1);  // cp -1
 	IF_Z goto not_visible;  // jr z, .not_visible
 	LDH_addr_A(hObjectStructIndex);  // ldh [hObjectStructIndex], a
-	CALL(mGetObjectStruct);  // call GetObjectStruct
+	CCALL(aGetObjectStruct);  // call GetObjectStruct
 	AND_A_A;  // and a
 	RET;  // ret
 
@@ -391,7 +391,7 @@ int CopyMapObjectStruct(){
 	SET_PC(0x17E8U);
 //  //  unreferenced
 	LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
-	CALL(mGetMapObject);  // call GetMapObject
+	CCALL(aGetMapObject);  // call GetMapObject
 	CALL(mCopyObjectStruct);  // call CopyObjectStruct
 	RET;  // ret
 
@@ -400,9 +400,9 @@ int CopyMapObjectStruct(){
 int UnmaskCopyMapObjectStruct(){
 	SET_PC(0x17F1U);
 	LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
-	CALL(mUnmaskObject);  // call UnmaskObject
+	CCALL(aUnmaskObject);  // call UnmaskObject
 	LDH_A_addr(hMapObjectIndex);  // ldh a, [hMapObjectIndex]
-	CALL(mGetMapObject);  // call GetMapObject
+	CCALL(aGetMapObject);  // call GetMapObject
 	FARCALL(aCopyObjectStruct);  // farcall CopyObjectStruct
 	RET;  // ret
 
@@ -411,7 +411,7 @@ int UnmaskCopyMapObjectStruct(){
 int ApplyDeletionToMapObject(){
 	SET_PC(0x1802U);
 	LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
-	CALL(mGetMapObject);  // call GetMapObject
+	CCALL(aGetMapObject);  // call GetMapObject
 	LD_HL(MAPOBJECT_OBJECT_STRUCT_ID);  // ld hl, MAPOBJECT_OBJECT_STRUCT_ID
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
@@ -421,7 +421,7 @@ int ApplyDeletionToMapObject(){
 	PUSH_AF;  // push af
 	CALL(mApplyDeletionToMapObject_CheckStopFollow);  // call .CheckStopFollow
 	POP_AF;  // pop af
-	CALL(mGetObjectStruct);  // call GetObjectStruct
+	CCALL(aGetObjectStruct);  // call GetObjectStruct
 	FARCALL(aDeleteMapObject);  // farcall DeleteMapObject
 	RET;  // ret
 
@@ -448,7 +448,7 @@ ok:
 int DeleteObjectStruct(){
 	SET_PC(0x183AU);
 	CALL(mApplyDeletionToMapObject);  // call ApplyDeletionToMapObject
-	CALL(mMaskObject);  // call MaskObject
+	CCALL(aMaskObject);  // call MaskObject
 	RET;  // ret
 
 }
@@ -456,7 +456,7 @@ int DeleteObjectStruct(){
 int CopyPlayerObjectTemplate(){
 	SET_PC(0x1841U);
 	PUSH_HL;  // push hl
-	CALL(mGetMapObject);  // call GetMapObject
+	CCALL(aGetMapObject);  // call GetMapObject
 	LD_D_B;  // ld d, b
 	LD_E_C;  // ld e, c
 	LD_A(-1);  // ld a, -1
@@ -464,7 +464,7 @@ int CopyPlayerObjectTemplate(){
 	INC_DE;  // inc de
 	POP_HL;  // pop hl
 	LD_BC(MAPOBJECT_LENGTH - 1);  // ld bc, MAPOBJECT_LENGTH - 1
-	CALL(mCopyBytes);  // call CopyBytes
+	CCALL(aCopyBytes);  // call CopyBytes
 	RET;  // ret
 
 }
@@ -472,7 +472,7 @@ int CopyPlayerObjectTemplate(){
 int DeleteFollowerMapObject(){
 	SET_PC(0x1853U);
 //  //  unreferenced
-	CALL(mGetMapObject);  // call GetMapObject
+	CCALL(aGetMapObject);  // call GetMapObject
 	LD_HL(MAPOBJECT_OBJECT_STRUCT_ID);  // ld hl, MAPOBJECT_OBJECT_STRUCT_ID
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
@@ -481,7 +481,7 @@ int DeleteFollowerMapObject(){
 	INC_HL;  // inc hl
 	LD_BC(MAPOBJECT_LENGTH - 1);  // ld bc, MAPOBJECT_LENGTH - 1
 	XOR_A_A;  // xor a
-	CALL(mByteFill);  // call ByteFill
+	CCALL(aByteFill);  // call ByteFill
 	POP_AF;  // pop af
 	CP_A(-1);  // cp -1
 	RET_Z ;  // ret z
@@ -498,7 +498,7 @@ int DeleteFollowerMapObject(){
 ok:
 	SET_PC(0x1879U);
 	LD_A_B;  // ld a, b
-	CALL(mGetObjectStruct);  // call GetObjectStruct
+	CCALL(aGetObjectStruct);  // call GetObjectStruct
 	FARCALL(aDeleteMapObject);  // farcall DeleteMapObject
 	RET;  // ret
 
@@ -515,7 +515,7 @@ int LoadMovementDataPointer(){
 	LD_A_H;  // ld a, h
 	LD_addr_A(wMovementDataAddress + 1);  // ld [wMovementDataAddress + 1], a
 	LD_A_addr(wMovementObject);  // ld a, [wMovementObject]
-	CALL(mCheckObjectVisibility);  // call CheckObjectVisibility
+	CCALL(aCheckObjectVisibility);  // call CheckObjectVisibility
 	RET_C ;  // ret c
 
 	LD_HL(OBJECT_MOVEMENTTYPE);  // ld hl, OBJECT_MOVEMENTTYPE
@@ -749,7 +749,7 @@ int GetObjectStruct(){
 	SET_PC(0x1980U);
 	LD_BC(OBJECT_LENGTH);  // ld bc, OBJECT_LENGTH
 	LD_HL(wObjectStructs);  // ld hl, wObjectStructs
-	CALL(mAddNTimes);  // call AddNTimes
+	CCALL(aAddNTimes);  // call AddNTimes
 	LD_B_H;  // ld b, h
 	LD_C_L;  // ld c, l
 	RET;  // ret

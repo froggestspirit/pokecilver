@@ -71,7 +71,7 @@ int PlayMusic(){
 	AND_A_A;  // and a
 	IF_Z goto nomusic;  // jr z, .nomusic
 
-	CALL(mv_PlayMusic);  // call _PlayMusic
+	CCALL(av_PlayMusic);  // call _PlayMusic
 	goto end;  // jr .end
 
 
@@ -110,10 +110,10 @@ int PlayMusic2(){
 
 	PUSH_DE;  // push de
 	LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
-	CALL(mv_PlayMusic);  // call _PlayMusic
+	CCALL(av_PlayMusic);  // call _PlayMusic
 	CALL(mDelayFrame);  // call DelayFrame
 	POP_DE;  // pop de
-	CALL(mv_PlayMusic);  // call _PlayMusic
+	CCALL(av_PlayMusic);  // call _PlayMusic
 
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
@@ -167,7 +167,7 @@ int PlayCry(){
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
 
-	CALL(mv_PlayCry);  // call _PlayCry
+	CCALL(av_PlayCry);  // call _PlayCry
 
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
@@ -192,7 +192,7 @@ int PlaySFX(){
 	PUSH_AF;  // push af
 
 // ; Is something already playing?
-	CALL(mCheckSFX);  // call CheckSFX
+	CCALL(aCheckSFX);  // call CheckSFX
 	IF_NC goto play;  // jr nc, .play
 
 // ; Does it have priority?
@@ -211,7 +211,7 @@ play:
 
 	LD_A_E;  // ld a, e
 	LD_addr_A(wCurSFX);  // ld [wCurSFX], a
-	CALL(mv_PlaySFX);  // call _PlaySFX
+	CCALL(av_PlaySFX);  // call _PlaySFX
 
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
@@ -230,8 +230,8 @@ done:
 
 int WaitPlaySFX(){
 	SET_PC(0x3E4BU);
-	CALL(mWaitSFX);  // call WaitSFX
-	CALL(mPlaySFX);  // call PlaySFX
+	CCALL(aWaitSFX);  // call WaitSFX
+	CCALL(aPlaySFX);  // call PlaySFX
 	RET;  // ret
 
 }
@@ -364,12 +364,12 @@ int PlayMapMusic(){
 
 	PUSH_DE;  // push de
 	LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
-	CALL(mPlayMusic);  // call PlayMusic
+	CCALL(aPlayMusic);  // call PlayMusic
 	CALL(mDelayFrame);  // call DelayFrame
 	POP_DE;  // pop de
 	LD_A_E;  // ld a, e
 	LD_addr_A(wMapMusic);  // ld [wMapMusic], a
-	CALL(mPlayMusic);  // call PlayMusic
+	CCALL(aPlayMusic);  // call PlayMusic
 
 
 done:
@@ -402,13 +402,13 @@ play:
 	SET_PC(0x3ED6U);
 	PUSH_DE;  // push de
 	LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
-	CALL(mPlayMusic);  // call PlayMusic
+	CCALL(aPlayMusic);  // call PlayMusic
 	CALL(mDelayFrame);  // call DelayFrame
 	POP_DE;  // pop de
 
 	LD_A_E;  // ld a, e
 	LD_addr_A(wMapMusic);  // ld [wMapMusic], a
-	CALL(mPlayMusic);  // call PlayMusic
+	CCALL(aPlayMusic);  // call PlayMusic
 
 	POP_AF;  // pop af
 	POP_BC;  // pop bc
@@ -426,7 +426,7 @@ int TryRestartMapMusic(){
 	XOR_A_A;  // xor a
 	LD_addr_A(wMapMusic);  // ld [wMapMusic], a
 	LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
-	CALL(mPlayMusic);  // call PlayMusic
+	CCALL(aPlayMusic);  // call PlayMusic
 	CALL(mDelayFrame);  // call DelayFrame
 	XOR_A_A;  // xor a
 	LD_addr_A(wDontPlayMapMusicOnReload);  // ld [wDontPlayMapMusicOnReload], a
@@ -441,12 +441,12 @@ int RestartMapMusic(){
 	PUSH_BC;  // push bc
 	PUSH_AF;  // push af
 	LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
-	CALL(mPlayMusic);  // call PlayMusic
+	CCALL(aPlayMusic);  // call PlayMusic
 	CALL(mDelayFrame);  // call DelayFrame
 	LD_A_addr(wMapMusic);  // ld a, [wMapMusic]
 	LD_E_A;  // ld e, a
 	LD_D(0);  // ld d, 0
-	CALL(mPlayMusic);  // call PlayMusic
+	CCALL(aPlayMusic);  // call PlayMusic
 	POP_AF;  // pop af
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
@@ -511,7 +511,7 @@ ranking:
 
 int GetMapMusic_MaybeSpecial(){
 	SET_PC(0x3F55U);
-	CALL(mSpecialMapMusic);  // call SpecialMapMusic
+	CCALL(aSpecialMapMusic);  // call SpecialMapMusic
 	RET_C ;  // ret c
 	CALL(mGetMapMusic);  // call GetMapMusic
 	RET;  // ret

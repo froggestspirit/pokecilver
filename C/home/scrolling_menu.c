@@ -2,7 +2,7 @@
 
 int ScrollingMenu(){
 	SET_PC(0x374DU);
-	CALL(mCopyMenuData);  // call CopyMenuData
+	CCALL(aCopyMenuData);  // call CopyMenuData
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 
@@ -44,7 +44,7 @@ int InitScrollingMenu(){
 	SUB_A_C;  // sub c
 	LD_E_A;  // ld e, a
 	PUSH_DE;  // push de
-	CALL(mCoord2Tile);  // call Coord2Tile
+	CCALL(aCoord2Tile);  // call Coord2Tile
 	POP_BC;  // pop bc
 	JP(mTextbox);  // jp Textbox
 

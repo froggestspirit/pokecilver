@@ -240,7 +240,7 @@ next:
 
 stopauto:
 	SET_PC(0x0991U);
-	CALL(mStopAutoInput);  // call StopAutoInput
+	CCALL(aStopAutoInput);  // call StopAutoInput
 	LD_B(NO_INPUT);  // ld b, NO_INPUT
 
 
@@ -419,7 +419,7 @@ loop:
 	SET_PC(0x0A3EU);
 	PUSH_HL;  // push hl
 	hlcoord(18, 17, wTilemap);  // hlcoord 18, 17
-	CALL(mBlinkCursor);  // call BlinkCursor
+	CCALL(aBlinkCursor);  // call BlinkCursor
 	POP_HL;  // pop hl
 
 	CALL(mJoyTextDelay);  // call JoyTextDelay
@@ -459,7 +459,7 @@ int PromptButton(){
 	CALL(mPromptButton_wait_input);  // call .wait_input
 	PUSH_DE;  // push de
 	LD_DE(SFX_READ_TEXT_2);  // ld de, SFX_READ_TEXT_2
-	CALL(mPlaySFX);  // call PlaySFX
+	CCALL(aPlaySFX);  // call PlaySFX
 	POP_DE;  // pop de
 	RET;  // ret
 
