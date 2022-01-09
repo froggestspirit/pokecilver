@@ -67,7 +67,7 @@ enum {
 };
 #define NUM_EXP_STATS STAT_SATK
 #define NUM_STATS STAT_SDEF
-#define NUM_BATTLE_STATS NUM_STATS - 1 // don't count HP
+#define NUM_BATTLE_STATS (NUM_STATS - 1) // don't count HP
 
 // stat formula constants
 #define STAT_MIN_NORMAL 5
@@ -156,7 +156,7 @@ enum {  // Should always be in pairs
 	ENEMY_LAST_MOVE,
 };
 
-#define NUM_BATTLE_VAR_LOCATION_PAIRS (ENEMY_LAST_MOVE + 1) / 2
+#define NUM_BATTLE_VAR_LOCATION_PAIRS ((ENEMY_LAST_MOVE + 1) / 2)
 
 // status condition bit flags
 #define SLP 0b111 // 0-7 turns
@@ -167,7 +167,7 @@ enum {
 	PAR,
 };
 
-#define ALL_STATUS (1 << PSN) | (1 << BRN) | (1 << FRZ) | (1 << PAR) | SLP
+#define ALL_STATUS ((1 << PSN) | (1 << BRN) | (1 << FRZ) | (1 << PAR) | SLP)
 
 // wPlayerSubStatus1 or wEnemySubStatus1 bit flags
 enum {
@@ -273,5 +273,5 @@ enum {
 #define BATTLERESULT_BITMASK (1 << BATTLERESULT_BOX_FULL)
 
 // link_battle_record struct
-#define LINK_BATTLE_RECORD_LENGTH 2 + (NAME_LENGTH - 1) + 2 * 3
+#define LINK_BATTLE_RECORD_LENGTH (2 + (NAME_LENGTH - 1) + 2 * 3)
 #define NUM_LINK_BATTLE_RECORDS 5

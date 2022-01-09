@@ -768,6 +768,8 @@ void init_function_pointers(){
 	REDIRECT(LoadNote);
 	REDIRECT(HandleTrackVibrato);
 	REDIRECT(ApplyPitchSlide);
+	REDIRECT(ApplyPitchSlide_finished_pitch_slide);
+	REDIRECT(ApplyPitchSlide_continue_pitch_slide);
 	REDIRECT(HandleNoise);
 	REDIRECT(ReadNoiseSample);
 	REDIRECT(ParseMusic);
@@ -812,6 +814,7 @@ void init_function_pointers(){
 	REDIRECT(GetMusicByte);
 	REDIRECT(GetFrequency);
 	REDIRECT(SetNoteDuration);
+	REDIRECT(SetNoteDuration_Multiply);
 	REDIRECT(SetGlobalTempo);
 	REDIRECT(Tempo);
 	REDIRECT(StartChannel);

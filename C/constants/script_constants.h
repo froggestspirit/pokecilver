@@ -76,9 +76,9 @@ enum {
 #define NUM_VARS const_value           // 15
 
 // variable action types
-#define RETVAR_STRBUF2 0 << 6
-#define RETVAR_ADDR_DE 1 << 6
-#define RETVAR_EXECUTE 2 << 6
+#define RETVAR_STRBUF2 (0 << 6)
+#define RETVAR_ADDR_DE (1 << 6)
+#define RETVAR_EXECUTE (2 << 6)
 
 // PlayerEventScriptPointers indexes (see engine/overworld/events.asm)
 enum {

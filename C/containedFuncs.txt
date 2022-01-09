@@ -338,3 +338,11 @@ v_PlayMonCry
 TextCommand_SOUND
 MenuClickSound
 TextCommand_CRY
+SetNoteDuration_Multiply
+SetNoteDuration
+ParseSFXOrCry
+GetNoiseSample
+ApplyPitchSlide_finished_pitch_slide
+ApplyPitchSlide_continue_pitch_slide
+ApplyPitchSlide
+HandleNoise

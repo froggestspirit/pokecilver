@@ -42,9 +42,9 @@ enum {
 };
 
 // PrintNum arguments (see engine/math/print_num.asm)
-#define PRINTNUM_MONEY 1 << PRINTNUM_MONEY_F
-#define PRINTNUM_LEFTALIGN 1 << PRINTNUM_LEFTALIGN_F
-#define PRINTNUM_LEADINGZEROS 1 << PRINTNUM_LEADINGZEROS_F
+#define PRINTNUM_MONEY (1 << PRINTNUM_MONEY_F)
+#define PRINTNUM_LEFTALIGN (1 << PRINTNUM_LEFTALIGN_F)
+#define PRINTNUM_LEADINGZEROS (1 << PRINTNUM_LEADINGZEROS_F)
 
 // character sets (see charmap.asm)
 #define FIRST_REGULAR_TEXT_CHAR 0x60

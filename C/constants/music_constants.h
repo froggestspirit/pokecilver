@@ -108,4 +108,4 @@ enum {
 
 // GetMapMusic picks music for this bit flag
 #define RADIO_TOWER_MUSIC_F 7
-#define RADIO_TOWER_MUSIC 1 << RADIO_TOWER_MUSIC_F
+#define RADIO_TOWER_MUSIC (1 << RADIO_TOWER_MUSIC_F)

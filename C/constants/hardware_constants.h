@@ -44,7 +44,7 @@
 #define TIMER    2
 #define SERIAL   3
 #define JOYPAD   4
-#define IE_DEFAULT (1 << JOYPAD) | (1 << SERIAL) | (1 << TIMER) | (1 << LCD_STAT) | (1 << VBLANK)
+#define IE_DEFAULT ((1 << JOYPAD) | (1 << SERIAL) | (1 << TIMER) | (1 << LCD_STAT) | (1 << VBLANK))
 
 // OAM attribute flags
 #define OAM_TILE_BANK 3
@@ -55,11 +55,11 @@
 
 // BG Map attribute flags
 #define PALETTE_MASK 0b111
-#define VRAM_BANK_1  1 << OAM_TILE_BANK // 0x08
-#define OBP_NUM      1 << OAM_OBP_NUM   // 0x10
-#define X_FLIP       1 << OAM_X_FLIP    // 0x20
-#define Y_FLIP       1 << OAM_Y_FLIP    // 0x40
-#define PRIORITY     1 << OAM_PRIORITY  // 0x80
+#define VRAM_BANK_1 (1 << OAM_TILE_BANK) // 0x08
+#define OBP_NUM (1 << OAM_OBP_NUM  ) // 0x10
+#define X_FLIP (1 << OAM_X_FLIP   ) // 0x20
+#define Y_FLIP (1 << OAM_Y_FLIP   ) // 0x40
+#define PRIORITY (1 << OAM_PRIORITY ) // 0x80
 
 // Hardware registers
 #define rJOYP       0xff00 // Joypad (R/W)
@@ -126,7 +126,7 @@
 #define rLCDC_WINDOW_ENABLE  5 // 0=Off, 1=On
 #define rLCDC_WINDOW_TILEMAP 6 // 0=9800-9BFF, 1=9C00-9FFF
 #define rLCDC_ENABLE         7 // 0=Off, 1=On
-#define LCDC_DEFAULT (1 << rLCDC_ENABLE) | (1 << rLCDC_WINDOW_TILEMAP) | (1 << rLCDC_WINDOW_ENABLE) | (1 << rLCDC_SPRITES_ENABLE) | (1 << rLCDC_BG_PRIORITY)
+#define LCDC_DEFAULT ((1 << rLCDC_ENABLE) | (1 << rLCDC_WINDOW_TILEMAP) | (1 << rLCDC_WINDOW_ENABLE) | (1 << rLCDC_SPRITES_ENABLE) | (1 << rLCDC_BG_PRIORITY))
 #define rSTAT       0xff41 // LCDC Status (R/W)
 #define rSCY        0xff42 // Scroll Y (R/W)
 #define rSCX        0xff43 // Scroll X (R/W)

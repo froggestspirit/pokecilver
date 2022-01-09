@@ -29,9 +29,9 @@ enum {
     CHAN7, // 6
     CHAN8, // 7
 };
-#define NUM_MUSIC_CHANS CHAN4 + 1
-#define NUM_NOISE_CHANS (CHAN8 + 1) - NUM_MUSIC_CHANS
-#define NUM_CHANNELS CHAN8 + 1
+#define NUM_MUSIC_CHANS (CHAN4 + 1)
+#define NUM_NOISE_CHANS ((CHAN8 + 1) - NUM_MUSIC_CHANS)
+#define NUM_CHANNELS (CHAN8 + 1)
 
 // channel_struct members (see macros/wram.asm)
 enum {

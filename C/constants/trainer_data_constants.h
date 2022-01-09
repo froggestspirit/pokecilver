@@ -34,12 +34,12 @@ enum {
 	CONTEXT_USE_F,      // 6
 };
 
-#define SWITCH_OFTEN 1 << SWITCH_OFTEN_F
-#define SWITCH_RARELY 1 << SWITCH_RARELY_F
-#define SWITCH_SOMETIMES 1 << SWITCH_SOMETIMES_F
-#define ALWAYS_USE 1 << ALWAYS_USE_F
-#define UNKNOWN_USE 1 << UNKNOWN_USE_F
-#define CONTEXT_USE 1 << CONTEXT_USE_F
+#define SWITCH_OFTEN (1 << SWITCH_OFTEN_F)
+#define SWITCH_RARELY (1 << SWITCH_RARELY_F)
+#define SWITCH_SOMETIMES (1 << SWITCH_SOMETIMES_F)
+#define ALWAYS_USE (1 << ALWAYS_USE_F)
+#define UNKNOWN_USE (1 << UNKNOWN_USE_F)
+#define CONTEXT_USE (1 << CONTEXT_USE_F)
 
 // TrainerTypes indexes (see engine/battle/read_trainer_party.asm)
 enum {

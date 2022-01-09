@@ -34,8 +34,8 @@ enum {
 #define CANT_TOSS_F 7
 
 #define NO_LIMITS 0
-#define CANT_SELECT 1 << CANT_SELECT_F
-#define CANT_TOSS 1 << CANT_TOSS_F
+#define CANT_SELECT (1 << CANT_SELECT_F)
+#define CANT_TOSS (1 << CANT_TOSS_F)
 
 // pack pockets
 enum {

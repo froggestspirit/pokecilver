@@ -20,14 +20,14 @@ enum {
 };
 #define BATTLEANIMOBJ_LENGTH BATTLEANIMSTRUCT_TILEID
 
-#define BATTLEANIMSTRUCT_LENGTH BATTLEANIMSTRUCT_VAR2 + 8
+#define BATTLEANIMSTRUCT_LENGTH (BATTLEANIMSTRUCT_VAR2 + 8)
 #define NUM_ANIM_OBJECTS 10 // see wActiveAnimObjects
 
 // wBattleAnimTileDict size (see wram.asm)
 #define NUM_BATTLEANIMTILEDICT_ENTRIES 5
 
 // Start tile for battle animation graphics
-#define BATTLEANIM_BASE_TILE 7 * 7  // Maximum size of a pokemon picture
+#define BATTLEANIM_BASE_TILE (7 * 7)  // Maximum size of a pokemon picture
 
 // BattleAnimObjects indexes (see data/battle_anims/objects.asm)
 enum {

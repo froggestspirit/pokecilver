@@ -80,10 +80,10 @@ enum {
 	NUM_DIRECTIONS,
 } ;
 
-#define DOWN_MASK  1 << DOWN
-#define UP_MASK    1 << UP
-#define LEFT_MASK  1 << LEFT
-#define RIGHT_MASK 1 << RIGHT
+#define DOWN_MASK (1 << DOWN)
+#define UP_MASK (1 << UP)
+#define LEFT_MASK (1 << LEFT)
+#define RIGHT_MASK (1 << RIGHT)
 
 // wFacingDirection::
 enum {
@@ -126,15 +126,15 @@ enum {
 	NUM_DAYTIMES,
 };
 
-#define MORN     1 << MORN_F
-#define DAY      1 << DAY_F
-#define NITE     1 << NITE_F
-#define DARKNESS 1 << DARKNESS_F
+#define MORN (1 << MORN_F)
+#define DAY (1 << DAY_F)
+#define NITE (1 << NITE_F)
+#define DARKNESS (1 << DARKNESS_F)
 
 #define ANYTIME MORN | DAY | NITE
 
 // wTimeOfDayPalset::
-#define DARKNESS_PALSET (DARKNESS_F << 6) | (DARKNESS_F << 4) | (DARKNESS_F << 2) | DARKNESS_F
+#define DARKNESS_PALSET ((DARKNESS_F << 6) | (DARKNESS_F << 4) | (DARKNESS_F << 2) | DARKNESS_F)
 
 // wBattleAnimFlags::
 enum {
@@ -215,7 +215,7 @@ enum {
 #define MOM_SAVING_ALL_MONEY_F  2
 #define MOM_ACTIVE_F            7
 
-#define MOM_SAVING_MONEY_MASK (1 << MOM_SAVING_SOME_MONEY_F) | (1 << MOM_SAVING_HALF_MONEY_F) | (1 << MOM_SAVING_ALL_MONEY_F)
+#define MOM_SAVING_MONEY_MASK ((1 << MOM_SAVING_SOME_MONEY_F) | (1 << MOM_SAVING_HALF_MONEY_F) | (1 << MOM_SAVING_ALL_MONEY_F))
 
 // wJohtoBadges::
 enum {

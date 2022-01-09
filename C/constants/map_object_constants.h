@@ -42,7 +42,7 @@ enum {
 #define OW_DOWN DOWN  << 2
 #define OW_UP UP    << 2
 #define OW_LEFT LEFT  << 2
-#define OW_RIGHT RIGHT << 2
+#define OW_RIGHT (RIGHT << 2)
 
 // object_struct OBJECT_FLAGS1 bit flags
 enum {
@@ -56,14 +56,14 @@ enum {
 	EMOTE_OBJECT_F,  // 7
 };
 
-#define INVISIBLE 1 << INVISIBLE_F
-#define WONT_DELETE 1 << WONT_DELETE_F
-#define FIXED_FACING 1 << FIXED_FACING_F
-#define SLIDING 1 << SLIDING_F
-#define NOCLIP_TILES 1 << NOCLIP_TILES_F
-#define MOVE_ANYWHERE 1 << MOVE_ANYWHERE_F
-#define NOCLIP_OBJS 1 << NOCLIP_OBJS_F
-#define EMOTE_OBJECT 1 << EMOTE_OBJECT_F
+#define INVISIBLE (1 << INVISIBLE_F)
+#define WONT_DELETE (1 << WONT_DELETE_F)
+#define FIXED_FACING (1 << FIXED_FACING_F)
+#define SLIDING (1 << SLIDING_F)
+#define NOCLIP_TILES (1 << NOCLIP_TILES_F)
+#define MOVE_ANYWHERE (1 << MOVE_ANYWHERE_F)
+#define NOCLIP_OBJS (1 << NOCLIP_OBJS_F)
+#define EMOTE_OBJECT (1 << EMOTE_OBJECT_F)
 
 // object_struct OBJECT_FLAGS2 bit flags
 enum {
@@ -77,10 +77,10 @@ enum {
 	OBJ_FLAGS2_7,    // 7
 };
 
-#define LOW_PRIORITY 1 << LOW_PRIORITY_F
-#define HIGH_PRIORITY 1 << HIGH_PRIORITY_F
-#define OVERHEAD 1 << OVERHEAD_F
-#define USE_OBP1 1 << USE_OBP1_F
+#define LOW_PRIORITY (1 << LOW_PRIORITY_F)
+#define HIGH_PRIORITY (1 << HIGH_PRIORITY_F)
+#define OVERHEAD (1 << OVERHEAD_F)
+#define USE_OBP1 (1 << USE_OBP1_F)
 
 // object_struct OBJECT_PALETTE bit flags
 enum {
@@ -89,16 +89,16 @@ enum {
 	BIG_OBJECT_F,       // 7
 };
 
-#define SWIMMING 1 << SWIMMING_F
-#define STRENGTH_BOULDER 1 << STRENGTH_BOULDER_F
-#define BIG_OBJECT 1 << BIG_OBJECT_F
+#define SWIMMING (1 << SWIMMING_F)
+#define STRENGTH_BOULDER (1 << STRENGTH_BOULDER_F)
+#define BIG_OBJECT (1 << BIG_OBJECT_F)
 
 // facing attribute bit flags
 #define RELATIVE_ATTRIBUTES_F 1
 #define ABSOLUTE_TILE_ID_F 2
 
-#define RELATIVE_ATTRIBUTES 1 << RELATIVE_ATTRIBUTES_F
-#define ABSOLUTE_TILE_ID 1 << ABSOLUTE_TILE_ID_F
+#define RELATIVE_ATTRIBUTES (1 << RELATIVE_ATTRIBUTES_F)
+#define ABSOLUTE_TILE_ID (1 << ABSOLUTE_TILE_ID_F)
 
 // map_object struct members (see macros/wram.asm)
 enum {

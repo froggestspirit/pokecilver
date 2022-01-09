@@ -145,7 +145,7 @@ noteover:
 
 continue_sound_update:
 	SET_PC(0xE8093U);
-	CALL(mApplyPitchSlide);  // call ApplyPitchSlide
+	CCALL(aApplyPitchSlide);  // call ApplyPitchSlide
 // ; duty cycle
 	LD_HL(CHANNEL_DUTY_CYCLE);  // ld hl, CHANNEL_DUTY_CYCLE
 	ADD_HL_BC;  // add hl, bc
@@ -161,7 +161,7 @@ continue_sound_update:
 	LD_addr_A(wCurTrackFrequency + 1);  // ld [wCurTrackFrequency + 1], a
 // ; vibrato, noise
 	CCALL(aHandleTrackVibrato);  // call HandleTrackVibrato ; handle vibrato and other things
-	CALL(mHandleNoise);  // call HandleNoise
+	CCALL(aHandleNoise);  // call HandleNoise
 // ; turn off music when playing sfx?
 	LD_A_addr(wSFXPriority);  // ld a, [wSFXPriority]
 	AND_A_A;  // and a
@@ -246,47 +246,29 @@ nextchannel:
 }
 
 int UpdateChannels(){
-	SET_PC(0xE8125U);
-	LD_HL(mUpdateChannels_ChannelFunctions);  // ld hl, .ChannelFunctions
-	LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
-	maskbits(NUM_CHANNELS, 0);  // maskbits NUM_CHANNELS
-	ADD_A_A;  // add a
-	LD_E_A;  // ld e, a
-	LD_D(0);  // ld d, 0
-	ADD_HL_DE;  // add hl, de
-	LD_A_hli;  // ld a, [hli]
-	LD_H_hl;  // ld h, [hl]
-	LD_L_A;  // ld l, a
-	JP_hl;  // jp hl
+	static int (*ChannelFunctions[8])() = {UpdateChannels_Channel1_LowHealth,
+										UpdateChannels_Channel2,
+										UpdateChannels_Channel3,
+										UpdateChannels_Channel4,
+										UpdateChannels_Channel1,
+										UpdateChannels_Channel2,
+										UpdateChannels_Channel3,
+										UpdateChannels_Channel4};
+	return ChannelFunctions[gb_read(wCurChannel) & 7]();
+}
 
-
-ChannelFunctions:
-	SET_PC(0xE8136U);
-	//table_width ['2', 'UpdateChannels.ChannelFunctions']  // table_width 2, UpdateChannels.ChannelFunctions
-//  music channels
-	//dw ['.Channel1'];  // dw .Channel1
-	//dw ['.Channel2'];  // dw .Channel2
-	//dw ['.Channel3'];  // dw .Channel3
-	//dw ['.Channel4'];  // dw .Channel4
-	//assert_table_length ['NUM_MUSIC_CHANS']  // assert_table_length NUM_MUSIC_CHANS
-//  sfx channels
-//  identical to music channels, except .Channel5 is not disabled by the low-HP danger sound
-//  (instead, PlayDanger does not play the danger sound if sfx is playing)
-	//dw ['.Channel5'];  // dw .Channel5
-	//dw ['.Channel6'];  // dw .Channel6
-	//dw ['.Channel7'];  // dw .Channel7
-	//dw ['.Channel8'];  // dw .Channel8
-	//assert_table_length ['NUM_CHANNELS']  // assert_table_length NUM_CHANNELS
-
-
-Channel1:
+int UpdateChannels_Channel1_LowHealth(){
 	SET_PC(0xE8146U);
+	return -1;
 	LD_A_addr(wLowHealthAlarm);  // ld a, [wLowHealthAlarm]
 	BIT_A(DANGER_ON_F);  // bit DANGER_ON_F, a
 	RET_NZ ;  // ret nz
+	return UpdateChannels_Channel1();
+}
 
-Channel5:
+int UpdateChannels_Channel1(){
 	SET_PC(0xE814CU);
+	return -1;
 	LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
 	ADD_HL_BC;  // add hl, bc
 	BIT_hl(NOTE_PITCH_SWEEP);  // bit NOTE_PITCH_SWEEP, [hl]
@@ -365,13 +347,11 @@ ch1_noise_sampling:
 	OR_A(0x80);  // or $80
 	LDH_addr_A(rNR14);  // ldh [rNR14], a
 	RET;  // ret
+}
 
-
-Channel2:
+int UpdateChannels_Channel2(){
 	SET_PC(0xE81BCU);
-
-Channel6:
-	SET_PC(0xE81BCU);
+	return -1;
 	LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
 	ADD_HL_BC;  // add hl, bc
 	BIT_hl(NOTE_REST);  // bit NOTE_REST, [hl] ; rest
@@ -438,13 +418,11 @@ ch2_noise_sampling:
 	OR_A(0x80);  // or $80 ; initial (restart)
 	LDH_addr_A(rNR24);  // ldh [rNR24], a
 	RET;  // ret
+}
 
-
-Channel3:
+int UpdateChannels_Channel3(){
 	SET_PC(0xE821EU);
-
-Channel7:
-	SET_PC(0xE821EU);
+	return -1;
 	LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
 	ADD_HL_BC;  // add hl, bc
 	BIT_hl(NOTE_REST);  // bit NOTE_REST, [hl]
@@ -554,13 +532,11 @@ load_wave_pattern:
 	SLA_A;  // sla a
 	LDH_addr_A(rNR32);  // ldh [rNR32], a
 	RET;  // ret
+}
 
-
-Channel4:
+int UpdateChannels_Channel4(){
 	SET_PC(0xE82B4U);
-
-Channel8:
-	SET_PC(0xE82B4U);
+	return -1;
 	LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
 	ADD_HL_BC;  // add hl, bc
 	BIT_hl(NOTE_REST);  // bit NOTE_REST, [hl]
@@ -599,7 +575,6 @@ ch4_noise_sampling:
 	LD_A(0x80);  // ld a, $80
 	LDH_addr_A(rNR44);  // ldh [rNR44], a
 	RET;  // ret
-
 }
 
 int v_CheckSFX(){
@@ -1166,15 +1141,14 @@ int ApplyPitchSlide(){
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
 	CP_A_D;  // cp d
-	JP_C (mApplyPitchSlide_finished_pitch_slide);  // jp c, .finished_pitch_slide
-	IF_NZ goto continue_pitch_slide;  // jr nz, .continue_pitch_slide
+	IF_C return ApplyPitchSlide_finished_pitch_slide();  // jp c, .finished_pitch_slide
+	IF_NZ return ApplyPitchSlide_continue_pitch_slide();  // jr nz, .continue_pitch_slide
 	LD_HL(CHANNEL_PITCH_SLIDE_TARGET);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET
 	ADD_HL_BC;  // add hl, bc
 	LD_A_hl;  // ld a, [hl]
 	CP_A_E;  // cp e
-	JP_C (mApplyPitchSlide_finished_pitch_slide);  // jp c, .finished_pitch_slide
-	goto continue_pitch_slide;  // jr .continue_pitch_slide
-
+	IF_C return ApplyPitchSlide_finished_pitch_slide();  // jp c, .finished_pitch_slide
+	return ApplyPitchSlide_continue_pitch_slide();  // jr .continue_pitch_slide
 
 decreasing:
 	SET_PC(0xE8542U);
@@ -1209,15 +1183,17 @@ decreasing:
 	ADD_HL_BC;  // add hl, bc
 	LD_A_D;  // ld a, d
 	CP_A_hl;  // cp [hl]
-	IF_C goto finished_pitch_slide;  // jr c, .finished_pitch_slide
-	IF_NZ goto continue_pitch_slide;  // jr nz, .continue_pitch_slide
+	IF_C return ApplyPitchSlide_finished_pitch_slide();  // jr c, .finished_pitch_slide
+	IF_NZ return ApplyPitchSlide_continue_pitch_slide();  // jr nz, .continue_pitch_slide
 	LD_HL(CHANNEL_PITCH_SLIDE_TARGET);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET
 	ADD_HL_BC;  // add hl, bc
 	LD_A_E;  // ld a, e
 	CP_A_hl;  // cp [hl]
-	IF_NC goto continue_pitch_slide;  // jr nc, .continue_pitch_slide
+	IF_NC return ApplyPitchSlide_continue_pitch_slide();  // jr nc, .continue_pitch_slide
+	return ApplyPitchSlide_finished_pitch_slide();
+}
 
-finished_pitch_slide:
+int ApplyPitchSlide_finished_pitch_slide(){
 	SET_PC(0xE856FU);
 	LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
 	ADD_HL_BC;  // add hl, bc
@@ -1226,9 +1202,9 @@ finished_pitch_slide:
 	ADD_HL_BC;  // add hl, bc
 	RES_hl(SOUND_PITCH_SLIDE_DIR);  // res SOUND_PITCH_SLIDE_DIR, [hl]
 	RET;  // ret
+}
 
-
-continue_pitch_slide:
+int ApplyPitchSlide_continue_pitch_slide(){
 	SET_PC(0xE857CU);
 	LD_HL(CHANNEL_FREQUENCY);  // ld hl, CHANNEL_FREQUENCY
 	ADD_HL_BC;  // add hl, bc
@@ -1240,7 +1216,6 @@ continue_pitch_slide:
 	SET_hl(NOTE_FREQ_OVERRIDE);  // set NOTE_FREQ_OVERRIDE, [hl]
 	SET_hl(NOTE_DUTY_OVERRIDE);  // set NOTE_DUTY_OVERRIDE, [hl]
 	RET;  // ret
-
 }
 
 int HandleNoise(){
@@ -1267,7 +1242,7 @@ next:
 	SET_PC(0xE85A4U);
 	LD_A_addr(wNoiseSampleDelay);  // ld a, [wNoiseSampleDelay]
 	AND_A_A;  // and a
-	JR_Z (mReadNoiseSample);  // jr z, ReadNoiseSample
+	IF_Z return ReadNoiseSample();  // jr z, ReadNoiseSample
 	DEC_A;  // dec a
 	LD_addr_A(wNoiseSampleDelay);  // ld [wNoiseSampleDelay], a
 	RET;  // ret
@@ -1361,7 +1336,7 @@ readnote:
 	LD_A_addr(wCurMusicByte);  // ld a, [wCurMusicByte]
 	AND_A(0xf);  // and $f
 	//return 0x45F1 + 24;
-	CALL(mSetNoteDuration);  // call SetNoteDuration
+	CCALL(aSetNoteDuration);  // call SetNoteDuration
 // ; get note pitch (top nybble)
 	LD_A_addr(wCurMusicByte);  // ld a, [wCurMusicByte]
 	SWAP_A;  // swap a
@@ -1482,7 +1457,7 @@ int ParseSFXOrCry(){
 	SET_hl(NOTE_NOISE_SAMPLING);  // set NOTE_NOISE_SAMPLING, [hl] ; noise sample
 // ; update note duration
 	LD_A_addr(wCurMusicByte);  // ld a, [wCurMusicByte]
-	CALL(mSetNoteDuration);  // call SetNoteDuration ; top nybble doesnt matter?
+	CCALL(aSetNoteDuration);  // call SetNoteDuration ; top nybble doesnt matter?
 // ; update volume envelope from next param
 	CCALL(aGetMusicByte);  // call GetMusicByte
 	LD_HL(CHANNEL_VOLUME_ENVELOPE);  // ld hl, CHANNEL_VOLUME_ENVELOPE
@@ -1519,7 +1494,7 @@ int GetNoiseSample(){
 // ; update note duration
 	LD_A_addr(wCurMusicByte);  // ld a, [wCurMusicByte]
 	AND_A(0xf);  // and $f
-	CALL(mSetNoteDuration);  // call SetNoteDuration
+	CCALL(aSetNoteDuration);  // call SetNoteDuration
 // ; check current channel
 	LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
 	BIT_A(NOISE_CHAN_F);  // bit NOISE_CHAN_F, a
@@ -1571,7 +1546,6 @@ next:
 }
 
 int ParseMusicCommand(){
-	SET_PC(0xE870FU);
 	static int (*MusicCommands[48])() = {Music_Octave,
 										Music_Octave,
 										Music_Octave,
@@ -2514,7 +2488,7 @@ int SetNoteDuration(){
 	LD_A_hl;  // ld a, [hl]
 // ; multiply NoteLength by delay units
 	LD_L(0);  // ld l, 0 ; just multiply
-	CALL(mSetNoteDuration_Multiply);  // call .Multiply
+	CCALL(aSetNoteDuration_Multiply);  // call .Multiply
 	LD_A_L;  // ld a, l ; low
 // ; store Tempo in de
 	LD_HL(CHANNEL_TEMPO);  // ld hl, CHANNEL_TEMPO
@@ -2527,7 +2501,7 @@ int SetNoteDuration(){
 	ADD_HL_BC;  // add hl, bc
 	LD_L_hl;  // ld l, [hl]
 // ; multiply Tempo by last result (NoteLength * LOW(delay))
-	CALL(mSetNoteDuration_Multiply);  // call .Multiply
+	CCALL(aSetNoteDuration_Multiply);  // call .Multiply
 // ; copy result to de
 	LD_E_L;  // ld e, l
 	LD_D_H;  // ld d, h
@@ -2540,9 +2514,9 @@ int SetNoteDuration(){
 	ADD_HL_BC;  // add hl, bc
 	LD_hl_D;  // ld [hl], d
 	RET;  // ret
+}
 
-
-Multiply:
+int SetNoteDuration_Multiply(){
 	SET_PC(0xE8AB8U);
 //  multiplies a and de
 //  adds the result to l
@@ -3254,7 +3228,7 @@ int PlayTrainerEncounterMusic(){
 // ; play nothing for one frame
 	PUSH_DE;  // push de
 	LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
-	CALL(mPlayMusic);  // call PlayMusic
+	CCALL(aPlayMusic);  // call PlayMusic
 	CALL(mDelayFrame);  // call DelayFrame
 // ; play new song
 	CCALL(aMaxVolume);  // call MaxVolume
@@ -3263,7 +3237,7 @@ int PlayTrainerEncounterMusic(){
 	LD_HL(mTrainerEncounterMusic);  // ld hl, TrainerEncounterMusic
 	ADD_HL_DE;  // add hl, de
 	LD_E_hl;  // ld e, [hl]
-	CALL(mPlayMusic);  // call PlayMusic
+	CCALL(aPlayMusic);  // call PlayMusic
 	RET;  // ret
 
 }
