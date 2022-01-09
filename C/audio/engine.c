@@ -2270,8 +2270,8 @@ int Music_StereoPanning(){
 	BIT_A(STEREO);  // bit STEREO, a
 	JR_NZ (mMusic_ForceStereoPanning);  // jr nz, Music_ForceStereoPanning
 // ; skip param
-	JP(mGetMusicByte);  // call GetMusicByte
-	//RET;  // ret
+	CALL(mGetMusicByte);  // call GetMusicByte
+	RET;  // ret
 }
 
 int Music_ForceStereoPanning(){
