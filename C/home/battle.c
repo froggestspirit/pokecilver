@@ -19,7 +19,7 @@ int GetPartyLocation(){
 	SET_PC(0x3B46U);
 //  Add the length of a PartyMon struct to hl a times.
 	LD_BC(PARTYMON_STRUCT_LENGTH);  // ld bc, PARTYMON_STRUCT_LENGTH
-	JP(mAddNTimes);  // jp AddNTimes
+	return AddNTimes();  // jp AddNTimes
 
 }
 
@@ -169,7 +169,7 @@ int UpdateBattleMon(){
 	LD_E_L;  // ld e, l
 	LD_HL(wBattleMonLevel);  // ld hl, wBattleMonLevel
 	LD_BC(wBattleMonMaxHP - wBattleMonLevel);  // ld bc, wBattleMonMaxHP - wBattleMonLevel
-	JP(mCopyBytes);  // jp CopyBytes
+	return CopyBytes();  // jp CopyBytes
 
 }
 
@@ -190,7 +190,7 @@ int UpdateEnemyMonInParty(){
 	LD_E_L;  // ld e, l
 	LD_HL(wEnemyMonLevel);  // ld hl, wEnemyMonLevel
 	LD_BC(wEnemyMonMaxHP - wEnemyMonLevel);  // ld bc, wEnemyMonMaxHP - wEnemyMonLevel
-	JP(mCopyBytes);  // jp CopyBytes
+	return CopyBytes();  // jp CopyBytes
 
 }
 

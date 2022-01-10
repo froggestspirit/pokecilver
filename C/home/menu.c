@@ -794,7 +794,7 @@ int GetScrollingMenuJoypad(){
 	CALL(mScrollingMenuJoypad);  // call ScrollingMenuJoypad
 	LD_HL(wMenuJoypadFilter);  // ld hl, wMenuJoypadFilter
 	AND_A_hl;  // and [hl]
-	JR(mContinueGettingMenuJoypad);  // jr ContinueGettingMenuJoypad
+	return ContinueGettingMenuJoypad();  // jr ContinueGettingMenuJoypad
 
 }
 

@@ -1079,7 +1079,7 @@ int CallMapScript(){
 	AND_A_A;  // and a
 	RET_NZ ;  // ret nz
 	CCALL(aGetMapScriptsBank);  // call GetMapScriptsBank
-	JR(mCallScript);  // jr CallScript
+	return CallScript();  // jr CallScript
 
 }
 
@@ -1661,7 +1661,7 @@ vertical:
 	SET_PC(0x29BDU);
 	LD_B(SCREEN_META_WIDTH);  // ld b, SCREEN_META_WIDTH
 	LD_C(SCREEN_META_HEIGHT - 1);  // ld c, SCREEN_META_HEIGHT - 1
-	JR(mSaveScreen_LoadConnection);  // jr SaveScreen_LoadConnection
+	return SaveScreen_LoadConnection();  // jr SaveScreen_LoadConnection
 
 
 left:
@@ -1679,7 +1679,7 @@ horizontal:
 	SET_PC(0x29CCU);
 	LD_B(SCREEN_META_WIDTH - 1);  // ld b, SCREEN_META_WIDTH - 1
 	LD_C(SCREEN_META_HEIGHT);  // ld c, SCREEN_META_HEIGHT
-	JR(mSaveScreen_LoadConnection);  // jr SaveScreen_LoadConnection
+	return SaveScreen_LoadConnection();  // jr SaveScreen_LoadConnection
 
 }
 
@@ -2299,7 +2299,7 @@ int ReloadTilesetAndPalettes(){
 	CALL(mOverworldTextModeSwitch);  // call OverworldTextModeSwitch
 	CALL(mLoadTilesetGFX);  // call LoadTilesetGFX
 	LD_A(8);  // ld a, 8
-	CALL(mSkipMusic);  // call SkipMusic
+	CCALL(aSkipMusic);  // call SkipMusic
 	POP_AF;  // pop af
 	RST(mBankswitch);  // rst Bankswitch
 

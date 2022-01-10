@@ -760,6 +760,7 @@ void init_function_pointers(){
 	REDIRECT(MusicOff);
 	REDIRECT(v_UpdateSound);
 	REDIRECT(UpdateChannels);
+	REDIRECT(UpdateChannels_load_wave_pattern);
 	REDIRECT(v_CheckSFX);
 	REDIRECT(PlayDanger);
 	REDIRECT(DangerSoundHigh);

@@ -20,7 +20,7 @@ int IsHMMove(){
 	SET_PC(0x3728U);
 	LD_HL(mIsHMMove_HMMoves);  // ld hl, .HMMoves
 	LD_DE(1);  // ld de, 1
-	JP(mIsInArray);  // jp IsInArray
+	return IsInArray();  // jp IsInArray
 
 
 HMMoves:

@@ -6,7 +6,7 @@ int LoadTilemapToTempTilemap(){
 	hlcoord(0, 0, wTilemap);  // hlcoord 0, 0
 	decoord(0, 0, wTempTilemap);  // decoord 0, 0, wTempTilemap
 	LD_BC(wTilemapEnd - wTilemap);  // ld bc, wTilemapEnd - wTilemap
-	JP(mCopyBytes);  // jp CopyBytes
+	return CopyBytes();  // jp CopyBytes
 
 }
 
@@ -27,6 +27,6 @@ int LoadTempTilemapToTilemap(){
 	hlcoord(0, 0, wTempTilemap);  // hlcoord 0, 0, wTempTilemap
 	decoord(0, 0, wTilemap);  // decoord 0, 0
 	LD_BC(wTilemapEnd - wTilemap);  // ld bc, wTilemapEnd - wTilemap
-	JP(mCopyBytes);  // jp CopyBytes
+	return CopyBytes();  // jp CopyBytes
 
 }

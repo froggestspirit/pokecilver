@@ -4,7 +4,7 @@ int InitString(){
 	SET_PC(0x2FB4U);
 //  Init a string of length c.
 	PUSH_HL;  // push hl
-	JR(mv_InitString);  // jr _InitString
+	return v_InitString();  // jr _InitString
 
 }
 

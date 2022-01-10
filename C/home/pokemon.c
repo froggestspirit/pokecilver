@@ -121,7 +121,7 @@ int PlayStereoCry(){
 	LD_A(1);  // ld a, 1
 	LD_addr_A(wStereoPanningMask);  // ld [wStereoPanningMask], a
 	POP_AF;  // pop af
-	JR(mv_PlayMonCry);  // jr _PlayMonCry
+	return v_PlayMonCry();  // jr _PlayMonCry
 
 }
 

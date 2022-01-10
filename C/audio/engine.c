@@ -141,7 +141,7 @@ noteover:
 	ADD_HL_BC;  // add hl, bc
 	RES_hl(SOUND_PITCH_SLIDE);  // res SOUND_PITCH_SLIDE, [hl]
 // ; get next note
-	CALL(mParseMusic);  // call ParseMusic
+	CCALL(aParseMusic);  // call ParseMusic
 
 continue_sound_update:
 	SET_PC(0xE8093U);
@@ -204,7 +204,7 @@ next:
 
 sfx_channel:
 	SET_PC(0xE80EEU);
-	CALL(mUpdateChannels);  // call UpdateChannels
+	CCALL(aUpdateChannels);  // call UpdateChannels
 	LD_HL(CHANNEL_TRACKS);  // ld hl, CHANNEL_TRACKS
 	ADD_HL_BC;  // add hl, bc
 	LD_A_addr(wSoundOutput);  // ld a, [wSoundOutput]
@@ -259,7 +259,6 @@ int UpdateChannels(){
 
 int UpdateChannels_Channel1_LowHealth(){
 	SET_PC(0xE8146U);
-	return -1;
 	LD_A_addr(wLowHealthAlarm);  // ld a, [wLowHealthAlarm]
 	BIT_A(DANGER_ON_F);  // bit DANGER_ON_F, a
 	RET_NZ ;  // ret nz
@@ -268,7 +267,6 @@ int UpdateChannels_Channel1_LowHealth(){
 
 int UpdateChannels_Channel1(){
 	SET_PC(0xE814CU);
-	return -1;
 	LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
 	ADD_HL_BC;  // add hl, bc
 	BIT_hl(NOTE_PITCH_SWEEP);  // bit NOTE_PITCH_SWEEP, [hl]
@@ -351,7 +349,6 @@ ch1_noise_sampling:
 
 int UpdateChannels_Channel2(){
 	SET_PC(0xE81BCU);
-	return -1;
 	LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
 	ADD_HL_BC;  // add hl, bc
 	BIT_hl(NOTE_REST);  // bit NOTE_REST, [hl] ; rest
@@ -422,7 +419,6 @@ ch2_noise_sampling:
 
 int UpdateChannels_Channel3(){
 	SET_PC(0xE821EU);
-	return -1;
 	LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
 	ADD_HL_BC;  // add hl, bc
 	BIT_hl(NOTE_REST);  // bit NOTE_REST, [hl]
@@ -467,7 +463,7 @@ ch3_noise_sampling:
 	LDH_addr_A(rNR31);  // ldh [rNR31], a
 	XOR_A_A;  // xor a
 	LDH_addr_A(rNR30);  // ldh [rNR30], a
-	CALL(mUpdateChannels_load_wave_pattern);  // call .load_wave_pattern
+	CCALL(aUpdateChannels_load_wave_pattern);  // call .load_wave_pattern
 	LD_A(0x80);  // ld a, $80
 	LDH_addr_A(rNR30);  // ldh [rNR30], a
 	LD_A_addr(wCurTrackFrequency);  // ld a, [wCurTrackFrequency]
@@ -476,9 +472,9 @@ ch3_noise_sampling:
 	OR_A(0x80);  // or $80
 	LDH_addr_A(rNR34);  // ldh [rNR34], a
 	RET;  // ret
+}
 
-
-load_wave_pattern:
+int UpdateChannels_load_wave_pattern(){
 	SET_PC(0xE8268U);
 	PUSH_HL;  // push hl
 	LD_A_addr(wCurTrackVolumeEnvelope);  // ld a, [wCurTrackVolumeEnvelope]
@@ -536,7 +532,6 @@ load_wave_pattern:
 
 int UpdateChannels_Channel4(){
 	SET_PC(0xE82B4U);
-	return -1;
 	LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
 	ADD_HL_BC;  // add hl, bc
 	BIT_hl(NOTE_REST);  // bit NOTE_REST, [hl]
@@ -1297,7 +1292,6 @@ int ReadNoiseSample(){
 	SET_hl(NOTE_NOISE_SAMPLING);  // set NOTE_NOISE_SAMPLING, [hl]
 	RET;  // ret
 
-
 quit:
 	SET_PC(0xE85E0U);
 	RET;  // ret
@@ -1315,9 +1309,8 @@ int ParseMusic(){
 
 readcommand:
 	SET_PC(0xE85ECU);
-	CALL(mParseMusicCommand);  // call ParseMusicCommand
-	JR(mParseMusic);  // jr ParseMusic ; start over
-
+	CCALL(aParseMusicCommand);  // call ParseMusicCommand
+	return ParseMusic();  // jr ParseMusic ; start over
 
 readnote:
 	SET_PC(0xE85F1U);
@@ -1326,11 +1319,11 @@ readnote:
 	LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
 	ADD_HL_BC;  // add hl, bc
 	BIT_hl(SOUND_SFX);  // bit SOUND_SFX, [hl]
-	JP_NZ (mParseSFXOrCry);  // jp nz, ParseSFXOrCry
+	IF_NZ return ParseSFXOrCry();  // jp nz, ParseSFXOrCry
 	BIT_hl(SOUND_CRY);  // bit SOUND_CRY, [hl]
-	JP_NZ (mParseSFXOrCry);  // jp nz, ParseSFXOrCry
+	IF_NZ return ParseSFXOrCry();  // jp nz, ParseSFXOrCry
 	BIT_hl(SOUND_NOISE);  // bit SOUND_NOISE, [hl]
-	JP_NZ (mGetNoiseSample);  // jp nz, GetNoiseSample
+	IF_NZ return GetNoiseSample();  // jp nz, GetNoiseSample
 //  normal note
 // ; set note duration (bottom nybble)
 	LD_A_addr(wCurMusicByte);  // ld a, [wCurMusicByte]
@@ -1363,8 +1356,7 @@ readnote:
 	LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
 	ADD_HL_BC;  // add hl, bc
 	SET_hl(NOTE_NOISE_SAMPLING);  // set NOTE_NOISE_SAMPLING, [hl]
-	JP(mLoadNote);  // jp LoadNote
-
+	return LoadNote();  // jp LoadNote
 
 rest:
 	SET_PC(0xE8633U);
@@ -1373,7 +1365,6 @@ rest:
 	ADD_HL_BC;  // add hl, bc
 	SET_hl(NOTE_REST);  // set NOTE_REST, [hl] ; Rest
 	RET;  // ret
-
 
 sound_ret:
 	SET_PC(0xE863AU);
@@ -1396,7 +1387,7 @@ chan_5to8:
 	LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
 	ADD_HL_BC;  // add hl, bc
 	BIT_hl(SOUND_CRY);  // bit SOUND_CRY, [hl]
-	CALL_NZ (mRestoreVolume);  // call nz, RestoreVolume
+	CCALL_NZ(aRestoreVolume);  // call nz, RestoreVolume
 // ; end music
 	LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
 	CP_A(CHAN5);  // cp CHAN5
@@ -1446,7 +1437,6 @@ int RestoreVolume(){
 	LD_addr_A(wLastVolume);  // ld [wLastVolume], a
 	LD_addr_A(wSFXPriority);  // ld [wSFXPriority], a
 	RET;  // ret
-
 }
 
 int ParseSFXOrCry(){
@@ -2243,7 +2233,7 @@ int Music_StereoPanning(){
 // ; stereo on?
 	LD_A_addr(wOptions);  // ld a, [wOptions]
 	BIT_A(STEREO);  // bit STEREO, a
-	JR_NZ (mMusic_ForceStereoPanning);  // jr nz, Music_ForceStereoPanning
+	IF_NZ return Music_ForceStereoPanning();  // jr nz, Music_ForceStereoPanning
 // ; skip param
 	CCALL(aGetMusicByte);  // call GetMusicByte
 	RET;  // ret
@@ -2921,7 +2911,7 @@ int PlayStereoSFX(){
 //  standard procedure if stereo's off
 	LD_A_addr(wOptions);  // ld a, [wOptions]
 	BIT_A(STEREO);  // bit STEREO, a
-	JP_Z (mv_PlaySFX);  // jp z, _PlaySFX
+	IF_Z return v_PlaySFX();  // jp z, _PlaySFX
 
 //  else, let's go ahead with this
 	LD_HL(wMusicID);  // ld hl, wMusicID

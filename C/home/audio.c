@@ -22,7 +22,7 @@ int UpdateSound(){
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
 
-	CALL(mv_UpdateSound);  // call _UpdateSound
+	CCALL(av_UpdateSound);  // call _UpdateSound
 
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
@@ -313,7 +313,7 @@ loop:
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
 	DEC_A;  // dec a
-	CALL(mUpdateSound);  // call UpdateSound
+	CCALL(aUpdateSound);  // call UpdateSound
 	goto loop;  // jr .loop
 
 }

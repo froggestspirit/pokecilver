@@ -62,7 +62,7 @@ int Textbox(){
 	CALL(mTextboxBorder);  // call TextboxBorder
 	POP_HL;  // pop hl
 	POP_BC;  // pop bc
-	JR(mTextboxPalette);  // jr TextboxPalette
+	return TextboxPalette();  // jr TextboxPalette
 
 }
 
@@ -699,7 +699,7 @@ communication:
 
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
 	OR_A_A;  // or a
-	CALL_Z (mUnloadBlinkingCursor);  // call z, UnloadBlinkingCursor
+	CCALL_Z(aUnloadBlinkingCursor);  // call z, UnloadBlinkingCursor
 // ; fallthrough
 
 	return v_ContTextNoPause();

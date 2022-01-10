@@ -127,9 +127,9 @@ ByteFill:
 	LDH_addr_A(hSerialConnectionStatus);  // ldh [hSerialConnectionStatus], a
 
 	LD_H(HIGH(vBGMap0));  // ld h, HIGH(vBGMap0)
-	CALL(mBlankBGMap);  // call BlankBGMap
+	CCALL(aBlankBGMap);  // call BlankBGMap
 	LD_H(HIGH(vBGMap1));  // ld h, HIGH(vBGMap1)
-	CALL(mBlankBGMap);  // call BlankBGMap
+	CCALL(aBlankBGMap);  // call BlankBGMap
 
 	CALLFAR(aInitCGBPals);  // callfar InitCGBPals
 
@@ -185,7 +185,7 @@ int ClearVRAM(){
 int BlankBGMap(){
 	SET_PC(0x0699U);
 	LD_A(0x7f);  // ld a, " "
-	JR(mFillBGMap);  // jr FillBGMap
+	return FillBGMap();  // jr FillBGMap
 
 }
 
