@@ -22,7 +22,7 @@ int UpdateSound(){
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
 
-	CCALL(av_UpdateSound);  // call _UpdateSound
+	v_UpdateSound();  // call _UpdateSound
 
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
@@ -71,7 +71,7 @@ int PlayMusic(){
 	AND_A_A;  // and a
 	IF_Z goto nomusic;  // jr z, .nomusic
 
-	CCALL(av_PlayMusic);  // call _PlayMusic
+	v_PlayMusic();  // call _PlayMusic
 	goto end;  // jr .end
 
 
@@ -110,10 +110,10 @@ int PlayMusic2(){
 
 	PUSH_DE;  // push de
 	LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
-	CCALL(av_PlayMusic);  // call _PlayMusic
+	v_PlayMusic();  // call _PlayMusic
 	CALL(mDelayFrame);  // call DelayFrame
 	POP_DE;  // pop de
-	CCALL(av_PlayMusic);  // call _PlayMusic
+	v_PlayMusic();  // call _PlayMusic
 
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
@@ -167,7 +167,7 @@ int PlayCry(){
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
 
-	CCALL(av_PlayCry);  // call _PlayCry
+	v_PlayCry();  // call _PlayCry
 
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
@@ -211,7 +211,7 @@ play:
 
 	LD_A_E;  // ld a, e
 	LD_addr_A(wCurSFX);  // ld [wCurSFX], a
-	CCALL(av_PlaySFX);  // call _PlaySFX
+	v_PlaySFX();  // call _PlaySFX
 
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
