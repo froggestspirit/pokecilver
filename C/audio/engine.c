@@ -692,7 +692,7 @@ novolume:
 	LD_A_addr(wMusicFadeID + 1);  // ld a, [wMusicFadeID + 1]
 	LD_D_A;  // ld d, a
 // ; load new song
-	CCALL(av_PlayMusic);  // call _PlayMusic
+	v_PlayMusic();  // call _PlayMusic
 
 quit:
 // ; cleanup
@@ -717,7 +717,7 @@ bicycle:
 	LD_A_addr(wMusicFadeID + 1);  // ld a, [wMusicFadeID + 1]
 	LD_D_A;  // ld d, a
 // ; load new song
-	CCALL(av_PlayMusic);  // call _PlayMusic
+	v_PlayMusic();  // call _PlayMusic
 	POP_BC;  // pop bc
 // ; fade in
 	LD_HL(wMusicFade);  // ld hl, wMusicFade
@@ -2182,7 +2182,7 @@ int Music_NewSong(){
 	GetMusicByte();
 	LD_D_A;  // ld d, a
 	PUSH_BC;  // push bc
-	CCALL(av_PlayMusic);  // call _PlayMusic
+	v_PlayMusic();  // call _PlayMusic
 	POP_BC;  // pop bc
 	return;  // ret
 }
