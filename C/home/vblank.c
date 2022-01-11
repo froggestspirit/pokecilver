@@ -138,10 +138,10 @@ ok2:
 	CALL(mUpdateJoypad);  // call UpdateJoypad
 
 	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();
 	v_UpdateSound();  // call _UpdateSound
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();
 
 	LDH_A_addr(hSeconds);  // ldh a, [hSeconds]
 	LDH_addr_A(hUnusedBackup);  // ldh [hUnusedBackup], a
@@ -207,10 +207,10 @@ skip_lcd:
 
 	NOP;  // ei
 	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();
 	v_UpdateSound();  // call _UpdateSound
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();
 // ; enable ints
 	LD_A(IE_DEFAULT);  // ld a, IE_DEFAULT
 	LDH_addr_A(rIE);  // ldh [rIE], a
@@ -264,11 +264,11 @@ int VBlank4(){
 	CCALL(aAskSerial);  // call AskSerial
 
 	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();
 	v_UpdateSound();  // call _UpdateSound
 
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();
 	RET;  // ret
 
 }
@@ -311,10 +311,10 @@ done:
 
 	NOP;  // ei
 	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();
 	v_UpdateSound();  // call _UpdateSound
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();
 	NOP;  // di
 
 	XOR_A_A;  // xor a
@@ -334,11 +334,11 @@ int VBlank2(){
 	LD_addr_A(wROMBankBackup);  // ld [wROMBankBackup], a
 
 	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();
 	v_UpdateSound();  // call _UpdateSound
 
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();
 
 	XOR_A_A;  // xor a
 	LD_addr_A(wVBlankOccurred);  // ld [wVBlankOccurred], a
@@ -417,10 +417,10 @@ okay:
 
 	NOP;  // ei
 	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();
 	v_UpdateSound();  // call _UpdateSound
 	LD_A_addr(wROMBankBackup);  // ld a, [wROMBankBackup]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();
 	NOP;  // di
 
 // ; discard requested ints

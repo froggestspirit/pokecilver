@@ -732,7 +732,6 @@ void init_function_pointers(){
 
 	// home/header.c
 	REDIRECT(FarCall);
-	REDIRECT(Bankswitch);
 	REDIRECT(JumpTable);
 	REDIRECT(IHandler);
 	REDIRECT(Start);

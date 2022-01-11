@@ -7,7 +7,7 @@ int FarCall(){
 int Bankswitch(){
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
-	RET;  // ret
+	return;  // ret
 }
 
 int JumpTable(){
