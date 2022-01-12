@@ -187,7 +187,7 @@ l_auto:
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A_addr(wAutoInputBank);  // ld a, [wAutoInputBank]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	LD_HL(wAutoInputAddress);  // ld hl, wAutoInputAddress
 	LD_A_hli;  // ld a, [hli]
@@ -203,7 +203,7 @@ l_auto:
 	DEC_A;  // dec a
 	LD_addr_A(wAutoInputLength);  // ld [wAutoInputLength], a
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	goto quit;  // jr .quit
 
 
@@ -247,7 +247,7 @@ stopauto:
 finishauto:
 	SET_PC(0x0996U);
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	LD_A_B;  // ld a, b
 	LDH_addr_A(hJoyPressed);  // ldh [hJoyPressed], a ; pressed
 	LDH_addr_A(hJoyDown);  // ldh [hJoyDown], a ; input
@@ -303,7 +303,7 @@ loop:
 	CALL(mDelayFrame);  // call DelayFrame
 
 	PUSH_BC;  // push bc
-	CALL(mJoyTextDelay);  // call JoyTextDelay
+	CCALL(aJoyTextDelay);  // call JoyTextDelay
 	POP_BC;  // pop bc
 
 //  Save data can be deleted by pressing Up + B + Select.
@@ -336,7 +336,7 @@ int JoyWaitAorB(){
 loop:
 	SET_PC(0x09E7U);
 	CALL(mDelayFrame);  // call DelayFrame
-	CALL(mGetJoypad);  // call GetJoypad
+	CCALL(aGetJoypad);  // call GetJoypad
 	LDH_A_addr(hJoyPressed);  // ldh a, [hJoyPressed]
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
 	RET_NZ ;  // ret nz
@@ -361,7 +361,7 @@ int WaitButton(){
 
 int JoyTextDelay(){
 	SET_PC(0x0A08U);
-	CALL(mGetJoypad);  // call GetJoypad
+	CCALL(aGetJoypad);  // call GetJoypad
 	LDH_A_addr(hInMenu);  // ldh a, [hInMenu]
 	AND_A_A;  // and a
 	LDH_A_addr(hJoyPressed);  // ldh a, [hJoyPressed]
@@ -422,7 +422,7 @@ loop:
 	CCALL(aBlinkCursor);  // call BlinkCursor
 	POP_HL;  // pop hl
 
-	CALL(mJoyTextDelay);  // call JoyTextDelay
+	CCALL(aJoyTextDelay);  // call JoyTextDelay
 	LDH_A_addr(hJoyLast);  // ldh a, [hJoyLast]
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
 // ;(port fix)jr z, .loop
@@ -440,7 +440,7 @@ int SimpleWaitPressAorB(){
 
 loop:
 	SET_PC(0x0A54U);
-	CALL(mJoyTextDelay);  // call JoyTextDelay
+	CCALL(aJoyTextDelay);  // call JoyTextDelay
 	LDH_A_addr(hJoyLast);  // ldh a, [hJoyLast]
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
 	IF_Z goto loop;  // jr z, .loop
@@ -485,7 +485,7 @@ wait_input:
 input_wait_loop:
 	SET_PC(0x0A88U);
 	CALL(mPromptButton_blink_cursor);  // call .blink_cursor
-	CALL(mJoyTextDelay);  // call JoyTextDelay
+	CCALL(aJoyTextDelay);  // call JoyTextDelay
 	LDH_A_addr(hJoyPressed);  // ldh a, [hJoyPressed]
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
 	IF_NZ goto received_input;  // jr nz, .received_input
@@ -571,3 +571,4 @@ place_arrow:
 	RET;  // ret
 
 }
+

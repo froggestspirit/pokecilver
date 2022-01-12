@@ -165,7 +165,7 @@ int VBlank1(){
 	LDH_addr_A(rSCX);  // ldh [rSCX], a
 	LDH_A_addr(hSCY);  // ldh a, [hSCY]
 	LDH_addr_A(rSCY);  // ldh [rSCY], a
-	CALL(mUpdatePals);  // call UpdatePals
+	CCALL(aUpdatePals);  // call UpdatePals
 	IF_C goto done;  // jr c, .done
 
 	CALL(mUpdateBGMap);  // call UpdateBGMap
@@ -224,7 +224,7 @@ int UpdatePals(){
 
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
-	JP_NZ (mUpdateCGBPals);  // jp nz, UpdateCGBPals
+	IF_NZ return UpdateCGBPals();  // jp nz, UpdateCGBPals
 
 // ; update gb pals
 	LD_A_addr(wBGP);  // ld a, [wBGP]
@@ -432,3 +432,4 @@ okay:
 	RET;  // ret
 
 }
+

@@ -345,3 +345,4 @@ int CheckRTCStatus(){
 	RET;  // ret
 
 }
+

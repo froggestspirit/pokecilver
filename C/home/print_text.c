@@ -56,7 +56,7 @@ updatedelay:
 
 checkjoypad:
 	SET_PC(0x3208U);
-	CALL(mGetJoypad);  // call GetJoypad
+	CCALL(aGetJoypad);  // call GetJoypad
 
 //  input override
 	LD_A_addr(wDisableTextAcceleration);  // ld a, [wDisableTextAcceleration]
@@ -158,3 +158,4 @@ int CallPointerAt(){
 	RET;  // ret
 
 }
+

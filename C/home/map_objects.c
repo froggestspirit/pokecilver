@@ -93,7 +93,7 @@ int DoesSpriteHaveFacings(){
 int GetPlayerStandingTile(){
 	SET_PC(0x16E5U);
 	LD_A_addr(wPlayerStandingTile);  // ld a, [wPlayerStandingTile]
-	CALL(mGetTileCollision);  // call GetTileCollision
+	CCALL(aGetTileCollision);  // call GetTileCollision
 	LD_B_A;  // ld b, a
 	RET;  // ret
 
@@ -102,7 +102,7 @@ int GetPlayerStandingTile(){
 int CheckOnWater(){
 	SET_PC(0x16EDU);
 	LD_A_addr(wPlayerStandingTile);  // ld a, [wPlayerStandingTile]
-	CALL(mGetTileCollision);  // call GetTileCollision
+	CCALL(aGetTileCollision);  // call GetTileCollision
 	SUB_A(WATER_TILE);  // sub WATER_TILE
 	RET_Z ;  // ret z
 	AND_A_A;  // and a
@@ -125,10 +125,10 @@ int GetTileCollision(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A(BANK(aTileCollisionTable));  // ld a, BANK(TileCollisionTable)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	LD_E_hl;  // ld e, [hl]
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	LD_A_E;  // ld a, e
 	AND_A(0xf);  // and $f ; lo nybble only
@@ -605,7 +605,7 @@ int GetInitialFacing(){
 	ADD_HL_DE;  // add hl, de
 	}
 	LD_A(BANK(aSpriteMovementData));  // ld a, BANK(SpriteMovementData)
-	CALL(mGetFarByte);  // call GetFarByte
+	CCALL(aGetFarByte);  // call GetFarByte
 	ADD_A_A;  // add a
 	ADD_A_A;  // add a
 	maskbits(NUM_DIRECTIONS, 2);  // maskbits NUM_DIRECTIONS, 2
@@ -693,7 +693,7 @@ int v_GetMovementByte(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A_hli;  // ld a, [hli]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 //  Load the current script byte as given by OBJECT_MOVEMENT_BYTE_INDEX, and increment OBJECT_MOVEMENT_BYTE_INDEX
 	LD_A_hli;  // ld a, [hli]
 	LD_D_hl;  // ld d, [hl]
@@ -708,7 +708,7 @@ int v_GetMovementByte(){
 	LD_A_de;  // ld a, [de]
 	LD_H_A;  // ld h, a
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	LD_A_H;  // ld a, h
 	RET;  // ret
@@ -792,3 +792,4 @@ int GetSpriteDirection(){
 	RET;  // ret
 
 }
+

@@ -350,3 +350,4 @@ int ScrollBGMapPalettes(){
 	RET;  // ret
 
 }
+

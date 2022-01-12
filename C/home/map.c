@@ -46,7 +46,7 @@ int GetCurrentMapSceneID(){
 	XOR_A_A;  // xor a
 	LD_addr_A(wCurMapSceneScriptPointer);  // ld [wCurMapSceneScriptPointer], a
 	LD_addr_A(wCurMapSceneScriptPointer + 1);  // ld [wCurMapSceneScriptPointer + 1], a
-	CALL(mGetMapSceneID);  // call GetMapSceneID
+	CCALL(aGetMapSceneID);  // call GetMapSceneID
 	RET_C ;  // ret c ; The map is not in the scene script table
 //  Load the scene script pointer from de into wCurMapSceneScriptPointer
 	LD_A_E;  // ld a, e
@@ -66,7 +66,7 @@ int GetMapSceneID(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A(BANK(aMapScenes));  // ld a, BANK(MapScenes)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	LD_HL(mMapScenes);  // ld hl, MapScenes
 
@@ -110,7 +110,7 @@ done:
 	POP_HL;  // pop hl
 	POP_BC;  // pop bc
 	LD_A_B;  // ld a, b
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	POP_BC;  // pop bc
 	RET;  // ret
@@ -324,8 +324,8 @@ int CheckUnknownMap(){
 
 int LoadMapAttributes(){
 	SET_PC(0x23E6U);
-	CALL(mCopyMapPartialAndAttributes);  // call CopyMapPartialAndAttributes
-	CALL(mSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
+	CCALL(aCopyMapPartialAndAttributes);  // call CopyMapPartialAndAttributes
+	CCALL(aSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
 	CCALL(aReadMapScripts);  // call ReadMapScripts
 	XOR_A_A;  // xor a ; do not skip object events
 	CCALL(aReadMapEvents);  // call ReadMapEvents
@@ -335,8 +335,8 @@ int LoadMapAttributes(){
 
 int LoadMapAttributes_SkipObjects(){
 	SET_PC(0x23F4U);
-	CALL(mCopyMapPartialAndAttributes);  // call CopyMapPartialAndAttributes
-	CALL(mSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
+	CCALL(aCopyMapPartialAndAttributes);  // call CopyMapPartialAndAttributes
+	CCALL(aSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
 	CCALL(aReadMapScripts);  // call ReadMapScripts
 	LD_A(TRUE);  // ld a, TRUE ; skip object events
 	CCALL(aReadMapEvents);  // call ReadMapEvents
@@ -346,9 +346,9 @@ int LoadMapAttributes_SkipObjects(){
 
 int CopyMapPartialAndAttributes(){
 	SET_PC(0x2403U);
-	CALL(mCopyMapPartial);  // call CopyMapPartial
-	CALL(mSwitchToMapAttributesBank);  // call SwitchToMapAttributesBank
-	CALL(mGetMapAttributesPointer);  // call GetMapAttributesPointer
+	CCALL(aCopyMapPartial);  // call CopyMapPartial
+	CCALL(aSwitchToMapAttributesBank);  // call SwitchToMapAttributesBank
+	CCALL(aGetMapAttributesPointer);  // call GetMapAttributesPointer
 	CCALL(aCopyMapAttributes);  // call CopyMapAttributes
 	CCALL(aGetMapConnections);  // call GetMapConnections
 	RET;  // ret
@@ -779,8 +779,8 @@ int LoadBlockData(){
 	LD_BC(wOverworldMapBlocksEnd - wOverworldMapBlocks);  // ld bc, wOverworldMapBlocksEnd - wOverworldMapBlocks
 	LD_A(0);  // ld a, 0
 	CCALL(aByteFill);  // call ByteFill
-	CALL(mChangeMap);  // call ChangeMap
-	CALL(mFillMapConnections);  // call FillMapConnections
+	CCALL(aChangeMap);  // call ChangeMap
+	CCALL(aFillMapConnections);  // call FillMapConnections
 	LD_A(MAPCALLBACK_TILES);  // ld a, MAPCALLBACK_TILES
 	CALL(mRunMapCallback);  // call RunMapCallback
 	RET;  // ret
@@ -805,7 +805,7 @@ int ChangeMap(){
 	LD_C(3);  // ld c, 3
 	ADD_HL_BC;  // add hl, bc
 	LD_A_addr(wMapBlocksBank);  // ld a, [wMapBlocksBank]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	LD_A_addr(wMapBlocksPointer);  // ld a, [wMapBlocksPointer]
 	LD_E_A;  // ld e, a
@@ -840,7 +840,7 @@ okay:
 	IF_NZ goto row;  // jr nz, .row
 
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
@@ -854,7 +854,7 @@ int FillMapConnections(){
 	LD_B_A;  // ld b, a
 	LD_A_addr(wNorthConnectedMapNumber);  // ld a, [wNorthConnectedMapNumber]
 	LD_C_A;  // ld c, a
-	CALL(mGetAnyMapBlocksBank);  // call GetAnyMapBlocksBank
+	CCALL(aGetAnyMapBlocksBank);  // call GetAnyMapBlocksBank
 
 	LD_A_addr(wNorthConnectionStripPointer);  // ld a, [wNorthConnectionStripPointer]
 	LD_L_A;  // ld l, a
@@ -879,7 +879,7 @@ South:
 	LD_B_A;  // ld b, a
 	LD_A_addr(wSouthConnectedMapNumber);  // ld a, [wSouthConnectedMapNumber]
 	LD_C_A;  // ld c, a
-	CALL(mGetAnyMapBlocksBank);  // call GetAnyMapBlocksBank
+	CCALL(aGetAnyMapBlocksBank);  // call GetAnyMapBlocksBank
 
 	LD_A_addr(wSouthConnectionStripPointer);  // ld a, [wSouthConnectionStripPointer]
 	LD_L_A;  // ld l, a
@@ -904,7 +904,7 @@ West:
 	LD_B_A;  // ld b, a
 	LD_A_addr(wWestConnectedMapNumber);  // ld a, [wWestConnectedMapNumber]
 	LD_C_A;  // ld c, a
-	CALL(mGetAnyMapBlocksBank);  // call GetAnyMapBlocksBank
+	CCALL(aGetAnyMapBlocksBank);  // call GetAnyMapBlocksBank
 
 	LD_A_addr(wWestConnectionStripPointer);  // ld a, [wWestConnectionStripPointer]
 	LD_L_A;  // ld l, a
@@ -929,7 +929,7 @@ East:
 	LD_B_A;  // ld b, a
 	LD_A_addr(wEastConnectedMapNumber);  // ld a, [wEastConnectedMapNumber]
 	LD_C_A;  // ld c, a
-	CALL(mGetAnyMapBlocksBank);  // call GetAnyMapBlocksBank
+	CCALL(aGetAnyMapBlocksBank);  // call GetAnyMapBlocksBank
 
 	LD_A_addr(wEastConnectionStripPointer);  // ld a, [wEastConnectionStripPointer]
 	LD_L_A;  // ld l, a
@@ -1089,7 +1089,7 @@ int RunMapCallback(){
 	LD_B_A;  // ld b, a
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
-	CALL(mSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
+	CCALL(aSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
 	CALL(mRunMapCallback_FindCallback);  // call .FindCallback
 	IF_NC goto done;  // jr nc, .done
 
@@ -1215,14 +1215,14 @@ int GetMovementData(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A_B;  // ld a, b
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	LD_A_C;  // ld a, c
 	CCALL(aLoadMovementDataPointer);  // call LoadMovementDataPointer
 
 	POP_HL;  // pop hl
 	LD_A_H;  // ld a, h
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
@@ -1236,7 +1236,7 @@ int GetScriptByte(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A_addr(wScriptBank);  // ld a, [wScriptBank]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	LD_HL(wScriptPos);  // ld hl, wScriptPos
 	LD_C_hl;  // ld c, [hl]
@@ -1252,7 +1252,7 @@ int GetScriptByte(){
 
 	LD_B_A;  // ld b, a
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	LD_A_B;  // ld a, b
 	POP_BC;  // pop bc
 	POP_HL;  // pop hl
@@ -1747,7 +1747,7 @@ int GetMovementPermissions(){
 	LD_D_A;  // ld d, a
 	LD_A_addr(wPlayerStandingMapY);  // ld a, [wPlayerStandingMapY]
 	LD_E_A;  // ld e, a
-	CALL(mGetCoordTile);  // call GetCoordTile
+	CCALL(aGetCoordTile);  // call GetCoordTile
 	LD_addr_A(wPlayerStandingTile);  // ld [wPlayerStandingTile], a
 	CALL(mGetMovementPermissions_CheckHiNybble);  // call .CheckHiNybble
 	RET_NZ ;  // ret nz
@@ -1788,13 +1788,13 @@ UpDown:
 
 	PUSH_DE;  // push de
 	INC_E;  // inc e
-	CALL(mGetCoordTile);  // call GetCoordTile
+	CCALL(aGetCoordTile);  // call GetCoordTile
 	LD_addr_A(wTileDown);  // ld [wTileDown], a
 	CALL(mGetMovementPermissions_Down);  // call .Down
 
 	POP_DE;  // pop de
 	DEC_E;  // dec e
-	CALL(mGetCoordTile);  // call GetCoordTile
+	CCALL(aGetCoordTile);  // call GetCoordTile
 	LD_addr_A(wTileUp);  // ld [wTileUp], a
 	CALL(mGetMovementPermissions_Up);  // call .Up
 	RET;  // ret
@@ -1809,13 +1809,13 @@ LeftRight:
 
 	PUSH_DE;  // push de
 	DEC_D;  // dec d
-	CALL(mGetCoordTile);  // call GetCoordTile
+	CCALL(aGetCoordTile);  // call GetCoordTile
 	LD_addr_A(wTileLeft);  // ld [wTileLeft], a
 	CALL(mGetMovementPermissions_Left);  // call .Left
 
 	POP_DE;  // pop de
 	INC_D;  // inc d
-	CALL(mGetCoordTile);  // call GetCoordTile
+	CCALL(aGetCoordTile);  // call GetCoordTile
 	LD_addr_A(wTileRight);  // ld [wTileRight], a
 	CALL(mGetMovementPermissions_Right);  // call .Right
 	RET;  // ret
@@ -1997,7 +1997,7 @@ nocarry:
 nocarry2:
 	SET_PC(0x2B3FU);
 	LD_A_addr(wTilesetCollisionBank);  // ld a, [wTilesetCollisionBank]
-	CALL(mGetFarByte);  // call GetFarByte
+	CCALL(aGetFarByte);  // call GetFarByte
 	RET;  // ret
 
 
@@ -2048,7 +2048,7 @@ nope:
 
 int CheckFacingBGEvent(){
 	SET_PC(0x2B6EU);
-	CALL(mGetFacingTileCoord);  // call GetFacingTileCoord
+	CCALL(aGetFacingTileCoord);  // call GetFacingTileCoord
 //  Load facing into b.
 	LD_B_A;  // ld b, a
 //  Convert the coordinates at de to within-boundaries coordinates.
@@ -2066,11 +2066,11 @@ int CheckFacingBGEvent(){
 	LD_C_A;  // ld c, a
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
-	CALL(mSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
+	CCALL(aSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
 	CCALL(aCheckIfFacingTileCoordIsBGEvent);  // call CheckIfFacingTileCoordIsBGEvent
 	POP_HL;  // pop hl
 	LD_A_H;  // ld a, h
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
@@ -2134,7 +2134,7 @@ int CheckCurrentMapCoordEvents(){
 	LD_C_A;  // ld c, a
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
-	CALL(mSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
+	CCALL(aSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
 	CALL(mCheckCurrentMapCoordEvents_CoordEventCheck);  // call .CoordEventCheck
 	POP_HL;  // pop hl
 	LD_A_H;  // ld a, h
@@ -2294,7 +2294,7 @@ int ReloadTilesetAndPalettes(){
 	LD_B_A;  // ld b, a
 	LD_A_addr(wMapNumber);  // ld a, [wMapNumber]
 	LD_C_A;  // ld c, a
-	CALL(mSwitchToAnyMapAttributesBank);  // call SwitchToAnyMapAttributesBank
+	CCALL(aSwitchToAnyMapAttributesBank);  // call SwitchToAnyMapAttributesBank
 	FARCALL(aUpdateTimeOfDayPal);  // farcall UpdateTimeOfDayPal
 	CALL(mOverworldTextModeSwitch);  // call OverworldTextModeSwitch
 	CALL(mLoadTilesetGFX);  // call LoadTilesetGFX
@@ -2375,7 +2375,7 @@ int GetAnyMapField(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A(BANK(aMapGroupPointers));  // ld a, BANK(MapGroupPointers)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	CCALL(aGetAnyMapPointer);  // call GetAnyMapPointer
 	ADD_HL_DE;  // add hl, de
@@ -2385,7 +2385,7 @@ int GetAnyMapField(){
 
 // ; bankswitch back
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
@@ -2401,8 +2401,8 @@ int SwitchToMapAttributesBank(){
 
 int SwitchToAnyMapAttributesBank(){
 	SET_PC(0x2CFBU);
-	CALL(mGetAnyMapAttributesBank);  // call GetAnyMapAttributesBank
-	RST(mBankswitch);  // rst Bankswitch
+	CCALL(aGetAnyMapAttributesBank);  // call GetAnyMapAttributesBank
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
@@ -2422,7 +2422,7 @@ int GetAnyMapAttributesBank(){
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	LD_DE(MAP_MAPATTRIBUTES_BANK);  // ld de, MAP_MAPATTRIBUTES_BANK
-	CALL(mGetAnyMapField);  // call GetAnyMapField
+	CCALL(aGetAnyMapField);  // call GetAnyMapField
 	LD_A_C;  // ld a, c
 	POP_DE;  // pop de
 	POP_HL;  // pop hl
@@ -2437,7 +2437,7 @@ int CopyMapPartial(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A(BANK(aMapGroupPointers));  // ld a, BANK(MapGroupPointers)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	CCALL(aGetMapPointer);  // call GetMapPointer
 	LD_DE(wMapPartial);  // ld de, wMapPartial
@@ -2445,7 +2445,7 @@ int CopyMapPartial(){
 	CCALL(aCopyBytes);  // call CopyBytes
 
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
@@ -2453,7 +2453,7 @@ int CopyMapPartial(){
 int SwitchToMapScriptsBank(){
 	SET_PC(0x2D29U);
 	LD_A_addr(wMapScriptsBank);  // ld a, [wMapScriptsBank]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
@@ -2474,21 +2474,21 @@ int GetAnyMapBlocksBank(){
 
 	PUSH_BC;  // push bc
 	LD_DE(MAP_MAPATTRIBUTES);  // ld de, MAP_MAPATTRIBUTES
-	CALL(mGetAnyMapField);  // call GetAnyMapField
+	CCALL(aGetAnyMapField);  // call GetAnyMapField
 	LD_L_C;  // ld l, c
 	LD_H_B;  // ld h, b
 	POP_BC;  // pop bc
 
 	PUSH_HL;  // push hl
 	LD_DE(MAP_MAPATTRIBUTES_BANK);  // ld de, MAP_MAPATTRIBUTES_BANK
-	CALL(mGetAnyMapField);  // call GetAnyMapField
+	CCALL(aGetAnyMapField);  // call GetAnyMapField
 	POP_HL;  // pop hl
 
 	LD_DE(MAP_MAPATTRIBUTES);  // ld de, MAP_MAPATTRIBUTES ; blockdata bank
 	ADD_HL_DE;  // add hl, de
 	LD_A_C;  // ld a, c
-	CALL(mGetFarByte);  // call GetFarByte
-	RST(mBankswitch);  // rst Bankswitch
+	CCALL(aGetFarByte);  // call GetFarByte
+	Bankswitch();  // rst Bankswitch
 
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
@@ -2503,7 +2503,7 @@ int GetMapAttributesPointer(){
 	PUSH_BC;  // push bc
 	PUSH_DE;  // push de
 	LD_DE(MAP_MAPATTRIBUTES);  // ld de, MAP_MAPATTRIBUTES
-	CALL(mGetMapField);  // call GetMapField
+	CCALL(aGetMapField);  // call GetMapField
 	LD_L_C;  // ld l, c
 	LD_H_B;  // ld h, b
 	POP_DE;  // pop de
@@ -2518,7 +2518,7 @@ int GetMapEnvironment(){
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
 	LD_DE(MAP_ENVIRONMENT);  // ld de, MAP_ENVIRONMENT
-	CALL(mGetMapField);  // call GetMapField
+	CCALL(aGetMapField);  // call GetMapField
 	LD_A_C;  // ld a, c
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
@@ -2540,7 +2540,7 @@ int GetAnyMapEnvironment(){
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
 	LD_DE(MAP_ENVIRONMENT);  // ld de, MAP_ENVIRONMENT
-	CALL(mGetAnyMapField);  // call GetAnyMapField
+	CCALL(aGetAnyMapField);  // call GetAnyMapField
 	LD_A_C;  // ld a, c
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
@@ -2552,7 +2552,7 @@ int GetAnyMapEnvironment(){
 int GetAnyMapTileset(){
 	SET_PC(0x2D7EU);
 	LD_DE(MAP_TILESET);  // ld de, MAP_TILESET
-	CALL(mGetAnyMapField);  // call GetAnyMapField
+	CCALL(aGetAnyMapField);  // call GetAnyMapField
 	LD_A_C;  // ld a, c
 	RET;  // ret
 
@@ -2566,7 +2566,7 @@ int GetWorldMapLocation(){
 	PUSH_BC;  // push bc
 
 	LD_DE(MAP_LOCATION);  // ld de, MAP_LOCATION
-	CALL(mGetAnyMapField);  // call GetAnyMapField
+	CCALL(aGetAnyMapField);  // call GetAnyMapField
 	LD_A_C;  // ld a, c
 
 	POP_BC;  // pop bc
@@ -2581,7 +2581,7 @@ int GetMapMusic(){
 	PUSH_HL;  // push hl
 	PUSH_BC;  // push bc
 	LD_DE(MAP_MUSIC);  // ld de, MAP_MUSIC
-	CALL(mGetMapField);  // call GetMapField
+	CCALL(aGetMapField);  // call GetMapField
 	LD_A_C;  // ld a, c
 	CP_A(MUSIC_MAHOGANY_MART);  // cp MUSIC_MAHOGANY_MART
 	IF_Z goto mahoganymart;  // jr z, .mahoganymart
@@ -2635,7 +2635,7 @@ clearedmahogany:
 
 int GetMapTimeOfDay(){
 	SET_PC(0x2DD0U);
-	CALL(mGetPhoneServiceTimeOfDayByte);  // call GetPhoneServiceTimeOfDayByte
+	CCALL(aGetPhoneServiceTimeOfDayByte);  // call GetPhoneServiceTimeOfDayByte
 	AND_A(0xf);  // and $f
 	RET;  // ret
 
@@ -2643,7 +2643,7 @@ int GetMapTimeOfDay(){
 
 int GetMapPhoneService(){
 	SET_PC(0x2DD6U);
-	CALL(mGetPhoneServiceTimeOfDayByte);  // call GetPhoneServiceTimeOfDayByte
+	CCALL(aGetPhoneServiceTimeOfDayByte);  // call GetPhoneServiceTimeOfDayByte
 	AND_A(0xf0);  // and $f0
 	SWAP_A;  // swap a
 	RET;  // ret
@@ -2656,7 +2656,7 @@ int GetPhoneServiceTimeOfDayByte(){
 	PUSH_BC;  // push bc
 
 	LD_DE(MAP_PALETTE);  // ld de, MAP_PALETTE
-	CALL(mGetMapField);  // call GetMapField
+	CCALL(aGetMapField);  // call GetMapField
 	LD_A_C;  // ld a, c
 
 	POP_BC;  // pop bc
@@ -2672,7 +2672,7 @@ int GetFishingGroup(){
 	PUSH_BC;  // push bc
 
 	LD_DE(MAP_FISHGROUP);  // ld de, MAP_FISHGROUP
-	CALL(mGetMapField);  // call GetMapField
+	CCALL(aGetMapField);  // call GetMapField
 	LD_A_C;  // ld a, c
 
 	POP_BC;  // pop bc
@@ -2696,7 +2696,7 @@ int LoadMapTileset(){
 	LD_BC(TILESET_LENGTH);  // ld bc, TILESET_LENGTH
 
 	LD_A(BANK(aTilesets));  // ld a, BANK(Tilesets)
-	CALL(mFarCopyBytes);  // call FarCopyBytes
+	CCALL(aFarCopyBytes);  // call FarCopyBytes
 
 	POP_BC;  // pop bc
 	POP_HL;  // pop hl
@@ -2713,3 +2713,4 @@ int DummyEndPredef(){
 	RET;  // ret
 
 }
+

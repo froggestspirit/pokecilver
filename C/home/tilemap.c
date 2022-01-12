@@ -396,3 +396,4 @@ int GetHPPal(){
 	RET;  // ret
 
 }
+

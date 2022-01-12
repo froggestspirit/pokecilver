@@ -5,7 +5,7 @@ int HandleStoneQueue(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 
-	CALL(mSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
+	CCALL(aSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
 	CALL(mHandleStoneQueue_WarpAction);  // call .WarpAction
 
 	POP_BC;  // pop bc
@@ -170,3 +170,4 @@ yes:
 	RET;  // ret
 
 }
+

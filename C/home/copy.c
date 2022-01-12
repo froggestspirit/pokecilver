@@ -31,7 +31,7 @@ int GetFarByte(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A_addr(wTempBank);  // ld a, [wTempBank]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 // ; get byte from new bank
 	LD_A_hl;  // ld a, [hl]
@@ -39,7 +39,7 @@ int GetFarByte(){
 
 // ; bankswitch to previous bank
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 // ; return retrieved value in a
 	LD_A_addr(wFarByte);  // ld a, [wFarByte]
@@ -55,7 +55,7 @@ int GetFarWord(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A_addr(wTempBank);  // ld a, [wTempBank]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 // ; get halfword from new bank, put it in hl
 	LD_A_hli;  // ld a, [hli]
@@ -64,7 +64,7 @@ int GetFarWord(){
 
 // ; bankswitch to previous bank and return
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
@@ -89,3 +89,4 @@ HandleLoop:
 	RET;  // ret
 
 }
+

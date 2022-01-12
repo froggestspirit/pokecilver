@@ -31,7 +31,7 @@ int GetName(){
 
 	LD_A_addr(wCurSpecies);  // ld a, [wCurSpecies]
 	LD_addr_A(wNamedObjectIndex);  // ld [wNamedObjectIndex], a
-	CALL(mGetPokemonName);  // call GetPokemonName
+	CCALL(aGetPokemonName);  // call GetPokemonName
 	LD_HL(MON_NAME_LENGTH);  // ld hl, MON_NAME_LENGTH
 	ADD_HL_DE;  // add hl, de
 	LD_E_L;  // ld e, l
@@ -50,7 +50,7 @@ NotPokeName:
 	ADD_HL_DE;  // add hl, de
 	ADD_HL_DE;  // add hl, de
 	LD_A_hli;  // ld a, [hli]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	LD_A_hli;  // ld a, [hli]
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
@@ -75,7 +75,7 @@ done:
 	POP_BC;  // pop bc
 	POP_HL;  // pop hl
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
@@ -109,7 +109,7 @@ int GetBasePokemonName(){
 //  Discards gender (Nidoran).
 
 	PUSH_HL;  // push hl
-	CALL(mGetPokemonName);  // call GetPokemonName
+	CCALL(aGetPokemonName);  // call GetPokemonName
 
 	LD_HL(wStringBuffer1);  // ld hl, wStringBuffer1
 
@@ -144,7 +144,7 @@ int GetPokemonName(){
 	PUSH_AF;  // push af
 	PUSH_HL;  // push hl
 	LD_A(BANK(aPokemonNames));  // ld a, BANK(PokemonNames)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 //  Each name is ten characters
 	LD_A_addr(wNamedObjectIndex);  // ld a, [wNamedObjectIndex]
@@ -168,7 +168,7 @@ int GetPokemonName(){
 
 	POP_HL;  // pop hl
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
@@ -187,7 +187,7 @@ int GetItemName(){
 	LD_addr_A(wCurSpecies);  // ld [wCurSpecies], a
 	LD_A(ITEM_NAME);  // ld a, ITEM_NAME
 	LD_addr_A(wNamedObjectType);  // ld [wNamedObjectType], a
-	CALL(mGetName);  // call GetName
+	CCALL(aGetName);  // call GetName
 	goto Copied;  // jr .Copied
 
 TM:
@@ -319,10 +319,11 @@ int GetMoveName(){
 	LD_A_addr(wNamedObjectIndex);  // ld a, [wNamedObjectIndex] ; move id
 	LD_addr_A(wCurSpecies);  // ld [wCurSpecies], a
 
-	CALL(mGetName);  // call GetName
+	CCALL(aGetName);  // call GetName
 	LD_DE(wStringBuffer1);  // ld de, wStringBuffer1
 
 	POP_HL;  // pop hl
 	RET;  // ret
 
 }
+

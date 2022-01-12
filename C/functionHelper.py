@@ -10,6 +10,7 @@ convertedFuncs = []
 
 
 def analyze(fileName):
+    printFile = f"{fileName}\n"
     with open(fileName, "r") as inFile:
         asmFile = inFile.read().split("\n")
     currentFunc = None
@@ -25,7 +26,8 @@ def analyze(fileName):
                 if not fallthrough:
                     for cFunc in currentFuncs:
                         if cFunc not in containedFuncs and cFunc not in convertedFuncs:
-                            print(f"\t{cFunc}")
+                            print(f"{printFile}\t{cFunc}")
+                            printFile = ""
                             containedFuncs.append(cFunc)
                     currentFunc = None
                     currentFuncs = []
@@ -52,6 +54,7 @@ def analyze(fileName):
 
 
 def update(fileName):
+    printFile = f"{fileName}\n"
     with open(fileName, "r") as inFile:
         asmFile = inFile.read().split("\n")
     currentFunc = None
@@ -86,7 +89,8 @@ def update(fileName):
                                 line = f"\t{condition}CCALL(a{routine});{comment}"
                             else:
                                 line = f"\t{condition}return {routine}();{comment}"
-                            print(f"{lineNum + 1}: {line}")
+                            print(f"{printFile}{lineNum + 1}: {line}")
+                            printFile = ""
             outFile.write(f"{line}\n")
 
 
@@ -98,17 +102,14 @@ def main():
     parser.add_argument("-a", "--analyze", dest="analyze", action="store_true", help="Check file for contained functions, and update list")
     parser.add_argument("-u", "--update", dest="update", action="store_true", help="Update calls/jumps to contained/converted functions in C file")
     args = parser.parse_args()
-
-    
-    if os.path.exists(contained):
-        with open(contained, "r") as inFile:
-            containedFuncs = list(i for i in inFile.read().split("\n") if i)
-            
     
     if os.path.exists(converted):
         with open(converted, "r") as inFile:
             convertedFuncs = list(i for i in inFile.read().split("\n") if i)
-    print(args.fileName)
+
+    if os.path.exists(contained):
+        with open(contained, "r") as inFile:
+            containedFuncs = list(i for i in inFile.read().split("\n") if i and i not in convertedFuncs)    
 
     if args.analyze:
         analyze(args.fileName)

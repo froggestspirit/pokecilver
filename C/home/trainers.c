@@ -5,12 +5,12 @@ int CheckTrainerBattle(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 
-	CALL(mSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
-	CALL(mv_CheckTrainerBattle);  // call _CheckTrainerBattle
+	CCALL(aSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
+	CCALL(av_CheckTrainerBattle);  // call _CheckTrainerBattle
 
 	POP_BC;  // pop bc
 	LD_A_B;  // ld a, b
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
@@ -110,7 +110,7 @@ startbattle:
 	LD_addr_A(wSeenTrainerDistance);  // ld [wSeenTrainerDistance], a
 	LD_A_C;  // ld a, c
 	LD_addr_A(wSeenTrainerDirection);  // ld [wSeenTrainerDirection], a
-	JR(mLoadTrainer_continue);  // jr LoadTrainer_continue
+	return LoadTrainer_continue();  // jr LoadTrainer_continue
 
 }
 
@@ -135,11 +135,11 @@ int LoadTrainer_continue(){
 	LD_HL(MAPOBJECT_SCRIPT_POINTER);  // ld hl, MAPOBJECT_SCRIPT_POINTER
 	ADD_HL_BC;  // add hl, bc
 	LD_A_addr(wSeenTrainerBank);  // ld a, [wSeenTrainerBank]
-	CALL(mGetFarWord);  // call GetFarWord
+	CCALL(aGetFarWord);  // call GetFarWord
 	LD_DE(wTempTrainer);  // ld de, wTempTrainer
 	LD_BC(wTempTrainerEnd - wTempTrainer);  // ld bc, wTempTrainerEnd - wTempTrainer
 	LD_A_addr(wSeenTrainerBank);  // ld a, [wSeenTrainerBank]
-	CALL(mFarCopyBytes);  // call FarCopyBytes
+	CCALL(aFarCopyBytes);  // call FarCopyBytes
 	XOR_A_A;  // xor a
 	LD_addr_A(wRunningTrainerBattleScript);  // ld [wRunningTrainerBattleScript], a
 	SCF;  // scf
@@ -256,7 +256,7 @@ int CheckTrainerFlag(){
 	LD_H_hl;  // ld h, [hl]
 	LD_L_A;  // ld l, a
 	CCALL(aGetMapScriptsBank);  // call GetMapScriptsBank
-	CALL(mGetFarWord);  // call GetFarWord
+	CCALL(aGetFarWord);  // call GetFarWord
 	LD_D_H;  // ld d, h
 	LD_E_L;  // ld e, l
 	PUSH_DE;  // push de
@@ -299,7 +299,8 @@ ok:
 	CCALL(aGetMapScriptsBank);  // call GetMapScriptsBank
 	CALL(mFarPrintText);  // call FarPrintText
 	CALL(mWaitBGMap);  // call WaitBGMap
-	CALL(mWaitPressAorB_BlinkCursor);  // call WaitPressAorB_BlinkCursor
+	CCALL(aWaitPressAorB_BlinkCursor);  // call WaitPressAorB_BlinkCursor
 	RET;  // ret
 
 }
+

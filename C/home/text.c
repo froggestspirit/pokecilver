@@ -1160,7 +1160,7 @@ int TextCommand_PAUSE(){
 //  wait for button press or 30 frames
 	PUSH_HL;  // push hl
 	PUSH_BC;  // push bc
-	CALL(mGetJoypad);  // call GetJoypad
+	CCALL(aGetJoypad);  // call GetJoypad
 	LDH_A_addr(hJoyDown);  // ldh a, [hJoyDown]
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
 	IF_NZ goto done;  // jr nz, .done
@@ -1261,7 +1261,7 @@ loop:
 	PUSH_DE;  // push de
 	LD_A(0x75);  // ld a, "…"
 	LD_hli_A;  // ld [hli], a
-	CALL(mGetJoypad);  // call GetJoypad
+	CCALL(aGetJoypad);  // call GetJoypad
 	LDH_A_addr(hJoyDown);  // ldh a, [hJoyDown]
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
 	IF_NZ goto next;  // jr nz, .next
@@ -1311,7 +1311,7 @@ int TextCommand_STRINGBUFFER(){
 	ADD_HL_DE;  // add hl, de
 	ADD_HL_DE;  // add hl, de
 	LD_A(BANK(aStringBufferPointers));  // ld a, BANK(StringBufferPointers)
-	CALL(mGetFarWord);  // call GetFarWord
+	CCALL(aGetFarWord);  // call GetFarWord
 	LD_D_H;  // ld d, h
 	LD_E_L;  // ld e, l
 	LD_H_B;  // ld h, b
@@ -1392,3 +1392,4 @@ Day:
 	SET_PC(0x1452U);
 
 }
+

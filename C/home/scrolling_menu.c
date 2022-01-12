@@ -58,7 +58,7 @@ int JoyTextDelay_ForcehJoyDown(){
 	PUSH_AF;  // push af
 	LD_A(0x1);  // ld a, $1
 	LDH_addr_A(hInMenu);  // ldh [hInMenu], a
-	CALL(mJoyTextDelay);  // call JoyTextDelay
+	CCALL(aJoyTextDelay);  // call JoyTextDelay
 	POP_AF;  // pop af
 	LDH_addr_A(hInMenu);  // ldh [hInMenu], a
 
@@ -72,3 +72,4 @@ int JoyTextDelay_ForcehJoyDown(){
 	RET;  // ret
 
 }
+

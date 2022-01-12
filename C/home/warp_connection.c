@@ -5,7 +5,7 @@ int HandleNewMap(){
 	CCALL(aClearUnusedMapBuffer);  // call ClearUnusedMapBuffer
 	CCALL(aResetMapBufferEventFlags);  // call ResetMapBufferEventFlags
 	CCALL(aResetFlashIfOutOfCave);  // call ResetFlashIfOutOfCave
-	CALL(mGetCurrentMapSceneID);  // call GetCurrentMapSceneID
+	CCALL(aGetCurrentMapSceneID);  // call GetCurrentMapSceneID
 	CCALL(aResetBikeFlags);  // call ResetBikeFlags
 	LD_A(MAPCALLBACK_NEWMAP);  // ld a, MAPCALLBACK_NEWMAP
 	CALL(mRunMapCallback);  // call RunMapCallback
@@ -17,7 +17,7 @@ int HandleContinueMap(){
 	FARCALL(aClearCmdQueue);  // farcall ClearCmdQueue
 	LD_A(MAPCALLBACK_CMDQUEUE);  // ld a, MAPCALLBACK_CMDQUEUE
 	CALL(mRunMapCallback);  // call RunMapCallback
-	CALL(mGetMapTimeOfDay);  // call GetMapTimeOfDay
+	CCALL(aGetMapTimeOfDay);  // call GetMapTimeOfDay
 	LD_addr_A(wMapTimeOfDay);  // ld [wMapTimeOfDay], a
 	RET;  // ret
 
@@ -94,7 +94,7 @@ column:
 
 int LoadMapGraphics(){
 	SET_PC(0x2110U);
-	CALL(mLoadMapTileset);  // call LoadMapTileset
+	CCALL(aLoadMapTileset);  // call LoadMapTileset
 	CALL(mLoadTilesetGFX);  // call LoadTilesetGFX
 	XOR_A_A;  // xor a
 	LDH_addr_A(hMapAnims);  // ldh [hMapAnims], a
@@ -394,7 +394,7 @@ int GetDestinationWarpNumber(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 
-	CALL(mSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
+	CCALL(aSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
 	CALL(mGetDestinationWarpNumber_GetDestinationWarpNumber);  // call .GetDestinationWarpNumber
 
 	POP_DE;  // pop de
@@ -479,7 +479,7 @@ int CopyWarpData(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 
-	CALL(mSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
+	CCALL(aSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
 	CALL(mCopyWarpData_CopyWarpData);  // call .CopyWarpData
 
 	POP_AF;  // pop af
@@ -543,14 +543,14 @@ int EnterMapWarp(){
 
 SaveDigWarp:
 	SET_PC(0x2360U);
-	CALL(mGetMapEnvironment);  // call GetMapEnvironment
+	CCALL(aGetMapEnvironment);  // call GetMapEnvironment
 	CCALL(aCheckOutdoorMap);  // call CheckOutdoorMap
 	RET_NZ ;  // ret nz
 	LD_A_addr(wNextMapGroup);  // ld a, [wNextMapGroup]
 	LD_B_A;  // ld b, a
 	LD_A_addr(wNextMapNumber);  // ld a, [wNextMapNumber]
 	LD_C_A;  // ld c, a
-	CALL(mGetAnyMapEnvironment);  // call GetAnyMapEnvironment
+	CCALL(aGetAnyMapEnvironment);  // call GetAnyMapEnvironment
 	CCALL(aCheckIndoorMap);  // call CheckIndoorMap
 	RET_NZ ;  // ret nz
 
@@ -580,14 +580,14 @@ not_mt_moon_square_or_tin_tower_roof:
 
 SetSpawn:
 	SET_PC(0x2399U);
-	CALL(mGetMapEnvironment);  // call GetMapEnvironment
+	CCALL(aGetMapEnvironment);  // call GetMapEnvironment
 	CCALL(aCheckOutdoorMap);  // call CheckOutdoorMap
 	RET_NZ ;  // ret nz
 	LD_A_addr(wNextMapGroup);  // ld a, [wNextMapGroup]
 	LD_B_A;  // ld b, a
 	LD_A_addr(wNextMapNumber);  // ld a, [wNextMapNumber]
 	LD_C_A;  // ld c, a
-	CALL(mGetAnyMapEnvironment);  // call GetAnyMapEnvironment
+	CCALL(aGetAnyMapEnvironment);  // call GetAnyMapEnvironment
 	CCALL(aCheckIndoorMap);  // call CheckIndoorMap
 	RET_NZ ;  // ret nz
 	LD_A_addr(wNextMapGroup);  // ld a, [wNextMapGroup]
@@ -596,7 +596,7 @@ SetSpawn:
 	LD_C_A;  // ld c, a
 
 //  Respawn in Pokémon Centers.
-	CALL(mGetAnyMapTileset);  // call GetAnyMapTileset
+	CCALL(aGetAnyMapTileset);  // call GetAnyMapTileset
 	LD_A_C;  // ld a, c
 	CP_A(TILESET_POKECENTER);  // cp TILESET_POKECENTER
 	RET_NZ ;  // ret nz
@@ -607,3 +607,4 @@ SetSpawn:
 	RET;  // ret
 
 }
+

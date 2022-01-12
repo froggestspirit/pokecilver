@@ -170,7 +170,7 @@ int LoadCry(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A(BANK(aPokemonCries));  // ld a, BANK(PokemonCries)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	LD_HL(mPokemonCries);  // ld hl, PokemonCries
 	for(int rept = 0; rept < MON_CRY_LENGTH; rept++){
@@ -192,7 +192,7 @@ int LoadCry(){
 	LD_addr_A(wCryLength + 1);  // ld [wCryLength + 1], a
 
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	AND_A_A;  // and a
 	RET;  // ret
 
@@ -278,7 +278,7 @@ int GetBaseData(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A(BANK(aBaseData));  // ld a, BANK(BaseData)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 //  Egg doesn't have BaseData
 	LD_A_addr(wCurSpecies);  // ld a, [wCurSpecies]
@@ -325,7 +325,7 @@ end:
 	LD_addr_A(wBaseDexNo);  // ld [wBaseDexNo], a
 
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	POP_HL;  // pop hl
 	POP_DE;  // pop de
 	POP_BC;  // pop bc
@@ -363,3 +363,4 @@ int GetNickname(){
 	RET;  // ret
 
 }
+

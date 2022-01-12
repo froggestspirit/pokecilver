@@ -9,7 +9,7 @@ int GetPartyParamLocation(){
 	LD_B(0);  // ld b, 0
 	ADD_HL_BC;  // add hl, bc
 	LD_A_addr(wCurPartyMon);  // ld a, [wCurPartyMon]
-	CALL(mGetPartyLocation);  // call GetPartyLocation
+	CCALL(aGetPartyLocation);  // call GetPartyLocation
 	POP_BC;  // pop bc
 	RET;  // ret
 
@@ -38,7 +38,7 @@ int GetDexNumber(){
 	CCALL(aAddNTimes);  // call AddNTimes
 	POP_BC;  // pop bc
 	LD_A(BANK(aBaseData));  // ld a, BANK(BaseData)
-	CALL(mGetFarWord);  // call GetFarWord
+	CCALL(aGetFarWord);  // call GetFarWord
 	LD_B_L;  // ld b, l
 	LD_C_H;  // ld c, h
 	POP_HL;  // pop hl
@@ -53,12 +53,12 @@ int UserPartyAttr(){
 	AND_A_A;  // and a
 	IF_NZ goto ot;  // jr nz, .ot
 	POP_AF;  // pop af
-	JR(mBattlePartyAttr);  // jr BattlePartyAttr
+	return BattlePartyAttr();  // jr BattlePartyAttr
 
 ot:
 	SET_PC(0x3B6EU);
 	POP_AF;  // pop af
-	JR(mOTPartyAttr);  // jr OTPartyAttr
+	return OTPartyAttr();  // jr OTPartyAttr
 
 }
 
@@ -69,12 +69,12 @@ int OpponentPartyAttr(){
 	AND_A_A;  // and a
 	IF_Z goto ot;  // jr z, .ot
 	POP_AF;  // pop af
-	JR(mBattlePartyAttr);  // jr BattlePartyAttr
+	return BattlePartyAttr();  // jr BattlePartyAttr
 
 ot:
 	SET_PC(0x3B7AU);
 	POP_AF;  // pop af
-	JR(mOTPartyAttr);  // jr OTPartyAttr
+	return OTPartyAttr();  // jr OTPartyAttr
 
 }
 
@@ -87,7 +87,7 @@ int BattlePartyAttr(){
 	LD_HL(wPartyMons);  // ld hl, wPartyMons
 	ADD_HL_BC;  // add hl, bc
 	LD_A_addr(wCurBattleMon);  // ld a, [wCurBattleMon]
-	CALL(mGetPartyLocation);  // call GetPartyLocation
+	CCALL(aGetPartyLocation);  // call GetPartyLocation
 	POP_BC;  // pop bc
 	RET;  // ret
 
@@ -102,7 +102,7 @@ int OTPartyAttr(){
 	LD_HL(wOTPartyMon1Species);  // ld hl, wOTPartyMon1Species
 	ADD_HL_BC;  // add hl, bc
 	LD_A_addr(wCurOTMon);  // ld a, [wCurOTMon]
-	CALL(mGetPartyLocation);  // call GetPartyLocation
+	CCALL(aGetPartyLocation);  // call GetPartyLocation
 	POP_BC;  // pop bc
 	RET;  // ret
 
@@ -163,7 +163,7 @@ int UpdateBattleMonInParty(){
 int UpdateBattleMon(){
 	SET_PC(0x3BBFU);
 	LD_HL(wPartyMon1Level);  // ld hl, wPartyMon1Level
-	CALL(mGetPartyLocation);  // call GetPartyLocation
+	CCALL(aGetPartyLocation);  // call GetPartyLocation
 
 	LD_D_H;  // ld d, h
 	LD_E_L;  // ld e, l
@@ -184,7 +184,7 @@ int UpdateEnemyMonInParty(){
 
 	LD_A_addr(wCurOTMon);  // ld a, [wCurOTMon]
 	LD_HL(wOTPartyMon1Level);  // ld hl, wOTPartyMon1Level
-	CALL(mGetPartyLocation);  // call GetPartyLocation
+	CCALL(aGetPartyLocation);  // call GetPartyLocation
 
 	LD_D_H;  // ld d, h
 	LD_E_L;  // ld e, l
@@ -262,7 +262,7 @@ int StdBattleTextbox(){
 int GetBattleAnimPointer(){
 	SET_PC(0x3CDEU);
 	LD_A(BANK(aBattleAnimations));  // ld a, BANK(BattleAnimations)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	LD_A_hli;  // ld a, [hli]
 	LD_addr_A(wBattleAnimAddress);  // ld [wBattleAnimAddress], a
@@ -271,7 +271,7 @@ int GetBattleAnimPointer(){
 
 // ; ClearBattleAnims is the only function that calls this...
 	LD_A(BANK(aClearBattleAnims));  // ld a, BANK(ClearBattleAnims)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	RET;  // ret
 
@@ -288,14 +288,14 @@ int GetBattleAnimByte(){
 	LD_D_hl;  // ld d, [hl]
 
 	LD_A(BANK(aBattleAnimations));  // ld a, BANK(BattleAnimations)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	LD_A_de;  // ld a, [de]
 	LD_addr_A(wBattleAnimByte);  // ld [wBattleAnimByte], a
 	INC_DE;  // inc de
 
 	LD_A(BANK(aBattleAnimCommands));  // ld a, BANK(BattleAnimCommands)
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	LD_hl_D;  // ld [hl], d
 	DEC_HL;  // dec hl
@@ -330,3 +330,4 @@ int PushLYOverrides(){
 	RET;  // ret
 
 }
+

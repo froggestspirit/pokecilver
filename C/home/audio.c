@@ -325,7 +325,7 @@ int FadeToMapMusic(){
 	PUSH_BC;  // push bc
 	PUSH_AF;  // push af
 
-	CALL(mGetMapMusic_MaybeSpecial);  // call GetMapMusic_MaybeSpecial
+	CCALL(aGetMapMusic_MaybeSpecial);  // call GetMapMusic_MaybeSpecial
 	LD_A_addr(wMapMusic);  // ld a, [wMapMusic]
 	CP_A_E;  // cp e
 	IF_Z goto done;  // jr z, .done
@@ -357,7 +357,7 @@ int PlayMapMusic(){
 	PUSH_BC;  // push bc
 	PUSH_AF;  // push af
 
-	CALL(mGetMapMusic_MaybeSpecial);  // call GetMapMusic_MaybeSpecial
+	CCALL(aGetMapMusic_MaybeSpecial);  // call GetMapMusic_MaybeSpecial
 	LD_A_addr(wMapMusic);  // ld a, [wMapMusic]
 	CP_A_E;  // cp e
 	IF_Z goto done;  // jr z, .done
@@ -396,7 +396,7 @@ int PlayMapMusicBike(){
 	LD_A_addr(wPlayerState);  // ld a, [wPlayerState]
 	CP_A(PLAYER_BIKE);  // cp PLAYER_BIKE
 	IF_Z goto play;  // jr z, .play
-	CALL(mGetMapMusic_MaybeSpecial);  // call GetMapMusic_MaybeSpecial
+	CCALL(aGetMapMusic_MaybeSpecial);  // call GetMapMusic_MaybeSpecial
 
 play:
 	SET_PC(0x3ED6U);
@@ -513,7 +513,7 @@ int GetMapMusic_MaybeSpecial(){
 	SET_PC(0x3F55U);
 	CCALL(aSpecialMapMusic);  // call SpecialMapMusic
 	RET_C ;  // ret c
-	CALL(mGetMapMusic);  // call GetMapMusic
+	CCALL(aGetMapMusic);  // call GetMapMusic
 	RET;  // ret
 
 }
@@ -596,3 +596,4 @@ int TerminateExpBarSound(){
 	RET;  // ret
 
 }
+

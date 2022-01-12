@@ -89,12 +89,12 @@ int FarCopyBytes(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A_addr(wTempBank);  // ld a, [wTempBank]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 	CCALL(aCopyBytes);  // call CopyBytes
 
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
@@ -108,7 +108,7 @@ int FarCopyBytesDouble(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A_addr(wTempBank);  // ld a, [wTempBank]
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 
 //  switcheroo, de <> hl
 	LD_A_H;  // ld a, h
@@ -138,7 +138,7 @@ dec:
 	IF_NZ goto loop;  // jr nz, .loop
 
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
@@ -275,7 +275,7 @@ int Get2bpp(){
 	LD_C_A;  // ld c, a
 	POP_AF;  // pop af
 
-	JP(mFarCopyBytes);  // jp FarCopyBytes
+	return FarCopyBytes();  // jp FarCopyBytes
 
 }
 
@@ -305,7 +305,7 @@ int Get1bpp(){
 	POP_AF;  // pop af
 
 	POP_HL;  // pop hl
-	JP(mFarCopyBytesDouble);  // jp FarCopyBytesDouble
+	return FarCopyBytesDouble();  // jp FarCopyBytesDouble
 
 }
 
@@ -334,6 +334,7 @@ int DuplicateGet2bpp(){
 
 	POP_DE;  // pop de
 	POP_HL;  // pop hl
-	JP(mFarCopyBytes);  // jp FarCopyBytes
+	return FarCopyBytes();  // jp FarCopyBytes
 
 }
+

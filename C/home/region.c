@@ -8,7 +8,7 @@ int IsInJohto(){
 	LD_B_A;  // ld b, a
 	LD_A_addr(wMapNumber);  // ld a, [wMapNumber]
 	LD_C_A;  // ld c, a
-	CALL(mGetWorldMapLocation);  // call GetWorldMapLocation
+	CCALL(aGetWorldMapLocation);  // call GetWorldMapLocation
 
 	CP_A(LANDMARK_FAST_SHIP);  // cp LANDMARK_FAST_SHIP
 	IF_Z goto Johto;  // jr z, .Johto
@@ -20,7 +20,7 @@ int IsInJohto(){
 	LD_B_A;  // ld b, a
 	LD_A_addr(wBackupMapNumber);  // ld a, [wBackupMapNumber]
 	LD_C_A;  // ld c, a
-	CALL(mGetWorldMapLocation);  // call GetWorldMapLocation
+	CCALL(aGetWorldMapLocation);  // call GetWorldMapLocation
 
 
 CheckRegion:
@@ -59,7 +59,7 @@ int SetXYCompareFlags(){
 	IF_Z goto quit;  // jr z, .quit
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
-	CALL(mSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
+	CCALL(aSwitchToMapScriptsBank);  // call SwitchToMapScriptsBank
 	LD_A_addr(wPlayerStandingMapX);  // ld a, [wPlayerStandingMapX]
 	ADD_A(0x4);  // add $4
 	LD_D_A;  // ld d, a
@@ -114,3 +114,4 @@ quit:
 	RET;  // ret
 
 }
+

@@ -191,3 +191,4 @@ int BattleVarLocations(){
 	//assert_table_length ['NUM_BATTLE_VAR_LOCATION_PAIRS']  // assert_table_length NUM_BATTLE_VAR_LOCATION_PAIRS
 
 }
+
