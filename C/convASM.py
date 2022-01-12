@@ -143,7 +143,7 @@ def parse_line_label(string):
             asm = f"// {asm}{string[0]}"
             includes.append(" ".join(parts[1:]))
         elif len(parts) > 1 and parts[1] == "EQU":
-            asm = f"#define {parts[0]} {' '.join(parts[2:]).replace('$', '0x').replace('%', '0b')}"
+            asm = f"#define {parts[0]} ({' '.join(parts[2:]).replace('$', '0x').replace('%', '0b')})"
         else:
             asm = f"{asm}{string[0]}"
             if asm:

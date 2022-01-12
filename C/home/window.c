@@ -112,10 +112,11 @@ int SafeUpdateSprites(){
 }
 
 int SetCarryFlag(){
-	SET_PC(0x2F0CU);
 //  //  unreferenced
 	SCF;  // scf
 	RET;  // ret
 
 }
+
+
 

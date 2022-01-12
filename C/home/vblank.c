@@ -91,7 +91,7 @@ int VBlank0(){
 	IF_C goto done;  // jr c, .done
 	CCALL(aUpdatePalsIfCGB);  // call UpdatePalsIfCGB
 	IF_C goto done;  // jr c, .done
-	CALL(mUpdateBGMap);  // call UpdateBGMap
+	CCALL(aUpdateBGMap);  // call UpdateBGMap
 
 // ; These have their own timing checks.
 
@@ -168,7 +168,7 @@ int VBlank1(){
 	CCALL(aUpdatePals);  // call UpdatePals
 	IF_C goto done;  // jr c, .done
 
-	CALL(mUpdateBGMap);  // call UpdateBGMap
+	CCALL(aUpdateBGMap);  // call UpdateBGMap
 	CCALL(aServe2bppRequest);  // call Serve2bppRequest
 
 	CALL(hTransferVirtualOAM);  // call hTransferVirtualOAM
@@ -219,7 +219,6 @@ skip_lcd:
 }
 
 int UpdatePals(){
-	SET_PC(0x023EU);
 //  update pals for either dmg or cgb
 
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
@@ -251,7 +250,7 @@ int VBlank4(){
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	LD_addr_A(wROMBankBackup);  // ld [wROMBankBackup], a
 
-	CALL(mUpdateBGMap);  // call UpdateBGMap
+	CCALL(aUpdateBGMap);  // call UpdateBGMap
 	CCALL(aServe2bppRequest);  // call Serve2bppRequest
 
 	CALL(hTransferVirtualOAM);  // call hTransferVirtualOAM
@@ -291,7 +290,7 @@ int VBlank5(){
 	CCALL(aUpdatePalsIfCGB);  // call UpdatePalsIfCGB
 	IF_C goto done;  // jr c, .done
 
-	CALL(mUpdateBGMap);  // call UpdateBGMap
+	CCALL(aUpdateBGMap);  // call UpdateBGMap
 	CCALL(aServe2bppRequest);  // call Serve2bppRequest
 
 done:
@@ -327,7 +326,6 @@ done:
 }
 
 int VBlank2(){
-	SET_PC(0x02B0U);
 //  sound only
 
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -386,7 +384,7 @@ int VBlank3(){
 	LDH_A_addr(hWX);  // ldh a, [hWX]
 	LDH_addr_A(rWX);  // ldh [rWX], a
 
-	CALL(mUpdateBGMap);  // call UpdateBGMap
+	CCALL(aUpdateBGMap);  // call UpdateBGMap
 	CCALL(aUpdateBGMapBuffer);  // call UpdateBGMapBuffer
 
 	CCALL(aServe2bppRequest);  // call Serve2bppRequest
@@ -432,4 +430,6 @@ okay:
 	RET;  // ret
 
 }
+
+
 

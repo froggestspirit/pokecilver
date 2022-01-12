@@ -8,7 +8,6 @@ int PrinterReceive(){
 }
 
 int AskSerial(){
-	SET_PC(0x1EBDU);
 //  send out a handshake while serial int is off
 	LD_A_addr(wPrinterConnectionOpen);  // ld a, [wPrinterConnectionOpen]
 	BIT_A(0);  // bit 0, a
@@ -47,4 +46,6 @@ int AskSerial(){
 	RET;  // ret
 
 }
+
+
 

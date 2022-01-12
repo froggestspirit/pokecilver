@@ -1,7 +1,6 @@
 #include "../constants.h"
 
 int UpdateBGMapBuffer(){
-	SET_PC(0x1456U);
 //  Copy [hBGMapTileCount] 16x8 tiles from wBGMapBuffer
 //  to bg map addresses in wBGMapBufferPointers.
 
@@ -25,7 +24,6 @@ int UpdateBGMapBuffer(){
 
 
 next:
-	SET_PC(0x1467U);
 //  Copy a pair of 16x8 blocks (one 16x16 block)
 
 	for(int rept = 0; rept < 2; rept++){
@@ -103,7 +101,6 @@ done:
 }
 
 int UpdateBGMap(){
-	SET_PC(0x14B9U);
 //  Update the BG Map, in thirds, from wTilemap and wAttrmap.
 
 	LDH_A_addr(hBGMapMode);  // ldh a, [hBGMapMode]
@@ -112,9 +109,9 @@ int UpdateBGMap(){
 
 //  BG Map 0
 	DEC_A;  // dec a ; 1
-	IF_Z goto Tiles;  // jr z, .Tiles
+	IF_Z return UpdateBGMap_Tiles();  // jr z, .Tiles
 	DEC_A;  // dec a ; 2
-	IF_Z goto Attr;  // jr z, .Attr
+	IF_Z return UpdateBGMap_Attr();  // jr z, .Attr
 
 //  BG Map 1
 	DEC_A;  // dec a ; useless
@@ -133,10 +130,10 @@ int UpdateBGMap(){
 	LDH_A_addr(hBGMapMode);  // ldh a, [hBGMapMode]
 	PUSH_AF;  // push af
 	CP_A(3);  // cp 3
-	CALL_Z (mUpdateBGMap_Tiles);  // call z, .Tiles
+	IF_Z CCALL(aUpdateBGMap_Tiles);  // call z, .Tiles
 	POP_AF;  // pop af
 	CP_A(4);  // cp 4
-	CALL_Z (mUpdateBGMap_Attr);  // call z, .Attr
+	IF_Z CCALL(aUpdateBGMap_Attr);  // call z, .Attr
 
 	POP_HL;  // pop hl
 	LD_A_L;  // ld a, l
@@ -144,39 +141,37 @@ int UpdateBGMap(){
 	LD_A_H;  // ld a, h
 	LDH_addr_A(hBGMapAddress + 1);  // ldh [hBGMapAddress + 1], a
 	RET;  // ret
+}
 
-
-Attr:
-	SET_PC(0x14E8U);
+int UpdateBGMap_Attr(){
 	LD_A(1);  // ld a, 1
 	LDH_addr_A(rVBK);  // ldh [rVBK], a
 
 	hlcoord(0, 0, wAttrmap);  // hlcoord 0, 0, wAttrmap
-	CALL(mUpdateBGMap_update);  // call .update
+	CCALL(aUpdateBGMap_update);  // call .update
 
 	LD_A(0);  // ld a, 0
 	LDH_addr_A(rVBK);  // ldh [rVBK], a
 	RET;  // ret
+}
 
-
-Tiles:
-	SET_PC(0x14F7U);
+int UpdateBGMap_Tiles(){
 	hlcoord(0, 0, wTilemap);  // hlcoord 0, 0
+	return UpdateBGMap_update();
+}
 
-
-update:
-	SET_PC(0x14FAU);
+int UpdateBGMap_update(){
 	LD_addr_SP(hSPBuffer);  // ld [hSPBuffer], sp
 
 //  Which third?
 	LDH_A_addr(hBGMapThird);  // ldh a, [hBGMapThird]
 	AND_A_A;  // and a ; 0
-	IF_Z goto top;  // jr z, .top
+	IF_Z return UpdateBGMap_top();  // jr z, .top
 	DEC_A;  // dec a ; 1
-	IF_Z goto middle;  // jr z, .middle
+	IF_Z return UpdateBGMap_middle();  // jr z, .middle
 // ; 2
 
-#define THIRD_HEIGHT SCREEN_HEIGHT / 3
+#define THIRD_HEIGHT (SCREEN_HEIGHT / 3)
 
 //  bottom
 	LD_DE(2 * THIRD_HEIGHT * SCREEN_WIDTH);  // ld de, 2 * THIRD_HEIGHT * SCREEN_WIDTH
@@ -193,11 +188,10 @@ update:
 
 //  Next time: top third
 	XOR_A_A;  // xor a
-	goto start;  // jr .start
+	return UpdateBGMap_start();
+}
 
-
-middle:
-	SET_PC(0x1517U);
+int UpdateBGMap_middle(){
 	LD_DE(THIRD_HEIGHT * SCREEN_WIDTH);  // ld de, THIRD_HEIGHT * SCREEN_WIDTH
 	ADD_HL_DE;  // add hl, de
 	LD_SP_HL;  // ld sp, hl
@@ -212,11 +206,10 @@ middle:
 
 //  Next time: bottom third
 	LD_A(2);  // ld a, 2
-	goto start;  // jr .start
+	return UpdateBGMap_start();
+}
 
-
-top:
-	SET_PC(0x152AU);
+int UpdateBGMap_top(){
 	LD_SP_HL;  // ld sp, hl
 
 	LDH_A_addr(hBGMapAddress + 1);  // ldh a, [hBGMapAddress + 1]
@@ -226,10 +219,10 @@ top:
 
 //  Next time: middle third
 	LD_A(1);  // ld a, 1
+	return UpdateBGMap_start();
+}
 
-
-start:
-	SET_PC(0x1533U);
+int UpdateBGMap_start(){
 //  Which third to update next time
 	LDH_addr_A(hBGMapThird);  // ldh [hBGMapThird], a
 
@@ -238,10 +231,10 @@ start:
 
 //  Discrepancy between wTilemap and BGMap
 	LD_BC(BG_MAP_WIDTH - (SCREEN_WIDTH - 1));  // ld bc, BG_MAP_WIDTH - (SCREEN_WIDTH - 1)
+	return UpdateBGMap_row();
+}
 
-
-row:
-	SET_PC(0x153AU);
+int UpdateBGMap_row(){
 //  Copy a row of 20 tiles
 	for(int rept = 0; rept < SCREEN_WIDTH / 2 - 1; rept++){
 	POP_DE;  // pop de
@@ -257,7 +250,7 @@ row:
 
 	ADD_HL_BC;  // add hl, bc
 	DEC_A;  // dec a
-	IF_NZ goto row;  // jr nz, .row
+	IF_NZ return UpdateBGMap_row();  // jr nz, .row
 
 	LDH_A_addr(hSPBuffer);  // ldh a, [hSPBuffer]
 	LD_L_A;  // ld l, a
@@ -265,11 +258,9 @@ row:
 	LD_H_A;  // ld h, a
 	LD_SP_HL;  // ld sp, hl
 	RET;  // ret
-
 }
 
 int Serve1bppRequest(){
-	SET_PC(0x1577U);
 	LD_A_addr(wRequested1bppSize);  // ld a, [wRequested1bppSize]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -300,7 +291,6 @@ int Serve1bppRequest(){
 
 
 next:
-	SET_PC(0x1594U);
 
 	for(int rept = 0; rept < 3; rept++){
 	POP_DE;  // pop de
@@ -343,7 +333,6 @@ next:
 }
 
 int Serve2bppRequest(){
-	SET_PC(0x15CEU);
 	LD_A_addr(wRequested2bppSize);  // ld a, [wRequested2bppSize]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -374,7 +363,6 @@ int Serve2bppRequest(){
 
 
 next:
-	SET_PC(0x15EBU);
 
 	for(int rept = 0; rept < 7; rept++){
 	POP_DE;  // pop de
@@ -428,14 +416,12 @@ int AnimateTileset(){
 }
 
 int Video_DummyFunction(){
-	SET_PC(0x1639U);
 //  //  unreferenced
 	RET;  // ret
 
 }
 
 int EnableSpriteDisplay(){
-	SET_PC(0x163AU);
 //  //  unreferenced
 	LD_HL(rLCDC);  // ld hl, rLCDC
 	SET_hl(1);  // set 1, [hl]
@@ -444,7 +430,6 @@ int EnableSpriteDisplay(){
 }
 
 int FillBGMap0WithBlack(){
-	SET_PC(0x1640U);
 	NOP;  // nop
 	LDH_A_addr(hBlackOutBGMapThird);  // ldh a, [hBlackOutBGMapThird]
 	AND_A_A;  // and a ; 0
@@ -471,7 +456,6 @@ int FillBGMap0WithBlack(){
 	LD_A(0x60);  // ld a, "■"
 
 loop1:
-	SET_PC(0x165DU);
 	for(int rept = 0; rept < BG_MAP_WIDTH - SCREEN_WIDTH; rept++){
 	LD_hli_A;  // ld [hli], a
 	}
@@ -482,7 +466,6 @@ loop1:
 
 
 two:
-	SET_PC(0x166EU);
 //  Black out the top 7 BG Map rows below the screen area
 	LD_A(1);  // ld a, 1
 	LD_DE(BG_MAP_WIDTH * SCREEN_HEIGHT);  // ld de, BG_MAP_WIDTH * SCREEN_HEIGHT
@@ -490,14 +473,12 @@ two:
 
 
 one:
-	SET_PC(0x1675U);
 //  Black out the bottom 7 BG Map rows below the screen area
 	XOR_A_A;  // xor a
 	LD_DE(BG_MAP_WIDTH * (SCREEN_HEIGHT + BG_THIRD_HEIGHT));  // ld de, BG_MAP_WIDTH * (SCREEN_HEIGHT + BG_THIRD_HEIGHT)
 
 
 go:
-	SET_PC(0x1679U);
 	LDH_addr_A(hBlackOutBGMapThird);  // ldh [hBlackOutBGMapThird], a
 	LD_HL(hBGMapAddress);  // ld hl, hBGMapAddress
 	LD_A_hli;  // ld a, [hli]
@@ -508,7 +489,6 @@ go:
 	LD_A(0x60);  // ld a, "■"
 
 loop2:
-	SET_PC(0x1686U);
 	for(int rept = 0; rept < BG_MAP_WIDTH / 2; rept++){
 	LD_hli_A;  // ld [hli], a
 	}
@@ -517,4 +497,6 @@ loop2:
 	RET;  // ret
 
 }
+
+
 

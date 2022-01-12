@@ -469,7 +469,6 @@ Receive:
 }
 
 int LinkDataReceived(){
-	SET_PC(0x08B9U);
 //  Let the other system know that the data has been received.
 	XOR_A_A;  // xor a
 	LDH_addr_A(hSerialSend);  // ldh [hSerialSend], a
@@ -485,7 +484,6 @@ int LinkDataReceived(){
 }
 
 int SetBitsForTimeCapsuleRequestIfNotLinked(){
-	SET_PC(0x08CAU);
 //  //  unreferenced
 //  Similar to SetBitsForTimeCapsuleRequest (see engine/link/link.asm).
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
@@ -502,4 +500,6 @@ int SetBitsForTimeCapsuleRequestIfNotLinked(){
 	RET;  // ret
 
 }
+
+
 

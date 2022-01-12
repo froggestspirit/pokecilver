@@ -1,18 +1,15 @@
 #include "../constants.h"
 
 int ClearBox(){
-	SET_PC(0x0EBBU);
 //  Fill a c*b box at hl with blank tiles.
 	LD_A(0x7f);  // ld a, " "
 	LD_DE(SCREEN_WIDTH);  // ld de, SCREEN_WIDTH
 
 row:
-	SET_PC(0x0EC0U);
 	PUSH_HL;  // push hl
 	PUSH_BC;  // push bc
 
 col:
-	SET_PC(0x0EC2U);
 	LD_hli_A;  // ld [hli], a
 	DEC_C;  // dec c
 	IF_NZ goto col;  // jr nz, .col
@@ -122,7 +119,6 @@ loop:
 }
 
 int TextboxPalette(){
-	SET_PC(0x0F29U);
 //  Fill text box width c height b at hl with pal 7
 	LD_DE(wAttrmap - wTilemap);  // ld de, wAttrmap - wTilemap
 	ADD_HL_DE;  // add hl, de
@@ -133,12 +129,10 @@ int TextboxPalette(){
 	LD_A(PAL_BG_TEXT);  // ld a, PAL_BG_TEXT
 
 col:
-	SET_PC(0x0F33U);
 	PUSH_BC;  // push bc
 	PUSH_HL;  // push hl
 
 row:
-	SET_PC(0x0F35U);
 	LD_hli_A;  // ld [hli], a
 	DEC_C;  // dec c
 	IF_NZ goto row;  // jr nz, .row
@@ -371,87 +365,70 @@ place:
                             JP(mPlaceCommandCharacter);} while(0)
 							
 int PrintMomsName(){
-	SET_PC(0x1064U);
 	print_name(wMomsName);
 }
 
 int PrintPlayerName(){
-	SET_PC(0x106BU);
 	print_name(wPlayerName);
 }
 
 int PrintRivalName(){
-	SET_PC(0x1072U);
 	print_name(wRivalName);
 }
 
 int PrintRedsName(){
-	SET_PC(0x1079U);
 	print_name(wRedsName);
 }
 
 int PrintGreensName(){
-	SET_PC(0x1080U);
 	print_name(wGreensName);
 }
 
 int TrainerChar(){
-	SET_PC(0x1087U);
 	print_name(mTrainerCharText);
 }
 
 int TMChar(){
-	SET_PC(0x108EU);
 	print_name(mTMCharText);
 }
 
 int PCChar(){
-	SET_PC(0x1095U);
 	print_name(mPCCharText);
 }
 
 int RocketChar(){
-	SET_PC(0x109CU);
 	print_name(mRocketCharText);
 }
 
 int PlacePOKe(){
-	SET_PC(0x10A3U);
 	print_name(mPlacePOKeText);
 }
 
 int PlaceKougeki(){
-	SET_PC(0x10AAU);
 	print_name(mKougekiText);
 }
 
 int SixDotsChar(){
-	SET_PC(0x10B1U);
 	print_name(mSixDotsCharText);
 }
 
 int PlacePKMN(){
-	SET_PC(0x10B8U);
 	print_name(mPlacePKMNText);
 }
 
 int PlacePOKE(){
-	SET_PC(0x10BFU);
 	print_name(mPlacePOKEText);
 }
 
 int PlaceJPRoute(){
-	SET_PC(0x10C6U);
 	print_name(mPlaceJPRouteText);
 }
 
 int PlaceWatashi(){
-	SET_PC(0x10CDU);
 	print_name(mPlaceWatashiText);
 }
 
 int PlaceKokoWa(){
-	SET_PC(0x10D4U);
 	print_name(mPlaceKokoWaText);
 }
 
@@ -737,7 +714,6 @@ cont:
 }
 
 int PlaceDexEnd(){
-	SET_PC(0x11E5U);
 //  Ends a Pokédex entry in Gen 1.
 //  Dex entries are now regular strings.
 	LD_hl(0xe8);  // ld [hl], "."
@@ -833,7 +809,6 @@ int Text_WaitBGMap(){
 }
 
 int Diacritic(){
-	SET_PC(0x1248U);
 	PUSH_AF;  // push af
 	PUSH_HL;  // push hl
 	LD_A_B;  // ld a, b
@@ -847,7 +822,6 @@ int Diacritic(){
 }
 
 int LoadBlinkingCursor(){
-	SET_PC(0x1253U);
 	LD_A(0xee);  // ld a, "▼"
 	ldcoord_a(18, 17, wTilemap);  // ldcoord_a 18, 17
 	RET;  // ret
@@ -855,7 +829,6 @@ int LoadBlinkingCursor(){
 }
 
 int UnloadBlinkingCursor(){
-	SET_PC(0x1259U);
 	LD_A(0x7a);  // ld a, "─"
 	ldcoord_a(18, 17, wTilemap);  // ldcoord_a 18, 17
 	RET;  // ret
@@ -1049,7 +1022,6 @@ int TextCommand_BCD(){
 }
 
 int TextCommand_MOVE(){
-	SET_PC(0x130BU);
 //  move to a new tile
 	LD_A_hli;  // ld a, [hli]
 	LD_addr_A(wMenuScrollPosition + 2);  // ld [wMenuScrollPosition + 2], a
@@ -1082,7 +1054,6 @@ int TextCommand_BOX(){
 }
 
 int TextCommand_LOW(){
-	SET_PC(0x1326U);
 //  write text at (1,16)
 	bccoord(TEXTBOX_INNERX, TEXTBOX_INNERY + 2, wTilemap);  // bccoord TEXTBOX_INNERX, TEXTBOX_INNERY + 2
 	RET;  // ret
@@ -1176,7 +1147,6 @@ done:
 }
 
 int TextCommand_SOUND(){
-	SET_PC(0x137EU);
 //  play a sound effect from TextSFX
 	PUSH_BC;  // push bc
 	DEC_HL;  // dec hl
@@ -1186,7 +1156,6 @@ int TextCommand_SOUND(){
 	LD_HL(mTextSFX);  // ld hl, TextSFX
 
 loop:
-	SET_PC(0x1386U);
 	LD_A_hli;  // ld a, [hli]
 	CP_A(-1);  // cp -1
 	IF_Z goto done;  // jr z, .done
@@ -1198,7 +1167,6 @@ loop:
 
 
 play:
-	SET_PC(0x1392U);
 	PUSH_DE;  // push de
 	LD_E_hl;  // ld e, [hl]
 	INC_HL;  // inc hl
@@ -1209,7 +1177,6 @@ play:
 
 
 done:
-	SET_PC(0x139DU);
 	POP_HL;  // pop hl
 	POP_BC;  // pop bc
 	RET;  // ret
@@ -1217,7 +1184,6 @@ done:
 }
 
 int TextCommand_CRY(){
-	SET_PC(0x13A0U);
 //  //  unreferenced
 //  play a pokemon cry
 	PUSH_DE;  // push de
@@ -1392,4 +1358,6 @@ Day:
 	SET_PC(0x1452U);
 
 }
+
+
 

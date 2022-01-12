@@ -60,6 +60,7 @@ def update(fileName):
     currentFunc = None
     with open(fileName, "w") as outFile:
         for lineNum, line in enumerate(asmFile):
+            skipLine = False
             if line:
                 if line[:3] == "int":
                     currentFunc = line.split("(")[0][4:]
@@ -67,7 +68,10 @@ def update(fileName):
                     currentFunc = None
                 elif line[0] == "\t":
                     op = line.strip("\t").split("(")[0].split(" ")[0]
-                    if op in ("CALL", "CALL_Z", "CALL_NZ", "CALL_C", "CALL_NC",
+                    if op == "SET_PC":
+                        if currentFunc in containedFuncs or currentFunc in convertedFuncs:
+                            skipLine = True
+                    elif op in ("CALL", "CALL_Z", "CALL_NZ", "CALL_C", "CALL_NC",
                                 "JP", "JP_Z", "JP_NZ", "JP_C", "JP_NC",
                                 "JR", "JR_Z", "JR_NZ", "JR_C", "JR_NC", "RST"):
                         routine = line.split(";")[0].replace(op, "", 1).strip("\t() ")[1:]
@@ -83,7 +87,8 @@ def update(fileName):
                                     line = f"\t{condition}{routine}();{comment}"
                                 else:
                                     line = f"\t{condition}return {routine}();{comment}"
-                                print(f"{lineNum + 1}: {line}")
+                                print(f"{printFile}{lineNum + 1}: {line}")
+                                printFile = ""
                         elif routine in containedFuncs:
                             if len(op) > 2:  # Op is either call or rst
                                 line = f"\t{condition}CCALL(a{routine});{comment}"
@@ -91,7 +96,9 @@ def update(fileName):
                                 line = f"\t{condition}return {routine}();{comment}"
                             print(f"{printFile}{lineNum + 1}: {line}")
                             printFile = ""
-            outFile.write(f"{line}\n")
+            if not skipLine:
+                outFile.write(f"{line}\n")
+            skipLine = False
 
 
 def main():

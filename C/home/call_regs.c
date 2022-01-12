@@ -9,9 +9,10 @@ int v_hl_(){
 }
 
 int v_de_(){
-	SET_PC(0x30FBU);
 	PUSH_DE;  // push de
 	RET;  // ret
 
 }
+
+
 

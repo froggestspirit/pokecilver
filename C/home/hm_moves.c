@@ -3,14 +3,12 @@
 //  HM moves can't be forgotten
 
 int IsHM(){
-	SET_PC(0x3720U);
 	CP_A(HM01);  // cp HM01
 	IF_C goto NotHM;  // jr c, .NotHM
 	SCF;  // scf
 	RET;  // ret
 
 NotHM:
-	SET_PC(0x3726U);
 	AND_A_A;  // and a
 	RET;  // ret
 
@@ -35,4 +33,6 @@ HMMoves:
 	//db ['-1'];  // db -1 ; end
 
 }
+
+
 

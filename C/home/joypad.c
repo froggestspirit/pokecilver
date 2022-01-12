@@ -1,7 +1,6 @@
 #include "../constants.h"
 
 int Joypad(){
-	SET_PC(0x08DFU);
 //  Replaced by UpdateJoypad, called from VBlank instead of the useless
 //  joypad interrupt.
 
@@ -11,7 +10,6 @@ int Joypad(){
 }
 
 int ClearJoypad(){
-	SET_PC(0x08E0U);
 	XOR_A_A;  // xor a
 //  Pressed this frame (delta)
 	LDH_addr_A(hJoyPressed);  // ldh [hJoyPressed], a
@@ -115,7 +113,6 @@ int UpdateJoypad(){
 }
 
 int GetJoypad(){
-	SET_PC(0x0935U);
 //  Update mirror joypad input from hJoypadDown (real input)
 
 //  hJoyReleased: released this frame (delta)
@@ -168,7 +165,6 @@ int GetJoypad(){
 
 
 quit:
-	SET_PC(0x0953U);
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
 	POP_HL;  // pop hl
@@ -177,7 +173,6 @@ quit:
 
 
 l_auto:
-	SET_PC(0x0958U);
 //  Use a predetermined input stream (used in the catching tutorial).
 
 //  Stream format: [input][duration]
@@ -208,7 +203,6 @@ l_auto:
 
 
 updateauto:
-	SET_PC(0x0973U);
 //  An input of $ff will end the stream.
 	LD_A_hli;  // ld a, [hli]
 	CP_A(-1);  // cp -1
@@ -229,7 +223,6 @@ updateauto:
 
 
 next:
-	SET_PC(0x0987U);
 //  On to the next input...
 	LD_A_L;  // ld a, l
 	LD_addr_A(wAutoInputAddress);  // ld [wAutoInputAddress], a
@@ -239,13 +232,11 @@ next:
 
 
 stopauto:
-	SET_PC(0x0991U);
 	CCALL(aStopAutoInput);  // call StopAutoInput
 	LD_B(NO_INPUT);  // ld b, NO_INPUT
 
 
 finishauto:
-	SET_PC(0x0996U);
 	POP_AF;  // pop af
 	Bankswitch();  // rst Bankswitch
 	LD_A_B;  // ld a, b
@@ -257,7 +248,6 @@ finishauto:
 }
 
 int StartAutoInput(){
-	SET_PC(0x099FU);
 //  Start reading automated input stream at a:hl.
 
 	LD_addr_A(wAutoInputBank);  // ld [wAutoInputBank], a
@@ -281,7 +271,6 @@ int StartAutoInput(){
 }
 
 int StopAutoInput(){
-	SET_PC(0x09BBU);
 //  Clear variables related to automated input.
 	XOR_A_A;  // xor a
 	LD_addr_A(wAutoInputBank);  // ld [wAutoInputBank], a
@@ -360,7 +349,6 @@ int WaitButton(){
 }
 
 int JoyTextDelay(){
-	SET_PC(0x0A08U);
 	CCALL(aGetJoypad);  // call GetJoypad
 	LDH_A_addr(hInMenu);  // ldh a, [hInMenu]
 	AND_A_A;  // and a
@@ -369,7 +357,6 @@ int JoyTextDelay(){
 	LDH_A_addr(hJoyDown);  // ldh a, [hJoyDown]
 
 ok:
-	SET_PC(0x0A14U);
 	LDH_addr_A(hJoyLast);  // ldh [hJoyLast], a
 	LDH_A_addr(hJoyPressed);  // ldh a, [hJoyPressed]
 	AND_A_A;  // and a
@@ -380,7 +367,6 @@ ok:
 
 
 checkframedelay:
-	SET_PC(0x0A21U);
 	LD_A_addr(wTextDelayFrames);  // ld a, [wTextDelayFrames]
 	AND_A_A;  // and a
 	IF_Z goto restartframedelay;  // jr z, .restartframedelay
@@ -390,7 +376,6 @@ checkframedelay:
 
 
 restartframedelay:
-	SET_PC(0x0A2BU);
 	LD_A(5);  // ld a, 5
 	LD_addr_A(wTextDelayFrames);  // ld [wTextDelayFrames], a
 	RET;  // ret
@@ -398,7 +383,6 @@ restartframedelay:
 }
 
 int WaitPressAorB_BlinkCursor(){
-	SET_PC(0x0A31U);
 //  Show a blinking cursor in the lower right-hand
 //  corner of a textbox and wait until A or B is
 //  pressed.
@@ -416,7 +400,6 @@ int WaitPressAorB_BlinkCursor(){
 
 
 loop:
-	SET_PC(0x0A3EU);
 	PUSH_HL;  // push hl
 	hlcoord(18, 17, wTilemap);  // hlcoord 18, 17
 	CCALL(aBlinkCursor);  // call BlinkCursor
@@ -436,10 +419,8 @@ loop:
 }
 
 int SimpleWaitPressAorB(){
-	SET_PC(0x0A54U);
 
 loop:
-	SET_PC(0x0A54U);
 	CCALL(aJoyTextDelay);  // call JoyTextDelay
 	LDH_A_addr(hJoyLast);  // ldh a, [hJoyLast]
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
@@ -525,7 +506,6 @@ load_cursor_state:
 }
 
 int BlinkCursor(){
-	SET_PC(0x0AB4U);
 	PUSH_BC;  // push bc
 	LD_A_hl;  // ld a, [hl]
 	LD_B_A;  // ld b, a
@@ -551,7 +531,6 @@ int BlinkCursor(){
 
 
 place_arrow:
-	SET_PC(0x0AD5U);
 	LDH_A_addr(hMapObjectIndex);  // ldh a, [hMapObjectIndex]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -571,4 +550,6 @@ place_arrow:
 	RET;  // ret
 
 }
+
+
 

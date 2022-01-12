@@ -136,7 +136,6 @@ skip:
 }
 
 int CheckMovingOffEdgeOfMap(){
-	SET_PC(0x2154U);
 	LD_A_addr(wPlayerStepDirection);  // ld a, [wPlayerStepDirection]
 	CP_A(STANDING);  // cp STANDING
 	RET_Z ;  // ret z
@@ -153,7 +152,6 @@ int CheckMovingOffEdgeOfMap(){
 
 
 down:
-	SET_PC(0x216BU);
 	LD_A_addr(wPlayerStandingMapY);  // ld a, [wPlayerStandingMapY]
 	SUB_A(4);  // sub 4
 	LD_B_A;  // ld b, a
@@ -166,7 +164,6 @@ down:
 
 
 up:
-	SET_PC(0x217AU);
 	LD_A_addr(wPlayerStandingMapY);  // ld a, [wPlayerStandingMapY]
 	SUB_A(4);  // sub 4
 	CP_A(-1);  // cp -1
@@ -176,7 +173,6 @@ up:
 
 
 left:
-	SET_PC(0x2185U);
 	LD_A_addr(wPlayerStandingMapX);  // ld a, [wPlayerStandingMapX]
 	SUB_A(4);  // sub 4
 	CP_A(-1);  // cp -1
@@ -186,7 +182,6 @@ left:
 
 
 right:
-	SET_PC(0x2190U);
 	LD_A_addr(wPlayerStandingMapX);  // ld a, [wPlayerStandingMapX]
 	SUB_A(4);  // sub 4
 	LD_B_A;  // ld b, a
@@ -199,7 +194,6 @@ right:
 
 
 ok:
-	SET_PC(0x219FU);
 	SCF;  // scf
 	RET;  // ret
 
@@ -607,4 +601,6 @@ SetSpawn:
 	RET;  // ret
 
 }
+
+
 

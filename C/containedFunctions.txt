@@ -333,3 +333,11 @@ CheckTrainerBattle
 FadeToMapMusic
 LoadMapAttributes
 LoadMapAttributes_SkipObjects
+UpdateBGMap_Tiles
+UpdateBGMap_update
+UpdateBGMap_middle
+UpdateBGMap_top
+UpdateBGMap_start
+UpdateBGMap_row
+UpdateBGMap_Attr
+UpdateBGMap

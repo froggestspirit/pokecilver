@@ -1,7 +1,6 @@
 #include "../constants.h"
 
 int ResetMapBufferEventFlags(){
-	SET_PC(0x2F0EU);
 	XOR_A_A;  // xor a
 	LD_HL(wEventFlags);  // ld hl, wEventFlags
 	LD_hli_A;  // ld [hli], a
@@ -10,7 +9,6 @@ int ResetMapBufferEventFlags(){
 }
 
 int ResetBikeFlags(){
-	SET_PC(0x2F14U);
 	XOR_A_A;  // xor a
 	LD_HL(wBikeFlags);  // ld hl, wBikeFlags
 	LD_hli_A;  // ld [hli], a
@@ -20,7 +18,6 @@ int ResetBikeFlags(){
 }
 
 int ResetFlashIfOutOfCave(){
-	SET_PC(0x2F1BU);
 	LD_A_addr(wEnvironment);  // ld a, [wEnvironment]
 	CP_A(ROUTE);  // cp ROUTE
 	IF_Z goto outdoors;  // jr z, .outdoors
@@ -30,7 +27,6 @@ int ResetFlashIfOutOfCave(){
 
 
 outdoors:
-	SET_PC(0x2F27U);
 	LD_HL(wStatusFlags);  // ld hl, wStatusFlags
 	RES_hl(STATUSFLAGS_FLASH_F);  // res STATUSFLAGS_FLASH_F, [hl]
 	RET;  // ret
@@ -38,7 +34,6 @@ outdoors:
 }
 
 int EventFlagAction(){
-	SET_PC(0x2F2DU);
 	LD_HL(wEventFlags);  // ld hl, wEventFlags
 	CCALL(aFlagAction);  // call FlagAction
 	RET;  // ret
@@ -46,7 +41,6 @@ int EventFlagAction(){
 }
 
 int FlagAction(){
-	SET_PC(0x2F34U);
 //  Perform action b on bit de in flag array hl.
 
 //  inputs:
@@ -75,20 +69,17 @@ int FlagAction(){
 	RLC_C;  // rlc c
 
 one:
-	SET_PC(0x2F4BU);
 	RRCA;  // rrca
 	IF_NC goto two;  // jr nc, .two
 	RLC_C;  // rlc c
 	RLC_C;  // rlc c
 
 two:
-	SET_PC(0x2F52U);
 	RRCA;  // rrca
 	IF_NC goto three;  // jr nc, .three
 	SWAP_C;  // swap c
 
 three:
-	SET_PC(0x2F57U);
 
 // ; check b's value: 0, 1, 2
 	LD_A_B;  // ld a, b
@@ -104,7 +95,6 @@ three:
 
 
 setbit:
-	SET_PC(0x2F62U);
 // ; set bit
 	LD_A_hl;  // ld a, [hl]
 	OR_A_C;  // or c
@@ -113,7 +103,6 @@ setbit:
 
 
 clearbit:
-	SET_PC(0x2F66U);
 // ; clear bit
 	LD_A_C;  // ld a, c
 	CPL;  // cpl
@@ -135,7 +124,6 @@ int CheckReceivedDex(){
 }
 
 int CheckBPressedDebug(){
-	SET_PC(0x2F79U);
 //  //  unreferenced
 //  Used in debug ROMs to walk through walls and avoid encounters.
 
@@ -150,14 +138,12 @@ int CheckBPressedDebug(){
 }
 
 int xor_a(){
-	SET_PC(0x2F84U);
 	XOR_A_A;  // xor a
 	RET;  // ret
 
 }
 
 int xor_a_dec_a(){
-	SET_PC(0x2F86U);
 	XOR_A_A;  // xor a
 	DEC_A;  // dec a
 	RET;  // ret
@@ -165,7 +151,6 @@ int xor_a_dec_a(){
 }
 
 int CheckFieldDebug(){
-	SET_PC(0x2F89U);
 //  //  unreferenced
 	PUSH_HL;  // push hl
 	LD_HL(wDebugFlags);  // ld hl, wDebugFlags
@@ -174,4 +159,6 @@ int CheckFieldDebug(){
 	RET;  // ret
 
 }
+
+
 

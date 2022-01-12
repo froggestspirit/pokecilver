@@ -1,7 +1,6 @@
 #include "../constants.h"
 
 int GetPartyParamLocation(){
-	SET_PC(0x3B36U);
 //  Get the location of parameter a from wCurPartyMon in hl
 	PUSH_BC;  // push bc
 	LD_HL(wPartyMons);  // ld hl, wPartyMons
@@ -16,7 +15,6 @@ int GetPartyParamLocation(){
 }
 
 int GetPartyLocation(){
-	SET_PC(0x3B46U);
 //  Add the length of a PartyMon struct to hl a times.
 	LD_BC(PARTYMON_STRUCT_LENGTH);  // ld bc, PARTYMON_STRUCT_LENGTH
 	return AddNTimes();  // jp AddNTimes
@@ -24,7 +22,6 @@ int GetPartyLocation(){
 }
 
 int GetDexNumber(){
-	SET_PC(0x3B4CU);
 //  //  unreferenced
 //  Probably used in gen 1 to convert index number to dex number
 //  Not required in gen 2 because index number == dex number
@@ -47,7 +44,6 @@ int GetDexNumber(){
 }
 
 int UserPartyAttr(){
-	SET_PC(0x3B65U);
 	PUSH_AF;  // push af
 	LDH_A_addr(hBattleTurn);  // ldh a, [hBattleTurn]
 	AND_A_A;  // and a
@@ -56,14 +52,12 @@ int UserPartyAttr(){
 	return BattlePartyAttr();  // jr BattlePartyAttr
 
 ot:
-	SET_PC(0x3B6EU);
 	POP_AF;  // pop af
 	return OTPartyAttr();  // jr OTPartyAttr
 
 }
 
 int OpponentPartyAttr(){
-	SET_PC(0x3B71U);
 	PUSH_AF;  // push af
 	LDH_A_addr(hBattleTurn);  // ldh a, [hBattleTurn]
 	AND_A_A;  // and a
@@ -72,14 +66,12 @@ int OpponentPartyAttr(){
 	return BattlePartyAttr();  // jr BattlePartyAttr
 
 ot:
-	SET_PC(0x3B7AU);
 	POP_AF;  // pop af
 	return OTPartyAttr();  // jr OTPartyAttr
 
 }
 
 int BattlePartyAttr(){
-	SET_PC(0x3B7DU);
 //  Get attribute a from the party struct of the active battle mon.
 	PUSH_BC;  // push bc
 	LD_C_A;  // ld c, a
@@ -94,7 +86,6 @@ int BattlePartyAttr(){
 }
 
 int OTPartyAttr(){
-	SET_PC(0x3B8DU);
 //  Get attribute a from the party struct of the active enemy mon.
 	PUSH_BC;  // push bc
 	LD_C_A;  // ld c, a
@@ -109,7 +100,6 @@ int OTPartyAttr(){
 }
 
 int ResetDamage(){
-	SET_PC(0x3B9DU);
 	XOR_A_A;  // xor a
 	LD_addr_A(wCurDamage);  // ld [wCurDamage], a
 	LD_addr_A(wCurDamage + 1);  // ld [wCurDamage + 1], a
@@ -118,7 +108,6 @@ int ResetDamage(){
 }
 
 int SetPlayerTurn(){
-	SET_PC(0x3BA5U);
 	XOR_A_A;  // xor a
 	LDH_addr_A(hBattleTurn);  // ldh [hBattleTurn], a
 	RET;  // ret
@@ -126,7 +115,6 @@ int SetPlayerTurn(){
 }
 
 int SetEnemyTurn(){
-	SET_PC(0x3BA9U);
 	LD_A(1);  // ld a, 1
 	LDH_addr_A(hBattleTurn);  // ldh [hBattleTurn], a
 	RET;  // ret
@@ -215,7 +203,6 @@ int UpdateBattleHuds(){
 }
 
 int FarCopyRadioText(){
-	SET_PC(0x3CB0U);
 	INC_HL;  // inc hl
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
@@ -260,7 +247,6 @@ int StdBattleTextbox(){
 }
 
 int GetBattleAnimPointer(){
-	SET_PC(0x3CDEU);
 	LD_A(BANK(aBattleAnimations));  // ld a, BANK(BattleAnimations)
 	Bankswitch();  // rst Bankswitch
 
@@ -278,7 +264,6 @@ int GetBattleAnimPointer(){
 }
 
 int GetBattleAnimByte(){
-	SET_PC(0x3CEDU);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 
@@ -310,7 +295,6 @@ int GetBattleAnimByte(){
 }
 
 int PushLYOverrides(){
-	SET_PC(0x3D09U);
 	LDH_A_addr(hLCDCPointer);  // ldh a, [hLCDCPointer]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -330,4 +314,6 @@ int PushLYOverrides(){
 	RET;  // ret
 
 }
+
+
 

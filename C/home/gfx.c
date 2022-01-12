@@ -82,7 +82,6 @@ int DecompressRequest2bpp(){
 }
 
 int FarCopyBytes(){
-	SET_PC(0x0DCBU);
 //  copy bc bytes from a:hl to de
 
 	LD_addr_A(wTempBank);  // ld [wTempBank], a
@@ -100,7 +99,6 @@ int FarCopyBytes(){
 }
 
 int FarCopyBytesDouble(){
-	SET_PC(0x0DDBU);
 //  Copy bc bytes from a:hl to bc*2 bytes at de,
 //  doubling each byte in the process.
 
@@ -124,14 +122,12 @@ int FarCopyBytesDouble(){
 
 
 loop:
-	SET_PC(0x0DEFU);
 	LD_A_de;  // ld a, [de]
 	INC_DE;  // inc de
 	LD_hli_A;  // ld [hli], a
 	LD_hli_A;  // ld [hli], a
 
 dec:
-	SET_PC(0x0DF3U);
 	DEC_C;  // dec c
 	IF_NZ goto loop;  // jr nz, .loop
 	DEC_B;  // dec b
@@ -337,4 +333,6 @@ int DuplicateGet2bpp(){
 	return FarCopyBytes();  // jp FarCopyBytes
 
 }
+
+
 

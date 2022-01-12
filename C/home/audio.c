@@ -3,14 +3,12 @@
 //  Audio interfaces.
 
 int InitSound(){
-	SET_PC(0x3D4BU);
 	v_InitSound();  // call _InitSound
 	RET;  // ret
 
 }
 
 int UpdateSound(){
-	SET_PC(0x3D67U);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -37,7 +35,6 @@ int UpdateSound(){
 }
 
 int v_LoadMusicByte(){
-	SET_PC(0x3D83U);
 //  [wCurMusicByte] = [a:de]
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
@@ -53,7 +50,6 @@ int v_LoadMusicByte(){
 }
 
 int PlayMusic(){
-	SET_PC(0x3D94U);
 //  Play music de.
 
 	PUSH_HL;  // push hl
@@ -76,12 +72,10 @@ int PlayMusic(){
 
 
 nomusic:
-	SET_PC(0x3DABU);
 	v_InitSound();  // call _InitSound
 
 
 end:
-	SET_PC(0x3DAEU);
 	POP_AF;  // pop af
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
@@ -128,7 +122,6 @@ int PlayMusic2(){
 }
 
 int PlayCry(){
-	SET_PC(0x3DE0U);
 //  Play cry de.
 
 	PUSH_HL;  // push hl
@@ -182,7 +175,6 @@ int PlayCry(){
 }
 
 int PlaySFX(){
-	SET_PC(0x3E20U);
 //  Play sound effect de.
 //  Sound effects are ordered by priority (highest to lowest)
 
@@ -202,7 +194,6 @@ int PlaySFX(){
 
 
 play:
-	SET_PC(0x3E2FU);
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 	LD_A(BANK(av_PlaySFX));  // ld a, BANK(_PlaySFX)
@@ -219,7 +210,6 @@ play:
 
 
 done:
-	SET_PC(0x3E46U);
 	POP_AF;  // pop af
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
@@ -229,7 +219,6 @@ done:
 }
 
 int WaitPlaySFX(){
-	SET_PC(0x3E4BU);
 	CCALL(aWaitSFX);  // call WaitSFX
 	CCALL(aPlaySFX);  // call PlaySFX
 	RET;  // ret
@@ -237,14 +226,12 @@ int WaitPlaySFX(){
 }
 
 int WaitSFX(){
-	SET_PC(0x3E52U);
 //  infinite loop until sfx is done playing
 
 	PUSH_HL;  // push hl
 
 
 wait:
-	SET_PC(0x3E53U);
 // ;(port fix)ld hl, wChannel5Flags1
 // ;(port fix)bit 0, [hl]
 // ;(port fix)jr nz, .wait
@@ -264,7 +251,6 @@ wait:
 }
 
 int MaxVolume(){
-	SET_PC(0x3E55U);
 	LD_A(MAX_VOLUME);  // ld a, MAX_VOLUME
 	LD_addr_A(wVolume);  // ld [wVolume], a
 	RET;  // ret
@@ -272,7 +258,6 @@ int MaxVolume(){
 }
 
 int LowVolume(){
-	SET_PC(0x3E5BU);
 	LD_A(0x33);  // ld a, $33 ; 50%
 	LD_addr_A(wVolume);  // ld [wVolume], a
 	RET;  // ret
@@ -280,7 +265,6 @@ int LowVolume(){
 }
 
 int MinVolume(){
-	SET_PC(0x3E61U);
 	XOR_A_A;  // xor a
 	LD_addr_A(wVolume);  // ld [wVolume], a
 	RET;  // ret
@@ -288,7 +272,6 @@ int MinVolume(){
 }
 
 int FadeOutToMusic(){
-	SET_PC(0x3E66U);
 //  //  unreferenced
 	LD_A(4);  // ld a, 4
 	LD_addr_A(wMusicFade);  // ld [wMusicFade], a
@@ -297,7 +280,6 @@ int FadeOutToMusic(){
 }
 
 int FadeInToMusic(){
-	SET_PC(0x3E6CU);
 	LD_A(4 | (1 << MUSIC_FADE_IN_F));  // ld a, 4 | (1 << MUSIC_FADE_IN_F)
 	LD_addr_A(wMusicFade);  // ld [wMusicFade], a
 	RET;  // ret
@@ -305,11 +287,9 @@ int FadeInToMusic(){
 }
 
 int SkipMusic(){
-	SET_PC(0x3E72U);
 //  Skip a frames of music.
 
 loop:
-	SET_PC(0x3E72U);
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
 	DEC_A;  // dec a
@@ -319,7 +299,6 @@ loop:
 }
 
 int FadeToMapMusic(){
-	SET_PC(0x3E7AU);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -341,7 +320,6 @@ int FadeToMapMusic(){
 
 
 done:
-	SET_PC(0x3E98U);
 	POP_AF;  // pop af
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
@@ -456,7 +434,6 @@ int RestartMapMusic(){
 }
 
 int SpecialMapMusic(){
-	SET_PC(0x3F20U);
 	LD_A_addr(wPlayerState);  // ld a, [wPlayerState]
 	CP_A(PLAYER_SURF);  // cp PLAYER_SURF
 	IF_Z goto surf;  // jr z, .surf
@@ -469,28 +446,24 @@ int SpecialMapMusic(){
 
 
 no:
-	SET_PC(0x3F32U);
 	AND_A_A;  // and a
 	RET;  // ret
 
 
 bike:
 // 
-	SET_PC(0x3F34U);  //  unreferenced
 	LD_DE(MUSIC_BICYCLE);  // ld de, MUSIC_BICYCLE
 	SCF;  // scf
 	RET;  // ret
 
 
 surf:
-	SET_PC(0x3F39U);
 	LD_DE(MUSIC_SURF);  // ld de, MUSIC_SURF
 	SCF;  // scf
 	RET;  // ret
 
 
 contest:
-	SET_PC(0x3F3EU);
 	LD_A_addr(wMapGroup);  // ld a, [wMapGroup]
 	CP_A(GROUP_ROUTE_35_NATIONAL_PARK_GATE);  // cp GROUP_ROUTE_35_NATIONAL_PARK_GATE
 	IF_NZ goto no;  // jr nz, .no
@@ -502,7 +475,6 @@ contest:
 
 
 ranking:
-	SET_PC(0x3F50U);
 	LD_DE(MUSIC_BUG_CATCHING_CONTEST_RANKING);  // ld de, MUSIC_BUG_CATCHING_CONTEST_RANKING
 	SCF;  // scf
 	RET;  // ret
@@ -510,7 +482,6 @@ ranking:
 }
 
 int GetMapMusic_MaybeSpecial(){
-	SET_PC(0x3F55U);
 	CCALL(aSpecialMapMusic);  // call SpecialMapMusic
 	RET_C ;  // ret c
 	CCALL(aGetMapMusic);  // call GetMapMusic
@@ -519,7 +490,6 @@ int GetMapMusic_MaybeSpecial(){
 }
 
 int PlaceBCDNumberSprite(){
-	SET_PC(0x3F5DU);
 //  //  unreferenced
 //  Places a BCD number at the upper center of the screen.
 	LD_A(4 * TILE_WIDTH);  // ld a, 4 * TILE_WIDTH
@@ -550,7 +520,6 @@ int PlaceBCDNumberSprite(){
 
 
 max:
-	SET_PC(0x3F93U);
 	LD_A(0xff);  // ld a, "9"
 	LD_addr_A(wVirtualOAMSprite38TileID);  // ld [wVirtualOAMSprite38TileID], a
 	LD_addr_A(wVirtualOAMSprite39TileID);  // ld [wVirtualOAMSprite39TileID], a
@@ -559,7 +528,6 @@ max:
 }
 
 int CheckSFX(){
-	SET_PC(0x3F9CU);
 //  Return carry if any SFX channels are active.
 	LD_A_addr(wChannel5Flags1);  // ld a, [wChannel5Flags1]
 	BIT_A(0);  // bit 0, a
@@ -577,14 +545,12 @@ int CheckSFX(){
 	RET;  // ret
 
 playing:
-	SET_PC(0x3FBAU);
 	SCF;  // scf
 	RET;  // ret
 
 }
 
 int TerminateExpBarSound(){
-	SET_PC(0x3FBCU);
 	XOR_A_A;  // xor a
 	LD_addr_A(wChannel5Flags1);  // ld [wChannel5Flags1], a
 	LD_addr_A(wPitchSweep);  // ld [wPitchSweep], a
@@ -596,4 +562,6 @@ int TerminateExpBarSound(){
 	RET;  // ret
 
 }
+
+
 

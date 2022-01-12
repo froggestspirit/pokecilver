@@ -3,7 +3,6 @@
 //  Functions to fade the screen in and out.
 
 int TimeOfDayFade(){
-	SET_PC(0x0360U);
 //  //  unreferenced
 	LD_A_addr(wTimeOfDayPal);  // ld a, [wTimeOfDayPal]
 	LD_B_A;  // ld b, a
@@ -16,7 +15,6 @@ int TimeOfDayFade(){
 
 
 okay:
-	SET_PC(0x036DU);
 	LD_A_hli;  // ld a, [hli]
 	LDH_addr_A(rBGP);  // ldh [rBGP], a
 	LD_A_hli;  // ld a, [hli]
@@ -140,103 +138,89 @@ int RotatePalettesLeft(){
 }
 
 int IncGradGBPalTable_00(){
-	SET_PC(0x03EBU);
 //dc 3,3,3,3, 3,3,3,3, 3,3,3,3
 	return IncGradGBPalTable_01();
 }
 
 int IncGradGBPalTable_01(){
-	SET_PC(0x03EEU);
 //dc 3,3,3,2, 3,3,3,2, 3,3,3,2
 	return IncGradGBPalTable_02();
 }
 
 int IncGradGBPalTable_02(){
-	SET_PC(0x03F1U);
 //dc 3,3,2,1, 3,3,2,1, 3,3,2,1
 	return IncGradGBPalTable_03();
 }
 
 int IncGradGBPalTable_03(){
-	SET_PC(0x03F4U);
 //dc 3,2,1,0, 3,2,1,0, 3,2,1,0
 
 	return IncGradGBPalTable_04();
 }
 
 int IncGradGBPalTable_04(){
-	SET_PC(0x03F7U);
 //dc 3,2,1,0, 3,2,1,0, 3,2,1,0
 	return IncGradGBPalTable_05();
 }
 
 int IncGradGBPalTable_05(){
-	SET_PC(0x03FAU);
 //dc 2,1,0,0, 2,1,0,0, 2,1,0,0
 	return IncGradGBPalTable_06();
 }
 
 int IncGradGBPalTable_06(){
-	SET_PC(0x03FDU);
 //dc 1,0,0,0, 1,0,0,0, 1,0,0,0
 
 	return IncGradGBPalTable_07();
 }
 
 int IncGradGBPalTable_07(){
-	SET_PC(0x0400U);
 //dc 0,0,0,0, 0,0,0,0, 0,0,0,0
 //                            bgp      obp1     obp2
 	return IncGradGBPalTable_08();
 }
 
 int IncGradGBPalTable_08(){
-	SET_PC(0x0403U);
 //dc 3,3,3,3, 3,3,3,3, 3,3,3,3
 	return IncGradGBPalTable_09();
 }
 
 int IncGradGBPalTable_09(){
-	SET_PC(0x0406U);
 //dc 3,3,3,2, 3,3,3,2, 3,3,2,0
 	return IncGradGBPalTable_10();
 }
 
 int IncGradGBPalTable_10(){
-	SET_PC(0x0409U);
 //dc 3,3,2,1, 3,2,1,0, 3,2,1,0
 	return IncGradGBPalTable_11();
 }
 
 int IncGradGBPalTable_11(){
-	SET_PC(0x040CU);
 //dc 3,2,1,0, 3,1,0,0, 3,2,0,0
 
 	return IncGradGBPalTable_12();
 }
 
 int IncGradGBPalTable_12(){
-	SET_PC(0x040FU);
 //dc 3,2,1,0, 3,1,0,0, 3,2,0,0
 	return IncGradGBPalTable_13();
 }
 
 int IncGradGBPalTable_13(){
-	SET_PC(0x0412U);
 //dc 2,1,0,0, 2,0,0,0, 2,1,0,0
 	return IncGradGBPalTable_14();
 }
 
 int IncGradGBPalTable_14(){
-	SET_PC(0x0415U);
 //dc 1,0,0,0, 1,0,0,0, 1,0,0,0
 
 	return IncGradGBPalTable_15();
 }
 
 int IncGradGBPalTable_15(){
-	SET_PC(0x0418U);
 //dc 0,0,0,0, 0,0,0,0, 0,0,0,0
 
 }
+
+
 

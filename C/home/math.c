@@ -1,7 +1,6 @@
 #include "../constants.h"
 
 int SimpleMultiply(){
-	SET_PC(0x31A8U);
 //  Return a * c.
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -11,7 +10,6 @@ int SimpleMultiply(){
 	XOR_A_A;  // xor a
 
 loop:
-	SET_PC(0x31ADU);
 	ADD_A_C;  // add c
 	DEC_B;  // dec b
 	IF_NZ goto loop;  // jr nz, .loop
@@ -21,12 +19,10 @@ loop:
 }
 
 int SimpleDivide(){
-	SET_PC(0x31B3U);
 //  Divide a by c. Return quotient b and remainder a.
 	LD_B(0);  // ld b, 0
 
 loop:
-	SET_PC(0x31B5U);
 	INC_B;  // inc b
 	SUB_A_C;  // sub c
 	IF_NC goto loop;  // jr nc, .loop
@@ -67,7 +63,6 @@ int Divide(){
 }
 
 int SubtractAbsolute(){
-	SET_PC(0x31D9U);
 //  //  unreferenced
 //  Return |a - b|, sign in carry.
 	SUB_A_B;  // sub b
@@ -78,4 +73,6 @@ int SubtractAbsolute(){
 	RET;  // ret
 
 }
+
+
 

@@ -41,7 +41,6 @@ bg0:
 }
 
 int IsCGB(){
-	SET_PC(0x346AU);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
 	RET;  // ret
@@ -317,7 +316,6 @@ SetPalettesForGameBoyColor:
 }
 
 int ClearPalettes(){
-	SET_PC(0x3560U);
 //  Make all palettes white
 
 //  CGB: make all the palette colors white
@@ -334,7 +332,6 @@ int ClearPalettes(){
 
 
 cgb:
-	SET_PC(0x356DU);
 //  Fill wBGPals2 and wOBPals2 with $ffff (white)
 	LD_HL(wBGPals2);  // ld hl, wBGPals2
 	LD_BC(16 * PALETTE_SIZE);  // ld bc, 16 palettes
@@ -374,7 +371,6 @@ sgb:
 }
 
 int SetHPPal(){
-	SET_PC(0x358DU);
 //  Set palette for hp bar pixel length e at hl.
 	CCALL(aGetHPPal);  // call GetHPPal
 	LD_hl_D;  // ld [hl], d
@@ -383,7 +379,6 @@ int SetHPPal(){
 }
 
 int GetHPPal(){
-	SET_PC(0x3592U);
 //  Get palette for hp bar pixel length e in d.
 	LD_D(HP_GREEN);  // ld d, HP_GREEN
 	LD_A_E;  // ld a, e
@@ -396,4 +391,6 @@ int GetHPPal(){
 	RET;  // ret
 
 }
+
+
 

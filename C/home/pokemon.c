@@ -1,7 +1,6 @@
 #include "../constants.h"
 
 int DrawBattleHPBar(){
-	SET_PC(0x3980U);
 //  Draw an HP bar d tiles long at hl
 //  Fill it up to e pixels
 
@@ -20,7 +19,6 @@ int DrawBattleHPBar(){
 	LD_A(0x62);  // ld a, $62 ; empty bar
 
 template:
-	SET_PC(0x398CU);
 	LD_hli_A;  // ld [hli], a
 	DEC_D;  // dec d
 	IF_NZ goto template;  // jr nz, .template
@@ -40,7 +38,6 @@ template:
 
 
 fill:
-	SET_PC(0x399FU);
 //  Keep drawing tiles until pixel length is reached
 	LD_A_E;  // ld a, e
 	SUB_A(TILE_WIDTH);  // sub TILE_WIDTH
@@ -56,14 +53,12 @@ fill:
 
 
 lastbar:
-	SET_PC(0x39AEU);
 	LD_A(0x62);  // ld a, $62  ; empty bar
 	ADD_A_E;  // add e      ; + e
 	LD_hl_A;  // ld [hl], a
 
 
 done:
-	SET_PC(0x39B2U);
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
 	POP_HL;  // pop hl
@@ -116,7 +111,6 @@ not_pokemon:
 }
 
 int PlayStereoCry(){
-	SET_PC(0x39ECU);
 	PUSH_AF;  // push af
 	LD_A(1);  // ld a, 1
 	LD_addr_A(wStereoPanningMask);  // ld [wStereoPanningMask], a
@@ -126,7 +120,6 @@ int PlayStereoCry(){
 }
 
 int PlayMonCry(){
-	SET_PC(0x39F5U);
 	PUSH_AF;  // push af
 	XOR_A_A;  // xor a
 	LD_addr_A(wStereoPanningMask);  // ld [wStereoPanningMask], a
@@ -137,7 +130,6 @@ int PlayMonCry(){
 }
 
 int v_PlayMonCry(){
-	SET_PC(0x39FEU);
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -152,7 +144,6 @@ int v_PlayMonCry(){
 
 
 done:
-	SET_PC(0x3A0EU);
 	POP_BC;  // pop bc
 	POP_DE;  // pop de
 	POP_HL;  // pop hl
@@ -161,7 +152,6 @@ done:
 }
 
 int LoadCry(){
-	SET_PC(0x3A12U);
 //  Load cry bc.
 
 	CCALL(aGetCryIndex);  // call GetCryIndex
@@ -199,7 +189,6 @@ int LoadCry(){
 }
 
 int GetCryIndex(){
-	SET_PC(0x3A3DU);
 	AND_A_A;  // and a
 	IF_Z goto no;  // jr z, .no
 	CP_A(NUM_POKEMON + 1);  // cp NUM_POKEMON + 1
@@ -213,7 +202,6 @@ int GetCryIndex(){
 
 
 no:
-	SET_PC(0x3A4AU);
 	SCF;  // scf
 	RET;  // ret
 
@@ -259,7 +247,6 @@ int Print8BitNumLeftAlign(){
 }
 
 int GetNthMove(){
-	SET_PC(0x3A6CU);
 //  //  unreferenced
 	LD_HL(wListMoves_MoveIndicesBuffer);  // ld hl, wListMoves_MoveIndicesBuffer
 	LD_C_A;  // ld c, a
@@ -271,7 +258,6 @@ int GetNthMove(){
 }
 
 int GetBaseData(){
-	SET_PC(0x3A75U);
 	PUSH_BC;  // push bc
 	PUSH_DE;  // push de
 	PUSH_HL;  // push hl
@@ -297,7 +283,6 @@ int GetBaseData(){
 
 
 egg:
-	SET_PC(0x3A9AU);
 	LD_DE(mEggPic);  // ld de, EggPic
 
 //  Sprite dimensions
@@ -319,7 +304,6 @@ egg:
 
 
 end:
-	SET_PC(0x3AAFU);
 //  Replace Pokedex # with species
 	LD_A_addr(wCurSpecies);  // ld a, [wCurSpecies]
 	LD_addr_A(wBaseDexNo);  // ld [wBaseDexNo], a
@@ -363,4 +347,6 @@ int GetNickname(){
 	RET;  // ret
 
 }
+
+
 

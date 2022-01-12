@@ -1,7 +1,6 @@
 #include "../constants.h"
 
 int NamesPointers(){
-	SET_PC(0x35EAU);
 //  entries correspond to GetName constants (see constants/text_constants.asm)
 	//dba ['PokemonNames']  // dba PokemonNames        ; MON_NAME (not used; jumps to GetPokemonName)
 	//dba ['MoveNames']  // dba MoveNames           ; MOVE_NAME
@@ -16,7 +15,6 @@ int NamesPointers(){
 }
 
 int GetName(){
-	SET_PC(0x3602U);
 //  Return name wCurSpecies from name list wNamedObjectType in wStringBuffer1.
 
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -40,7 +38,6 @@ int GetName(){
 
 
 NotPokeName:
-	SET_PC(0x3620U);
 	LD_A_addr(wNamedObjectType);  // ld a, [wNamedObjectType]
 	DEC_A;  // dec a
 	LD_E_A;  // ld e, a
@@ -65,7 +62,6 @@ NotPokeName:
 
 
 done:
-	SET_PC(0x3642U);
 	LD_A_E;  // ld a, e
 	LD_addr_A(wUnusedNamesPointer);  // ld [wUnusedNamesPointer], a
 	LD_A_D;  // ld a, d
@@ -81,7 +77,6 @@ done:
 }
 
 int GetNthString(){
-	SET_PC(0x3650U);
 //  Return the address of the
 //  ath string starting from hl.
 
@@ -93,7 +88,6 @@ int GetNthString(){
 	LD_C(0x50);  // ld c, "@"
 
 readChar:
-	SET_PC(0x3656U);
 	LD_A_hli;  // ld a, [hli]
 	CP_A_C;  // cp c
 	IF_NZ goto readChar;  // jr nz, .readChar
@@ -105,7 +99,6 @@ readChar:
 }
 
 int GetBasePokemonName(){
-	SET_PC(0x365FU);
 //  Discards gender (Nidoran).
 
 	PUSH_HL;  // push hl
@@ -114,7 +107,6 @@ int GetBasePokemonName(){
 	LD_HL(wStringBuffer1);  // ld hl, wStringBuffer1
 
 loop:
-	SET_PC(0x3666U);
 	LD_A_hl;  // ld a, [hl]
 	CP_A(0x50);  // cp "@"
 	IF_Z goto quit;  // jr z, .quit
@@ -126,18 +118,15 @@ loop:
 	goto loop;  // jr .loop
 
 end:
-	SET_PC(0x3676U);
 	LD_hl(0x50);  // ld [hl], "@"
 
 quit:
-	SET_PC(0x3678U);
 	POP_HL;  // pop hl
 	RET;  // ret
 
 }
 
 int GetPokemonName(){
-	SET_PC(0x367AU);
 //  Get Pokemon name for wNamedObjectIndex.
 
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -310,7 +299,6 @@ HMTextEnd:
 }
 
 int GetMoveName(){
-	SET_PC(0x3739U);
 	PUSH_HL;  // push hl
 
 	LD_A(MOVE_NAME);  // ld a, MOVE_NAME
@@ -326,4 +314,6 @@ int GetMoveName(){
 	RET;  // ret
 
 }
+
+
 

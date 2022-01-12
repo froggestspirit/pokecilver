@@ -173,7 +173,6 @@ ByteFill:
 }
 
 int ClearVRAM(){
-	SET_PC(0x068EU);
 	LD_HL(VRAM_Begin);  // ld hl, VRAM_Begin
 	LD_BC(VRAM_End - VRAM_Begin);  // ld bc, VRAM_End - VRAM_Begin
 	XOR_A_A;  // xor a
@@ -183,14 +182,12 @@ int ClearVRAM(){
 }
 
 int BlankBGMap(){
-	SET_PC(0x0699U);
 	LD_A(0x7f);  // ld a, " "
 	return FillBGMap();  // jr FillBGMap
 
 }
 
 int FillBGMap_l(){
-	SET_PC(0x069DU);
 //  //  unreferenced
 	LD_A_L;  // ld a, l
 // ; fallthrough
@@ -199,12 +196,10 @@ int FillBGMap_l(){
 }
 
 int FillBGMap(){
-	SET_PC(0x069EU);
 	LD_DE(vBGMap1 - vBGMap0);  // ld de, vBGMap1 - vBGMap0
 	LD_L_E;  // ld l, e
 
 loop:
-	SET_PC(0x06A2U);
 	LD_hli_A;  // ld [hli], a
 	DEC_E;  // dec e
 	IF_NZ goto loop;  // jr nz, .loop
@@ -213,4 +208,6 @@ loop:
 	RET;  // ret
 
 }
+
+
 

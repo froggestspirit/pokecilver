@@ -3,14 +3,12 @@
 //  Functions relating to the timer interrupt and the real-time-clock.
 
 int Timer(){
-	SET_PC(0x045BU);
 //  //  unreferenced
 	RET;  // ret
 
 }
 
 int LatchClock(){
-	SET_PC(0x045CU);
 //  latch clock counter data
 	LD_A(0);  // ld a, 0
 	LD_addr_A(MBC3LatchClock);  // ld [MBC3LatchClock], a
@@ -31,7 +29,6 @@ int UpdateTime(){
 }
 
 int GetClock(){
-	SET_PC(0x0477U);
 //  store clock data in hRTCDayHi-hRTCSeconds
 
 //  enable clock r/w
@@ -74,7 +71,6 @@ int GetClock(){
 }
 
 int FixDays(){
-	SET_PC(0x04A8U);
 //  fix day count
 //  mod by 140
 
@@ -91,12 +87,10 @@ int FixDays(){
 	LDH_A_addr(hRTCDayLo);  // ldh a, [hRTCDayLo]
 
 modh:
-	SET_PC(0x04B4U);
 	SUB_A(140);  // sub 140
 	IF_NC goto modh;  // jr nc, .modh
 
 modl:
-	SET_PC(0x04B8U);
 	SUB_A(140);  // sub 140
 	IF_NC goto modl;  // jr nc, .modl
 	ADD_A(140);  // add 140
@@ -110,7 +104,6 @@ modl:
 
 
 daylo:
-	SET_PC(0x04C4U);
 //  quit if fewer than 140 days have passed
 	LDH_A_addr(hRTCDayLo);  // ldh a, [hRTCDayLo]
 	CP_A(140);  // cp 140
@@ -119,7 +112,6 @@ daylo:
 //  mod 140
 
 mod:
-	SET_PC(0x04CAU);
 	SUB_A(140);  // sub 140
 	IF_NC goto mod;  // jr nc, .mod
 	ADD_A(140);  // add 140
@@ -132,7 +124,6 @@ mod:
 
 
 set:
-	SET_PC(0x04D4U);
 //  update clock with modded day value
 	PUSH_AF;  // push af
 	CCALL(aSetClock);  // call SetClock
@@ -142,7 +133,6 @@ set:
 
 
 quit:
-	SET_PC(0x04DBU);
 	CCF;  // ccf
 	XOR_A_A;  // xor a
 	RET;  // ret
@@ -150,7 +140,6 @@ quit:
 }
 
 int FixTime(){
-	SET_PC(0x04DEU);
 //  add ingame time (set at newgame) to current time
 //  store time in wCurDay, hHours, hMinutes, hSeconds
 
@@ -164,7 +153,6 @@ int FixTime(){
 	ADD_A(60);  // add 60
 
 updatesec:
-	SET_PC(0x04EBU);
 	LDH_addr_A(hSeconds);  // ldh [hSeconds], a
 
 //  minute
@@ -178,7 +166,6 @@ updatesec:
 	ADD_A(60);  // add 60
 
 updatemin:
-	SET_PC(0x04FBU);
 	LDH_addr_A(hMinutes);  // ldh [hMinutes], a
 
 //  hour
@@ -192,7 +179,6 @@ updatemin:
 	ADD_A(24);  // add 24
 
 updatehr:
-	SET_PC(0x050BU);
 	LDH_addr_A(hHours);  // ldh [hHours], a
 
 //  day
@@ -256,7 +242,6 @@ ClearhRTC:
 }
 
 int SetClock(){
-	SET_PC(0x0552U);
 //  set clock data from hram
 
 //  enable clock r/w
@@ -306,7 +291,6 @@ int SetClock(){
 }
 
 int ClearRTCStatus(){
-	SET_PC(0x0585U);
 //  //  unreferenced
 //  clear sRTCStatusFlags
 	XOR_A_A;  // xor a
@@ -321,7 +305,6 @@ int ClearRTCStatus(){
 }
 
 int RecordRTCStatus(){
-	SET_PC(0x0594U);
 //  append flags to sRTCStatusFlags
 	LD_HL(sRTCStatusFlags);  // ld hl, sRTCStatusFlags
 	PUSH_AF;  // push af
@@ -336,7 +319,6 @@ int RecordRTCStatus(){
 }
 
 int CheckRTCStatus(){
-	SET_PC(0x05A4U);
 //  check sRTCStatusFlags
 	LD_A(BANK(sRTCStatusFlags));  // ld a, BANK(sRTCStatusFlags)
 	CCALL(aOpenSRAM);  // call OpenSRAM
@@ -345,4 +327,6 @@ int CheckRTCStatus(){
 	RET;  // ret
 
 }
+
+
 

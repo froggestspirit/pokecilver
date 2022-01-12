@@ -2972,3 +2972,4 @@ int PlayTrainerEncounterMusic(){
 	CCALL(aPlayMusic);  // call PlayMusic
 	RET;  // ret
 }
+

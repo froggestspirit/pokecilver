@@ -1,7 +1,6 @@
 #include "../constants.h"
 
 int InitString(){
-	SET_PC(0x2FB4U);
 //  Init a string of length c.
 	PUSH_HL;  // push hl
 	return v_InitString();  // jr _InitString
@@ -9,7 +8,6 @@ int InitString(){
 }
 
 int InitName(){
-	SET_PC(0x2FB7U);
 //  Intended for names, so this function is limited to ten characters.
 	PUSH_HL;  // push hl
 	LD_C(NAME_LENGTH - 1);  // ld c, NAME_LENGTH - 1
@@ -17,13 +15,11 @@ int InitName(){
 }
 
 int v_InitString(){
-	SET_PC(0x2FBAU);
 //  if the string pointed to by hl is empty (defined as "zero or more spaces
 //  followed by a null"), then initialize it to the string pointed to by de.
 	PUSH_BC;  // push bc
 
 loop:
-	SET_PC(0x2FBBU);
 	LD_A_hli;  // ld a, [hli]
 	CP_A(0x50);  // cp "@"
 	IF_Z goto blank;  // jr z, .blank
@@ -33,7 +29,6 @@ loop:
 	IF_NZ goto loop;  // jr nz, .loop
 
 blank:
-	SET_PC(0x2FC7U);
 	POP_BC;  // pop bc
 	LD_L_E;  // ld l, e
 	LD_H_D;  // ld h, d
@@ -45,10 +40,11 @@ blank:
 
 
 notblank:
-	SET_PC(0x2FD2U);
 	POP_BC;  // pop bc
 	POP_HL;  // pop hl
 	RET;  // ret
 
 }
+
+
 

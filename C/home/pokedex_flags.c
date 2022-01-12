@@ -1,20 +1,17 @@
 #include "../constants.h"
 
 int CountSetBits(){
-	SET_PC(0x359EU);
 //  Count the number of set bits in b bytes starting from hl.
 //  Return in a, c and [wNumSetBits].
 	LD_C(0);  // ld c, 0
 
 next:
-	SET_PC(0x35A0U);
 	LD_A_hli;  // ld a, [hli]
 	LD_E_A;  // ld e, a
 	LD_D(8);  // ld d, 8
 
 
 count:
-	SET_PC(0x35A4U);
 	SRL_E;  // srl e
 	LD_A(0);  // ld a, 0
 	ADC_A_C;  // adc c
@@ -32,11 +29,9 @@ count:
 }
 
 int GetWeekday(){
-	SET_PC(0x35B5U);
 	LD_A_addr(wCurDay);  // ld a, [wCurDay]
 
 mod:
-	SET_PC(0x35B8U);
 	SUB_A(7);  // sub 7
 	IF_NC goto mod;  // jr nc, .mod
 	ADD_A(7);  // add 7
@@ -94,4 +89,6 @@ int PokedexFlagAction(){
 	RET;  // ret
 
 }
+
+
 

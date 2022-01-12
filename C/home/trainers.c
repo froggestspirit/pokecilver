@@ -1,7 +1,6 @@
 #include "../constants.h"
 
 int CheckTrainerBattle(){
-	SET_PC(0x3840U);
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
 
@@ -16,7 +15,6 @@ int CheckTrainerBattle(){
 }
 
 int v_CheckTrainerBattle(){
-	SET_PC(0x384DU);
 //  Check if any trainer on the map sees the player and wants to battle.
 
 //  Skip the player object.
@@ -25,7 +23,6 @@ int v_CheckTrainerBattle(){
 
 
 loop:
-	SET_PC(0x3852U);
 
 //  Start a battle if the object:
 	PUSH_AF;  // push af
@@ -86,7 +83,6 @@ loop:
 
 
 next:
-	SET_PC(0x3897U);
 	POP_DE;  // pop de
 	LD_HL(MAPOBJECT_LENGTH);  // ld hl, MAPOBJECT_LENGTH
 	ADD_HL_DE;  // add hl, de
@@ -102,7 +98,6 @@ next:
 
 
 startbattle:
-	SET_PC(0x38A6U);
 	POP_DE;  // pop de
 	POP_AF;  // pop af
 	LDH_addr_A(hLastTalked);  // ldh [hLastTalked], a
@@ -115,7 +110,6 @@ startbattle:
 }
 
 int TalkToTrainer(){
-	SET_PC(0x38B4U);
 	LD_A(1);  // ld a, 1
 	LD_addr_A(wSeenTrainerDistance);  // ld [wSeenTrainerDistance], a
 	LD_A(-1);  // ld a, -1
@@ -125,7 +119,6 @@ int TalkToTrainer(){
 }
 
 int LoadTrainer_continue(){
-	SET_PC(0x38BEU);
 	CCALL(aGetMapScriptsBank);  // call GetMapScriptsBank
 	LD_addr_A(wSeenTrainerBank);  // ld [wSeenTrainerBank], a
 
@@ -148,7 +141,6 @@ int LoadTrainer_continue(){
 }
 
 int FacingPlayerDistance_bc(){
-	SET_PC(0x38E5U);
 	PUSH_DE;  // push de
 	CCALL(aFacingPlayerDistance);  // call FacingPlayerDistance
 	LD_B_D;  // ld b, d
@@ -159,7 +151,6 @@ int FacingPlayerDistance_bc(){
 }
 
 int FacingPlayerDistance(){
-	SET_PC(0x38EDU);
 //  Return carry if the sprite at bc is facing the player,
 //  its distance in d, and its direction in e.
 
@@ -184,7 +175,6 @@ int FacingPlayerDistance(){
 
 
 CheckY:
-	SET_PC(0x3905U);
 	LD_A_addr(wPlayerStandingMapY);  // ld a, [wPlayerStandingMapY]
 	SUB_A_E;  // sub e
 	IF_Z goto NotFacing;  // jr z, .NotFacing
@@ -199,14 +189,12 @@ CheckY:
 
 
 Above:
-	SET_PC(0x3914U);
 	LD_D_A;  // ld d, a
 	LD_E(OW_DOWN);  // ld e, OW_DOWN
 	goto CheckFacing;  // jr .CheckFacing
 
 
 CheckX:
-	SET_PC(0x3919U);
 	LD_A_addr(wPlayerStandingMapX);  // ld a, [wPlayerStandingMapX]
 	SUB_A_D;  // sub d
 	IF_Z goto NotFacing;  // jr z, .NotFacing
@@ -221,13 +209,11 @@ CheckX:
 
 
 Left:
-	SET_PC(0x3928U);
 	LD_D_A;  // ld d, a
 	LD_E(OW_RIGHT);  // ld e, OW_RIGHT
 
 
 CheckFacing:
-	SET_PC(0x392BU);
 	CCALL(aGetSpriteDirection);  // call GetSpriteDirection
 	CP_A_E;  // cp e
 	IF_NZ goto NotFacing;  // jr nz, .NotFacing
@@ -236,14 +222,12 @@ CheckFacing:
 
 
 NotFacing:
-	SET_PC(0x3933U);
 	AND_A_A;  // and a
 	RET;  // ret
 
 }
 
 int CheckTrainerFlag(){
-	SET_PC(0x3935U);
 //  //  unreferenced
 	PUSH_BC;  // push bc
 	LD_HL(OBJECT_MAP_OBJECT_INDEX);  // ld hl, OBJECT_MAP_OBJECT_INDEX
@@ -303,4 +287,6 @@ ok:
 	RET;  // ret
 
 }
+
+
 

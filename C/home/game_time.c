@@ -1,7 +1,6 @@
 #include "../constants.h"
 
 int ResetGameTime(){
-	SET_PC(0x1EE4U);
 	XOR_A_A;  // xor a
 	LD_addr_A(wGameTimeCap);  // ld [wGameTimeCap], a
 	LD_addr_A(wGameTimeHours);  // ld [wGameTimeHours], a
@@ -14,7 +13,6 @@ int ResetGameTime(){
 }
 
 int GameTimer(){
-	SET_PC(0x1EF8U);
 	NOP;  // nop
 
 //  Increment the game timer by one frame.
@@ -48,7 +46,6 @@ int GameTimer(){
 
 
 second:
-	SET_PC(0x1F15U);
 	XOR_A_A;  // xor a
 	LD_hl_A;  // ld [hl], a
 
@@ -65,7 +62,6 @@ second:
 
 
 minute:
-	SET_PC(0x1F22U);
 	XOR_A_A;  // xor a
 	LD_hl_A;  // ld [hl], a
 
@@ -82,7 +78,6 @@ minute:
 
 
 hour:
-	SET_PC(0x1F2FU);
 	XOR_A_A;  // xor a
 	LD_hl_A;  // ld [hl], a
 
@@ -112,7 +107,6 @@ hour:
 
 
 ok:
-	SET_PC(0x1F52U);
 	LD_A_H;  // ld a, h
 	LD_addr_A(wGameTimeHours);  // ld [wGameTimeHours], a
 	LD_A_L;  // ld a, l
@@ -120,4 +114,6 @@ ok:
 	RET;  // ret
 
 }
+
+
 

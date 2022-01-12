@@ -1,7 +1,6 @@
 #include "../constants.h"
 
 int GetBattleVar(){
-	SET_PC(0x3C01U);
 	PUSH_HL;  // push hl
 	CCALL(aGetBattleVarAddr);  // call GetBattleVarAddr
 	POP_HL;  // pop hl
@@ -10,7 +9,6 @@ int GetBattleVar(){
 }
 
 int GetBattleVarAddr(){
-	SET_PC(0x3C07U);
 //  Get variable from pair a, depending on whose turn it is.
 //  There are 21 variable pairs.
 	PUSH_BC;  // push bc
@@ -34,7 +32,6 @@ int GetBattleVarAddr(){
 
 
 getvar:
-	SET_PC(0x3C19U);
 //  var id
 	LD_A_hl;  // ld a, [hl]
 	LD_C_A;  // ld c, a
@@ -56,7 +53,6 @@ getvar:
 }
 
 int BattleVarPairs(){
-	SET_PC(0x3C28U);
 //  entries correspond to BATTLE_VARS_* constants
 	//table_width ['2', 'BattleVarPairs']  // table_width 2, BattleVarPairs
 	//dw ['.Substatus1'];  // dw .Substatus1
@@ -86,93 +82,71 @@ int BattleVarPairs(){
 
 Substatus1:
 //     db PLAYER_SUBSTATUS_1,    ENEMY_SUBSTATUS_1
-	SET_PC(0x3C52U);
 
 Substatus1Opp:
 //  db ENEMY_SUBSTATUS_1,     PLAYER_SUBSTATUS_1
-	SET_PC(0x3C54U);
 
 Substatus2:
 //     db PLAYER_SUBSTATUS_2,    ENEMY_SUBSTATUS_2
-	SET_PC(0x3C56U);
 
 Substatus2Opp:
 //  db ENEMY_SUBSTATUS_2,     PLAYER_SUBSTATUS_2
-	SET_PC(0x3C58U);
 
 Substatus3:
 //     db PLAYER_SUBSTATUS_3,    ENEMY_SUBSTATUS_3
-	SET_PC(0x3C5AU);
 
 Substatus3Opp:
 //  db ENEMY_SUBSTATUS_3,     PLAYER_SUBSTATUS_3
-	SET_PC(0x3C5CU);
 
 Substatus4:
 //     db PLAYER_SUBSTATUS_4,    ENEMY_SUBSTATUS_4
-	SET_PC(0x3C5EU);
 
 Substatus4Opp:
 //  db ENEMY_SUBSTATUS_4,     PLAYER_SUBSTATUS_4
-	SET_PC(0x3C60U);
 
 Substatus5:
 //     db PLAYER_SUBSTATUS_5,    ENEMY_SUBSTATUS_5
-	SET_PC(0x3C62U);
 
 Substatus5Opp:
 //  db ENEMY_SUBSTATUS_5,     PLAYER_SUBSTATUS_5
-	SET_PC(0x3C64U);
 
 Status:
 //         db PLAYER_STATUS,         ENEMY_STATUS
-	SET_PC(0x3C66U);
 
 StatusOpp:
 //      db ENEMY_STATUS,          PLAYER_STATUS
-	SET_PC(0x3C68U);
 
 MoveAnim:
 //       db PLAYER_MOVE_ANIMATION, ENEMY_MOVE_ANIMATION
-	SET_PC(0x3C6AU);
 
 MoveEffect:
 //     db PLAYER_MOVE_EFFECT,    ENEMY_MOVE_EFFECT
-	SET_PC(0x3C6CU);
 
 MovePower:
 //      db PLAYER_MOVE_POWER,     ENEMY_MOVE_POWER
-	SET_PC(0x3C6EU);
 
 MoveType:
 //       db PLAYER_MOVE_TYPE,      ENEMY_MOVE_TYPE
-	SET_PC(0x3C70U);
 
 CurMove:
 //        db PLAYER_CUR_MOVE,       ENEMY_CUR_MOVE
-	SET_PC(0x3C72U);
 
 LastCounter:
 //    db PLAYER_COUNTER_MOVE,   ENEMY_COUNTER_MOVE
-	SET_PC(0x3C74U);
 
 LastCounterOpp:
 // db ENEMY_COUNTER_MOVE,    PLAYER_COUNTER_MOVE
-	SET_PC(0x3C76U);
 
 LastMove:
 //       db PLAYER_LAST_MOVE,      ENEMY_LAST_MOVE
-	SET_PC(0x3C78U);
 
 LastMoveOpp:
 //    db ENEMY_LAST_MOVE,       PLAYER_LAST_MOVE
-	SET_PC(0x3C7AU);
 
 	return BattleVarLocations();
 }
 
 int BattleVarLocations(){
-	SET_PC(0x3C7CU);
 //  entries correspond to PLAYER_* and ENEMY_* constants
 	//table_width ['2 + 2', 'BattleVarLocations']  // table_width 2 + 2, BattleVarLocations
 	//dw ['wPlayerSubStatus1', 'wEnemySubStatus1'];  // dw wPlayerSubStatus1,          wEnemySubStatus1
@@ -191,4 +165,6 @@ int BattleVarLocations(){
 	//assert_table_length ['NUM_BATTLE_VAR_LOCATION_PAIRS']  // assert_table_length NUM_BATTLE_VAR_LOCATION_PAIRS
 
 }
+
+
 

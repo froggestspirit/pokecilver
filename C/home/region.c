@@ -1,7 +1,6 @@
 #include "../constants.h"
 
 int IsInJohto(){
-	SET_PC(0x2FD5U);
 //  Return 0 if the player is in Johto, and 1 in Kanto.
 
 	LD_A_addr(wMapGroup);  // ld a, [wMapGroup]
@@ -24,19 +23,16 @@ int IsInJohto(){
 
 
 CheckRegion:
-	SET_PC(0x2FF3U);
 	CP_A(KANTO_LANDMARK);  // cp KANTO_LANDMARK
 	IF_NC goto Kanto;  // jr nc, .Kanto
 
 
 Johto:
-	SET_PC(0x2FF7U);
 	XOR_A_A;  // xor a ; JOHTO_REGION
 	RET;  // ret
 
 
 Kanto:
-	SET_PC(0x2FF9U);
 	LD_A(KANTO_REGION);  // ld a, KANTO_REGION
 	RET;  // ret
 
@@ -114,4 +110,6 @@ quit:
 	RET;  // ret
 
 }
+
+
 

@@ -3,7 +3,6 @@
 //  Functions dealing with palettes.
 
 int UpdatePalsIfCGB(){
-	SET_PC(0x0BDDU);
 //  update bgp data from wBGPals2
 //  update obp data from wOBPals2
 //  return carry if successful
@@ -16,7 +15,6 @@ int UpdatePalsIfCGB(){
 }
 
 int UpdateCGBPals(){
-	SET_PC(0x0BE1U);
 //  return carry if successful
 //  any pals to update?
 	LDH_A_addr(hCGBPalUpdate);  // ldh a, [hCGBPalUpdate]
@@ -31,7 +29,6 @@ int UpdateCGBPals(){
 	LD_C(8 / 2);  // ld c, 8 / 2
 
 bgp:
-	SET_PC(0x0BEEU);
 	for(int rept = 0; rept < (PALETTE_SIZE) * 2; rept++){
 	LD_A_hli;  // ld a, [hli]
 	LDH_addr_A(rBGPD);  // ldh [rBGPD], a
@@ -48,7 +45,6 @@ bgp:
 	LD_C(8 / 2);  // ld c, 8 / 2
 
 obp:
-	SET_PC(0x0C27U);
 	for(int rept = 0; rept < (PALETTE_SIZE) * 2; rept++){
 	LD_A_hli;  // ld a, [hli]
 	LDH_addr_A(rOBPD);  // ldh [rOBPD], a
@@ -277,7 +273,6 @@ ok:
 }
 
 int ClearVBank1(){
-	SET_PC(0x0D11U);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -297,13 +292,11 @@ int ClearVBank1(){
 }
 
 int ReloadPalettes(){
-	SET_PC(0x0D28U);
 	hlcoord(0, 0, wTilemap);  // hlcoord 0, 0
 	decoord(0, 0, wAttrmap);  // decoord 0, 0, wAttrmap
 	LD_BC(SCREEN_WIDTH * SCREEN_HEIGHT);  // ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 
 loop:
-	SET_PC(0x0D31U);
 	LD_A_hli;  // ld a, [hli]
 	CP_A(0x60);  // cp "■"
 	IF_C goto skip;  // jr c, .skip
@@ -311,7 +304,6 @@ loop:
 	LD_de_A;  // ld [de], a
 
 skip:
-	SET_PC(0x0D39U);
 	INC_DE;  // inc de
 	DEC_BC;  // dec bc
 	LD_A_B;  // ld a, b
@@ -350,4 +342,6 @@ int ScrollBGMapPalettes(){
 	RET;  // ret
 
 }
+
+
 
