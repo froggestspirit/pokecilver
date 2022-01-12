@@ -159,6 +159,3 @@ int CheckFieldDebug(){
 	RET;  // ret
 
 }
-
-
-

@@ -601,6 +601,3 @@ SetSpawn:
 	RET;  // ret
 
 }
-
-
-

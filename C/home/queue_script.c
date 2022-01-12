@@ -17,6 +17,3 @@ int FarQueueScript(){
 	RET;  // ret
 
 }
-
-
-

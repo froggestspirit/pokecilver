@@ -23,6 +23,3 @@ int EnableSpriteUpdates(){
 	RET;  // ret
 
 }
-
-
-

@@ -46,6 +46,3 @@ int Start(){
 	NOP;  // nop
 	JP(mv_Start);  // jp _Start
 }
-
-
-

@@ -37,6 +37,3 @@ int FarCall_JumpToHL(){
 	JP_hl;  // jp hl
 
 }
-
-
-

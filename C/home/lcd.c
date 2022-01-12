@@ -70,6 +70,3 @@ int EnableLCD(){
 	RET;  // ret
 
 }
-
-
-

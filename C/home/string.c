@@ -45,6 +45,3 @@ notblank:
 	RET;  // ret
 
 }
-
-
-

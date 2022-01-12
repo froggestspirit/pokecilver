@@ -152,6 +152,3 @@ MovementData:
 	//big_step ['RIGHT']  // big_step RIGHT
 
 }
-
-
-

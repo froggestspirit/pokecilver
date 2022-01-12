@@ -1017,6 +1017,3 @@ int ResetBGWindow(){
 	RET;  // ret
 
 }
-
-
-

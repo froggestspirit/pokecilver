@@ -500,6 +500,3 @@ int SetBitsForTimeCapsuleRequestIfNotLinked(){
 	RET;  // ret
 
 }
-
-
-

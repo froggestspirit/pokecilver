@@ -745,6 +745,3 @@ int GetSpriteDirection(){
 	RET;  // ret
 
 }
-
-
-

@@ -31,6 +31,3 @@ int UpdateTimePals(){
 	RET;  // ret
 
 }
-
-
-

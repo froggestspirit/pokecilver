@@ -28,6 +28,3 @@ int DelayFrames(){
 	RET;  // ret
 
 }
-
-
-

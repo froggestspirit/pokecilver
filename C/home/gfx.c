@@ -333,6 +333,3 @@ int DuplicateGet2bpp(){
 	return FarCopyBytes();  // jp FarCopyBytes
 
 }
-
-
-

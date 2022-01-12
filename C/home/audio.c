@@ -562,6 +562,3 @@ int TerminateExpBarSound(){
 	RET;  // ret
 
 }
-
-
-

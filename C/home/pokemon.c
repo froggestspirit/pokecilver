@@ -347,6 +347,3 @@ int GetNickname(){
 	RET;  // ret
 
 }
-
-
-

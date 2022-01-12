@@ -46,6 +46,3 @@ int AskSerial(){
 	RET;  // ret
 
 }
-
-
-

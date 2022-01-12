@@ -13,6 +13,3 @@ int v_de_(){
 	RET;  // ret
 
 }
-
-
-

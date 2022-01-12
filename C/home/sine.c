@@ -17,6 +17,3 @@ int Sine(){
 	RET;  // ret
 
 }
-
-
-

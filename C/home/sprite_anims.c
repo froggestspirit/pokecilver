@@ -38,6 +38,3 @@ int ReinitSpriteAnimFrame(){
 	RET;  // ret
 
 }
-
-
-

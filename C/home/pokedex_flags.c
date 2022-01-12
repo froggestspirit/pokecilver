@@ -89,6 +89,3 @@ int PokedexFlagAction(){
 	RET;  // ret
 
 }
-
-
-

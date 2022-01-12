@@ -72,6 +72,3 @@ int JoyTextDelay_ForcehJoyDown(){
 	RET;  // ret
 
 }
-
-
-

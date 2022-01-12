@@ -314,6 +314,3 @@ int GetMoveName(){
 	RET;  // ret
 
 }
-
-
-

@@ -85,6 +85,3 @@ int CheckItem(){
 	RET;  // ret
 
 }
-
-
-

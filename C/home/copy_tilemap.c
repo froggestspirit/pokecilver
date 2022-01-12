@@ -30,6 +30,3 @@ int LoadTempTilemapToTilemap(){
 	return CopyBytes();  // jp CopyBytes
 
 }
-
-
-

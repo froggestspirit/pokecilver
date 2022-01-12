@@ -327,6 +327,3 @@ int CheckRTCStatus(){
 	RET;  // ret
 
 }
-
-
-

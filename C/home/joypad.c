@@ -550,6 +550,3 @@ place_arrow:
 	RET;  // ret
 
 }
-
-
-

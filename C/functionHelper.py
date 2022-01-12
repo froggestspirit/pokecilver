@@ -57,6 +57,10 @@ def update(fileName):
     printFile = f"{fileName}\n"
     with open(fileName, "r") as inFile:
         asmFile = inFile.read().split("\n")
+    for lineNum, line in enumerate(asmFile):
+        if line:
+            lastLine = lineNum + 1
+    asmFile = asmFile[:lastLine]
     currentFunc = None
     with open(fileName, "w") as outFile:
         for lineNum, line in enumerate(asmFile):
