@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int PrintNum(){
+void PrintNum(void){
 	SET_PC(0x3239U);
 //  Print c digits of the b-byte value from de to hl.
 //  Allows 2 to 7 digits. For 1-digit numbers, add
@@ -366,7 +366,7 @@ inc:
 
 }
 
-int PrintHexNumber(){
+void PrintHexNumber(void){
 	SET_PC(0x33CAU);
 //  Print the c-byte value from de to hl as hexadecimal digits.
 

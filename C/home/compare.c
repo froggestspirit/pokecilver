@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int CompareBytes(){
+void CompareBytes(void){
 //  Compare c bytes at de and hl.
 //  Return z if they all match.
 
@@ -16,7 +16,7 @@ loop:
 
 }
 
-int CompareBytesLong(){
+void CompareBytesLong(void){
 //  Compare bc bytes at de and hl.
 //  Return carry if they all match.
 

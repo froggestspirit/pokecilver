@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int ClearBox(){
+void ClearBox(void){
 //  Fill a c*b box at hl with blank tiles.
 	LD_A(0x7f);  // ld a, " "
 	LD_DE(SCREEN_WIDTH);  // ld de, SCREEN_WIDTH
@@ -22,7 +22,7 @@ col:
 
 }
 
-int ClearTilemap(){
+void ClearTilemap(void){
 	SET_PC(0x0ECDU);
 //  Fill wTilemap with blank tiles.
 
@@ -39,7 +39,7 @@ int ClearTilemap(){
 
 }
 
-int ClearScreen(){
+void ClearScreen(void){
 	SET_PC(0x0EE0U);
 	LD_A(PAL_BG_TEXT);  // ld a, PAL_BG_TEXT
 	hlcoord(0, 0, wAttrmap);  // hlcoord 0, 0, wAttrmap
@@ -49,7 +49,7 @@ int ClearScreen(){
 
 }
 
-int Textbox(){
+void Textbox(void){
 	SET_PC(0x0EEDU);
 //  Draw a text box at hl with room for b lines of c characters each.
 //  Places a border around the textbox, then switches the palette to the
@@ -63,7 +63,7 @@ int Textbox(){
 
 }
 
-int TextboxBorder(){
+void TextboxBorder(void){
 	SET_PC(0x0EF6U);
 // ; Top
 	PUSH_HL;  // push hl
@@ -118,7 +118,7 @@ loop:
 
 }
 
-int TextboxPalette(){
+void TextboxPalette(void){
 //  Fill text box width c height b at hl with pal 7
 	LD_DE(wAttrmap - wTilemap);  // ld de, wAttrmap - wTilemap
 	ADD_HL_DE;  // add hl, de
@@ -146,7 +146,7 @@ row:
 
 }
 
-int SpeechTextbox(){
+void SpeechTextbox(void){
 	SET_PC(0x0F43U);
 //  Standard textbox.
 	hlcoord(TEXTBOX_X, TEXTBOX_Y, wTilemap);  // hlcoord TEXTBOX_X, TEXTBOX_Y
@@ -156,7 +156,7 @@ int SpeechTextbox(){
 
 }
 
-int GameFreakText(){
+void GameFreakText(void){
 	SET_PC(0x0F4DU);
 //  //  unreferenced
 	//text ['"ゲームフりーク！"']  // text "ゲームフりーク！" ; "GAMEFREAK!"
@@ -165,7 +165,7 @@ int GameFreakText(){
 	return RadioTerminator();
 }
 
-int RadioTerminator(){
+void RadioTerminator(void){
 	SET_PC(0x0F57U);
 	LD_HL(mRadioTerminator_stop);  // ld hl, .stop
 	RET;  // ret
@@ -178,7 +178,7 @@ stop:
 	return PrintText();
 }
 
-int PrintText(){
+void PrintText(void){
 	SET_PC(0x0F5CU);
 	CALL(mSetUpTextbox);  // call SetUpTextbox
 // ; fallthrough
@@ -186,7 +186,7 @@ int PrintText(){
 	return PrintTextboxText();
 }
 
-int PrintTextboxText(){
+void PrintTextboxText(void){
 	SET_PC(0x0F5FU);
 	bccoord(TEXTBOX_INNERX, TEXTBOX_INNERY, wTilemap);  // bccoord TEXTBOX_INNERX, TEXTBOX_INNERY
 	CALL(mPlaceHLTextAtBC);  // call PlaceHLTextAtBC
@@ -194,7 +194,7 @@ int PrintTextboxText(){
 
 }
 
-int SetUpTextbox(){
+void SetUpTextbox(void){
 	SET_PC(0x0F66U);
 	PUSH_HL;  // push hl
 	CALL(mSpeechTextbox);  // call SpeechTextbox
@@ -205,7 +205,7 @@ int SetUpTextbox(){
 
 }
 
-int PlaceString(){
+void PlaceString(void){
 	SET_PC(0x0F72U);
 	PUSH_HL;  // push hl
 // ; fallthrough
@@ -213,7 +213,7 @@ int PlaceString(){
 	return PlaceNextChar();
 }
 
-int PlaceNextChar(){
+void PlaceNextChar(void){
 	SET_PC(0x0F73U);
 	LD_A_de;  // ld a, [de]
 	CP_A(0x50);  // cp "@"
@@ -225,7 +225,7 @@ int PlaceNextChar(){
 
 }
 
-int DummyChar(){
+void DummyChar(void){
 	SET_PC(0x0F7CU);
 //  //  unreferenced
 	POP_DE;  // pop de
@@ -234,14 +234,14 @@ int DummyChar(){
 	return NextChar();
 }
 
-int NextChar(){
+void NextChar(void){
 	SET_PC(0x0F7DU);
 	INC_DE;  // inc de
 	JP(mPlaceNextChar);  // jp PlaceNextChar
 
 }
 
-int CheckDict(){
+void CheckDict(void){
 	SET_PC(0x0F81U);
 // dict: MACRO
 // assert CHARLEN(\1) == 1
@@ -364,75 +364,75 @@ place:
                             LD_DE(x);\
                             JP(mPlaceCommandCharacter);} while(0)
 							
-int PrintMomsName(){
+void PrintMomsName(void){
 	print_name(wMomsName);
 }
 
-int PrintPlayerName(){
+void PrintPlayerName(void){
 	print_name(wPlayerName);
 }
 
-int PrintRivalName(){
+void PrintRivalName(void){
 	print_name(wRivalName);
 }
 
-int PrintRedsName(){
+void PrintRedsName(void){
 	print_name(wRedsName);
 }
 
-int PrintGreensName(){
+void PrintGreensName(void){
 	print_name(wGreensName);
 }
 
-int TrainerChar(){
+void TrainerChar(void){
 	print_name(mTrainerCharText);
 }
 
-int TMChar(){
+void TMChar(void){
 	print_name(mTMCharText);
 }
 
-int PCChar(){
+void PCChar(void){
 	print_name(mPCCharText);
 }
 
-int RocketChar(){
+void RocketChar(void){
 	print_name(mRocketCharText);
 }
 
-int PlacePOKe(){
+void PlacePOKe(void){
 	print_name(mPlacePOKeText);
 }
 
-int PlaceKougeki(){
+void PlaceKougeki(void){
 	print_name(mKougekiText);
 }
 
-int SixDotsChar(){
+void SixDotsChar(void){
 	print_name(mSixDotsCharText);
 }
 
-int PlacePKMN(){
+void PlacePKMN(void){
 	print_name(mPlacePKMNText);
 }
 
-int PlacePOKE(){
+void PlacePOKE(void){
 	print_name(mPlacePOKEText);
 }
 
-int PlaceJPRoute(){
+void PlaceJPRoute(void){
 	print_name(mPlaceJPRouteText);
 }
 
-int PlaceWatashi(){
+void PlaceWatashi(void){
 	print_name(mPlaceWatashiText);
 }
 
-int PlaceKokoWa(){
+void PlaceKokoWa(void){
 	print_name(mPlaceKokoWaText);
 }
 
-int PlaceMoveTargetsName(){
+void PlaceMoveTargetsName(void){
 	SET_PC(0x10DBU);
 	LDH_A_addr(hBattleTurn);  // ldh a, [hBattleTurn]
 	XOR_A(1);  // xor 1
@@ -440,7 +440,7 @@ int PlaceMoveTargetsName(){
 
 }
 
-int PlaceMoveUsersName(){
+void PlaceMoveUsersName(void){
 	SET_PC(0x10E1U);
 	LDH_A_addr(hBattleTurn);  // ldh a, [hBattleTurn]
 // ; fallthrough
@@ -448,7 +448,7 @@ int PlaceMoveUsersName(){
 	return PlaceBattlersName();
 }
 
-int PlaceBattlersName(){
+void PlaceBattlersName(void){
 	SET_PC(0x10E3U);
 	PUSH_DE;  // push de
 	AND_A_A;  // and a
@@ -469,7 +469,7 @@ enemy:
 
 }
 
-int PlaceEnemysName(){
+void PlaceEnemysName(void){
 	SET_PC(0x10F9U);
 	PUSH_DE;  // push de
 
@@ -509,7 +509,7 @@ linkbattle:
 
 }
 
-int PlaceCommandCharacter(){
+void PlaceCommandCharacter(void){
 	SET_PC(0x1130U);
 	CALL(mPlaceString);  // call PlaceString
 	LD_H_B;  // ld h, b
@@ -519,91 +519,91 @@ int PlaceCommandCharacter(){
 
 }
 
-int TMCharText(){
+void TMCharText(void){
 	SET_PC(0x1139U);
 //     db "TM@"
 	return TrainerCharText();
 }
 
-int TrainerCharText(){
+void TrainerCharText(void){
 	SET_PC(0x113CU);
 //db "TRAINER@"
 	return PCCharText();
 }
 
-int PCCharText(){
+void PCCharText(void){
 	SET_PC(0x1144U);
 //     db "PC@"
 	return RocketCharText();
 }
 
-int RocketCharText(){
+void RocketCharText(void){
 	SET_PC(0x1147U);
 // db "ROCKET@"
 	return PlacePOKeText();
 }
 
-int PlacePOKeText(){
+void PlacePOKeText(void){
 	SET_PC(0x114EU);
 //  db "POKé@"
 	return KougekiText();
 }
 
-int KougekiText(){
+void KougekiText(void){
 	SET_PC(0x1153U);
 //    db "こうげき@"
 	return SixDotsCharText();
 }
 
-int SixDotsCharText(){
+void SixDotsCharText(void){
 	SET_PC(0x1158U);
 //db "……@"
 	return EnemyText();
 }
 
-int EnemyText(){
+void EnemyText(void){
 	SET_PC(0x115BU);
 //      db "Enemy @"
 	return PlacePKMNText();
 }
 
-int PlacePKMNText(){
+void PlacePKMNText(void){
 	SET_PC(0x1162U);
 //  db "<PK><MN>@"
 	return PlacePOKEText();
 }
 
-int PlacePOKEText(){
+void PlacePOKEText(void){
 	SET_PC(0x1165U);
 //  db "<PO><KE>@"
 	return String_Space();
 }
 
-int String_Space(){
+void String_Space(void){
 	SET_PC(0x1168U);
 //   db " @"
 //  These strings have been dummied out.
 	return PlaceJPRouteText();
 }
 
-int PlaceJPRouteText(){
+void PlaceJPRouteText(void){
 	SET_PC(0x116AU);
 	return PlaceWatashiText();
 }
 
-int PlaceWatashiText(){
+void PlaceWatashiText(void){
 	SET_PC(0x116AU);
 	return PlaceKokoWaText();
 }
 
-int PlaceKokoWaText(){
+void PlaceKokoWaText(void){
 	SET_PC(0x116AU);
 //db "@"
 
 	return NextLineChar();
 }
 
-int NextLineChar(){
+void NextLineChar(void){
 	SET_PC(0x116BU);
 	POP_HL;  // pop hl
 	LD_BC(SCREEN_WIDTH * 2);  // ld bc, SCREEN_WIDTH * 2
@@ -613,7 +613,7 @@ int NextLineChar(){
 
 }
 
-int LineFeedChar(){
+void LineFeedChar(void){
 	SET_PC(0x1174U);
 	POP_HL;  // pop hl
 	LD_BC(SCREEN_WIDTH);  // ld bc, SCREEN_WIDTH
@@ -623,7 +623,7 @@ int LineFeedChar(){
 
 }
 
-int LineChar(){
+void LineChar(void){
 	SET_PC(0x117DU);
 	POP_HL;  // pop hl
 	hlcoord(TEXTBOX_INNERX, TEXTBOX_INNERY + 2, wTilemap);  // hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY + 2
@@ -632,7 +632,7 @@ int LineChar(){
 
 }
 
-int Paragraph(){
+void Paragraph(void){
 	SET_PC(0x1185U);
 	PUSH_DE;  // push de
 
@@ -658,7 +658,7 @@ linkbattle:
 
 }
 
-int v_ContText(){
+void v_ContText(void){
 	SET_PC(0x11AEU);
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
 	OR_A_A;  // or a
@@ -682,7 +682,7 @@ communication:
 	return v_ContTextNoPause();
 }
 
-int v_ContTextNoPause(){
+void v_ContTextNoPause(void){
 	SET_PC(0x11C6U);
 	PUSH_DE;  // push de
 	CALL(mTextScroll);  // call TextScroll
@@ -693,7 +693,7 @@ int v_ContTextNoPause(){
 
 }
 
-int ContText(){
+void ContText(void){
 	SET_PC(0x11D4U);
 	PUSH_DE;  // push de
 	LD_DE(mContText_cont);  // ld de, .cont
@@ -713,7 +713,7 @@ cont:
 	return PlaceDexEnd();
 }
 
-int PlaceDexEnd(){
+void PlaceDexEnd(void){
 //  Ends a Pokédex entry in Gen 1.
 //  Dex entries are now regular strings.
 	LD_hl(0xe8);  // ld [hl], "."
@@ -722,7 +722,7 @@ int PlaceDexEnd(){
 
 }
 
-int PromptText(){
+void PromptText(void){
 	SET_PC(0x11E9U);
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
 	CP_A(LINK_COLOSSEUM);  // cp LINK_COLOSSEUM
@@ -741,7 +741,7 @@ ok:
 
 }
 
-int DoneText(){
+void DoneText(void){
 	SET_PC(0x1203U);
 	POP_HL;  // pop hl
 	LD_DE(mDoneText_stop);  // ld de, .stop
@@ -756,7 +756,7 @@ stop:
 	return NullChar();
 }
 
-int NullChar(){
+void NullChar(void){
 	SET_PC(0x120AU);
 	LD_B_H;  // ld b, h
 	LD_C_L;  // ld c, l
@@ -775,7 +775,7 @@ ErrorText:
 	return TextScroll();
 }
 
-int TextScroll(){
+void TextScroll(void){
 	SET_PC(0x121BU);
 	hlcoord(TEXTBOX_X, TEXTBOX_INNERY, wTilemap);  // hlcoord TEXTBOX_X, TEXTBOX_INNERY
 	decoord(TEXTBOX_X, TEXTBOX_INNERY - 1, wTilemap);  // decoord TEXTBOX_X, TEXTBOX_INNERY - 1
@@ -791,7 +791,7 @@ int TextScroll(){
 
 }
 
-int Text_WaitBGMap(){
+void Text_WaitBGMap(void){
 	SET_PC(0x1238U);
 	PUSH_BC;  // push bc
 	LDH_A_addr(hOAMUpdate);  // ldh a, [hOAMUpdate]
@@ -808,7 +808,7 @@ int Text_WaitBGMap(){
 
 }
 
-int Diacritic(){
+void Diacritic(void){
 	PUSH_AF;  // push af
 	PUSH_HL;  // push hl
 	LD_A_B;  // ld a, b
@@ -821,21 +821,21 @@ int Diacritic(){
 
 }
 
-int LoadBlinkingCursor(){
+void LoadBlinkingCursor(void){
 	LD_A(0xee);  // ld a, "▼"
 	ldcoord_a(18, 17, wTilemap);  // ldcoord_a 18, 17
 	RET;  // ret
 
 }
 
-int UnloadBlinkingCursor(){
+void UnloadBlinkingCursor(void){
 	LD_A(0x7a);  // ld a, "─"
 	ldcoord_a(18, 17, wTilemap);  // ldcoord_a 18, 17
 	RET;  // ret
 
 }
 
-int PlaceFarString(){
+void PlaceFarString(void){
 	SET_PC(0x125FU);
 	LD_B_A;  // ld b, a
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -851,7 +851,7 @@ int PlaceFarString(){
 
 }
 
-int PokeFluteTerminator(){
+void PokeFluteTerminator(void){
 	SET_PC(0x126BU);
 //  //  unreferenced
 	LD_HL(mPokeFluteTerminator_stop);  // ld hl, .stop
@@ -865,7 +865,7 @@ stop:
 	return PlaceHLTextAtBC();
 }
 
-int PlaceHLTextAtBC(){
+void PlaceHLTextAtBC(void){
 	SET_PC(0x1270U);
 	LD_A_addr(wTextboxFlags);  // ld a, [wTextboxFlags]
 	PUSH_AF;  // push af
@@ -880,7 +880,7 @@ int PlaceHLTextAtBC(){
 
 }
 
-int DoTextUntilTerminator(){
+void DoTextUntilTerminator(void){
 	SET_PC(0x1281U);
 	LD_A_hli;  // ld a, [hli]
 	CP_A(TX_END);  // cp TX_END
@@ -910,7 +910,7 @@ TextCommand:
 
 }
 
-int TextCommands(){
+void TextCommands(void){
 	SET_PC(0x129BU);
 //  entries correspond to TX_* constants (see macros/scripts/text.asm)
 	//table_width ['2', 'TextCommands']  // table_width 2, TextCommands
@@ -942,7 +942,7 @@ int TextCommands(){
 	return TextCommand_START();
 }
 
-int TextCommand_START(){
+void TextCommand_START(void){
 	SET_PC(0x12C9U);
 //  write text until "@"
 	LD_D_H;  // ld d, h
@@ -957,7 +957,7 @@ int TextCommand_START(){
 
 }
 
-int TextCommand_RAM(){
+void TextCommand_RAM(void){
 	SET_PC(0x12D4U);
 //  write text from a ram address (little endian)
 	LD_A_hli;  // ld a, [hli]
@@ -973,7 +973,7 @@ int TextCommand_RAM(){
 
 }
 
-int TextCommand_FAR(){
+void TextCommand_FAR(void){
 	SET_PC(0x12E0U);
 //  write text from a different bank (little endian)
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -1001,7 +1001,7 @@ int TextCommand_FAR(){
 
 }
 
-int TextCommand_BCD(){
+void TextCommand_BCD(void){
 	SET_PC(0x12FBU);
 //  write bcd from address, typically ram
 	LD_A_hli;  // ld a, [hli]
@@ -1021,7 +1021,7 @@ int TextCommand_BCD(){
 
 }
 
-int TextCommand_MOVE(){
+void TextCommand_MOVE(void){
 //  move to a new tile
 	LD_A_hli;  // ld a, [hli]
 	LD_addr_A(wMenuScrollPosition + 2);  // ld [wMenuScrollPosition + 2], a
@@ -1033,7 +1033,7 @@ int TextCommand_MOVE(){
 
 }
 
-int TextCommand_BOX(){
+void TextCommand_BOX(void){
 	SET_PC(0x1316U);
 //  draw a box (height, width)
 	LD_A_hli;  // ld a, [hli]
@@ -1053,14 +1053,14 @@ int TextCommand_BOX(){
 
 }
 
-int TextCommand_LOW(){
+void TextCommand_LOW(void){
 //  write text at (1,16)
 	bccoord(TEXTBOX_INNERX, TEXTBOX_INNERY + 2, wTilemap);  // bccoord TEXTBOX_INNERX, TEXTBOX_INNERY + 2
 	RET;  // ret
 
 }
 
-int TextCommand_PROMPT_BUTTON(){
+void TextCommand_PROMPT_BUTTON(void){
 	SET_PC(0x132AU);
 //  wait for button press
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
@@ -1078,7 +1078,7 @@ int TextCommand_PROMPT_BUTTON(){
 
 }
 
-int TextCommand_SCROLL(){
+void TextCommand_SCROLL(void){
 	SET_PC(0x1340U);
 //  pushes text up two lines and sets the BC cursor to the border tile
 //  below the first character column of the text box.
@@ -1092,14 +1092,14 @@ int TextCommand_SCROLL(){
 
 }
 
-int TextCommand_START_ASM(){
+void TextCommand_START_ASM(void){
 	SET_PC(0x134FU);
 //  run assembly code
 	JP_hl;  // jp hl
 
 }
 
-int TextCommand_DECIMAL(){
+void TextCommand_DECIMAL(void){
 	SET_PC(0x1350U);
 //  print a decimal number
 	LD_A_hli;  // ld a, [hli]
@@ -1126,7 +1126,7 @@ int TextCommand_DECIMAL(){
 
 }
 
-int TextCommand_PAUSE(){
+void TextCommand_PAUSE(void){
 	SET_PC(0x136BU);
 //  wait for button press or 30 frames
 	PUSH_HL;  // push hl
@@ -1146,7 +1146,7 @@ done:
 
 }
 
-int TextCommand_SOUND(){
+void TextCommand_SOUND(void){
 //  play a sound effect from TextSFX
 	PUSH_BC;  // push bc
 	DEC_HL;  // dec hl
@@ -1183,7 +1183,7 @@ done:
 
 }
 
-int TextCommand_CRY(){
+void TextCommand_CRY(void){
 //  //  unreferenced
 //  play a pokemon cry
 	PUSH_DE;  // push de
@@ -1198,7 +1198,7 @@ int TextCommand_CRY(){
 
 }
 
-int TextSFX(){
+void TextSFX(void){
 	SET_PC(0x13ABU);
 	//dbw ['TX_SOUND_DEX_FANFARE_50_79', 'SFX_DEX_FANFARE_50_79']  // dbw TX_SOUND_DEX_FANFARE_50_79,  SFX_DEX_FANFARE_50_79
 	//dbw ['TX_SOUND_FANFARE', 'SFX_FANFARE']  // dbw TX_SOUND_FANFARE,            SFX_FANFARE
@@ -1212,7 +1212,7 @@ int TextSFX(){
 	return TextCommand_DOTS();
 }
 
-int TextCommand_DOTS(){
+void TextCommand_DOTS(void){
 	SET_PC(0x13C1U);
 //  wait for button press or 30 frames while printing "…"s
 	LD_A_hli;  // ld a, [hli]
@@ -1247,7 +1247,7 @@ next:
 
 }
 
-int TextCommand_WAIT_BUTTON(){
+void TextCommand_WAIT_BUTTON(void){
 	SET_PC(0x13E0U);
 //  wait for button press
 	PUSH_HL;  // push hl
@@ -1259,7 +1259,7 @@ int TextCommand_WAIT_BUTTON(){
 
 }
 
-int TextCommand_STRINGBUFFER(){
+void TextCommand_STRINGBUFFER(void){
 	SET_PC(0x13E8U);
 //  Print a string from one of the following:
 //  0: wStringBuffer3
@@ -1288,7 +1288,7 @@ int TextCommand_STRINGBUFFER(){
 
 }
 
-int TextCommand_DAY(){
+void TextCommand_DAY(void){
 	SET_PC(0x1400U);
 //  print the day of the week
 	CCALL(aGetWeekday);  // call GetWeekday

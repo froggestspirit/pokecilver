@@ -1,2 +1,2 @@
-int PrinterReceive();
-int AskSerial();
+void PrinterReceive(void);
+void AskSerial(void);

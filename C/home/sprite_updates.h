@@ -1,2 +1,2 @@
-int DisableSpriteUpdates();
-int EnableSpriteUpdates();
+void DisableSpriteUpdates(void);
+void EnableSpriteUpdates(void);

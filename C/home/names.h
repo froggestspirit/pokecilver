@@ -1,9 +1,9 @@
-int NamesPointers();
-int GetName();
-int GetNthString();
-int GetBasePokemonName();
-int GetPokemonName();
-int GetItemName();
-int GetTMHMName();
-int GetMoveName();
+void NamesPointers(void);
+void GetName(void);
+void GetNthString(void);
+void GetBasePokemonName(void);
+void GetPokemonName(void);
+void GetItemName(void);
+void GetTMHMName(void);
+void GetMoveName(void);
 #include "hm_moves.h"

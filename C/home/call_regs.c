@@ -2,13 +2,13 @@
 
 //  Register aliases
 
-int v_hl_(){
+void v_hl_(void){
 	SET_PC(0x30FAU);
 	JP_hl;  // jp hl
 
 }
 
-int v_de_(){
+void v_de_(void){
 	PUSH_DE;  // push de
 	RET;  // ret
 

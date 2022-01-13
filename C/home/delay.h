@@ -1,2 +1,2 @@
-int DelayFrame();
-int DelayFrames();
+void DelayFrame(void);
+void DelayFrames(void);

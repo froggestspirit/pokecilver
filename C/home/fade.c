@@ -2,7 +2,7 @@
 
 //  Functions to fade the screen in and out.
 
-int TimeOfDayFade(){
+void TimeOfDayFade(void){
 //  //  unreferenced
 	LD_A_addr(wTimeOfDayPal);  // ld a, [wTimeOfDayPal]
 	LD_B_A;  // ld b, a
@@ -25,7 +25,7 @@ okay:
 
 }
 
-int RotateFourPalettesRight(){
+void RotateFourPalettesRight(void){
 	SET_PC(0x0377U);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
@@ -43,7 +43,7 @@ dmg:
 
 }
 
-int RotateThreePalettesRight(){
+void RotateThreePalettesRight(void){
 	SET_PC(0x038AU);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
@@ -60,7 +60,7 @@ dmg:
 	return RotatePalettesRight();
 }
 
-int RotatePalettesRight(){
+void RotatePalettesRight(void){
 	SET_PC(0x039BU);
 //  Rotate palettes to the right and fill with loaded colors from the left
 //  If we're already at the leftmost color, fill with the leftmost color
@@ -81,7 +81,7 @@ int RotatePalettesRight(){
 
 }
 
-int RotateFourPalettesLeft(){
+void RotateFourPalettesLeft(void){
 	SET_PC(0x03B1U);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
@@ -99,7 +99,7 @@ dmg:
 
 }
 
-int RotateThreePalettesLeft(){
+void RotateThreePalettesLeft(void){
 	SET_PC(0x03C4U);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
@@ -116,7 +116,7 @@ dmg:
 	return RotatePalettesLeft();
 }
 
-int RotatePalettesLeft(){
+void RotatePalettesLeft(void){
 	SET_PC(0x03D5U);
 //  Rotate palettes to the left and fill with loaded colors from the right
 //  If we're already at the rightmost color, fill with the rightmost color
@@ -137,87 +137,87 @@ int RotatePalettesLeft(){
 
 }
 
-int IncGradGBPalTable_00(){
+void IncGradGBPalTable_00(void){
 //dc 3,3,3,3, 3,3,3,3, 3,3,3,3
 	return IncGradGBPalTable_01();
 }
 
-int IncGradGBPalTable_01(){
+void IncGradGBPalTable_01(void){
 //dc 3,3,3,2, 3,3,3,2, 3,3,3,2
 	return IncGradGBPalTable_02();
 }
 
-int IncGradGBPalTable_02(){
+void IncGradGBPalTable_02(void){
 //dc 3,3,2,1, 3,3,2,1, 3,3,2,1
 	return IncGradGBPalTable_03();
 }
 
-int IncGradGBPalTable_03(){
+void IncGradGBPalTable_03(void){
 //dc 3,2,1,0, 3,2,1,0, 3,2,1,0
 
 	return IncGradGBPalTable_04();
 }
 
-int IncGradGBPalTable_04(){
+void IncGradGBPalTable_04(void){
 //dc 3,2,1,0, 3,2,1,0, 3,2,1,0
 	return IncGradGBPalTable_05();
 }
 
-int IncGradGBPalTable_05(){
+void IncGradGBPalTable_05(void){
 //dc 2,1,0,0, 2,1,0,0, 2,1,0,0
 	return IncGradGBPalTable_06();
 }
 
-int IncGradGBPalTable_06(){
+void IncGradGBPalTable_06(void){
 //dc 1,0,0,0, 1,0,0,0, 1,0,0,0
 
 	return IncGradGBPalTable_07();
 }
 
-int IncGradGBPalTable_07(){
+void IncGradGBPalTable_07(void){
 //dc 0,0,0,0, 0,0,0,0, 0,0,0,0
 //                            bgp      obp1     obp2
 	return IncGradGBPalTable_08();
 }
 
-int IncGradGBPalTable_08(){
+void IncGradGBPalTable_08(void){
 //dc 3,3,3,3, 3,3,3,3, 3,3,3,3
 	return IncGradGBPalTable_09();
 }
 
-int IncGradGBPalTable_09(){
+void IncGradGBPalTable_09(void){
 //dc 3,3,3,2, 3,3,3,2, 3,3,2,0
 	return IncGradGBPalTable_10();
 }
 
-int IncGradGBPalTable_10(){
+void IncGradGBPalTable_10(void){
 //dc 3,3,2,1, 3,2,1,0, 3,2,1,0
 	return IncGradGBPalTable_11();
 }
 
-int IncGradGBPalTable_11(){
+void IncGradGBPalTable_11(void){
 //dc 3,2,1,0, 3,1,0,0, 3,2,0,0
 
 	return IncGradGBPalTable_12();
 }
 
-int IncGradGBPalTable_12(){
+void IncGradGBPalTable_12(void){
 //dc 3,2,1,0, 3,1,0,0, 3,2,0,0
 	return IncGradGBPalTable_13();
 }
 
-int IncGradGBPalTable_13(){
+void IncGradGBPalTable_13(void){
 //dc 2,1,0,0, 2,0,0,0, 2,1,0,0
 	return IncGradGBPalTable_14();
 }
 
-int IncGradGBPalTable_14(){
+void IncGradGBPalTable_14(void){
 //dc 1,0,0,0, 1,0,0,0, 1,0,0,0
 
 	return IncGradGBPalTable_15();
 }
 
-int IncGradGBPalTable_15(){
+void IncGradGBPalTable_15(void){
 //dc 0,0,0,0, 0,0,0,0, 0,0,0,0
 
 }

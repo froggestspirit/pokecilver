@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int Cosine(){
+void Cosine(void){
 	SET_PC(0x19AAU);
 //  //  unreferenced
 //  a = d * cos(a * pi/32)
@@ -9,7 +9,7 @@ int Cosine(){
 	return Sine();
 }
 
-int Sine(){
+void Sine(void){
 	SET_PC(0x19ACU);
 //  a = d * sin(a * pi/32)
 	LD_E_A;  // ld e, a

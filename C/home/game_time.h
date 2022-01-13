@@ -1,2 +1,2 @@
-int ResetGameTime();
-int GameTimer();
+void ResetGameTime(void);
+void GameTimer(void);

@@ -1,2 +1,2 @@
-int Cosine();
-int Sine();
+void Cosine(void);
+void Sine(void);

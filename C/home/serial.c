@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int Serial(){
+void Serial(void){
 	SET_PC(0x06AAU);
 //  The serial interrupt.
 
@@ -99,7 +99,7 @@ end:
 
 }
 
-int Serial_ExchangeBytes(){
+void Serial_ExchangeBytes(void){
 	SET_PC(0x0710U);
 //  send bc bytes from hl, receive bc bytes to de
 	LD_A(TRUE);  // ld a, TRUE
@@ -147,7 +147,7 @@ load:
 
 }
 
-int Serial_ExchangeByte(){
+void Serial_ExchangeByte(void){
 	SET_PC(0x073BU);
 
 timeout_loop:
@@ -283,7 +283,7 @@ short_delay_loop:
 
 }
 
-int CheckLinkTimeoutFramesNonzero(){
+void CheckLinkTimeoutFramesNonzero(void){
 	SET_PC(0x07DCU);
 	PUSH_HL;  // push hl
 	LD_HL(wLinkTimeoutFrames);  // ld hl, wLinkTimeoutFrames
@@ -297,7 +297,7 @@ int CheckLinkTimeoutFramesNonzero(){
 	return SerialDisconnected();
 }
 
-int SerialDisconnected(){
+void SerialDisconnected(void){
 	SET_PC(0x07E4U);
 	DEC_A;  // dec a
 	LD_addr_A(wLinkTimeoutFrames);  // ld [wLinkTimeoutFrames], a
@@ -308,7 +308,7 @@ int SerialDisconnected(){
 	return Serial_ExchangeSyncBytes();
 }
 
-int Serial_ExchangeSyncBytes(){
+void Serial_ExchangeSyncBytes(void){
 	SET_PC(0x07ECU);
 	LD_HL(wLinkPlayerSyncBuffer);  // ld hl, wLinkPlayerSyncBuffer
 	LD_DE(wLinkReceivedSyncBuffer);  // ld de, wLinkReceivedSyncBuffer
@@ -338,7 +338,7 @@ exchange:
 
 }
 
-int Serial_PrintWaitingTextAndSyncAndExchangeNybble(){
+void Serial_PrintWaitingTextAndSyncAndExchangeNybble(void){
 	SET_PC(0x0813U);
 	CALL(mLoadTilemapToTempTilemap);  // call LoadTilemapToTempTilemap
 	CALLFAR(aPlaceWaitingText);  // callfar PlaceWaitingText
@@ -347,7 +347,7 @@ int Serial_PrintWaitingTextAndSyncAndExchangeNybble(){
 
 }
 
-int Serial_SyncAndExchangeNybble(){
+void Serial_SyncAndExchangeNybble(void){
 	SET_PC(0x0822U);
 //  //  unreferenced
 	CALL(mLoadTilemapToTempTilemap);  // call LoadTilemapToTempTilemap
@@ -356,7 +356,7 @@ int Serial_SyncAndExchangeNybble(){
 
 }
 
-int WaitLinkTransfer(){
+void WaitLinkTransfer(void){
 	SET_PC(0x082EU);
 	LD_A(0xff);  // ld a, $ff
 	LD_addr_A(wOtherPlayerLinkAction);  // ld [wOtherPlayerLinkAction], a
@@ -415,7 +415,7 @@ acknowledge:
 
 }
 
-int LinkTransfer(){
+void LinkTransfer(void){
 	SET_PC(0x0872U);
 	PUSH_BC;  // push bc
 	LD_B(SERIAL_TIMECAPSULE);  // ld b, SERIAL_TIMECAPSULE
@@ -468,7 +468,7 @@ Receive:
 
 }
 
-int LinkDataReceived(){
+void LinkDataReceived(void){
 //  Let the other system know that the data has been received.
 	XOR_A_A;  // xor a
 	LDH_addr_A(hSerialSend);  // ldh [hSerialSend], a
@@ -483,7 +483,7 @@ int LinkDataReceived(){
 
 }
 
-int SetBitsForTimeCapsuleRequestIfNotLinked(){
+void SetBitsForTimeCapsuleRequestIfNotLinked(void){
 //  //  unreferenced
 //  Similar to SetBitsForTimeCapsuleRequest (see engine/link/link.asm).
 	LD_A_addr(wLinkMode);  // ld a, [wLinkMode]

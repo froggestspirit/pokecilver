@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int UpdateBGMapBuffer(){
+void UpdateBGMapBuffer(void){
 //  Copy [hBGMapTileCount] 16x8 tiles from wBGMapBuffer
 //  to bg map addresses in wBGMapBufferPointers.
 
@@ -76,7 +76,7 @@ next:
 
 }
 
-int WaitTop(){
+void WaitTop(void){
 	SET_PC(0x14A7U);
 //  Wait until the top third of the BG Map is being updated.
 
@@ -100,7 +100,7 @@ done:
 
 }
 
-int UpdateBGMap(){
+void UpdateBGMap(void){
 //  Update the BG Map, in thirds, from wTilemap and wAttrmap.
 
 	LDH_A_addr(hBGMapMode);  // ldh a, [hBGMapMode]
@@ -143,7 +143,7 @@ int UpdateBGMap(){
 	RET;  // ret
 }
 
-int UpdateBGMap_Attr(){
+void UpdateBGMap_Attr(void){
 	LD_A(1);  // ld a, 1
 	LDH_addr_A(rVBK);  // ldh [rVBK], a
 
@@ -155,12 +155,12 @@ int UpdateBGMap_Attr(){
 	RET;  // ret
 }
 
-int UpdateBGMap_Tiles(){
+void UpdateBGMap_Tiles(void){
 	hlcoord(0, 0, wTilemap);  // hlcoord 0, 0
 	return UpdateBGMap_update();
 }
 
-int UpdateBGMap_update(){
+void UpdateBGMap_update(void){
 	LD_addr_SP(hSPBuffer);  // ld [hSPBuffer], sp
 
 //  Which third?
@@ -191,7 +191,7 @@ int UpdateBGMap_update(){
 	return UpdateBGMap_start();
 }
 
-int UpdateBGMap_middle(){
+void UpdateBGMap_middle(void){
 	LD_DE(THIRD_HEIGHT * SCREEN_WIDTH);  // ld de, THIRD_HEIGHT * SCREEN_WIDTH
 	ADD_HL_DE;  // add hl, de
 	LD_SP_HL;  // ld sp, hl
@@ -209,7 +209,7 @@ int UpdateBGMap_middle(){
 	return UpdateBGMap_start();
 }
 
-int UpdateBGMap_top(){
+void UpdateBGMap_top(void){
 	LD_SP_HL;  // ld sp, hl
 
 	LDH_A_addr(hBGMapAddress + 1);  // ldh a, [hBGMapAddress + 1]
@@ -222,7 +222,7 @@ int UpdateBGMap_top(){
 	return UpdateBGMap_start();
 }
 
-int UpdateBGMap_start(){
+void UpdateBGMap_start(void){
 //  Which third to update next time
 	LDH_addr_A(hBGMapThird);  // ldh [hBGMapThird], a
 
@@ -234,7 +234,7 @@ int UpdateBGMap_start(){
 	return UpdateBGMap_row();
 }
 
-int UpdateBGMap_row(){
+void UpdateBGMap_row(void){
 //  Copy a row of 20 tiles
 	for(int rept = 0; rept < SCREEN_WIDTH / 2 - 1; rept++){
 	POP_DE;  // pop de
@@ -260,7 +260,7 @@ int UpdateBGMap_row(){
 	RET;  // ret
 }
 
-int Serve1bppRequest(){
+void Serve1bppRequest(void){
 	LD_A_addr(wRequested1bppSize);  // ld a, [wRequested1bppSize]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -332,7 +332,7 @@ next:
 
 }
 
-int Serve2bppRequest(){
+void Serve2bppRequest(void){
 	LD_A_addr(wRequested2bppSize);  // ld a, [wRequested2bppSize]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -396,7 +396,7 @@ next:
 
 }
 
-int AnimateTileset(){
+void AnimateTileset(void){
 	SET_PC(0x1629U);
 	LDH_A_addr(hMapAnims);  // ldh a, [hMapAnims]
 	AND_A_A;  // and a
@@ -410,18 +410,18 @@ int AnimateTileset(){
 	CALL(mv_AnimateTileset);  // call _AnimateTileset
 
 	POP_AF;  // pop af
-	RST(mBankswitch);  // rst Bankswitch
+	Bankswitch();  // rst Bankswitch
 	RET;  // ret
 
 }
 
-int Video_DummyFunction(){
+void Video_DummyFunction(void){
 //  //  unreferenced
 	RET;  // ret
 
 }
 
-int EnableSpriteDisplay(){
+void EnableSpriteDisplay(void){
 //  //  unreferenced
 	LD_HL(rLCDC);  // ld hl, rLCDC
 	SET_hl(1);  // set 1, [hl]
@@ -429,7 +429,7 @@ int EnableSpriteDisplay(){
 
 }
 
-int FillBGMap0WithBlack(){
+void FillBGMap0WithBlack(void){
 	NOP;  // nop
 	LDH_A_addr(hBlackOutBGMapThird);  // ldh a, [hBlackOutBGMapThird]
 	AND_A_A;  // and a ; 0

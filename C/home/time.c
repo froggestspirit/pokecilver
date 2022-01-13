@@ -2,13 +2,13 @@
 
 //  Functions relating to the timer interrupt and the real-time-clock.
 
-int Timer(){
+void Timer(void){
 //  //  unreferenced
 	RET;  // ret
 
 }
 
-int LatchClock(){
+void LatchClock(void){
 //  latch clock counter data
 	LD_A(0);  // ld a, 0
 	LD_addr_A(MBC3LatchClock);  // ld [MBC3LatchClock], a
@@ -18,7 +18,7 @@ int LatchClock(){
 
 }
 
-int UpdateTime(){
+void UpdateTime(void){
 	SET_PC(0x0467U);
 	CCALL(aGetClock);  // call GetClock
 	CCALL(aFixDays);  // call FixDays
@@ -28,7 +28,7 @@ int UpdateTime(){
 
 }
 
-int GetClock(){
+void GetClock(void){
 //  store clock data in hRTCDayHi-hRTCSeconds
 
 //  enable clock r/w
@@ -70,7 +70,7 @@ int GetClock(){
 
 }
 
-int FixDays(){
+void FixDays(void){
 //  fix day count
 //  mod by 140
 
@@ -139,7 +139,7 @@ quit:
 
 }
 
-int FixTime(){
+void FixTime(void){
 //  add ingame time (set at newgame) to current time
 //  store time in wCurDay, hHours, hMinutes, hSeconds
 
@@ -192,7 +192,7 @@ updatehr:
 
 }
 
-int InitTimeOfDay(){
+void InitTimeOfDay(void){
 	SET_PC(0x0519U);
 	XOR_A_A;  // xor a
 	LD_addr_A(wStringBuffer2);  // ld [wStringBuffer2], a
@@ -202,7 +202,7 @@ int InitTimeOfDay(){
 
 }
 
-int InitDayOfWeek(){
+void InitDayOfWeek(void){
 	SET_PC(0x0524U);
 	CALL(mUpdateTime);  // call UpdateTime
 	LDH_A_addr(hHours);  // ldh a, [hHours]
@@ -215,14 +215,14 @@ int InitDayOfWeek(){
 
 }
 
-int InitTime(){
+void InitTime(void){
 	SET_PC(0x0538U);
 	FARCALL(av_InitTime);  // farcall _InitTime
 	RET;  // ret
 
 }
 
-int ClearClock(){
+void ClearClock(void){
 	SET_PC(0x053FU);
 	CALL(mClearClock_ClearhRTC);  // call .ClearhRTC
 	CCALL(aSetClock);  // call SetClock
@@ -241,7 +241,7 @@ ClearhRTC:
 
 }
 
-int SetClock(){
+void SetClock(void){
 //  set clock data from hram
 
 //  enable clock r/w
@@ -290,7 +290,7 @@ int SetClock(){
 
 }
 
-int ClearRTCStatus(){
+void ClearRTCStatus(void){
 //  //  unreferenced
 //  clear sRTCStatusFlags
 	XOR_A_A;  // xor a
@@ -304,7 +304,7 @@ int ClearRTCStatus(){
 
 }
 
-int RecordRTCStatus(){
+void RecordRTCStatus(void){
 //  append flags to sRTCStatusFlags
 	LD_HL(sRTCStatusFlags);  // ld hl, sRTCStatusFlags
 	PUSH_AF;  // push af
@@ -318,7 +318,7 @@ int RecordRTCStatus(){
 
 }
 
-int CheckRTCStatus(){
+void CheckRTCStatus(void){
 //  check sRTCStatusFlags
 	LD_A(BANK(sRTCStatusFlags));  // ld a, BANK(sRTCStatusFlags)
 	CCALL(aOpenSRAM);  // call OpenSRAM

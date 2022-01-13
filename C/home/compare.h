@@ -1,2 +1,2 @@
-int CompareBytes();
-int CompareBytesLong();
+void CompareBytes(void);
+void CompareBytesLong(void);

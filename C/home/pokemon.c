@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int DrawBattleHPBar(){
+void DrawBattleHPBar(void){
 //  Draw an HP bar d tiles long at hl
 //  Fill it up to e pixels
 
@@ -66,7 +66,7 @@ done:
 
 }
 
-int PrepMonFrontpic(){
+void PrepMonFrontpic(void){
 	SET_PC(0x39B6U);
 	LD_A(0x1);  // ld a, $1
 	LD_addr_A(wBoxAlignment);  // ld [wBoxAlignment], a
@@ -74,7 +74,7 @@ int PrepMonFrontpic(){
 	return v_PrepMonFrontpic();
 }
 
-int v_PrepMonFrontpic(){
+void v_PrepMonFrontpic(void){
 	SET_PC(0x39BBU);
 	LD_A_addr(wCurPartySpecies);  // ld a, [wCurPartySpecies]
 //  is a pokemon?
@@ -110,7 +110,7 @@ not_pokemon:
 
 }
 
-int PlayStereoCry(){
+void PlayStereoCry(void){
 	PUSH_AF;  // push af
 	LD_A(1);  // ld a, 1
 	LD_addr_A(wStereoPanningMask);  // ld [wStereoPanningMask], a
@@ -119,7 +119,7 @@ int PlayStereoCry(){
 
 }
 
-int PlayMonCry(){
+void PlayMonCry(void){
 	PUSH_AF;  // push af
 	XOR_A_A;  // xor a
 	LD_addr_A(wStereoPanningMask);  // ld [wStereoPanningMask], a
@@ -129,7 +129,7 @@ int PlayMonCry(){
 	return v_PlayMonCry();
 }
 
-int v_PlayMonCry(){
+void v_PlayMonCry(void){
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -151,7 +151,7 @@ done:
 
 }
 
-int LoadCry(){
+void LoadCry(void){
 //  Load cry bc.
 
 	CCALL(aGetCryIndex);  // call GetCryIndex
@@ -188,7 +188,7 @@ int LoadCry(){
 
 }
 
-int GetCryIndex(){
+void GetCryIndex(void){
 	AND_A_A;  // and a
 	IF_Z goto no;  // jr z, .no
 	CP_A(NUM_POKEMON + 1);  // cp NUM_POKEMON + 1
@@ -207,7 +207,7 @@ no:
 
 }
 
-int PrintLevel(){
+void PrintLevel(void){
 	SET_PC(0x3A4CU);
 //  Print wTempMonLevel at hl
 
@@ -227,7 +227,7 @@ int PrintLevel(){
 
 }
 
-int PrintLevel_Force3Digits(){
+void PrintLevel_Force3Digits(void){
 	SET_PC(0x3A5CU);
 //  Print :L and all 3 digits
 	LD_hl(0x6e);  // ld [hl], "<LV>"
@@ -237,7 +237,7 @@ int PrintLevel_Force3Digits(){
 	return Print8BitNumLeftAlign();
 }
 
-int Print8BitNumLeftAlign(){
+void Print8BitNumLeftAlign(void){
 	SET_PC(0x3A61U);
 	LD_addr_A(wTextDecimalByte);  // ld [wTextDecimalByte], a
 	LD_DE(wTextDecimalByte);  // ld de, wTextDecimalByte
@@ -246,7 +246,7 @@ int Print8BitNumLeftAlign(){
 
 }
 
-int GetNthMove(){
+void GetNthMove(void){
 //  //  unreferenced
 	LD_HL(wListMoves_MoveIndicesBuffer);  // ld hl, wListMoves_MoveIndicesBuffer
 	LD_C_A;  // ld c, a
@@ -257,7 +257,7 @@ int GetNthMove(){
 
 }
 
-int GetBaseData(){
+void GetBaseData(void){
 	PUSH_BC;  // push bc
 	PUSH_DE;  // push de
 	PUSH_HL;  // push hl
@@ -317,7 +317,7 @@ end:
 
 }
 
-int GetCurNickname(){
+void GetCurNickname(void){
 	SET_PC(0x3ABBU);
 	LD_A_addr(wCurPartyMon);  // ld a, [wCurPartyMon]
 	LD_HL(wPartyMonNicknames);  // ld hl, wPartyMonNicknames
@@ -325,7 +325,7 @@ int GetCurNickname(){
 	return GetNickname();
 }
 
-int GetNickname(){
+void GetNickname(void){
 	SET_PC(0x3AC1U);
 //  Get nickname a from list hl.
 

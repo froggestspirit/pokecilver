@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int ClearSprites(){
+void ClearSprites(void){
 //  Erase OAM data
 	LD_HL(wVirtualOAM);  // ld hl, wVirtualOAM
 	LD_B(wVirtualOAMEnd - wVirtualOAM);  // ld b, wVirtualOAMEnd - wVirtualOAM
@@ -14,7 +14,7 @@ loop:
 
 }
 
-int HideSprites(){
+void HideSprites(void){
 //  Set all OAM y-positions to 160 to hide them offscreen
 	LD_HL(wVirtualOAMSprite00YCoord);  // ld hl, wVirtualOAMSprite00YCoord
 	LD_DE(SPRITEOAMSTRUCT_LENGTH);  // ld de, SPRITEOAMSTRUCT_LENGTH

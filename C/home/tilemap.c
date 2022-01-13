@@ -1,12 +1,12 @@
 #include "../constants.h"
 
-int ClearBGPalettes(){
+void ClearBGPalettes(void){
 	SET_PC(0x3445U);
 	CCALL(aClearPalettes);  // call ClearPalettes
 	return WaitBGMap();
 }
 
-int WaitBGMap(){
+void WaitBGMap(void){
 	SET_PC(0x3448U);
 //  Tell VBlank to update BG Map
 	LD_A(1);  // ld a, 1 ; BG Map 0 tiles
@@ -18,7 +18,7 @@ int WaitBGMap(){
 
 }
 
-int WaitBGMap2(){
+void WaitBGMap2(void){
 	SET_PC(0x3452U);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
@@ -40,14 +40,14 @@ bg0:
 
 }
 
-int IsCGB(){
+void IsCGB(void){
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
 	RET;  // ret
 
 }
 
-int ApplyTilemap(){
+void ApplyTilemap(void){
 	SET_PC(0x346EU);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
@@ -73,7 +73,7 @@ dmg:
 
 }
 
-int CGBOnly_CopyTilemapAtOnce(){
+void CGBOnly_CopyTilemapAtOnce(void){
 	SET_PC(0x348AU);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
@@ -81,7 +81,7 @@ int CGBOnly_CopyTilemapAtOnce(){
 
 }
 
-int CopyTilemapAtOnce(){
+void CopyTilemapAtOnce(void){
 	SET_PC(0x348FU);
 	LDH_A_addr(hBGMapMode);  // ldh a, [hBGMapMode]
 	PUSH_AF;  // push af
@@ -288,7 +288,7 @@ loop_u8230:
 
 }
 
-int SetPalettes(){
+void SetPalettes(void){
 	SET_PC(0x3542U);
 //  Inits the Palettes
 //  depending on the system the monochromes palettes or color palettes
@@ -315,7 +315,7 @@ SetPalettesForGameBoyColor:
 
 }
 
-int ClearPalettes(){
+void ClearPalettes(void){
 //  Make all palettes white
 
 //  CGB: make all the palette colors white
@@ -344,13 +344,13 @@ cgb:
 
 }
 
-int GetMemSGBLayout(){
+void GetMemSGBLayout(void){
 	SET_PC(0x357DU);
 	LD_B(SCGB_DEFAULT);  // ld b, SCGB_DEFAULT
 	return GetSGBLayout();
 }
 
-int GetSGBLayout(){
+void GetSGBLayout(void){
 	SET_PC(0x357FU);
 //  load sgb packets unless dmg
 
@@ -370,7 +370,7 @@ sgb:
 	return SetHPPal();
 }
 
-int SetHPPal(){
+void SetHPPal(void){
 //  Set palette for hp bar pixel length e at hl.
 	CCALL(aGetHPPal);  // call GetHPPal
 	LD_hl_D;  // ld [hl], d
@@ -378,7 +378,7 @@ int SetHPPal(){
 
 }
 
-int GetHPPal(){
+void GetHPPal(void){
 //  Get palette for hp bar pixel length e in d.
 	LD_D(HP_GREEN);  // ld d, HP_GREEN
 	LD_A_E;  // ld a, e

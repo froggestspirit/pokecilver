@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int Joypad(){
+void Joypad(void){
 //  Replaced by UpdateJoypad, called from VBlank instead of the useless
 //  joypad interrupt.
 
@@ -9,7 +9,7 @@ int Joypad(){
 
 }
 
-int ClearJoypad(){
+void ClearJoypad(void){
 	XOR_A_A;  // xor a
 //  Pressed this frame (delta)
 	LDH_addr_A(hJoyPressed);  // ldh [hJoyPressed], a
@@ -19,8 +19,7 @@ int ClearJoypad(){
 
 }
 
-int UpdateJoypad(){
-	SET_PC(0x08E6U);
+void UpdateJoypad(void){
 //  This is called automatically every frame in VBlank.
 //  Read the joypad register and translate it to something more
 //  workable for use in-game. There are 8 buttons, so we can use
@@ -104,15 +103,13 @@ int UpdateJoypad(){
 //  Now that we have the input, we can do stuff with it.
 
 //  For example, soft reset:
-	AND_A(A_BUTTON | B_BUTTON | SELECT | START);  // and A_BUTTON | B_BUTTON | SELECT | START
-	CP_A(A_BUTTON | B_BUTTON | SELECT | START);  // cp  A_BUTTON | B_BUTTON | SELECT | START
-	JP_Z (mReset);  // jp z, Reset
-
+	//AND_A(A_BUTTON | B_BUTTON | SELECT | START);  // and A_BUTTON | B_BUTTON | SELECT | START
+	//CP_A(A_BUTTON | B_BUTTON | SELECT | START);  // cp  A_BUTTON | B_BUTTON | SELECT | START
+	//JP_Z (mReset);  // jp z, Reset
 	RET;  // ret
-
 }
 
-int GetJoypad(){
+void GetJoypad(void){
 //  Update mirror joypad input from hJoypadDown (real input)
 
 //  hJoyReleased: released this frame (delta)
@@ -247,7 +244,7 @@ finishauto:
 	return StartAutoInput();
 }
 
-int StartAutoInput(){
+void StartAutoInput(void){
 //  Start reading automated input stream at a:hl.
 
 	LD_addr_A(wAutoInputBank);  // ld [wAutoInputBank], a
@@ -270,7 +267,7 @@ int StartAutoInput(){
 
 }
 
-int StopAutoInput(){
+void StopAutoInput(void){
 //  Clear variables related to automated input.
 	XOR_A_A;  // xor a
 	LD_addr_A(wAutoInputBank);  // ld [wAutoInputBank], a
@@ -283,7 +280,7 @@ int StopAutoInput(){
 
 }
 
-int JoyTitleScreenInput(){
+void JoyTitleScreenInput(void){
 	SET_PC(0x09CCU);
 //  //  unreferenced
 
@@ -319,7 +316,7 @@ keycombo:
 
 }
 
-int JoyWaitAorB(){
+void JoyWaitAorB(void){
 	SET_PC(0x09E7U);
 
 loop:
@@ -334,7 +331,7 @@ loop:
 
 }
 
-int WaitButton(){
+void WaitButton(void){
 	SET_PC(0x09F7U);
 	LDH_A_addr(hOAMUpdate);  // ldh a, [hOAMUpdate]
 	PUSH_AF;  // push af
@@ -348,7 +345,7 @@ int WaitButton(){
 
 }
 
-int JoyTextDelay(){
+void JoyTextDelay(void){
 	CCALL(aGetJoypad);  // call GetJoypad
 	LDH_A_addr(hInMenu);  // ldh a, [hInMenu]
 	AND_A_A;  // and a
@@ -382,7 +379,7 @@ restartframedelay:
 
 }
 
-int WaitPressAorB_BlinkCursor(){
+void WaitPressAorB_BlinkCursor(void){
 //  Show a blinking cursor in the lower right-hand
 //  corner of a textbox and wait until A or B is
 //  pressed.
@@ -418,7 +415,7 @@ loop:
 
 }
 
-int SimpleWaitPressAorB(){
+void SimpleWaitPressAorB(void){
 
 loop:
 	CCALL(aJoyTextDelay);  // call JoyTextDelay
@@ -429,7 +426,7 @@ loop:
 
 }
 
-int PromptButton(){
+void PromptButton(void){
 	SET_PC(0x0A5EU);
 //  Show a blinking cursor in the lower right-hand
 //  corner of a textbox and wait until A or B is
@@ -505,7 +502,7 @@ load_cursor_state:
 
 }
 
-int BlinkCursor(){
+void BlinkCursor(void){
 	PUSH_BC;  // push bc
 	LD_A_hl;  // ld a, [hl]
 	LD_B_A;  // ld b, a

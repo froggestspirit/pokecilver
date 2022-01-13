@@ -793,8 +793,7 @@ void gb_step_cpu()
 		int absAddress = gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE));
 		if(func[absAddress] != NULL){
 			//printf("FUN: %x\n", absAddress);
-			int result = func[absAddress]();
-			if(result > 0) gb.cpu_reg.pc = result;
+			func[absAddress]();
 			//PEEK("");
 			//printf("RET: %x\n", gb.cpu_reg.pc + (gb.cpu_reg.pc < 0x4000 ? 0 : ((gb.selected_rom_bank - 1) * ROM_BANK_SIZE)));
 			if(gb.cpu_reg.pc == 0x18) gb.gb_frame = 1;

@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int Load2DMenuData(){
+void Load2DMenuData(void){
 	PUSH_HL;  // push hl
 	PUSH_BC;  // push bc
 	LD_HL(w2DMenuData);  // ld hl, w2DMenuData
@@ -27,7 +27,7 @@ loop:
 
 }
 
-int StaticMenuJoypad(){
+void StaticMenuJoypad(void){
 	SET_PC(0x1A64U);
 	CALLFAR(av_StaticMenuJoypad);  // callfar _StaticMenuJoypad
 	CCALL(aGetMenuJoypad);  // call GetMenuJoypad
@@ -35,7 +35,7 @@ int StaticMenuJoypad(){
 
 }
 
-int ScrollingMenuJoypad(){
+void ScrollingMenuJoypad(void){
 	SET_PC(0x1A6EU);
 	CALLFAR(av_ScrollingMenuJoypad);  // callfar _ScrollingMenuJoypad
 	CCALL(aGetMenuJoypad);  // call GetMenuJoypad
@@ -43,7 +43,7 @@ int ScrollingMenuJoypad(){
 
 }
 
-int GetMenuJoypad(){
+void GetMenuJoypad(void){
 	PUSH_BC;  // push bc
 	PUSH_AF;  // push af
 	LDH_A_addr(hJoyLast);  // ldh a, [hJoyLast]
@@ -60,7 +60,7 @@ int GetMenuJoypad(){
 
 }
 
-int PlaceHollowCursor(){
+void PlaceHollowCursor(void){
 	LD_HL(wCursorCurrentTile);  // ld hl, wCursorCurrentTile
 	LD_A_hli;  // ld a, [hli]
 	LD_H_hl;  // ld h, [hl]
@@ -70,7 +70,7 @@ int PlaceHollowCursor(){
 
 }
 
-int HideCursor(){
+void HideCursor(void){
 	LD_HL(wCursorCurrentTile);  // ld hl, wCursorCurrentTile
 	LD_A_hli;  // ld a, [hli]
 	LD_H_hl;  // ld h, [hl]
@@ -80,14 +80,14 @@ int HideCursor(){
 
 }
 
-int PushWindow(){
+void PushWindow(void){
 	SET_PC(0x1A9BU);
 	CALLFAR(av_PushWindow);  // callfar _PushWindow
 	RET;  // ret
 
 }
 
-int ExitMenu(){
+void ExitMenu(void){
 	SET_PC(0x1AA2U);
 	PUSH_AF;  // push af
 	CALLFAR(av_ExitMenu);  // callfar _ExitMenu
@@ -96,14 +96,14 @@ int ExitMenu(){
 
 }
 
-int InitVerticalMenuCursor(){
+void InitVerticalMenuCursor(void){
 	SET_PC(0x1AABU);
 	CALLFAR(av_InitVerticalMenuCursor);  // callfar _InitVerticalMenuCursor
 	RET;  // ret
 
 }
 
-int CloseWindow(){
+void CloseWindow(void){
 	SET_PC(0x1AB2U);
 	PUSH_AF;  // push af
 	CALL(mExitMenu);  // call ExitMenu
@@ -114,7 +114,7 @@ int CloseWindow(){
 
 }
 
-int RestoreTileBackup(){
+void RestoreTileBackup(void){
 	CCALL(aMenuBoxCoord2Tile);  // call MenuBoxCoord2Tile
 	CCALL(aGetMenuBoxDims);  // call GetMenuBoxDims
 	INC_B;  // inc b
@@ -144,7 +144,7 @@ col:
 
 }
 
-int PopWindow(){
+void PopWindow(void){
 	LD_B(wMenuHeaderEnd - wMenuHeader);  // ld b, wMenuHeaderEnd - wMenuHeader
 	LD_DE(wMenuHeader);  // ld de, wMenuHeader
 
@@ -158,7 +158,7 @@ loop:
 
 }
 
-int GetMenuBoxDims(){
+void GetMenuBoxDims(void){
 	LD_A_addr(wMenuBorderTopCoord);  // ld a, [wMenuBorderTopCoord] ; top
 	LD_B_A;  // ld b, a
 	LD_A_addr(wMenuBorderBottomCoord);  // ld a, [wMenuBorderBottomCoord] ; bottom
@@ -173,7 +173,7 @@ int GetMenuBoxDims(){
 
 }
 
-int CopyMenuData(){
+void CopyMenuData(void){
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 	PUSH_BC;  // push bc
@@ -193,7 +193,7 @@ int CopyMenuData(){
 
 }
 
-int GetWindowStackTop(){
+void GetWindowStackTop(void){
 	LD_HL(wWindowStackPointer);  // ld hl, wWindowStackPointer
 	LD_A_hli;  // ld a, [hli]
 	LD_H_hl;  // ld h, [hl]
@@ -206,7 +206,7 @@ int GetWindowStackTop(){
 
 }
 
-int PlaceVerticalMenuItems(){
+void PlaceVerticalMenuItems(void){
 	SET_PC(0x1B1AU);
 	CCALL(aCopyMenuData);  // call CopyMenuData
 	LD_HL(wMenuDataPointer);  // ld hl, wMenuDataPointer
@@ -245,7 +245,7 @@ loop:
 
 }
 
-int MenuBox(){
+void MenuBox(void){
 	SET_PC(0x1B4CU);
 	CCALL(aMenuBoxCoord2Tile);  // call MenuBoxCoord2Tile
 	CCALL(aGetMenuBoxDims);  // call GetMenuBoxDims
@@ -255,7 +255,7 @@ int MenuBox(){
 
 }
 
-int GetMenuTextStartCoord(){
+void GetMenuTextStartCoord(void){
 	LD_A_addr(wMenuBorderTopCoord);  // ld a, [wMenuBorderTopCoord]
 	LD_B_A;  // ld b, a
 	INC_B;  // inc b
@@ -282,7 +282,7 @@ bit_7_clear:
 
 }
 
-int ClearMenuBoxInterior(){
+void ClearMenuBoxInterior(void){
 	CCALL(aMenuBoxCoord2Tile);  // call MenuBoxCoord2Tile
 	LD_BC(SCREEN_WIDTH + 1);  // ld bc, SCREEN_WIDTH + 1
 	ADD_HL_BC;  // add hl, bc
@@ -294,7 +294,7 @@ int ClearMenuBoxInterior(){
 
 }
 
-int ClearWholeMenuBox(){
+void ClearWholeMenuBox(void){
 	CCALL(aMenuBoxCoord2Tile);  // call MenuBoxCoord2Tile
 	CCALL(aGetMenuBoxDims);  // call GetMenuBoxDims
 	INC_C;  // inc c
@@ -304,7 +304,7 @@ int ClearWholeMenuBox(){
 
 }
 
-int MenuBoxCoord2Tile(){
+void MenuBoxCoord2Tile(void){
 	LD_A_addr(wMenuBorderLeftCoord);  // ld a, [wMenuBorderLeftCoord]
 	LD_C_A;  // ld c, a
 	LD_A_addr(wMenuBorderTopCoord);  // ld a, [wMenuBorderTopCoord]
@@ -314,7 +314,7 @@ int MenuBoxCoord2Tile(){
 	return Coord2Tile();
 }
 
-int Coord2Tile(){
+void Coord2Tile(void){
 //  Return the address of wTilemap(c, b) in hl.
 	XOR_A_A;  // xor a
 	LD_H_A;  // ld h, a
@@ -337,7 +337,7 @@ int Coord2Tile(){
 
 }
 
-int LoadMenuHeader(){
+void LoadMenuHeader(void){
 	SET_PC(0x1BAAU);
 	CCALL(aCopyMenuHeader);  // call CopyMenuHeader
 	CALL(mPushWindow);  // call PushWindow
@@ -345,7 +345,7 @@ int LoadMenuHeader(){
 
 }
 
-int CopyMenuHeader(){
+void CopyMenuHeader(void){
 	LD_DE(wMenuHeader);  // ld de, wMenuHeader
 	LD_BC(wMenuHeaderEnd - wMenuHeader);  // ld bc, wMenuHeaderEnd - wMenuHeader
 	CCALL(aCopyBytes);  // call CopyBytes
@@ -353,13 +353,13 @@ int CopyMenuHeader(){
 
 }
 
-int StoreMenuCursorPosition(){
+void StoreMenuCursorPosition(void){
 	LD_addr_A(wMenuCursorPosition);  // ld [wMenuCursorPosition], a
 	RET;  // ret
 
 }
 
-int MenuTextbox(){
+void MenuTextbox(void){
 	SET_PC(0x1BBFU);
 	PUSH_HL;  // push hl
 	CALL(mLoadMenuTextbox);  // call LoadMenuTextbox
@@ -368,13 +368,13 @@ int MenuTextbox(){
 
 }
 
-int Menu_DummyFunction(){
+void Menu_DummyFunction(void){
 //  //  unreferenced
 	RET;  // ret
 
 }
 
-int LoadMenuTextbox(){
+void LoadMenuTextbox(void){
 	SET_PC(0x1BC8U);
 	LD_HL(mLoadMenuTextbox_MenuHeader);  // ld hl, .MenuHeader
 	CALL(mLoadMenuHeader);  // call LoadMenuHeader
@@ -391,7 +391,7 @@ MenuHeader:
 	return MenuTextboxBackup();
 }
 
-int MenuTextboxBackup(){
+void MenuTextboxBackup(void){
 	SET_PC(0x1BD7U);
 	CALL(mMenuTextbox);  // call MenuTextbox
 	CALL(mCloseWindow);  // call CloseWindow
@@ -399,7 +399,7 @@ int MenuTextboxBackup(){
 
 }
 
-int LoadStandardMenuHeader(){
+void LoadStandardMenuHeader(void){
 	SET_PC(0x1BDEU);
 	LD_HL(mLoadStandardMenuHeader_MenuHeader);  // ld hl, .MenuHeader
 	CALL(mLoadMenuHeader);  // call LoadMenuHeader
@@ -416,14 +416,14 @@ MenuHeader:
 	return Call_ExitMenu();
 }
 
-int Call_ExitMenu(){
+void Call_ExitMenu(void){
 	SET_PC(0x1BEDU);
 	CALL(mExitMenu);  // call ExitMenu
 	RET;  // ret
 
 }
 
-int VerticalMenu(){
+void VerticalMenu(void){
 	SET_PC(0x1BF1U);
 	XOR_A_A;  // xor a
 	LDH_addr_A(hBGMapMode);  // ldh [hBGMapMode], a
@@ -454,7 +454,7 @@ okay:
 
 }
 
-int GetMenu2(){
+void GetMenu2(void){
 	SET_PC(0x1C1BU);
 	CALL(mLoadMenuHeader);  // call LoadMenuHeader
 	CALL(mVerticalMenu);  // call VerticalMenu
@@ -464,7 +464,7 @@ int GetMenu2(){
 
 }
 
-int CopyNameFromMenu(){
+void CopyNameFromMenu(void){
 	PUSH_HL;  // push hl
 	PUSH_BC;  // push bc
 	PUSH_AF;  // push af
@@ -485,20 +485,20 @@ int CopyNameFromMenu(){
 
 }
 
-int YesNoBox(){
+void YesNoBox(void){
 	SET_PC(0x1C3FU);
 	LD_BC((SCREEN_WIDTH - 6 << 8) | 7);  // lb bc, SCREEN_WIDTH - 6, 7
 
 	return PlaceYesNoBox();
 }
 
-int PlaceYesNoBox(){
+void PlaceYesNoBox(void){
 	SET_PC(0x1C42U);
 	JR(mv_YesNoBox);  // jr _YesNoBox
 
 }
 
-int PlaceGenericTwoOptionBox(){
+void PlaceGenericTwoOptionBox(void){
 	SET_PC(0x1C44U);
 //  //  unreferenced
 	CALL(mLoadMenuHeader);  // call LoadMenuHeader
@@ -506,7 +506,7 @@ int PlaceGenericTwoOptionBox(){
 
 }
 
-int v_YesNoBox(){
+void v_YesNoBox(void){
 	SET_PC(0x1C49U);
 //  Return nc (yes) or c (no).
 	PUSH_BC;  // push bc
@@ -527,7 +527,7 @@ int v_YesNoBox(){
 	return InterpretTwoOptionMenu();
 }
 
-int InterpretTwoOptionMenu(){
+void InterpretTwoOptionMenu(void){
 	SET_PC(0x1C66U);
 	CALL(mVerticalMenu);  // call VerticalMenu
 	PUSH_AF;  // push af
@@ -552,7 +552,7 @@ no:
 
 }
 
-int YesNoMenuHeader(){
+void YesNoMenuHeader(void){
 	SET_PC(0x1C85U);
 	//db ['MENU_BACKUP_TILES'];  // db MENU_BACKUP_TILES ; flags
 	//menu_coords ['10', '5', '15', '9'];  // menu_coords 10, 5, 15, 9
@@ -570,7 +570,7 @@ MenuData:
 	return OffsetMenuHeader();
 }
 
-int OffsetMenuHeader(){
+void OffsetMenuHeader(void){
 	SET_PC(0x1C96U);
 	CCALL(av_OffsetMenuHeader);  // call _OffsetMenuHeader
 	CALL(mPushWindow);  // call PushWindow
@@ -578,7 +578,7 @@ int OffsetMenuHeader(){
 
 }
 
-int v_OffsetMenuHeader(){
+void v_OffsetMenuHeader(void){
 	PUSH_DE;  // push de
 	CCALL(aCopyMenuHeader);  // call CopyMenuHeader
 	POP_DE;  // pop de
@@ -604,7 +604,7 @@ int v_OffsetMenuHeader(){
 
 }
 
-int DoNthMenu(){
+void DoNthMenu(void){
 	SET_PC(0x1CC5U);
 	CALL(mDrawVariableLengthMenuBox);  // call DrawVariableLengthMenuBox
 	CALL(mMenuWriteText);  // call MenuWriteText
@@ -616,7 +616,7 @@ int DoNthMenu(){
 
 }
 
-int SetUpMenu(){
+void SetUpMenu(void){
 	SET_PC(0x1CD8U);
 	CALL(mDrawVariableLengthMenuBox);  // call DrawVariableLengthMenuBox
 	CALL(mMenuWriteText);  // call MenuWriteText
@@ -627,7 +627,7 @@ int SetUpMenu(){
 
 }
 
-int DrawVariableLengthMenuBox(){
+void DrawVariableLengthMenuBox(void){
 	SET_PC(0x1CE7U);
 	CCALL(aCopyMenuData);  // call CopyMenuData
 	CCALL(aGetMenuIndexSet);  // call GetMenuIndexSet
@@ -637,7 +637,7 @@ int DrawVariableLengthMenuBox(){
 
 }
 
-int MenuWriteText(){
+void MenuWriteText(void){
 	SET_PC(0x1CF4U);
 	XOR_A_A;  // xor a
 	LDH_addr_A(hBGMapMode);  // ldh [hBGMapMode], a
@@ -655,7 +655,7 @@ int MenuWriteText(){
 
 }
 
-int AutomaticGetMenuBottomCoord(){
+void AutomaticGetMenuBottomCoord(void){
 	LD_A_addr(wMenuBorderLeftCoord);  // ld a, [wMenuBorderLeftCoord]
 	LD_C_A;  // ld c, a
 	LD_A_addr(wMenuBorderRightCoord);  // ld a, [wMenuBorderRightCoord]
@@ -672,7 +672,7 @@ int AutomaticGetMenuBottomCoord(){
 
 }
 
-int GetMenuIndexSet(){
+void GetMenuIndexSet(void){
 	LD_HL(wMenuDataIndicesPointer);  // ld hl, wMenuDataIndicesPointer
 	LD_A_hli;  // ld a, [hli]
 	LD_H_hl;  // ld h, [hl]
@@ -700,7 +700,7 @@ skip:
 
 }
 
-int RunMenuItemPrintingFunction(){
+void RunMenuItemPrintingFunction(void){
 	SET_PC(0x1D42U);
 	CCALL(aMenuBoxCoord2Tile);  // call MenuBoxCoord2Tile
 	LD_BC(2 * SCREEN_WIDTH + 2);  // ld bc, 2 * SCREEN_WIDTH + 2
@@ -735,7 +735,7 @@ _hl_:
 
 }
 
-int InitMenuCursorAndButtonPermissions(){
+void InitMenuCursorAndButtonPermissions(void){
 	SET_PC(0x1D67U);
 	CALL(mInitVerticalMenuCursor);  // call InitVerticalMenuCursor
 	LD_HL(wMenuJoypadFilter);  // ld hl, wMenuJoypadFilter
@@ -760,7 +760,7 @@ disallow_left_right:
 
 }
 
-int GetScrollingMenuJoypad(){
+void GetScrollingMenuJoypad(void){
 	SET_PC(0x1D82U);
 	CALL(mScrollingMenuJoypad);  // call ScrollingMenuJoypad
 	LD_HL(wMenuJoypadFilter);  // ld hl, wMenuJoypadFilter
@@ -769,7 +769,7 @@ int GetScrollingMenuJoypad(){
 
 }
 
-int GetStaticMenuJoypad(){
+void GetStaticMenuJoypad(void){
 	SET_PC(0x1D8BU);
 	XOR_A_A;  // xor a
 	LD_addr_A(wMenuJoypad);  // ld [wMenuJoypad], a
@@ -778,7 +778,7 @@ int GetStaticMenuJoypad(){
 	return ContinueGettingMenuJoypad();
 }
 
-int ContinueGettingMenuJoypad(){
+void ContinueGettingMenuJoypad(void){
 	BIT_A(A_BUTTON_F);  // bit A_BUTTON_F, a
 	IF_NZ goto a_button;  // jr nz, .a_button
 	BIT_A(B_BUTTON_F);  // bit B_BUTTON_F, a
@@ -835,7 +835,7 @@ b_start:
 
 }
 
-int PlaceMenuStrings(){
+void PlaceMenuStrings(void){
 	SET_PC(0x1DE1U);
 	PUSH_DE;  // push de
 	LD_HL(wMenuDataPointerTableAddr);  // ld hl, wMenuDataPointerTableAddr
@@ -852,7 +852,7 @@ int PlaceMenuStrings(){
 
 }
 
-int PlaceNthMenuStrings(){
+void PlaceNthMenuStrings(void){
 	SET_PC(0x1DF5U);
 	PUSH_DE;  // push de
 	LD_A_addr(wMenuSelection);  // ld a, [wMenuSelection]
@@ -868,7 +868,7 @@ int PlaceNthMenuStrings(){
 
 }
 
-int GetNthMenuStrings(){
+void GetNthMenuStrings(void){
 //  //  unreferenced
 	CCALL(aGetMenuDataPointerTableEntry);  // call GetMenuDataPointerTableEntry
 	INC_HL;  // inc hl
@@ -880,7 +880,7 @@ int GetNthMenuStrings(){
 
 }
 
-int MenuJumptable(){
+void MenuJumptable(void){
 	SET_PC(0x1E0FU);
 	LD_A_addr(wMenuSelection);  // ld a, [wMenuSelection]
 	CCALL(aGetMenuDataPointerTableEntry);  // call GetMenuDataPointerTableEntry
@@ -891,7 +891,7 @@ int MenuJumptable(){
 
 }
 
-int GetMenuDataPointerTableEntry(){
+void GetMenuDataPointerTableEntry(void){
 	LD_E_A;  // ld e, a
 	LD_D(0);  // ld d, 0
 	LD_HL(wMenuDataPointerTableAddr);  // ld hl, wMenuDataPointerTableAddr
@@ -906,7 +906,7 @@ int GetMenuDataPointerTableEntry(){
 
 }
 
-int ClearWindowData(){
+void ClearWindowData(void){
 	SET_PC(0x1E27U);
 	LD_HL(wWindowStackPointer);  // ld hl, wWindowStackPointer
 	CALL(mClearWindowData_bytefill);  // call .bytefill
@@ -942,7 +942,7 @@ bytefill:
 
 }
 
-int MenuClickSound(){
+void MenuClickSound(void){
 	PUSH_AF;  // push af
 	AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
 	IF_Z goto nosound;  // jr z, .nosound
@@ -957,7 +957,7 @@ nosound:
 
 }
 
-int PlayClickSFX(){
+void PlayClickSFX(void){
 	PUSH_DE;  // push de
 	LD_DE(SFX_READ_TEXT_2);  // ld de, SFX_READ_TEXT_2
 	CCALL(aPlaySFX);  // call PlaySFX
@@ -966,7 +966,7 @@ int PlayClickSFX(){
 
 }
 
-int MenuTextboxWaitButton(){
+void MenuTextboxWaitButton(void){
 	SET_PC(0x1E77U);
 	CALL(mMenuTextbox);  // call MenuTextbox
 	CALL(mWaitButton);  // call WaitButton
@@ -975,7 +975,7 @@ int MenuTextboxWaitButton(){
 
 }
 
-int Place2DMenuItemName(){
+void Place2DMenuItemName(void){
 	SET_PC(0x1E81U);
 	LD_addr_A(wTempBank);  // ld [wTempBank], a
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -991,7 +991,7 @@ int Place2DMenuItemName(){
 
 }
 
-int v_2DMenu(){
+void v_2DMenu(void){
 	SET_PC(0x1E91U);
 	CCALL(aCopyMenuData);  // call CopyMenuData
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -1008,7 +1008,7 @@ int v_2DMenu(){
 
 }
 
-int ResetBGWindow(){
+void ResetBGWindow(void){
 	XOR_A_A;  // xor a
 	LDH_addr_A(hBGMapMode);  // ldh [hBGMapMode], a
 	LD_A(0x90);  // ld a, $90

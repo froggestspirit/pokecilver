@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int FarCall_hl(){
+void FarCall_hl(void){
 	SET_PC(0x2E25U);
 //  Call a:hl.
 //  Preserves other registers.
@@ -32,7 +32,7 @@ int FarCall_hl(){
 
 }
 
-int FarCall_JumpToHL(){
+void FarCall_JumpToHL(void){
 	SET_PC(0x2E46U);
 	JP_hl;  // jp hl
 

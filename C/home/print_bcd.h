@@ -1,2 +1,2 @@
-int PrintBCDNumber();
-int PrintBCDDigit();
+void PrintBCDNumber(void);
+void PrintBCDDigit(void);

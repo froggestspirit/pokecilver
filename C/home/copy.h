@@ -1,4 +1,4 @@
-int CopyBytes();
-int GetFarByte();
-int GetFarWord();
-int ByteFill();
+void CopyBytes(void);
+void GetFarByte(void);
+void GetFarWord(void);
+void ByteFill(void);

@@ -1,5 +1,5 @@
-int FarCall();
-int Bankswitch();
-int JumpTable();
-int IHandler();
-int Start();
+void FarCall(void);
+void Bankswitch(void);
+void JumpTable(void);
+void IHandler(void);
+void Start(void);

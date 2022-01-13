@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int GetBattleVar(){
+void GetBattleVar(void){
 	PUSH_HL;  // push hl
 	CCALL(aGetBattleVarAddr);  // call GetBattleVarAddr
 	POP_HL;  // pop hl
@@ -8,7 +8,7 @@ int GetBattleVar(){
 
 }
 
-int GetBattleVarAddr(){
+void GetBattleVarAddr(void){
 //  Get variable from pair a, depending on whose turn it is.
 //  There are 21 variable pairs.
 	PUSH_BC;  // push bc
@@ -52,7 +52,7 @@ getvar:
 
 }
 
-int BattleVarPairs(){
+void BattleVarPairs(void){
 //  entries correspond to BATTLE_VARS_* constants
 	//table_width ['2', 'BattleVarPairs']  // table_width 2, BattleVarPairs
 	//dw ['.Substatus1'];  // dw .Substatus1
@@ -146,7 +146,7 @@ LastMoveOpp:
 	return BattleVarLocations();
 }
 
-int BattleVarLocations(){
+void BattleVarLocations(void){
 //  entries correspond to PLAYER_* and ENEMY_* constants
 	//table_width ['2 + 2', 'BattleVarLocations']  // table_width 2 + 2, BattleVarLocations
 	//dw ['wPlayerSubStatus1', 'wEnemySubStatus1'];  // dw wPlayerSubStatus1,          wEnemySubStatus1

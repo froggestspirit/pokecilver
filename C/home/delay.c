@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int DelayFrame(){
+void DelayFrame(void){
 	SET_PC(0x032EU);
 //  Wait for one frame
 	LD_A(1);  // ld a, 1
@@ -19,7 +19,7 @@ halt:
 
 }
 
-int DelayFrames(){
+void DelayFrames(void){
 	SET_PC(0x033CU);
 //  Wait c frames
 	CALL(mDelayFrame);  // call DelayFrame

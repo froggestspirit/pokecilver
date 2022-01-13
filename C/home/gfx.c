@@ -2,7 +2,7 @@
 
 #define TILES_PER_CYCLE 8
 
-int FarDecompressBufferedPic(){
+void FarDecompressBufferedPic(void){
 	SET_PC(0x0D6EU);
 //  //  unreferenced
 	LD_B_A;  // ld b, a
@@ -32,35 +32,35 @@ int FarDecompressBufferedPic(){
 
 }
 
-int UpdatePlayerSprite(){
+void UpdatePlayerSprite(void){
 	SET_PC(0x0D95U);
 	FARCALL(av_UpdatePlayerSprite);  // farcall _UpdatePlayerSprite
 	RET;  // ret
 
 }
 
-int LoadStandardFont(){
+void LoadStandardFont(void){
 	SET_PC(0x0D9CU);
 	FARCALL(av_LoadStandardFont);  // farcall _LoadStandardFont
 	RET;  // ret
 
 }
 
-int LoadFontsBattleExtra(){
+void LoadFontsBattleExtra(void){
 	SET_PC(0x0DA3U);
 	FARCALL(av_LoadFontsBattleExtra);  // farcall _LoadFontsBattleExtra
 	RET;  // ret
 
 }
 
-int LoadFontsExtra(){
+void LoadFontsExtra(void){
 	SET_PC(0x0DAAU);
 	FARCALL(av_LoadFontsExtra);  // farcall _LoadFontsExtra
 	RET;  // ret
 
 }
 
-int DecompressRequest2bpp(){
+void DecompressRequest2bpp(void){
 	SET_PC(0x0DB1U);
 	PUSH_DE;  // push de
 	LD_A(BANK(sScratch));  // ld a, BANK(sScratch)
@@ -81,7 +81,7 @@ int DecompressRequest2bpp(){
 
 }
 
-int FarCopyBytes(){
+void FarCopyBytes(void){
 //  copy bc bytes from a:hl to de
 
 	LD_addr_A(wTempBank);  // ld [wTempBank], a
@@ -98,7 +98,7 @@ int FarCopyBytes(){
 
 }
 
-int FarCopyBytesDouble(){
+void FarCopyBytesDouble(void){
 //  Copy bc bytes from a:hl to bc*2 bytes at de,
 //  doubling each byte in the process.
 
@@ -139,7 +139,7 @@ dec:
 
 }
 
-int Request2bpp(){
+void Request2bpp(void){
 	SET_PC(0x0DFCU);
 //  Load 2bpp at b:de to occupy c tiles of hl.
 	LDH_A_addr(hBGMapMode);  // ldh a, [hBGMapMode]
@@ -192,7 +192,7 @@ cycle:
 	return Request1bpp();
 }
 
-int Request1bpp(){
+void Request1bpp(void){
 	SET_PC(0x0E36U);
 //  Load 1bpp at b:de to occupy c tiles of hl.
 	LDH_A_addr(hBGMapMode);  // ldh a, [hBGMapMode]
@@ -245,7 +245,7 @@ cycle:
 	return Get2bpp();
 }
 
-int Get2bpp(){
+void Get2bpp(void){
 	SET_PC(0x0E70U);
 //  copy c 2bpp tiles from b:de to hl
 	LDH_A_addr(rLCDC);  // ldh a, [rLCDC]
@@ -275,7 +275,7 @@ int Get2bpp(){
 
 }
 
-int Get1bpp(){
+void Get1bpp(void){
 	SET_PC(0x0E8BU);
 //  copy c 1bpp tiles from b:de to hl
 	LDH_A_addr(rLCDC);  // ldh a, [rLCDC]
@@ -305,7 +305,7 @@ int Get1bpp(){
 
 }
 
-int DuplicateGet2bpp(){
+void DuplicateGet2bpp(void){
 	SET_PC(0x0EA4U);
 //  //  unreferenced
 	LDH_A_addr(rLCDC);  // ldh a, [rLCDC]

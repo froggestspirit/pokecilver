@@ -1,2 +1,2 @@
-int PrintNum();
-int PrintHexNumber();
+void PrintNum(void);
+void PrintHexNumber(void);

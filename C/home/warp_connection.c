@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int HandleNewMap(){
+void HandleNewMap(void){
 	SET_PC(0x2084U);
 	CCALL(aClearUnusedMapBuffer);  // call ClearUnusedMapBuffer
 	CCALL(aResetMapBufferEventFlags);  // call ResetMapBufferEventFlags
@@ -12,7 +12,7 @@ int HandleNewMap(){
 	return HandleContinueMap();
 }
 
-int HandleContinueMap(){
+void HandleContinueMap(void){
 	SET_PC(0x2098U);
 	FARCALL(aClearCmdQueue);  // farcall ClearCmdQueue
 	LD_A(MAPCALLBACK_CMDQUEUE);  // ld a, MAPCALLBACK_CMDQUEUE
@@ -23,7 +23,7 @@ int HandleContinueMap(){
 
 }
 
-int LoadMapTimeOfDay(){
+void LoadMapTimeOfDay(void){
 	SET_PC(0x20AAU);
 	LD_A(0x1);  // ld a, $1
 	LD_addr_A(wSpriteUpdatesEnabled);  // ld [wSpriteUpdatesEnabled], a
@@ -92,7 +92,7 @@ column:
 
 }
 
-int LoadMapGraphics(){
+void LoadMapGraphics(void){
 	SET_PC(0x2110U);
 	CCALL(aLoadMapTileset);  // call LoadMapTileset
 	CALL(mLoadTilesetGFX);  // call LoadTilesetGFX
@@ -106,14 +106,14 @@ int LoadMapGraphics(){
 
 }
 
-int LoadMapPalettes(){
+void LoadMapPalettes(void){
 	SET_PC(0x2126U);
 	LD_B(0x9);  // ld b, $9
 	JP(mGetSGBLayout);  // jp GetSGBLayout
 
 }
 
-int RefreshMapSprites(){
+void RefreshMapSprites(void){
 	SET_PC(0x212BU);
 	CCALL(aClearSprites);  // call ClearSprites
 	CCALL(aResetBGWindow);  // call ResetBGWindow
@@ -135,7 +135,7 @@ skip:
 
 }
 
-int CheckMovingOffEdgeOfMap(){
+void CheckMovingOffEdgeOfMap(void){
 	LD_A_addr(wPlayerStepDirection);  // ld a, [wPlayerStepDirection]
 	CP_A(STANDING);  // cp STANDING
 	RET_Z ;  // ret z
@@ -199,7 +199,7 @@ ok:
 
 }
 
-int EnterMapConnection(){
+void EnterMapConnection(void){
 	SET_PC(0x21A1U);
 //  Return carry if a connection has been entered.
 	LD_A_addr(wPlayerStepDirection);  // ld a, [wPlayerStepDirection]
@@ -355,7 +355,7 @@ done:
 
 }
 
-int CheckWarpTile(){
+void CheckWarpTile(void){
 	SET_PC(0x2291U);
 	CALL(mGetDestinationWarpNumber);  // call GetDestinationWarpNumber
 	RET_NC ;  // ret nc
@@ -371,7 +371,7 @@ int CheckWarpTile(){
 
 }
 
-int WarpCheck(){
+void WarpCheck(void){
 	SET_PC(0x22A3U);
 	CALL(mGetDestinationWarpNumber);  // call GetDestinationWarpNumber
 	RET_NC ;  // ret nc
@@ -380,7 +380,7 @@ int WarpCheck(){
 
 }
 
-int GetDestinationWarpNumber(){
+void GetDestinationWarpNumber(void){
 	SET_PC(0x22ABU);
 	FARCALL(aCheckWarpCollision);  // farcall CheckWarpCollision
 	RET_NC ;  // ret nc
@@ -468,7 +468,7 @@ IncreaseHLTwice:
 
 }
 
-int CopyWarpData(){
+void CopyWarpData(void){
 	SET_PC(0x2300U);
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
@@ -522,7 +522,7 @@ skip:
 
 }
 
-int EnterMapWarp(){
+void EnterMapWarp(void){
 	SET_PC(0x2347U);
 	CALL(mEnterMapWarp_SaveDigWarp);  // call .SaveDigWarp
 	CALL(mEnterMapWarp_SetSpawn);  // call .SetSpawn

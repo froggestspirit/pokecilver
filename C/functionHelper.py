@@ -18,8 +18,8 @@ def analyze(fileName):
     fallthrough = False
     for line in asmFile:
         if line:
-            if line[:3] == "int":
-                currentFunc = line.split("(")[0][4:]
+            if line[:4] == "void":
+                currentFunc = line.split("(")[0][5:]
                 currentFuncs.append(currentFunc)
                 fallthrough = False
             elif line[0] == "}":

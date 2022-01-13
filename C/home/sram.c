@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int OpenSRAM(){
+void OpenSRAM(void){
 //  switch to sram bank a
 	PUSH_AF;  // push af
 //  latch clock data
@@ -16,7 +16,7 @@ int OpenSRAM(){
 
 }
 
-int CloseSRAM(){
+void CloseSRAM(void){
 	PUSH_AF;  // push af
 	LD_A(SRAM_DISABLE);  // ld a, SRAM_DISABLE
 //  reset clock latch for next time

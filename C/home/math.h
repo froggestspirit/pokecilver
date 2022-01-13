@@ -1,5 +1,5 @@
-int SimpleMultiply();
-int SimpleDivide();
-int Multiply();
-int Divide();
-int SubtractAbsolute();
+void SimpleMultiply(void);
+void SimpleDivide(void);
+void Multiply(void);
+void Divide(void);
+void SubtractAbsolute(void);

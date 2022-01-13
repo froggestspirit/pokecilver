@@ -1,20 +1,20 @@
 #include "../constants.h"
 
-int InitString(){
+void InitString(void){
 //  Init a string of length c.
 	PUSH_HL;  // push hl
 	return v_InitString();  // jr _InitString
 
 }
 
-int InitName(){
+void InitName(void){
 //  Intended for names, so this function is limited to ten characters.
 	PUSH_HL;  // push hl
 	LD_C(NAME_LENGTH - 1);  // ld c, NAME_LENGTH - 1
 	return v_InitString();
 }
 
-int v_InitString(){
+void v_InitString(void){
 //  if the string pointed to by hl is empty (defined as "zero or more spaces
 //  followed by a null"), then initialize it to the string pointed to by de.
 	PUSH_BC;  // push bc

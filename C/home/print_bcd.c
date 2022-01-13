@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int PrintBCDNumber(){
+void PrintBCDNumber(void){
 	SET_PC(0x3ADAU);
 //  function to print a BCD (Binary-coded decimal) number
 //  de = address of BCD number
@@ -63,7 +63,7 @@ done:
 
 }
 
-int PrintBCDDigit(){
+void PrintBCDDigit(void){
 	SET_PC(0x3B11U);
 	AND_A(0b00001111);  // and %00001111
 	AND_A_A;  // and a

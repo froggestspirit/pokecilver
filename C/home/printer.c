@@ -1,13 +1,13 @@
 #include "../constants.h"
 
-int PrinterReceive(){
+void PrinterReceive(void){
 	SET_PC(0x1EB1U);
 	HOMECALL(av_PrinterReceive);  // homecall _PrinterReceive
 	RET;  // ret
 
 }
 
-int AskSerial(){
+void AskSerial(void){
 //  send out a handshake while serial int is off
 	LD_A_addr(wPrinterConnectionOpen);  // ld a, [wPrinterConnectionOpen]
 	BIT_A(0);  // bit 0, a

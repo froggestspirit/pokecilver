@@ -115,10 +115,10 @@ def parse_line_label(string):
         funcList.append(currentFunc)
         if prevFunc != "":
             if not funcRet:
-                asm = f"\treturn {currentFunc}();\n"
+                asm = f"\t{currentFunc}();\n\treturn;\n"
             asm = f"{asm}}}\n\n"
         funcID = funcsKnown.index(currentFunc)
-        asm = f"{asm}int {currentFunc}(){{\n\tSET_PC({funcsKnownAddr[funcID]});"
+        asm = f"{asm}void {currentFunc}(void){{\n\tSET_PC({funcsKnownAddr[funcID]});"
         if len(parts) > 1:
             asm = f"{asm}\n//{' '.join(parts[1:])}"
     elif len(string[0]) and string[0][0] == ".":
@@ -211,6 +211,8 @@ def parse_asm(asm):
         elif asm[0] in register:  # Non-register into register
             if "[" in asm[1]:
                 source = "_addr"
+            if asm[0] == "hl" and asm[1][:3] == "sp+":
+                return f"LD_HL_SP({asm[1][3:]});"
             return f"{op}{register[asm[0]]}{source}({check_if_label(asm[1].strip('[]'), 'm')});"
         elif asm[1] in register:  # register into address
             return f"{op}{dest}{register[asm[1]]}({asm[0].strip('[]')});"
@@ -361,7 +363,7 @@ def main():
     if not os.path.exists(args.fileName.replace(".asm", ".h")):
         with open(args.fileName.replace(".asm", ".h"), "w") as cFile:
             for f in funcList:
-                cFile.write(f"int {f}();\n")
+                cFile.write(f"void {f}(void);\n")
             for inc in includes:
                 cFile.write(f"//#include {inc.replace('.asm', '.h')}\n")
     print(f"\t// {args.fileName.replace('.asm', '.c')}")

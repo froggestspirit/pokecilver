@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int FarDecompress(){
+void FarDecompress(void){
 	SET_PC(0x0AEEU);
 //  Decompress graphics data from a:hl to de.
 
@@ -18,7 +18,7 @@ int FarDecompress(){
 
 }
 
-int Decompress(){
+void Decompress(void){
 	SET_PC(0x0AFEU);
 //  Pokemon GSC uses an lz variant (lz3) for compression.
 //  This is mainly (but not necessarily) used for graphics.

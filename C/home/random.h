@@ -1,3 +1,3 @@
-int Random();
-int BattleRandom();
-int RandomRange();
+void Random(void);
+void BattleRandom(void);
+void RandomRange(void);

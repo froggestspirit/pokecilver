@@ -1,2 +1,2 @@
-int FarDecompress();
-int Decompress();
+void FarDecompress(void);
+void Decompress(void);

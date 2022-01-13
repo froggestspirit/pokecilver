@@ -1,7 +1,7 @@
-int CountSetBits();
-int GetWeekday();
-int SetSeenAndCaughtMon();
-int SetSeenMon();
-int CheckCaughtMon();
-int CheckSeenMon();
-int PokedexFlagAction();
+void CountSetBits(void);
+void GetWeekday(void);
+void SetSeenAndCaughtMon(void);
+void SetSeenMon(void);
+void CheckCaughtMon(void);
+void CheckSeenMon(void);
+void PokedexFlagAction(void);

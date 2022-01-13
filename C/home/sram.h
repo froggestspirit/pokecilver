@@ -1,2 +1,2 @@
-int OpenSRAM();
-int CloseSRAM();
+void OpenSRAM(void);
+void CloseSRAM(void);

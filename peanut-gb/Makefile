@@ -19,7 +19,10 @@ LICENSE := $(COPYRIGHT); Released under the $(LICENSE_SPDX) License.
 GIT_VER := $(shell git describe --dirty --always --tags --long)
 
 TARGET := peanut-sdl
-SRCS   := peanut_sdl.c $(wildcard ../C/home/*.c) $(wildcard ../C/audio/*.c)
+SRCS   := peanut_sdl.c \
+	$(wildcard ../C/*/*.c) \
+	$(wildcard ../C/*/*/*.c) \
+	$(wildcard ../C/*/*/*/*.c)
 CFLAGS += $(shell sdl2-config --cflags)
 
 ifeq ($(STATIC),yes)
@@ -86,7 +89,10 @@ $(TARGET): $(OBJS)
 		/DNAME="$(NAME)" /DICON_FILE="$(ICON_FILE)" $^
 
 clean:
-	$(RM) *.$(OBJEXT) $(TARGET) $(wildcard ../C/home/*.o) $(wildcard ../C/audio/*.o)
+	$(RM) *.$(OBJEXT) $(TARGET) \
+	$(wildcard ../C/*/*.o) \
+	$(wildcard ../C/*/*/*.o) \
+	$(wildcard ../C/*/*/*/*.o)
 
 help:
 	@cd

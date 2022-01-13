@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int ResetGameTime(){
+void ResetGameTime(void){
 	XOR_A_A;  // xor a
 	LD_addr_A(wGameTimeCap);  // ld [wGameTimeCap], a
 	LD_addr_A(wGameTimeHours);  // ld [wGameTimeHours], a
@@ -12,7 +12,7 @@ int ResetGameTime(){
 
 }
 
-int GameTimer(){
+void GameTimer(void){
 	NOP;  // nop
 
 //  Increment the game timer by one frame.

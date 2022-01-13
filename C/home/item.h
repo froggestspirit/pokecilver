@@ -1,5 +1,5 @@
-int DoItemEffect();
-int CheckTossableItem();
-int TossItem();
-int ReceiveItem();
-int CheckItem();
+void DoItemEffect(void);
+void CheckTossableItem(void);
+void TossItem(void);
+void ReceiveItem(void);
+void CheckItem(void);

@@ -2,6 +2,8 @@
 
 #include "home.h"
 #include "audio/engine.h"
+#include "engine/tilesets/tileset_anims.h"
+
 
 void init_function_pointers(){
     for(int i = 0; i < ROM_SIZE; i++) func[i] = NULL;
@@ -754,4 +756,97 @@ void init_function_pointers(){
 
 	// audio/engine.c
 	REDIRECT(PlayTrainerEncounterMusic);
+
+
+	// engine/tilesets/tileset_anims.c
+	REDIRECT(DummyPredef3A_DummyData);
+	REDIRECT(DummyPredef3A);
+	REDIRECT(DummyPredef3A_DummyFunction);
+	REDIRECT(v_AnimateTileset);
+	REDIRECT(Tileset0Anim);
+	REDIRECT(TilesetJohtoModernAnim);
+	REDIRECT(TilesetKantoAnim);
+	REDIRECT(TilesetParkAnim);
+	REDIRECT(TilesetForestAnim);
+	REDIRECT(TilesetJohtoAnim);
+	REDIRECT(UnusedTilesetAnim1);
+	REDIRECT(UnusedTilesetAnim2);
+	REDIRECT(TilesetPortAnim);
+	REDIRECT(TilesetEliteFourRoomAnim);
+	REDIRECT(UnusedTilesetAnim3);
+	REDIRECT(UnusedTilesetAnim4);
+	REDIRECT(TilesetCaveAnim);
+	REDIRECT(TilesetDarkCaveAnim);
+	REDIRECT(TilesetIcePathAnim);
+	REDIRECT(TilesetTowerAnim);
+	REDIRECT(UnusedTilesetAnim5);
+	REDIRECT(TilesetHouseAnim);
+	REDIRECT(TilesetPlayersHouseAnim);
+	REDIRECT(TilesetPokecenterAnim);
+	REDIRECT(TilesetGateAnim);
+	REDIRECT(TilesetLabAnim);
+	REDIRECT(TilesetFacilityAnim);
+	REDIRECT(TilesetMartAnim);
+	REDIRECT(TilesetMansionAnim);
+	REDIRECT(TilesetGameCornerAnim);
+	REDIRECT(TilesetTraditionalHouseAnim);
+	REDIRECT(TilesetTrainStationAnim);
+	REDIRECT(TilesetChampionsRoomAnim);
+	REDIRECT(TilesetLighthouseAnim);
+	REDIRECT(TilesetPlayersRoomAnim);
+	REDIRECT(TilesetRuinsOfAlphAnim);
+	REDIRECT(TilesetRadioTowerAnim);
+	REDIRECT(TilesetUndergroundAnim);
+	REDIRECT(DoneTileAnimation);
+	REDIRECT(WaitTileAnimation);
+	REDIRECT(StandingTileFrame8);
+	REDIRECT(ScrollTileRightLeft);
+	REDIRECT(ScrollTileUpDown);
+	REDIRECT(ScrollTileLeft);
+	REDIRECT(ScrollTileRight);
+	REDIRECT(ScrollTileUp);
+	REDIRECT(ScrollTileDown);
+	REDIRECT(AnimateWaterTile);
+	REDIRECT(AnimateFlowerTile);
+	REDIRECT(AnimateLavaBubbleTile1);
+	REDIRECT(AnimateLavaBubbleTile2);
+	REDIRECT(LavaBubbleTileFrames);
+	REDIRECT(AnimateTowerPillarTile);
+	REDIRECT(StandingTileFrame);
+	REDIRECT(AnimateWhirlpoolTile);
+	REDIRECT(WriteTileFromAnimBuffer);
+	REDIRECT(ReadTileToAnimBuffer);
+	REDIRECT(WriteTile);
+	REDIRECT(AnimateWaterPalette);
+	REDIRECT(FlickeringCaveEntrancePalette);
+	REDIRECT(TowerPillarTilePointer1);
+	REDIRECT(TowerPillarTilePointer2);
+	REDIRECT(TowerPillarTilePointer3);
+	REDIRECT(TowerPillarTilePointer4);
+	REDIRECT(TowerPillarTilePointer5);
+	REDIRECT(TowerPillarTilePointer6);
+	REDIRECT(TowerPillarTilePointer7);
+	REDIRECT(TowerPillarTilePointer8);
+	REDIRECT(TowerPillarTilePointer9);
+	REDIRECT(TowerPillarTilePointer10);
+	REDIRECT(TowerPillarTile1);
+	REDIRECT(TowerPillarTile2);
+	REDIRECT(TowerPillarTile3);
+	REDIRECT(TowerPillarTile4);
+	REDIRECT(TowerPillarTile5);
+	REDIRECT(TowerPillarTile6);
+	REDIRECT(TowerPillarTile7);
+	REDIRECT(TowerPillarTile8);
+	REDIRECT(TowerPillarTile9);
+	REDIRECT(TowerPillarTile10);
+	REDIRECT(WhirlpoolFrames1);
+	REDIRECT(WhirlpoolFrames2);
+	REDIRECT(WhirlpoolFrames3);
+	REDIRECT(WhirlpoolFrames4);
+	REDIRECT(WhirlpoolTiles1);
+	REDIRECT(WhirlpoolTiles2);
+	REDIRECT(WhirlpoolTiles3);
+	REDIRECT(WhirlpoolTiles4);
+	REDIRECT(TilesetAnims_DummyFunction);
+
 }

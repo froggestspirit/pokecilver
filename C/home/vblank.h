@@ -1,8 +1,9 @@
-int VBlank();
-int VBlank0();
-int VBlank1();
-int UpdatePals();
-int VBlank4();
-int VBlank5();
-int VBlank2();
-int VBlank3();
+void TransferVirtualOAM(void); // Manually add this
+void VBlank(void);
+void VBlank0(void);
+void VBlank1(void);
+void UpdatePals(void);
+void VBlank4(void);
+void VBlank5(void);
+void VBlank2(void);
+void VBlank3(void);

@@ -2,7 +2,7 @@
 
 //  LCD handling
 
-int LCD(){
+void LCD(void){
 	PUSH_AF;  // push af
 	LDH_A_addr(hLCDCPointer);  // ldh a, [hLCDCPointer]
 	AND_A_A;  // and a
@@ -27,7 +27,7 @@ done:
 
 }
 
-int DisableLCD(){
+void DisableLCD(void){
 //  Turn the LCD off
 
 //  Don't need to do anything if the LCD is already off
@@ -63,7 +63,7 @@ wait:  // hack to avoid hanging
 
 }
 
-int EnableLCD(){
+void EnableLCD(void){
 	LDH_A_addr(rLCDC);  // ldh a, [rLCDC]
 	SET_A(rLCDC_ENABLE);  // set rLCDC_ENABLE, a
 	LDH_addr_A(rLCDC);  // ldh [rLCDC], a

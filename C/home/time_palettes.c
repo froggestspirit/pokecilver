@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int UpdateTimeAndPals(){
+void UpdateTimeAndPals(void){
 	SET_PC(0x0343U);
 //  update time and time-sensitive palettes
 
@@ -18,14 +18,14 @@ int UpdateTimeAndPals(){
 
 }
 
-int TimeOfDayPals(){
+void TimeOfDayPals(void){
 	SET_PC(0x0352U);
 	CALLFAR(av_TimeOfDayPals);  // callfar _TimeOfDayPals
 	RET;  // ret
 
 }
 
-int UpdateTimePals(){
+void UpdateTimePals(void){
 	SET_PC(0x0359U);
 	CALLFAR(av_UpdateTimePals);  // callfar _UpdateTimePals
 	RET;  // ret

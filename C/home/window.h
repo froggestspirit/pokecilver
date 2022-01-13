@@ -1,6 +1,6 @@
-int RefreshScreen();
-int CloseText();
-int OpenText();
-int v_OpenAndCloseMenu_HDMATransferTilemapAndAttrmap();
-int SafeUpdateSprites();
-int SetCarryFlag();
+void RefreshScreen(void);
+void CloseText(void);
+void OpenText(void);
+void v_OpenAndCloseMenu_HDMATransferTilemapAndAttrmap(void);
+void SafeUpdateSprites(void);
+void SetCarryFlag(void);

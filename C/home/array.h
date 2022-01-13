@@ -1,3 +1,3 @@
-int IsInArray();
-int SkipNames();
-int AddNTimes();
+void IsInArray(void);
+void SkipNames(void);
+void AddNTimes(void);

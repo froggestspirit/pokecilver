@@ -1,2 +1,2 @@
-int v_hl_();
-int v_de_();
+void v_hl_(void);
+void v_de_(void);

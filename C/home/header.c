@@ -1,16 +1,16 @@
 #include "../constants.h"
 
-int FarCall(){
+void FarCall(void){
 	JP(mFarCall_hl);  // jp FarCall_hl
 }
 
-int Bankswitch(){
+void Bankswitch(void){
 	LDH_addr_A(hROMBank);  // ldh [hROMBank], a
 	LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
 	return;  // ret
 }
 
-int JumpTable(){
+void JumpTable(void){
 	PUSH_DE;  // push de
 	LD_E_A;  // ld e, a
 	LD_D(0);  // ld d, 0
@@ -23,7 +23,7 @@ int JumpTable(){
 	JP_hl;  // jp hl
 }
 
-int IHandler(){
+void IHandler(void){
 	PUSH_AF;  // push af
 	PUSH_HL;  // push hl
 	LD_HL(0xFF44);  // ld hl, $FF44
@@ -42,7 +42,7 @@ wait:  // hack to avoid hanging
 	RET;  // ret
 }
 
-int Start(){
+void Start(void){
 	NOP;  // nop
 	JP(mv_Start);  // jp _Start
 }

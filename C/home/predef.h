@@ -1,1 +1,1 @@
-int Predef();
+void Predef(void);

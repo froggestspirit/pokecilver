@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int IsInArray(){
+void IsInArray(void){
 //  Find value a for every de bytes in array hl.
 //  Return index in b and carry if found.
 
@@ -29,7 +29,7 @@ InArray:
 
 }
 
-int SkipNames(){
+void SkipNames(void){
 //  Skip a names.
 	LD_BC(NAME_LENGTH);  // ld bc, NAME_LENGTH
 	AND_A_A;  // and a
@@ -43,7 +43,7 @@ loop:
 
 }
 
-int AddNTimes(){
+void AddNTimes(void){
 //  Add bc * a to hl.
 	AND_A_A;  // and a
 	RET_Z ;  // ret z

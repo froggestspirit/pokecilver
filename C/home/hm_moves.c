@@ -2,7 +2,7 @@
 
 //  HM moves can't be forgotten
 
-int IsHM(){
+void IsHM(void){
 	CP_A(HM01);  // cp HM01
 	IF_C goto NotHM;  // jr c, .NotHM
 	SCF;  // scf
@@ -14,7 +14,7 @@ NotHM:
 
 }
 
-int IsHMMove(){
+void IsHMMove(void){
 	SET_PC(0x3728U);
 	LD_HL(mIsHMMove_HMMoves);  // ld hl, .HMMoves
 	LD_DE(1);  // ld de, 1

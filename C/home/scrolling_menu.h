@@ -1,3 +1,3 @@
-int ScrollingMenu();
-int InitScrollingMenu();
-int JoyTextDelay_ForcehJoyDown();
+void ScrollingMenu(void);
+void InitScrollingMenu(void);
+void JoyTextDelay_ForcehJoyDown(void);

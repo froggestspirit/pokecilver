@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int Reset(){
+void Reset(void){
 	SET_PC(0x05B0U);
 	CCALL(aInitSound);  // call InitSound
 	XOR_A_A;  // xor a
@@ -18,7 +18,7 @@ int Reset(){
 
 }
 
-int v_Start(){
+void v_Start(void){
 	SET_PC(0x05C6U);
 	CP_A(0x11);  // cp $11
 	IF_Z goto cgb;  // jr z, .cgb
@@ -38,7 +38,7 @@ load:
 	return Init();
 }
 
-int Init(){
+void Init(void){
 	SET_PC(0x05D1U);
 	NOP;  // di
 
@@ -172,7 +172,7 @@ ByteFill:
 
 }
 
-int ClearVRAM(){
+void ClearVRAM(void){
 	LD_HL(VRAM_Begin);  // ld hl, VRAM_Begin
 	LD_BC(VRAM_End - VRAM_Begin);  // ld bc, VRAM_End - VRAM_Begin
 	XOR_A_A;  // xor a
@@ -181,13 +181,13 @@ int ClearVRAM(){
 
 }
 
-int BlankBGMap(){
+void BlankBGMap(void){
 	LD_A(0x7f);  // ld a, " "
 	return FillBGMap();  // jr FillBGMap
 
 }
 
-int FillBGMap_l(){
+void FillBGMap_l(void){
 //  //  unreferenced
 	LD_A_L;  // ld a, l
 // ; fallthrough
@@ -195,7 +195,7 @@ int FillBGMap_l(){
 	return FillBGMap();
 }
 
-int FillBGMap(){
+void FillBGMap(void){
 	LD_DE(vBGMap1 - vBGMap0);  // ld de, vBGMap1 - vBGMap0
 	LD_L_E;  // ld l, e
 

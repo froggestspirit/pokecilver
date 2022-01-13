@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int SimpleMultiply(){
+void SimpleMultiply(void){
 //  Return a * c.
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -18,7 +18,7 @@ loop:
 
 }
 
-int SimpleDivide(){
+void SimpleDivide(void){
 //  Divide a by c. Return quotient b and remainder a.
 	LD_B(0);  // ld b, 0
 
@@ -32,7 +32,7 @@ loop:
 
 }
 
-int Multiply(){
+void Multiply(void){
 	SET_PC(0x31BCU);
 //  Multiply hMultiplicand (3 bytes) by hMultiplier. Result in hProduct.
 //  All values are big endian.
@@ -47,7 +47,7 @@ int Multiply(){
 
 }
 
-int Divide(){
+void Divide(void){
 	SET_PC(0x31C7U);
 //  Divide hDividend length b (max 4 bytes) by hDivisor. Result in hQuotient.
 //  All values are big endian.
@@ -62,7 +62,7 @@ int Divide(){
 
 }
 
-int SubtractAbsolute(){
+void SubtractAbsolute(void){
 //  //  unreferenced
 //  Return |a - b|, sign in carry.
 	SUB_A_B;  // sub b

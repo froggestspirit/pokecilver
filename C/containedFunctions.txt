@@ -341,3 +341,9 @@ UpdateBGMap_start
 UpdateBGMap_row
 UpdateBGMap_Attr
 UpdateBGMap
+VBlank1
+UpdateJoypad
+VBlank0
+VBlank4
+VBlank5
+VBlank3

@@ -1,1 +1,1 @@
-int HandleStoneQueue();
+void HandleStoneQueue(void);

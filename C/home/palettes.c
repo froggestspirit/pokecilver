@@ -2,7 +2,7 @@
 
 //  Functions dealing with palettes.
 
-int UpdatePalsIfCGB(){
+void UpdatePalsIfCGB(void){
 //  update bgp data from wBGPals2
 //  update obp data from wOBPals2
 //  return carry if successful
@@ -14,7 +14,7 @@ int UpdatePalsIfCGB(){
 
 }
 
-int UpdateCGBPals(){
+void UpdateCGBPals(void){
 //  return carry if successful
 //  any pals to update?
 	LDH_A_addr(hCGBPalUpdate);  // ldh a, [hCGBPalUpdate]
@@ -62,7 +62,7 @@ obp:
 
 }
 
-int DmgToCgbBGPals(){
+void DmgToCgbBGPals(void){
 	SET_PC(0x0C5FU);
 //  exists to forego reinserting cgb-converted image data
 
@@ -104,7 +104,7 @@ end:
 
 }
 
-int DmgToCgbObjPals(){
+void DmgToCgbObjPals(void){
 	SET_PC(0x0C81U);
 //  exists to forego reinserting cgb-converted image data
 
@@ -144,7 +144,7 @@ int DmgToCgbObjPals(){
 
 }
 
-int DmgToCgbObjPal0(){
+void DmgToCgbObjPal0(void){
 	SET_PC(0x0CA4U);
 	LDH_addr_A(rOBP0);  // ldh [rOBP0], a
 	PUSH_AF;  // push af
@@ -179,7 +179,7 @@ dmg:
 
 }
 
-int DmgToCgbObjPal1(){
+void DmgToCgbObjPal1(void){
 	SET_PC(0x0CC6U);
 	LDH_addr_A(rOBP1);  // ldh [rOBP1], a
 	PUSH_AF;  // push af
@@ -213,7 +213,7 @@ dmg:
 
 }
 
-int CopyPals(){
+void CopyPals(void){
 	SET_PC(0x0CE8U);
 //  copy c palettes in order b from de to hl
 
@@ -272,7 +272,7 @@ ok:
 
 }
 
-int ClearVBank1(){
+void ClearVBank1(void){
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z
@@ -291,7 +291,7 @@ int ClearVBank1(){
 
 }
 
-int ReloadPalettes(){
+void ReloadPalettes(void){
 	hlcoord(0, 0, wTilemap);  // hlcoord 0, 0
 	decoord(0, 0, wAttrmap);  // decoord 0, 0, wAttrmap
 	LD_BC(SCREEN_WIDTH * SCREEN_HEIGHT);  // ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
@@ -313,7 +313,7 @@ skip:
 
 }
 
-int ReloadSpritesNoPalettes(){
+void ReloadSpritesNoPalettes(void){
 	SET_PC(0x0D40U);
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
 	AND_A_A;  // and a
@@ -329,14 +329,14 @@ int ReloadSpritesNoPalettes(){
 
 }
 
-int SwapTextboxPalettes(){
+void SwapTextboxPalettes(void){
 	SET_PC(0x0D56U);
 	HOMECALL(av_SwapTextboxPalettes);  // homecall _SwapTextboxPalettes
 	RET;  // ret
 
 }
 
-int ScrollBGMapPalettes(){
+void ScrollBGMapPalettes(void){
 	SET_PC(0x0D62U);
 	HOMECALL(av_ScrollBGMapPalettes);  // homecall _ScrollBGMapPalettes
 	RET;  // ret

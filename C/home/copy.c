@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int CopyBytes(){
+void CopyBytes(void){
 //  copy bc bytes from hl to de
 	INC_B;  // inc b ; we bail the moment b hits 0, so include the last run
 	INC_C;  // inc c ; same thing; include last byte
@@ -20,7 +20,7 @@ HandleLoop:
 
 }
 
-int GetFarByte(){
+void GetFarByte(void){
 //  retrieve a single byte from a:hl, and return it in a.
 // ; bankswitch to new bank
 	LD_addr_A(wTempBank);  // ld [wTempBank], a
@@ -43,7 +43,7 @@ int GetFarByte(){
 
 }
 
-int GetFarWord(){
+void GetFarWord(void){
 //  retrieve a halfword from a:hl, and return it in hl.
 // ; bankswitch to new bank
 	LD_addr_A(wTempBank);  // ld [wTempBank], a
@@ -64,7 +64,7 @@ int GetFarWord(){
 
 }
 
-int ByteFill(){
+void ByteFill(void){
 //  fill bc bytes with the value of a, starting at hl
 	INC_B;  // inc b ; we bail the moment b hits 0, so include the last run
 	INC_C;  // inc c ; same thing; include last byte

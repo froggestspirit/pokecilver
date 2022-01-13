@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int ResetMapBufferEventFlags(){
+void ResetMapBufferEventFlags(void){
 	XOR_A_A;  // xor a
 	LD_HL(wEventFlags);  // ld hl, wEventFlags
 	LD_hli_A;  // ld [hli], a
@@ -8,7 +8,7 @@ int ResetMapBufferEventFlags(){
 
 }
 
-int ResetBikeFlags(){
+void ResetBikeFlags(void){
 	XOR_A_A;  // xor a
 	LD_HL(wBikeFlags);  // ld hl, wBikeFlags
 	LD_hli_A;  // ld [hli], a
@@ -17,7 +17,7 @@ int ResetBikeFlags(){
 
 }
 
-int ResetFlashIfOutOfCave(){
+void ResetFlashIfOutOfCave(void){
 	LD_A_addr(wEnvironment);  // ld a, [wEnvironment]
 	CP_A(ROUTE);  // cp ROUTE
 	IF_Z goto outdoors;  // jr z, .outdoors
@@ -33,14 +33,14 @@ outdoors:
 
 }
 
-int EventFlagAction(){
+void EventFlagAction(void){
 	LD_HL(wEventFlags);  // ld hl, wEventFlags
 	CCALL(aFlagAction);  // call FlagAction
 	RET;  // ret
 
 }
 
-int FlagAction(){
+void FlagAction(void){
 //  Perform action b on bit de in flag array hl.
 
 //  inputs:
@@ -112,7 +112,7 @@ clearbit:
 
 }
 
-int CheckReceivedDex(){
+void CheckReceivedDex(void){
 	SET_PC(0x2F6BU);
 	LD_DE(ENGINE_POKEDEX);  // ld de, ENGINE_POKEDEX
 	LD_B(CHECK_FLAG);  // ld b, CHECK_FLAG
@@ -123,7 +123,7 @@ int CheckReceivedDex(){
 
 }
 
-int CheckBPressedDebug(){
+void CheckBPressedDebug(void){
 //  //  unreferenced
 //  Used in debug ROMs to walk through walls and avoid encounters.
 
@@ -137,20 +137,20 @@ int CheckBPressedDebug(){
 
 }
 
-int xor_a(){
+void xor_a(void){
 	XOR_A_A;  // xor a
 	RET;  // ret
 
 }
 
-int xor_a_dec_a(){
+void xor_a_dec_a(void){
 	XOR_A_A;  // xor a
 	DEC_A;  // dec a
 	RET;  // ret
 
 }
 
-int CheckFieldDebug(){
+void CheckFieldDebug(void){
 //  //  unreferenced
 	PUSH_HL;  // push hl
 	LD_HL(wDebugFlags);  // ld hl, wDebugFlags

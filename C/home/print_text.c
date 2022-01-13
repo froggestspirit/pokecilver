@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int PrintLetterDelay(){
+void PrintLetterDelay(void){
 	SET_PC(0x31E0U);
 //  Wait before printing the next letter.
 
@@ -99,7 +99,7 @@ end:
 
 }
 
-int CopyDataUntil(){
+void CopyDataUntil(void){
 	SET_PC(0x322DU);
 //  Copy [hl .. bc) to de.
 
@@ -123,7 +123,7 @@ int CopyDataUntil(){
 	return FarPrintText();
 }
 
-int FarPrintText(){
+void FarPrintText(void){
 	SET_PC(0x3400U);
 	LD_addr_A(wTempBank);  // ld [wTempBank], a
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -139,7 +139,7 @@ int FarPrintText(){
 
 }
 
-int CallPointerAt(){
+void CallPointerAt(void){
 	SET_PC(0x3410U);
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af

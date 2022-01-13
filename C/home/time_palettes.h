@@ -1,3 +1,3 @@
-int UpdateTimeAndPals();
-int TimeOfDayPals();
-int UpdateTimePals();
+void UpdateTimeAndPals(void);
+void TimeOfDayPals(void);
+void UpdateTimePals(void);

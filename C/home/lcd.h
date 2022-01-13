@@ -1,3 +1,3 @@
-int LCD();
-int DisableLCD();
-int EnableLCD();
+void LCD(void);
+void DisableLCD(void);
+void EnableLCD(void);

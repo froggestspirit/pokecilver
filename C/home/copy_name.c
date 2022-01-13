@@ -1,13 +1,13 @@
 #include "../constants.h"
 
-int CopyName1(){
+void CopyName1(void){
 //  Copies the name from de to wStringBuffer2
 	LD_HL(wStringBuffer2);  // ld hl, wStringBuffer2
 
 	return CopyName2();
 }
 
-int CopyName2(){
+void CopyName2(void){
 //  Copies the name from de to hl
 
 loop:

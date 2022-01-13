@@ -1,2 +1,2 @@
-int IsHM();
-int IsHMMove();
+void IsHM(void);
+void IsHMMove(void);

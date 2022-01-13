@@ -1,2 +1,2 @@
-int InitSpriteAnimStruct();
-int ReinitSpriteAnimFrame();
+void InitSpriteAnimStruct(void);
+void ReinitSpriteAnimFrame(void);

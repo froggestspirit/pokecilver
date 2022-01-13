@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int GetPartyParamLocation(){
+void GetPartyParamLocation(void){
 //  Get the location of parameter a from wCurPartyMon in hl
 	PUSH_BC;  // push bc
 	LD_HL(wPartyMons);  // ld hl, wPartyMons
@@ -14,14 +14,14 @@ int GetPartyParamLocation(){
 
 }
 
-int GetPartyLocation(){
+void GetPartyLocation(void){
 //  Add the length of a PartyMon struct to hl a times.
 	LD_BC(PARTYMON_STRUCT_LENGTH);  // ld bc, PARTYMON_STRUCT_LENGTH
 	return AddNTimes();  // jp AddNTimes
 
 }
 
-int GetDexNumber(){
+void GetDexNumber(void){
 //  //  unreferenced
 //  Probably used in gen 1 to convert index number to dex number
 //  Not required in gen 2 because index number == dex number
@@ -43,7 +43,7 @@ int GetDexNumber(){
 
 }
 
-int UserPartyAttr(){
+void UserPartyAttr(void){
 	PUSH_AF;  // push af
 	LDH_A_addr(hBattleTurn);  // ldh a, [hBattleTurn]
 	AND_A_A;  // and a
@@ -57,7 +57,7 @@ ot:
 
 }
 
-int OpponentPartyAttr(){
+void OpponentPartyAttr(void){
 	PUSH_AF;  // push af
 	LDH_A_addr(hBattleTurn);  // ldh a, [hBattleTurn]
 	AND_A_A;  // and a
@@ -71,7 +71,7 @@ ot:
 
 }
 
-int BattlePartyAttr(){
+void BattlePartyAttr(void){
 //  Get attribute a from the party struct of the active battle mon.
 	PUSH_BC;  // push bc
 	LD_C_A;  // ld c, a
@@ -85,7 +85,7 @@ int BattlePartyAttr(){
 
 }
 
-int OTPartyAttr(){
+void OTPartyAttr(void){
 //  Get attribute a from the party struct of the active enemy mon.
 	PUSH_BC;  // push bc
 	LD_C_A;  // ld c, a
@@ -99,7 +99,7 @@ int OTPartyAttr(){
 
 }
 
-int ResetDamage(){
+void ResetDamage(void){
 	XOR_A_A;  // xor a
 	LD_addr_A(wCurDamage);  // ld [wCurDamage], a
 	LD_addr_A(wCurDamage + 1);  // ld [wCurDamage + 1], a
@@ -107,21 +107,21 @@ int ResetDamage(){
 
 }
 
-int SetPlayerTurn(){
+void SetPlayerTurn(void){
 	XOR_A_A;  // xor a
 	LDH_addr_A(hBattleTurn);  // ldh [hBattleTurn], a
 	RET;  // ret
 
 }
 
-int SetEnemyTurn(){
+void SetEnemyTurn(void){
 	LD_A(1);  // ld a, 1
 	LDH_addr_A(hBattleTurn);  // ldh [hBattleTurn], a
 	RET;  // ret
 
 }
 
-int UpdateOpponentInParty(){
+void UpdateOpponentInParty(void){
 	SET_PC(0x3BAEU);
 	LDH_A_addr(hBattleTurn);  // ldh a, [hBattleTurn]
 	AND_A_A;  // and a
@@ -130,7 +130,7 @@ int UpdateOpponentInParty(){
 
 }
 
-int UpdateUserInParty(){
+void UpdateUserInParty(void){
 	SET_PC(0x3BB5U);
 	LDH_A_addr(hBattleTurn);  // ldh a, [hBattleTurn]
 	AND_A_A;  // and a
@@ -139,7 +139,7 @@ int UpdateUserInParty(){
 
 }
 
-int UpdateBattleMonInParty(){
+void UpdateBattleMonInParty(void){
 	SET_PC(0x3BBCU);
 //  Update level, status, current HP
 
@@ -148,7 +148,7 @@ int UpdateBattleMonInParty(){
 	return UpdateBattleMon();
 }
 
-int UpdateBattleMon(){
+void UpdateBattleMon(void){
 	SET_PC(0x3BBFU);
 	LD_HL(wPartyMon1Level);  // ld hl, wPartyMon1Level
 	CCALL(aGetPartyLocation);  // call GetPartyLocation
@@ -161,7 +161,7 @@ int UpdateBattleMon(){
 
 }
 
-int UpdateEnemyMonInParty(){
+void UpdateEnemyMonInParty(void){
 	SET_PC(0x3BD0U);
 //  Update level, status, current HP
 
@@ -182,7 +182,7 @@ int UpdateEnemyMonInParty(){
 
 }
 
-int RefreshBattleHuds(){
+void RefreshBattleHuds(void){
 	SET_PC(0x3BE9U);
 	CALL(mUpdateBattleHuds);  // call UpdateBattleHuds
 	LD_C(3);  // ld c, 3
@@ -191,7 +191,7 @@ int RefreshBattleHuds(){
 
 }
 
-int UpdateBattleHuds(){
+void UpdateBattleHuds(void){
 	SET_PC(0x3BF4U);
 	FARCALL(aUpdatePlayerHUD);  // farcall UpdatePlayerHUD
 	FARCALL(aUpdateEnemyHUD);  // farcall UpdateEnemyHUD
@@ -202,7 +202,7 @@ int UpdateBattleHuds(){
 	return FarCopyRadioText();
 }
 
-int FarCopyRadioText(){
+void FarCopyRadioText(void){
 	INC_HL;  // inc hl
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	PUSH_AF;  // push af
@@ -228,7 +228,7 @@ int FarCopyRadioText(){
 
 }
 
-int StdBattleTextbox(){
+void StdBattleTextbox(void){
 	SET_PC(0x3CD2U);
 //  Open a textbox and print battle text at 20:hl.
 
@@ -246,7 +246,7 @@ int StdBattleTextbox(){
 
 }
 
-int GetBattleAnimPointer(){
+void GetBattleAnimPointer(void){
 	LD_A(BANK(aBattleAnimations));  // ld a, BANK(BattleAnimations)
 	Bankswitch();  // rst Bankswitch
 
@@ -263,7 +263,7 @@ int GetBattleAnimPointer(){
 
 }
 
-int GetBattleAnimByte(){
+void GetBattleAnimByte(void){
 	PUSH_HL;  // push hl
 	PUSH_DE;  // push de
 
@@ -294,7 +294,7 @@ int GetBattleAnimByte(){
 
 }
 
-int PushLYOverrides(){
+void PushLYOverrides(void){
 	LDH_A_addr(hLCDCPointer);  // ldh a, [hLCDCPointer]
 	AND_A_A;  // and a
 	RET_Z ;  // ret z

@@ -1,8 +1,8 @@
-int CheckTrainerBattle();
-int v_CheckTrainerBattle();
-int TalkToTrainer();
-int LoadTrainer_continue();
-int FacingPlayerDistance_bc();
-int FacingPlayerDistance();
-int CheckTrainerFlag();
-int PrintWinLossText();
+void CheckTrainerBattle(void);
+void v_CheckTrainerBattle(void);
+void TalkToTrainer(void);
+void LoadTrainer_continue(void);
+void FacingPlayerDistance_bc(void);
+void FacingPlayerDistance(void);
+void CheckTrainerFlag(void);
+void PrintWinLossText(void);

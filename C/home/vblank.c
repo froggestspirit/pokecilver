@@ -8,8 +8,19 @@
 
 //  This prevents the display and audio output from lagging.
 
+void TransferVirtualOAM(void){
+	// initiate DMA
+	LD_A(HIGH(wVirtualOAM));
+	LDH_addr_A(rDMA);
+	// wait for DMA to finish
+	LD_A(NUM_SPRITE_OAM_STRUCTS);
+wait:
+	DEC_A;
+	IF_NZ goto wait;
+	return;
+}
 
-int VBlank(){
+void VBlank(void){
 	SET_PC(0x0150U);
 	static int (*VBlanks[8])() = {VBlank0,
 								VBlank1,
@@ -40,8 +51,7 @@ l_return:
 	RET;  // ret
 }
 
-int VBlank0(){
-	SET_PC(0x0180U);
+void VBlank0(void){
 //  normal operation
 
 //  rng
@@ -97,20 +107,18 @@ int VBlank0(){
 
 	CCALL(aServe2bppRequest);  // call Serve2bppRequest
 	CCALL(aServe1bppRequest);  // call Serve1bppRequest
-	CALL(mAnimateTileset);  // call AnimateTileset
+	//CALL(mAnimateTileset);  // call AnimateTileset //Temporarily disable
 	CCALL(aFillBGMap0WithBlack);  // call FillBGMap0WithBlack
 
 
 done:
-	SET_PC(0x01C2U);
 
 	LDH_A_addr(hOAMUpdate);  // ldh a, [hOAMUpdate]
 	AND_A_A;  // and a
 	IF_NZ goto done_oam;  // jr nz, .done_oam
-	CALL(hTransferVirtualOAM);  // call hTransferVirtualOAM
+	TransferVirtualOAM();  // call hTransferVirtualOAM
 
 done_oam:
-	SET_PC(0x01CAU);
 
 // ; vblank-sensitive operations are done
 
@@ -124,7 +132,6 @@ done_oam:
 	LD_addr_A(wOverworldDelay);  // ld [wOverworldDelay], a
 
 ok:
-	SET_PC(0x01D8U);
 
 	LD_A_addr(wTextDelayFrames);  // ld a, [wTextDelayFrames]
 	AND_A_A;  // and a
@@ -133,9 +140,8 @@ ok:
 	LD_addr_A(wTextDelayFrames);  // ld [wTextDelayFrames], a
 
 ok2:
-	SET_PC(0x01E2U);
 
-	CALL(mUpdateJoypad);  // call UpdateJoypad
+	CCALL(aUpdateJoypad);  // call UpdateJoypad
 
 	LD_A(BANK(av_UpdateSound));  // ld a, BANK(_UpdateSound)
 	Bankswitch();
@@ -150,8 +156,7 @@ ok2:
 
 }
 
-int VBlank1(){
-	SET_PC(0x01F4U);
+void VBlank1(void){
 //  scx, scy
 //  palettes
 //  bg map
@@ -171,11 +176,10 @@ int VBlank1(){
 	CCALL(aUpdateBGMap);  // call UpdateBGMap
 	CCALL(aServe2bppRequest);  // call Serve2bppRequest
 
-	CALL(hTransferVirtualOAM);  // call hTransferVirtualOAM
+	TransferVirtualOAM();  // call hTransferVirtualOAM
 
 
 done:
-	SET_PC(0x020FU);
 	LDH_A_addr(hLCDCPointer);  // ldh a, [hLCDCPointer]
 	OR_A_A;  // or a
 	IF_Z goto skip_lcd;  // jr z, .skip_lcd
@@ -185,7 +189,6 @@ done:
 
 
 skip_lcd:
-	SET_PC(0x0219U);
 	XOR_A_A;  // xor a
 	LD_addr_A(wVBlankOccurred);  // ld [wVBlankOccurred], a
 
@@ -218,7 +221,7 @@ skip_lcd:
 
 }
 
-int UpdatePals(){
+void UpdatePals(void){
 //  update pals for either dmg or cgb
 
 	LDH_A_addr(hCGB);  // ldh a, [hCGB]
@@ -238,8 +241,7 @@ int UpdatePals(){
 
 }
 
-int VBlank4(){
-	SET_PC(0x0255U);
+void VBlank4(void){
 //  bg map
 //  tiles
 //  oam
@@ -253,9 +255,9 @@ int VBlank4(){
 	CCALL(aUpdateBGMap);  // call UpdateBGMap
 	CCALL(aServe2bppRequest);  // call Serve2bppRequest
 
-	CALL(hTransferVirtualOAM);  // call hTransferVirtualOAM
+	TransferVirtualOAM();  // call hTransferVirtualOAM
 
-	CALL(mUpdateJoypad);  // call UpdateJoypad
+	CCALL(aUpdateJoypad);  // call UpdateJoypad
 
 	XOR_A_A;  // xor a
 	LD_addr_A(wVBlankOccurred);  // ld [wVBlankOccurred], a
@@ -272,8 +274,7 @@ int VBlank4(){
 
 }
 
-int VBlank5(){
-	SET_PC(0x0278U);
+void VBlank5(void){
 //  scx
 //  palettes
 //  bg map
@@ -294,12 +295,11 @@ int VBlank5(){
 	CCALL(aServe2bppRequest);  // call Serve2bppRequest
 
 done:
-	SET_PC(0x028CU);
 
 	XOR_A_A;  // xor a
 	LD_addr_A(wVBlankOccurred);  // ld [wVBlankOccurred], a
 
-	CALL(mUpdateJoypad);  // call UpdateJoypad
+	CCALL(aUpdateJoypad);  // call UpdateJoypad
 
 	XOR_A_A;  // xor a
 	LDH_addr_A(rIF);  // ldh [rIF], a
@@ -325,7 +325,7 @@ done:
 
 }
 
-int VBlank2(){
+void VBlank2(void){
 //  sound only
 
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -344,8 +344,7 @@ int VBlank2(){
 
 }
 
-int VBlank3(){
-	SET_PC(0x02C4U);
+void VBlank3(void){
 //  scx, scy
 //  palettes
 //  bg map
@@ -369,7 +368,7 @@ int VBlank3(){
 	SBC_A_B;  // sbc b
 	LDH_addr_A(hRandomSub);  // ldh [hRandomSub], a
 
-	CALL(mUpdateJoypad);  // call UpdateJoypad
+	CCALL(aUpdateJoypad);  // call UpdateJoypad
 
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
 	LD_addr_A(wROMBankBackup);  // ld [wROMBankBackup], a
@@ -389,8 +388,8 @@ int VBlank3(){
 
 	CCALL(aServe2bppRequest);  // call Serve2bppRequest
 	CCALL(aServe1bppRequest);  // call Serve1bppRequest
-	CALL(mAnimateTileset);  // call AnimateTileset
-	CALL(hTransferVirtualOAM);  // call hTransferVirtualOAM
+	//CALL(mAnimateTileset);  // call AnimateTileset  //Temporarily disable
+	TransferVirtualOAM();  // call hTransferVirtualOAM
 
 	XOR_A_A;  // xor a
 	LD_addr_A(wVBlankOccurred);  // ld [wVBlankOccurred], a
@@ -403,7 +402,6 @@ int VBlank3(){
 
 
 okay:
-	SET_PC(0x0311U);
 // ; discard requested ints
 	XOR_A_A;  // xor a
 	LDH_addr_A(rIF);  // ldh [rIF], a

@@ -1,6 +1,6 @@
 #include "../constants.h"
 
-int RefreshScreen(){
+void RefreshScreen(void){
 	SET_PC(0x2E7EU);
 	CALL(mClearWindowData);  // call ClearWindowData
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -18,7 +18,7 @@ int RefreshScreen(){
 
 }
 
-int CloseText(){
+void CloseText(void){
 	SET_PC(0x2E93U);
 	LDH_A_addr(hOAMUpdate);  // ldh a, [hOAMUpdate]
 	PUSH_AF;  // push af
@@ -53,7 +53,7 @@ CloseText:
 
 }
 
-int OpenText(){
+void OpenText(void){
 	SET_PC(0x2EC9U);
 	CALL(mClearWindowData);  // call ClearWindowData
 	LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
@@ -72,7 +72,7 @@ int OpenText(){
 
 }
 
-int v_OpenAndCloseMenu_HDMATransferTilemapAndAttrmap(){
+void v_OpenAndCloseMenu_HDMATransferTilemapAndAttrmap(void){
 	SET_PC(0x2EE1U);
 	LDH_A_addr(hOAMUpdate);  // ldh a, [hOAMUpdate]
 	PUSH_AF;  // push af
@@ -87,7 +87,7 @@ int v_OpenAndCloseMenu_HDMATransferTilemapAndAttrmap(){
 
 }
 
-int SafeUpdateSprites(){
+void SafeUpdateSprites(void){
 	SET_PC(0x2EEFU);
 	LDH_A_addr(hOAMUpdate);  // ldh a, [hOAMUpdate]
 	PUSH_AF;  // push af
@@ -111,7 +111,7 @@ int SafeUpdateSprites(){
 
 }
 
-int SetCarryFlag(){
+void SetCarryFlag(void){
 //  //  unreferenced
 	SCF;  // scf
 	RET;  // ret

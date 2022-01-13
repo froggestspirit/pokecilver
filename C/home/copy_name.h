@@ -1,2 +1,2 @@
-int CopyName1();
-int CopyName2();
+void CopyName1(void);
+void CopyName2(void);

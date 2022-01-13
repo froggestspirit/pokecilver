@@ -1,4 +1,4 @@
-int GetBattleVar();
-int GetBattleVarAddr();
-int BattleVarPairs();
-int BattleVarLocations();
+void GetBattleVar(void);
+void GetBattleVarAddr(void);
+void BattleVarPairs(void);
+void BattleVarLocations(void);
