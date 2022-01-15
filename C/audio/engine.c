@@ -8,9 +8,21 @@
 //  	FadeMusic
 //  	PlayStereoSFX
 
+
+struct Channel *chan[8];
+struct Channel *curChan;
+uint16_t channelPointers[8] = {wChannel1,
+								wChannel2,
+								wChannel3,
+								wChannel4,
+								wChannel5,
+								wChannel6,
+								wChannel7,
+								wChannel8};
 void v_InitSound(void){
 //  restart sound operation
 //  clear all relevant hardware registers & wram
+	for(int i = 0; i < NUM_CHANNELS; i++) chan[i] = gb_pointer(channelPointers[i]);
 	MusicOff();
 	gb_write(rNR50, 0);
 	gb_write(rNR51, 0);
@@ -29,15 +41,9 @@ void v_InitSound(void){
 
 void MusicFadeRestart(void){
 //  restart but keep the music id to fade in to
-	LD_A_addr(wMusicFadeID + 1);  // ld a, [wMusicFadeID + 1]
-	PUSH_AF;  // push af
-	LD_A_addr(wMusicFadeID);  // ld a, [wMusicFadeID]
-	PUSH_AF;  // push af
+	uint16_t musicId = gb_read16(wMusicFadeID);
 	v_InitSound();
-	POP_AF;  // pop af
-	LD_addr_A(wMusicFadeID);  // ld [wMusicFadeID], a
-	POP_AF;  // pop af
-	LD_addr_A(wMusicFadeID + 1);  // ld [wMusicFadeID + 1], a
+	gb_write16(wMusicFadeID, musicId);
 }
 
 void MusicOn(void){
@@ -53,133 +59,78 @@ void v_UpdateSound(void){
 // ; no use updating audio if it's not playing
 	if(!gb_read(wMusicPlaying)) return;
 // ; start at ch1
-	gb_write(wCurChannel, 0);
+	int curChannel = 0;
+	curChan = chan[curChannel];
+	gb_write(wCurChannel, curChannel);
 	gb_write(wSoundOutput, 0);
 	LD_BC(wChannel1);  // ld bc, wChannel1
 
 loop:
 // ; is the channel active?
-	LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
-	ADD_HL_BC;  // add hl, bc
-	BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl]
-	IF_Z goto nextchannel;  // jp z, .nextchannel
+	if(!curChan->channelOn) goto nextchannel;
 // ; check time left in the current note
-	LD_HL(CHANNEL_NOTE_DURATION);  // ld hl, CHANNEL_NOTE_DURATION
-	ADD_HL_BC;  // add hl, bc
-	LD_A_hl;  // ld a, [hl]
-	CP_A(2);  // cp 2 ; 1 or 0?
-	IF_C goto noteover;  // jr c, .noteover
-	DEC_hl;  // dec [hl]
-	goto continue_sound_update;  // jr .continue_sound_update
-
+	if(curChan->noteDuration < 2) goto noteover;
+	curChan->noteDuration--;
+	goto continue_sound_update;
 
 noteover:
 // ; reset vibrato delay
-	LD_HL(CHANNEL_VIBRATO_DELAY);  // ld hl, CHANNEL_VIBRATO_DELAY
-	ADD_HL_BC;  // add hl, bc
-	LD_A_hl;  // ld a, [hl]
-	LD_HL(CHANNEL_VIBRATO_DELAY_COUNT);  // ld hl, CHANNEL_VIBRATO_DELAY_COUNT
-	ADD_HL_BC;  // add hl, bc
-	LD_hl_A;  // ld [hl], a
+	curChan->vibratoDelayCount = curChan->vibratoDelay;
 // ; turn vibrato off for now
-	LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
-	ADD_HL_BC;  // add hl, bc
-	RES_hl(SOUND_PITCH_SLIDE);  // res SOUND_PITCH_SLIDE, [hl]
+	curChan->pitchSlide = 0;
 // ; get next note
 	ParseMusic();
 
 continue_sound_update:
 	ApplyPitchSlide();
 // ; duty cycle
-	LD_HL(CHANNEL_DUTY_CYCLE);  // ld hl, CHANNEL_DUTY_CYCLE
-	ADD_HL_BC;  // add hl, bc
-	LD_A_hli;  // ld a, [hli]
-	LD_addr_A(wCurTrackDuty);  // ld [wCurTrackDuty], a
+	gb_write(wCurTrackDuty, curChan->dutyCycle);
 // ; volume envelope
-	LD_A_hli;  // ld a, [hli]
-	LD_addr_A(wCurTrackVolumeEnvelope);  // ld [wCurTrackVolumeEnvelope], a
+	gb_write(wCurTrackVolumeEnvelope, curChan->volumeEnvelope);
 // ; frequency
-	LD_A_hli;  // ld a, [hli]
-	LD_addr_A(wCurTrackFrequency);  // ld [wCurTrackFrequency], a
-	LD_A_hl;  // ld a, [hl]
-	LD_addr_A(wCurTrackFrequency + 1);  // ld [wCurTrackFrequency + 1], a
+	gb_write16(wCurTrackFrequency, curChan->frequency);
 // ; vibrato, noise
 	HandleTrackVibrato();  // handle vibrato and other things
 	HandleNoise();
 // ; turn off music when playing sfx?
-	LD_A_addr(wSFXPriority);  // ld a, [wSFXPriority]
-	AND_A_A;  // and a
-	IF_Z goto next;  // jr z, .next
+	if(!gb_read(wSFXPriority)) goto next;
 // ; are we in a sfx channel right now?
-	LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
-	CP_A(NUM_MUSIC_CHANS);  // cp NUM_MUSIC_CHANS
-	IF_NC goto next;  // jr nc, .next
+	if(gb_read(wCurChannel) >= NUM_MUSIC_CHANS) goto next;
 // ; are any sfx channels active?
 // ; if so, mute
-	LD_HL(wChannel5Flags1);  // ld hl, wChannel5Flags1
-	BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl]
-	IF_NZ goto restnote;  // jr nz, .restnote
-	LD_HL(wChannel6Flags1);  // ld hl, wChannel6Flags1
-	BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl]
-	IF_NZ goto restnote;  // jr nz, .restnote
-	LD_HL(wChannel7Flags1);  // ld hl, wChannel7Flags1
-	BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl]
-	IF_NZ goto restnote;  // jr nz, .restnote
-	LD_HL(wChannel8Flags1);  // ld hl, wChannel8Flags1
-	BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl]
-	IF_Z goto next;  // jr z, .next
-
-restnote:
-	LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
-	ADD_HL_BC;  // add hl, bc
-	SET_hl(NOTE_REST);  // set NOTE_REST, [hl] ; Rest
+	for(int i = NUM_MUSIC_CHANS; i < NUM_CHANNELS; i++){
+		if(chan[i]->channelOn){
+			curChan->rest = 1;
+			break;
+		}
+	}	
 
 next:
 // ; are we in a sfx channel right now?
-	LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
-	CP_A(NUM_MUSIC_CHANS);  // cp NUM_MUSIC_CHANS
-	IF_NC goto sfx_channel;  // jr nc, .sfx_channel
-	LD_HL(CHANNEL_STRUCT_LENGTH * NUM_MUSIC_CHANS + CHANNEL_FLAGS1);  // ld hl, CHANNEL_STRUCT_LENGTH * NUM_MUSIC_CHANS + CHANNEL_FLAGS1
-	ADD_HL_BC;  // add hl, bc
-	BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl]
-	IF_NZ goto sound_channel_on;  // jr nz, .sound_channel_on
+	if(curChannel >= NUM_MUSIC_CHANS) goto sfx_channel;
+	if(chan[curChannel + NUM_MUSIC_CHANS]->channelOn) goto sound_channel_on;
 
 sfx_channel:
 	UpdateChannels();
-	LD_HL(CHANNEL_TRACKS);  // ld hl, CHANNEL_TRACKS
-	ADD_HL_BC;  // add hl, bc
-	LD_A_addr(wSoundOutput);  // ld a, [wSoundOutput]
-	OR_A_hl;  // or [hl]
-	LD_addr_A(wSoundOutput);  // ld [wSoundOutput], a
+	gb_write(wSoundOutput, gb_read(wSoundOutput) | curChan->tracks);
 
 sound_channel_on:
 // ; clear note flags
-	LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
-	ADD_HL_BC;  // add hl, bc
-	XOR_A_A;  // xor a
-	LD_hl_A;  // ld [hl], a
+	curChan->noteFlags = 0;
 
 nextchannel:
 // ; next channel
-	LD_HL(CHANNEL_STRUCT_LENGTH);  // ld hl, CHANNEL_STRUCT_LENGTH
-	ADD_HL_BC;  // add hl, bc
-	LD_C_L;  // ld c, l
-	LD_B_H;  // ld b, h
-	LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
-	INC_A;  // inc a
-	LD_addr_A(wCurChannel);  // ld [wCurChannel], a
-	CP_A(NUM_CHANNELS);  // cp NUM_CHANNELS ; are we done?
-	IF_NZ goto loop;  // jp nz, .loop ; do it all again
-
+	curChan = chan[++curChannel];
+	REG_BC += CHANNEL_STRUCT_LENGTH;
+	gb_write(wCurChannel, curChannel);
+	if(curChannel < NUM_CHANNELS) goto loop;  // do it all again
 	PlayDanger();
 // ; fade music in/out
 	FadeMusic();
 // ; write volume to hardware register
-	LD_A_addr(wVolume);  // ld a, [wVolume]
-	LDH_addr_A(rNR50);  // ldh [rNR50], a
+	gb_write(rNR50, gb_read(wVolume));
 // ; write SO on/off to hardware register
-	LD_A_addr(wSoundOutput);  // ld a, [wSoundOutput]
-	LDH_addr_A(rNR51);  // ldh [rNR51], a
+	gb_write(rNR51, gb_read(wSoundOutput));
 }
 
 void UpdateChannels(void){

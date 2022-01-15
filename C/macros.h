@@ -12,6 +12,10 @@
 
 #define CHIRP   printf("%s test\n", __func__);
 
+#define gb_read16(x)   (gb_read(x) | (gb_read((x) + 1) << 8))
+#define gb_write16(x, y)   gb_write(x, (y) & 0xFF); gb_write((x) + 1, (y) >> 8);
+
+#define gb_pointer(x)   &gb.wram[(x) - WRAM_0_ADDR];
 //---- Only use these for the goto commands ----
 #define IF_C	INC_PC(2) if(gb.cpu_reg.f_bits.c)
 #define IF_NC	INC_PC(2) if(!gb.cpu_reg.f_bits.c)
@@ -840,7 +844,7 @@
                     ROT_FLAG(temp, carry);\
                     gb_write(gb.cpu_reg.hl, temp);} while(0)
 
-#define BIT(x, bit)	((gb_read(x) >> bit) & 0x1)
+#define BIT(x, bit)	((gb_read(x) >> (bit)) & 0x1)
 
 #define BIT_(x, bit)	do {uint8_t val = x;\
                         gb.cpu_reg.f_bits.z = !((val >> bit) & 0x1);\
