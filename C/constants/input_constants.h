@@ -1,13 +1,13 @@
 // joypad buttons
 enum {
-	A_BUTTON_F, // 0
-	B_BUTTON_F, // 1
-	SELECT_F,   // 2
-	START_F,    // 3
-	D_RIGHT_F,  // 4
-	D_LEFT_F,   // 5
-	D_UP_F,     // 6
-	D_DOWN_F,   // 7
+    A_BUTTON_F, // 0
+    B_BUTTON_F, // 1
+    SELECT_F,   // 2
+    START_F,    // 3
+    D_RIGHT_F,  // 4
+    D_LEFT_F,   // 5
+    D_UP_F,     // 6
+    D_DOWN_F,   // 7
 };
 
 #define NO_INPUT 0b00000000

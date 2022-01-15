@@ -13,10 +13,10 @@
 #define MULTIPASS_SKIP_THRESHOLD    64
 
 #if __STDC_VERSION__ >= 201112L
-	// <noreturn.h> forces "noreturn void", which is silly and redundant; this is simpler
-	#define noreturn _Noreturn void
+    // <noreturn.h> forces "noreturn void", which is silly and redundant; this is simpler
+    #define noreturn _Noreturn void
 #else
-	#define noreturn void /* fallback */
+    #define noreturn void /* fallback */
 #endif
 
 struct command {

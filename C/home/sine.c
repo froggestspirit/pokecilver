@@ -1,19 +1,19 @@
 #include "../constants.h"
 
 void Cosine(void){
-	SET_PC(0x19AAU);
+    SET_PC(0x19AAU);
 //  //  unreferenced
 //  a = d * cos(a * pi/32)
-	ADD_A(0b010000);  // add %010000 ; cos(x) = sin(x + pi/2)
+    ADD_A(0b010000);  // add %010000 ; cos(x) = sin(x + pi/2)
 // ; fallthrough
-	return Sine();
+    return Sine();
 }
 
 void Sine(void){
-	SET_PC(0x19ACU);
+    SET_PC(0x19ACU);
 //  a = d * sin(a * pi/32)
-	LD_E_A;  // ld e, a
-	HOMECALL(av_Sine);  // homecall _Sine
-	RET;  // ret
+    LD_E_A;  // ld e, a
+    HOMECALL(av_Sine);  // homecall _Sine
+    RET;  // ret
 
 }

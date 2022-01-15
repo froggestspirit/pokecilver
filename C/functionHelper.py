@@ -12,7 +12,7 @@ convertedFuncs = []
 def analyze(fileName):
     printFile = f"{fileName}\n"
     with open(fileName, "r") as inFile:
-        asmFile = inFile.read().split("\n")
+        asmFile = inFile.read().replace("    ", "\t").split("\n")
     currentFunc = None
     currentFuncs = []
     fallthrough = False
@@ -56,7 +56,7 @@ def analyze(fileName):
 def update(fileName):
     printFile = f"{fileName}\n"
     with open(fileName, "r") as inFile:
-        asmFile = inFile.read().split("\n")
+        asmFile = inFile.read().replace("    ", "\t").split("\n")
     for lineNum, line in enumerate(asmFile):
         if line:
             lastLine = lineNum + 1
@@ -101,7 +101,7 @@ def update(fileName):
                             print(f"{printFile}{lineNum + 1}: {line}")
                             printFile = ""
             if not skipLine:
-                outFile.write(f"{line}\n")
+                outFile.write(f"{line.replace('\t', '    ')}\n")
             skipLine = False
 
 

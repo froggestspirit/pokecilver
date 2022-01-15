@@ -10,14 +10,14 @@
 
 // GetName types (see home/names.asm)
 enum {
-	MON_NAME = 1,          // 1
-	MOVE_NAME,             // 2
-	DUMMY_NAME,            // 3
-	ITEM_NAME,             // 4
-	PARTY_OT_NAME,         // 5
-	ENEMY_OT_NAME,         // 6
-	TRAINER_NAME,          // 7
-	MOVE_DESC_NAME_BROKEN, // 8
+    MON_NAME = 1,          // 1
+    MOVE_NAME,             // 2
+    DUMMY_NAME,            // 3
+    ITEM_NAME,             // 4
+    PARTY_OT_NAME,         // 5
+    ENEMY_OT_NAME,         // 6
+    TRAINER_NAME,          // 7
+    MOVE_DESC_NAME_BROKEN, // 8
 };
 
 // see home/text.asm
@@ -36,9 +36,9 @@ enum {
 
 // PrintNum bit flags
 enum {
-	PRINTNUM_MONEY_F = 5,    // 5
-	PRINTNUM_LEFTALIGN_F,    // 6
-	PRINTNUM_LEADINGZEROS_F, // 7
+    PRINTNUM_MONEY_F = 5,    // 5
+    PRINTNUM_LEFTALIGN_F,    // 6
+    PRINTNUM_LEADINGZEROS_F, // 7
 };
 
 // PrintNum arguments (see engine/math/print_num.asm)

@@ -7,13 +7,13 @@
 
 #include <stdint.h>
 
-#define AUDIO_SAMPLE_RATE	48000.0
+#define AUDIO_SAMPLE_RATE    48000.0
 
-#define DMG_CLOCK_FREQ		4194304.0
-#define SCREEN_REFRESH_CYCLES	70224.0
-#define VERTICAL_SYNC		(DMG_CLOCK_FREQ/SCREEN_REFRESH_CYCLES)
+#define DMG_CLOCK_FREQ        4194304.0
+#define SCREEN_REFRESH_CYCLES    70224.0
+#define VERTICAL_SYNC        (DMG_CLOCK_FREQ/SCREEN_REFRESH_CYCLES)
 
-#define AUDIO_SAMPLES		((unsigned)(AUDIO_SAMPLE_RATE / VERTICAL_SYNC))
+#define AUDIO_SAMPLES        ((unsigned)(AUDIO_SAMPLE_RATE / VERTICAL_SYNC))
 
 /**
  * Fill allocated buffer "data" with "len" number of 32-bit floating point

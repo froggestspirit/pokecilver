@@ -211,7 +211,7 @@ class Compressed:
 
     def find_lookback(self, method, address=None):
         """Temporarily stubbed, because the real function doesn't run in polynomial time."""
-	return 0, None
+    return 0, None
 
     def broken_find_lookback(self, method, address=None):
         if address is None:

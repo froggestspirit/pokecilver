@@ -1,10 +1,10 @@
 
 // wLinkMode
 enum {
-	LINK_NULL = 0,    // 0
-	LINK_TIMECAPSULE, // 1
-	LINK_TRADECENTER, // 2
-	LINK_COLOSSEUM,   // 3
+    LINK_NULL = 0,    // 0
+    LINK_TIMECAPSULE, // 1
+    LINK_TRADECENTER, // 2
+    LINK_COLOSSEUM,   // 3
 };
 
 // hSerialReceive high nybbles

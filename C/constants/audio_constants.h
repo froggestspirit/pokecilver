@@ -2,18 +2,18 @@
 // pitch
 // FrequencyTable indexes (see audio/notes.asm)
 enum {
-	C_ = 1,
-	Cs,
-	D_,
-	Ds,
-	E_,
-	F_,
-	Fs,
-	G_,
-	Gs,
-	A_,
-	As,
-	B_,
+    C_ = 1,
+    Cs,
+    D_,
+    Ds,
+    E_,
+    F_,
+    Fs,
+    G_,
+    Gs,
+    A_,
+    As,
+    B_,
     NUM_NOTES = B_
 };
 

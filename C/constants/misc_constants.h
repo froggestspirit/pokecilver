@@ -8,9 +8,9 @@
 
 // FlagAction arguments (see home/flag.asm)
 enum {
-	RESET_FLAG,
-	SET_FLAG,
-	CHECK_FLAG,
+    RESET_FLAG,
+    SET_FLAG,
+    CHECK_FLAG,
 };
 
 // G/S version ID: 0 = Gold, 1 = Silver (used by checkver)

@@ -7,7 +7,7 @@
 // b{name} rom bank of the address
 // m{name} address the function would appear as when loaded (0x0000-0x3FFF for home, 0x4000-0x7FFF for everything elseU)
 
-#define FUNCMAP(x, y) 	enum {\
+#define FUNCMAP(x, y)     enum {\
                             a##x = y,\
                             b##x = (y >> 14),\
                             m##x = (y < 0x4000 ? y : ((y & 0x3FFF) | 0x4000)),\

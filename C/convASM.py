@@ -342,7 +342,7 @@ def main():
     funcsKnownAddr = list(i.split(",")[1].strip(" )") for i in funcsFile if i[:7] == "FUNCMAP")
 
     with open(args.fileName, "r") as inFile:
-        asmFile = inFile.read().split("\n")
+        asmFile = inFile.read().replace("    ", "\t").split("\n")
     asm = []
     comment = []
     for line in asmFile:
@@ -357,7 +357,7 @@ def main():
             cFile.write('#include "../constants.h"\n\n')
             for ln, line in enumerate(asm):
                 ln = f"{line}{comment[ln]}".strip(" ")
-                cFile.write(f"{ln}\n")
+                cFile.write(f"{ln.replace('\t', '    ')}\n")
 
     print(f"\n")
     if not os.path.exists(args.fileName.replace(".asm", ".h")):
@@ -366,9 +366,9 @@ def main():
                 cFile.write(f"void {f}(void);\n")
             for inc in includes:
                 cFile.write(f"//#include {inc.replace('.asm', '.h')}\n")
-    print(f"\t// {args.fileName.replace('.asm', '.c')}")
+    print(f"    // {args.fileName.replace('.asm', '.c')}")
     for f in funcList:
-        print(f"\tREDIRECT({f});")
+        print(f"    REDIRECT({f});")
     return 0
 
 

@@ -98,38 +98,25 @@ void UpdateChannels(void){
 }
 
 void UpdateChannels_Channel1_LowHealth(void){
-    if(!BIT(wLowHealthAlarm, DANGER_ON_F)) UpdateChannels_Channel1();
+    if(!gb_read(wLowHealthAlarm) | (1 << DANGER_ON_F)) UpdateChannels_Channel1();
 }
 
 void UpdateChannels_Channel1(void){
     if(curChan->pitchSweep) gb_write(rNR10, gb_read(wPitchSweep));
-    if(curChan->rest) goto rest;
-    if(curChan->noiseSampling) goto noise_sampling;
-    if(curChan->freqOverride) goto frequency_override;
-    if(curChan->vibratoOverride) goto vibrato_override;
-    goto check_duty_override;
-
-frequency_override:
-    gb_write16(rNR13, gb_read16(wCurTrackFrequency));
-
-check_duty_override:
-    if(curChan->dutyOverride) gb_write(rNR11, (gb_read(rNR11) & 0x3F) | gb_read(wCurTrackDuty));
-    return;
-
-vibrato_override:
-    gb_write(rNR11, (gb_read(rNR11) & 0x3F) | gb_read(wCurTrackDuty));
-    gb_write(rNR13, gb_read(wCurTrackFrequency));
-    return;
-
-rest:
-    gb_write(rNR52, gb_read(rNR52) & 0b10001110);
-    ClearChannel(rNR10);
-    return;
-
-noise_sampling:
-    gb_write(rNR11, (gb_read(rNR11) & 0x3F) | gb_read(wCurTrackDuty));
-    gb_write(rNR12, gb_read(wCurTrackVolumeEnvelope));
-    gb_write16(rNR13, gb_read16(wCurTrackFrequency) | 0x8000);
+    if(curChan->rest){
+        gb_write(rNR52, gb_read(rNR52) & 0b10001110);
+        ClearChannel(rNR10);
+    }else if(curChan->noiseSampling){
+        gb_write(rNR11, (gb_read(rNR11) & 0x3F) | gb_read(wCurTrackDuty));
+        gb_write(rNR12, gb_read(wCurTrackVolumeEnvelope));
+        gb_write16(rNR13, gb_read16(wCurTrackFrequency) | 0x8000);
+    }else if(curChan->freqOverride){
+        gb_write16(rNR13, gb_read16(wCurTrackFrequency));
+        if(curChan->dutyOverride) gb_write(rNR11, (gb_read(rNR11) & 0x3F) | gb_read(wCurTrackDuty));
+    }else if(curChan->vibratoOverride){
+        gb_write(rNR11, (gb_read(rNR11) & 0x3F) | gb_read(wCurTrackDuty));
+        gb_write(rNR13, gb_read(wCurTrackFrequency));
+    }else if(curChan->dutyOverride) gb_write(rNR11, (gb_read(rNR11) & 0x3F) | gb_read(wCurTrackDuty));
 }
 
 void UpdateChannels_Channel2(void){

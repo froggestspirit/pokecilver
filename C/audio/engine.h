@@ -31,7 +31,7 @@ struct Channel{
 
     uint16_t musicAddress;
     uint16_t lastMusicAddress;
-	uint16_t unused;
+    uint16_t unused;
 
     union {
         struct{
