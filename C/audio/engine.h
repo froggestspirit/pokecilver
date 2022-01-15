@@ -164,7 +164,7 @@ void MonoTracks(void);
 void StereoTracks(void);
 void ChannelPointers(void);
 void ClearChannels(void);
-void ClearChannel(void);
+void ClearChannel(uint16_t);
 void PlayTrainerEncounterMusic(void);
 //#include "audio/notes.h"
 //#include "audio/wave_samples.h"
