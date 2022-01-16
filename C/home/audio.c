@@ -69,7 +69,7 @@ void PlayMusic(void){
     AND_A_A;  // and a
     IF_Z goto nomusic;  // jr z, .nomusic
 
-    v_PlayMusic();  // call _PlayMusic
+    v_PlayMusic(REG_DE);
     goto end;  // jr .end
 
 
@@ -105,11 +105,10 @@ void PlayMusic2(void){
     LD_addr_A(MBC3RomBank);  // ld [MBC3RomBank], a
 
     PUSH_DE;  // push de
-    LD_DE(MUSIC_NONE);  // ld de, MUSIC_NONE
-    v_PlayMusic();  // call _PlayMusic
+    v_PlayMusic(MUSIC_NONE);
     CALL(mDelayFrame);  // call DelayFrame
     POP_DE;  // pop de
-    v_PlayMusic();  // call _PlayMusic
+    v_PlayMusic(REG_DE);
 
     POP_AF;  // pop af
     LDH_addr_A(hROMBank);  // ldh [hROMBank], a

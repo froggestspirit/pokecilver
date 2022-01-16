@@ -1,5 +1,6 @@
 #include "../constants.h"
 #include "engine.h"
+#include "wave_samples.h"
 
 //  The entire sound engine. Uses section "audio" in WRAM.
 
@@ -63,8 +64,8 @@ void v_UpdateSound(void){  // called once per frame
             gb_write16(wCurTrackFrequency, curChan->frequency);  // frequency
             HandleTrackVibrato();  // handle vibrato and other things
             HandleNoise();
-            if((gb_read(wSFXPriority)) &&  // turn off music when playing sfx?
-            (curChannel < NUM_MUSIC_CHANS)){  // are we in a sfx channel right now?
+            if((gb_read(wSFXPriority))  // turn off music when playing sfx?
+            && (curChannel < NUM_MUSIC_CHANS)){  // are we in a sfx channel right now?
                 for(int i = NUM_MUSIC_CHANS; i < NUM_CHANNELS; i++){  // are any sfx channels active?
                     if(chan[i]->channelOn){  // if so, mute
                         curChan->rest = 1;
@@ -72,8 +73,8 @@ void v_UpdateSound(void){  // called once per frame
                     }
                 }    
             }
-            if((curChannel >= NUM_MUSIC_CHANS) ||
-            (!chan[curChannel + NUM_MUSIC_CHANS]->channelOn)){  // are we in a sfx channel right now?
+            if((curChannel >= NUM_MUSIC_CHANS)
+            || (!chan[curChannel + NUM_MUSIC_CHANS]->channelOn)){  // are we in a sfx channel right now?
                 UpdateChannels();
                 gb_write(wSoundOutput, gb_read(wSoundOutput) | curChan->tracks);
             }
@@ -117,246 +118,89 @@ void UpdateChannels_Channel1(void){
     }else if(curChan->vibratoOverride){
         gb_write(rNR11, (gb_read(rNR11) & 0x3F) | gb_read(wCurTrackDuty));
         gb_write(rNR13, gb_read(wCurTrackFrequency));
-    }else if(curChan->dutyOverride) gb_write(rNR11, (gb_read(rNR11) & 0x3F) | gb_read(wCurTrackDuty));
+    }else if(curChan->dutyOverride)
+        gb_write(rNR11, (gb_read(rNR11) & 0x3F) | gb_read(wCurTrackDuty));
 }
 
 void UpdateChannels_Channel2(void){
-    if(curChan->rest) goto rest;
-    if(curChan->noiseSampling) goto noise_sampling;
-    if(curChan->freqOverride) goto frequency_override;
-    if(curChan->vibratoOverride) goto vibrato_override;
-    if(curChan->dutyOverride) gb_write(rNR21, (gb_read(rNR21) & 0x3F) | gb_read(wCurTrackDuty));
-    return;
-
-frequency_override:
-    gb_write16(rNR23, gb_read16(wCurTrackFrequency));
-    return;
-
-vibrato_override:
-    gb_write(rNR21, (gb_read(rNR21) & 0x3F) | gb_read(wCurTrackDuty));
-    gb_write(rNR23, gb_read(wCurTrackFrequency));
-    return;
-
-rest:
-    gb_write(rNR52, gb_read(rNR52) & 0b10001101);
-    ClearChannel(rNR20);
-    return;
-
-noise_sampling:
-    gb_write(rNR21, (gb_read(rNR21) & 0x3F) | gb_read(wCurTrackDuty));
-    gb_write(rNR22, gb_read(wCurTrackVolumeEnvelope));
-    gb_write16(rNR23, gb_read16(wCurTrackFrequency) | 0x8000);
+    if(curChan->rest){
+        gb_write(rNR52, gb_read(rNR52) & 0b10001101);
+        ClearChannel(rNR20);
+    }else if(curChan->noiseSampling){
+        gb_write(rNR21, (gb_read(rNR21) & 0x3F) | gb_read(wCurTrackDuty));
+        gb_write(rNR22, gb_read(wCurTrackVolumeEnvelope));
+        gb_write16(rNR23, gb_read16(wCurTrackFrequency) | 0x8000);
+    }else if(curChan->freqOverride){
+        gb_write16(rNR23, gb_read16(wCurTrackFrequency));
+    }else if(curChan->vibratoOverride){
+        gb_write(rNR21, (gb_read(rNR21) & 0x3F) | gb_read(wCurTrackDuty));
+        gb_write(rNR23, gb_read(wCurTrackFrequency));
+    }else if(curChan->dutyOverride)
+        gb_write(rNR21, (gb_read(rNR21) & 0x3F) | gb_read(wCurTrackDuty));
 }
 
 void UpdateChannels_Channel3(void){
-    LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(NOTE_REST);  // bit NOTE_REST, [hl]
-    IF_NZ goto ch3_rest;  // jr nz, .ch3_rest
-    BIT_hl(NOTE_NOISE_SAMPLING);  // bit NOTE_NOISE_SAMPLING, [hl]
-    IF_NZ goto ch3_noise_sampling;  // jr nz, .ch3_noise_sampling
-    BIT_hl(NOTE_VIBRATO_OVERRIDE);  // bit NOTE_VIBRATO_OVERRIDE, [hl]
-    IF_NZ goto ch3_vibrato_override;  // jr nz, .ch3_vibrato_override
-    return;
-
-
-ch3_frequency_override:
-// 
-    LD_A_addr(wCurTrackFrequency);  // ld a, [wCurTrackFrequency]
-    LDH_addr_A(rNR33);  // ldh [rNR33], a
-    LD_A_addr(wCurTrackFrequency + 1);  // ld a, [wCurTrackFrequency + 1]
-    LDH_addr_A(rNR34);  // ldh [rNR34], a
-    return;
-
-
-ch3_vibrato_override:
-    LD_A_addr(wCurTrackFrequency);  // ld a, [wCurTrackFrequency]
-    LDH_addr_A(rNR33);  // ldh [rNR33], a
-    return;
-
-
-ch3_rest:
-    LDH_A_addr(rNR52);  // ldh a, [rNR52]
-    AND_A(0b10001011);  // and %10001011 ; ch3 off
-    LDH_addr_A(rNR52);  // ldh [rNR52], a
-    LD_HL(rNR30);  // ld hl, rNR30
-    ClearChannel(rNR30);
-    return;
-
-
-ch3_noise_sampling:
-    LD_A(0x3f);  // ld a, $3f ; sound length
-    LDH_addr_A(rNR31);  // ldh [rNR31], a
-    XOR_A_A;  // xor a
-    LDH_addr_A(rNR30);  // ldh [rNR30], a
-    UpdateChannels_load_wave_pattern();  // call .load_wave_pattern
-    LD_A(0x80);  // ld a, $80
-    LDH_addr_A(rNR30);  // ldh [rNR30], a
-    LD_A_addr(wCurTrackFrequency);  // ld a, [wCurTrackFrequency]
-    LDH_addr_A(rNR33);  // ldh [rNR33], a
-    LD_A_addr(wCurTrackFrequency + 1);  // ld a, [wCurTrackFrequency + 1]
-    OR_A(0x80);  // or $80
-    LDH_addr_A(rNR34);  // ldh [rNR34], a
-    return;
+    if(curChan->rest){
+        gb_write(rNR52, gb_read(rNR52) & 0b10001011);
+        ClearChannel(rNR30);
+    }else if(curChan->noiseSampling){
+        gb_write(rNR31, 0x3F);
+        UpdateChannels_load_wave_pattern(gb_read(wCurTrackVolumeEnvelope) & 0xF);
+        gb_write16(rNR33, gb_read16(wCurTrackFrequency) | 0x8000);
+    }else if(curChan->vibratoOverride){
+        gb_write(rNR33, gb_read(wCurTrackFrequency));
+    }
 }
 
-void UpdateChannels_load_wave_pattern(void){
-    PUSH_HL;  // push hl
-    LD_A_addr(wCurTrackVolumeEnvelope);  // ld a, [wCurTrackVolumeEnvelope]
-    AND_A(0xf);  // and $f ; only 0-9 are valid
-    LD_L_A;  // ld l, a
-    LD_H(0);  // ld h, 0
-// hl << 4
-// each wavepattern is $f bytes long
-// so seeking is done in $10s
-    for(int rept = 0; rept < 4; rept++){
-    ADD_HL_HL;  // add hl, hl
-    }
-    LD_DE(mWaveSamples);  // ld de, WaveSamples
-    ADD_HL_DE;  // add hl, de
-// load wavepattern into rWave_0-rWave_f
-    for(int i = 0; i < 16; i++) gb_write(rWave_0 + i, gb_read(REG_HL + i));
-    POP_HL;  // pop hl
-    LD_A_addr(wCurTrackVolumeEnvelope);  // ld a, [wCurTrackVolumeEnvelope]
-    AND_A(0xf0);  // and $f0
-    SLA_A;  // sla a
-    LDH_addr_A(rNR32);  // ldh [rNR32], a
+void UpdateChannels_load_wave_pattern(uint8_t sampleId){
+    int samplePointer = sampleId << 5;
+    gb_write(rNR30, 0);
+    for(int i = 0; i < 16; i++, samplePointer += 2)
+        gb_write(rWave_0 + i, (WaveSamples[samplePointer] << 4) | WaveSamples[samplePointer + 1]);
+    gb_write(rNR32, (gb_read(wCurTrackVolumeEnvelope) & 0x30) << 1);
+    gb_write(rNR30, 0x80);
 }
 
 void UpdateChannels_Channel4(void){
-    LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(NOTE_REST);  // bit NOTE_REST, [hl]
-    IF_NZ goto ch4_rest;  // jr nz, .ch4_rest
-    BIT_hl(NOTE_NOISE_SAMPLING);  // bit NOTE_NOISE_SAMPLING, [hl]
-    IF_NZ goto ch4_noise_sampling;  // jr nz, .ch4_noise_sampling
-    return;
-
-ch4_frequency_override:
-// 
-    LD_A_addr(wCurTrackFrequency);  // ld a, [wCurTrackFrequency]
-    LDH_addr_A(rNR43);  // ldh [rNR43], a
-    return;
-
-ch4_rest:
-    LDH_A_addr(rNR52);  // ldh a, [rNR52]
-    AND_A(0b10000111);  // and %10000111 ; ch4 off
-    LDH_addr_A(rNR52);  // ldh [rNR52], a
-    LD_HL(rNR40);  // ld hl, rNR40
-    ClearChannel(rNR40);
-    return;
-
-ch4_noise_sampling:
-    LD_A(0x3f);  // ld a, $3f ; sound length
-    LDH_addr_A(rNR41);  // ldh [rNR41], a
-    LD_A_addr(wCurTrackVolumeEnvelope);  // ld a, [wCurTrackVolumeEnvelope]
-    LDH_addr_A(rNR42);  // ldh [rNR42], a
-    LD_A_addr(wCurTrackFrequency);  // ld a, [wCurTrackFrequency]
-    LDH_addr_A(rNR43);  // ldh [rNR43], a
-    LD_A(0x80);  // ld a, $80
-    LDH_addr_A(rNR44);  // ldh [rNR44], a
+    if(curChan->rest){
+        gb_write(rNR52, gb_read(rNR52) & 0b10000111);
+        ClearChannel(rNR40);
+    }else if(curChan->noiseSampling){
+        gb_write(rNR41, 0x3F);
+        gb_write(rNR42, gb_read(wCurTrackVolumeEnvelope));
+        gb_write(rNR43, gb_read(wCurTrackFrequency));
+        gb_write(rNR44, 0x80);
+    }
 }
 
-void v_CheckSFX(void){
-//  return carry if any sfx channels are active
-    LD_HL(wChannel5Flags1);  // ld hl, wChannel5Flags1
-    BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl]
-    IF_NZ goto sfxon;  // jr nz, .sfxon
-    LD_HL(wChannel6Flags1);  // ld hl, wChannel6Flags1
-    BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl]
-    IF_NZ goto sfxon;  // jr nz, .sfxon
-    LD_HL(wChannel7Flags1);  // ld hl, wChannel7Flags1
-    BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl]
-    IF_NZ goto sfxon;  // jr nz, .sfxon
-    LD_HL(wChannel8Flags1);  // ld hl, wChannel8Flags1
-    BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl]
-    IF_NZ goto sfxon;  // jr nz, .sfxon
-    AND_A_A;  // and a
-    return;
-
-sfxon:
-    SCF;  // scf
+int v_CheckSFX(void){  // check if any sfx channels are active
+    for(int i = NUM_MUSIC_CHANS; i < NUM_CHANNELS; i++){  // are any sfx channels active?
+        if(chan[i]->channelOn) return 1;
+    }
+    return 0;
 }
 
 void PlayDanger(void){
-    LD_A_addr(wLowHealthAlarm);  // ld a, [wLowHealthAlarm]
-    BIT_A(DANGER_ON_F);  // bit DANGER_ON_F, a
-    IF_Z return;
-
-// Don't do anything if SFX is being played
-    AND_A(0xff ^ (1 << DANGER_ON_F));  // and $ff ^ (1 << DANGER_ON_F)
-    LD_D_A;  // ld d, a
-    v_CheckSFX();  // call _CheckSFX
-    IF_C goto increment;  // jr c, .increment
-
-// Play the high tone
-    AND_A_A;  // and a
-    IF_Z goto begin;  // jr z, .begin
-
-// Play the low tone
-    CP_A(16);  // cp 16
-    IF_Z goto halfway;  // jr z, .halfway
-
-    goto increment;  // jr .increment
-
-
-halfway:
-    LD_HL(mDangerSoundLow);  // ld hl, DangerSoundLow
-    goto applychannel;  // jr .applychannel
-
-
-begin:
-    LD_HL(mDangerSoundHigh);  // ld hl, DangerSoundHigh
-
-
-applychannel:
-    XOR_A_A;  // xor a
-    LDH_addr_A(rNR10);  // ldh [rNR10], a
-    LD_A_hli;  // ld a, [hli]
-    LDH_addr_A(rNR11);  // ldh [rNR11], a
-    LD_A_hli;  // ld a, [hli]
-    LDH_addr_A(rNR12);  // ldh [rNR12], a
-    LD_A_hli;  // ld a, [hli]
-    LDH_addr_A(rNR13);  // ldh [rNR13], a
-    LD_A_hli;  // ld a, [hli]
-    LDH_addr_A(rNR14);  // ldh [rNR14], a
-
-
-increment:
-    LD_A_D;  // ld a, d
-    INC_A;  // inc a
-    CP_A(30);  // cp 30 ; Ending frame
-    IF_C goto noreset;  // jr c, .noreset
-    XOR_A_A;  // xor a
-
-noreset:
-// Make sure the danger sound is kept on
-    OR_A(1 << DANGER_ON_F);  // or 1 << DANGER_ON_F
-    LD_addr_A(wLowHealthAlarm);  // ld [wLowHealthAlarm], a
-
-// Enable channel 1 if it's off
-    LD_A_addr(wSoundOutput);  // ld a, [wSoundOutput]
-    AND_A(0x11);  // and $11
-    IF_NZ return;
-    LD_A_addr(wSoundOutput);  // ld a, [wSoundOutput]
-    OR_A(0x11);  // or $11
-    LD_addr_A(wSoundOutput);  // ld [wSoundOutput], a
-    return;
-
-}
-
-void DangerSoundHigh(void){
-    //db ['0x80'];  // db $80 ; duty 50%
-    //db ['0xe2'];  // db $e2 ; volume 14, envelope decrease sweep 2
-    //db ['0x50'];  // db $50 ; frequency: $750
-    //db ['0x87'];  // db $87 ; restart sound
-}
-
-void DangerSoundLow(void){
-    //db ['0x80'];  // db $80 ; duty 50%
-    //db ['0xe2'];  // db $e2 ; volume 14, envelope decrease sweep 2
-    //db ['0xee'];  // db $ee ; frequency: $6ee
-    //db ['0x86'];  // db $86 ; restart sound
+    if((gb_read(wLowHealthAlarm) & (1 << DANGER_ON_F))){
+        uint8_t lowHealthTimer = gb_read(wLowHealthAlarm) ^ (1 << DANGER_ON_F);
+        uint16_t lowHealthPitch;
+        if(!v_CheckSFX()){  // Don't do anything if SFX is being played
+            if(!(lowHealthTimer & 0x0F)){  // switch pitch
+                if(!lowHealthTimer){  // Play the high tone (timer = 0)
+                    lowHealthPitch = 0x750;
+                }else{  // Play the low tone (timer = 16)
+                    lowHealthPitch = 0x6EE;
+                }
+                gb_write(rNR10, 0);
+                gb_write(rNR11, 0x80);  // duty 50%
+                gb_write(rNR12, 0xE2);  // volume 14, envelope decrease sweep 2
+                gb_write16(rNR13, lowHealthPitch | 0x8000);
+            }
+        }
+        if(++lowHealthTimer == 30) lowHealthTimer = 0;
+        gb_write(wLowHealthAlarm, lowHealthTimer | (1 << DANGER_ON_F));  // Make sure the danger sound is kept on
+        gb_write(wSoundOutput, gb_read(wSoundOutput) | 0x11);  // Enable channel 1 if it's off
+    }
 }
 
 void FadeMusic(void){
@@ -368,115 +212,41 @@ void FadeMusic(void){
 //     fade new song in
 //  notes:
 //     max # frames per volume level is $3f
-
-// fading?
-    LD_A_addr(wMusicFade);  // ld a, [wMusicFade]
-    AND_A_A;  // and a
-    IF_Z return;
-// has the count ended?
-    LD_A_addr(wMusicFadeCount);  // ld a, [wMusicFadeCount]
-    AND_A_A;  // and a
-    IF_Z goto update;  // jr z, .update
-// count down
-    DEC_A;  // dec a
-    LD_addr_A(wMusicFadeCount);  // ld [wMusicFadeCount], a
-    return;
-
-
-update:
-    LD_A_addr(wMusicFade);  // ld a, [wMusicFade]
-    LD_D_A;  // ld d, a
-// get new count
-    AND_A(0x3f);  // and $3f
-    LD_addr_A(wMusicFadeCount);  // ld [wMusicFadeCount], a
-// get SO1 volume
-    LD_A_addr(wVolume);  // ld a, [wVolume]
-    AND_A(VOLUME_SO1_LEVEL);  // and VOLUME_SO1_LEVEL
-// which way are we fading?
-    BIT_D(MUSIC_FADE_IN_F);  // bit MUSIC_FADE_IN_F, d
-    IF_NZ goto fadein;  // jr nz, .fadein
-// fading out
-    AND_A_A;  // and a
-    IF_Z goto novolume;  // jr z, .novolume
-    DEC_A;  // dec a
-    goto updatevolume;  // jr .updatevolume
-
-
-novolume:
-// make sure volume is off
-    XOR_A_A;  // xor a
-    LD_addr_A(wVolume);  // ld [wVolume], a
-// did we just get on a bike?
-    LD_A_addr(wPlayerState);  // ld a, [wPlayerState]
-    CP_A(PLAYER_BIKE);  // cp PLAYER_BIKE
-    IF_Z goto bicycle;  // jr z, .bicycle
-    PUSH_BC;  // push bc
-// restart sound
-    MusicFadeRestart();
-// get new song id
-    LD_A_addr(wMusicFadeID);  // ld a, [wMusicFadeID]
-    AND_A_A;  // and a
-    IF_Z goto quit;  // jr z, .quit ; this assumes there are fewer than 256 songs!
-    LD_E_A;  // ld e, a
-    LD_A_addr(wMusicFadeID + 1);  // ld a, [wMusicFadeID + 1]
-    LD_D_A;  // ld d, a
-// load new song
-    v_PlayMusic();  // call _PlayMusic
-
-quit:
-// cleanup
-    POP_BC;  // pop bc
-// stop fading
-    XOR_A_A;  // xor a
-    LD_addr_A(wMusicFade);  // ld [wMusicFade], a
-    return;
-
-
-bicycle:
-    PUSH_BC;  // push bc
-// restart sound
-    MusicFadeRestart();
-// this turns the volume up
-// turn it back down
-    XOR_A_A;  // xor a
-    LD_addr_A(wVolume);  // ld [wVolume], a
-// get new song id
-    LD_A_addr(wMusicFadeID);  // ld a, [wMusicFadeID]
-    LD_E_A;  // ld e, a
-    LD_A_addr(wMusicFadeID + 1);  // ld a, [wMusicFadeID + 1]
-    LD_D_A;  // ld d, a
-// load new song
-    v_PlayMusic();  // call _PlayMusic
-    POP_BC;  // pop bc
-// fade in
-    LD_HL(wMusicFade);  // ld hl, wMusicFade
-    SET_hl(MUSIC_FADE_IN_F);  // set MUSIC_FADE_IN_F, [hl]
-    return;
-
-
-fadein:
-// are we done?
-    CP_A(MAX_VOLUME & 0xf);  // cp MAX_VOLUME & $f
-    IF_NC goto maxvolume;  // jr nc, .maxvolume
-// inc volume
-    INC_A;  // inc a
-    goto updatevolume;  // jr .updatevolume
-
-
-maxvolume:
-// we're done
-    XOR_A_A;  // xor a
-    LD_addr_A(wMusicFade);  // ld [wMusicFade], a
-    return;
-
-
-updatevolume:
-// hi = lo
-    LD_D_A;  // ld d, a
-    SWAP_A;  // swap a
-    OR_A_D;  // or d
-    LD_addr_A(wVolume);  // ld [wVolume], a
-    return;
+    if(gb_read(wMusicFade)){  // fading?
+        if(gb_read(wMusicFadeCount)){  // has the count ended?
+            gb_write(wMusicFadeCount, gb_read(wMusicFadeCount) - 1);
+        }else{
+            gb_write(wMusicFadeCount, gb_read(wMusicFade) & 0x3F);  // get new count
+            uint8_t curVol = gb_read(wVolume) & VOLUME_SO1_LEVEL;  // get SO1 volume
+            if(gb_read(wMusicFade) & (1 << MUSIC_FADE_IN_F)){  // fading in?
+                if(gb_read(wVolume) & (MAX_VOLUME & 0xF)){  // are we done?
+                    gb_write(wMusicFade, 0);  // we're done
+                    return;
+                }
+                curVol++;  // inc volume
+            }else{  // fading out
+                if(!(gb_read(wVolume) & VOLUME_SO1_LEVEL)){
+                    gb_write(wVolume, 0);  // make sure volume is off
+                    if(gb_read(wPlayerState) == PLAYER_BIKE){  // did we just get on a bike?
+                        MusicFadeRestart();  // restart sound
+                        gb_write(wVolume, 0);
+                        v_PlayMusic(gb_read16(wMusicFadeID));  // load new song
+                        gb_write(wMusicFade, gb_read(wMusicFade) | (1 << MUSIC_FADE_IN_F));  // fade in
+                        return;
+                    }
+                    MusicFadeRestart();  // restart sound
+                    if(gb_read(wMusicFadeID)){
+                        v_PlayMusic(gb_read16(wMusicFadeID));  // load new song
+                    }
+                    gb_write(wMusicFade, 0);  // stop fading
+                    return;
+                }
+                curVol--;  // dec volume
+            }
+            curVol |= curVol << 4;  // hi = lo
+            gb_write(wVolume, curVol);
+        }
+    }
 }
 
 void LoadNote(void){
@@ -1915,7 +1685,7 @@ void Music_NewSong(void){
     GetMusicByte();
     LD_D_A;  // ld d, a
     PUSH_BC;  // push bc
-    v_PlayMusic();  // call _PlayMusic
+    v_PlayMusic(REG_DE);
     POP_BC;  // pop bc
     return;
 }
@@ -2142,8 +1912,9 @@ void SetLRTracks(void){
     return;
 }
 
-void v_PlayMusic(void){
+void v_PlayMusic(uint16_t songId){
 //  load music
+    REG_DE = songId;
     MusicOff();
     LD_HL(wMusicID);  // ld hl, wMusicID
     LD_hl_E;  // ld [hl], e ; song number
@@ -2596,8 +2367,6 @@ void LoadMusicByte(void){
 }
 
 // INCLUDE "audio/notes.asm"
-
-// INCLUDE "audio/wave_samples.asm"
 
 // INCLUDE "audio/drumkits.asm"
 

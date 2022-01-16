@@ -1,4 +1,3 @@
-
 struct Channel{
     uint16_t musicId;
     uint8_t musicBank;
@@ -90,12 +89,10 @@ void UpdateChannels_Channel1_LowHealth(void);
 void UpdateChannels_Channel1(void);
 void UpdateChannels_Channel2(void);
 void UpdateChannels_Channel3(void);
-void UpdateChannels_load_wave_pattern(void);
+void UpdateChannels_load_wave_pattern(uint8_t);
 void UpdateChannels_Channel4(void);
-void v_CheckSFX(void);
+int v_CheckSFX(void);
 void PlayDanger(void);
-void DangerSoundHigh(void);
-void DangerSoundLow(void);
 void FadeMusic(void);
 void LoadNote(void);
 void HandleTrackVibrato(void);
@@ -152,7 +149,7 @@ void SetGlobalTempo(void);
 void Tempo(void);
 void StartChannel(void);
 void SetLRTracks(void);
-void v_PlayMusic(void);
+void v_PlayMusic(uint16_t);
 void v_PlayCry(void);
 void v_PlaySFX(void);
 void PlayStereoSFX(void);
