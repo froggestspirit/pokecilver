@@ -1526,7 +1526,7 @@ void gb_init_serial(
                 uint8_t*))
 {
     gb.gb_serial_tx = gb_serial_tx;
-    gb.gb_serial_rx = gb_serial_rx;
+    gb.gb_serial_rx = (void*)gb_serial_rx;
 }
 
 uint8_t gb_colour_hash()
@@ -1831,7 +1831,7 @@ void read_cart_ram_file(const char *save_file_name, uint8_t **dest,
     }
 
     /* Read save file to allocated memory. */
-    fread(*dest, sizeof(uint8_t), len, f);
+    if(fread(*dest, sizeof(uint8_t), len, f)) printf("Save loaded\n");
     fclose(f);
 }
 
@@ -1939,8 +1939,6 @@ int get_input(){
     static SDL_Event event;
     while(SDL_PollEvent(&event))
     {
-        static int fullscreen = 0;
-
         switch(event.type)
         {
         case SDL_QUIT:
@@ -2398,8 +2396,6 @@ int main(int argc, char **argv)
     {
         int delay;
         static unsigned int rtc_timer = 0;
-        static unsigned int selected_palette = 3;
-        static unsigned int dump_bmp = 0;
 
         /* Calculate the time taken to draw frame, then later add a
          * delay to cap at 60 fps. */
@@ -2440,9 +2436,6 @@ int main(int argc, char **argv)
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, texture, NULL, NULL);
         SDL_RenderPresent(renderer);
-
-        if(dump_bmp)
-            save_lcd_bmp(priv.fb);
 
         /* Use a delay that will draw the screen at a rate of 59.7275 Hz. */
         new_ticks = SDL_GetTicks();

@@ -16,7 +16,6 @@ void FarDecompress(void){
     POP_AF;  // pop af
     RST(mBankswitch);  // rst Bankswitch
     RET;  // ret
-
 }
 
 void Decompress(void){

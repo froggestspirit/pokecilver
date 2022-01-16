@@ -1,5 +1,6 @@
 #include "../constants.h"
 #include "copy_tilemap.h"
+#include "copy.h"
 
 void LoadTilemapToTempTilemap(void){
     SET_PC(0x3156U);

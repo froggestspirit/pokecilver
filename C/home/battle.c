@@ -1,5 +1,7 @@
 #include "../constants.h"
 #include "battle.h"
+#include "array.h"
+#include "copy.h"
 
 void GetPartyParamLocation(void){
 //  Get the location of parameter a from wCurPartyMon in hl

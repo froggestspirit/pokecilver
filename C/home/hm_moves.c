@@ -1,5 +1,6 @@
 #include "../constants.h"
 #include "hm_moves.h"
+#include "array.h"
 
 //  HM moves can't be forgotten
 

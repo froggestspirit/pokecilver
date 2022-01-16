@@ -1,5 +1,6 @@
 #include "../constants.h"
 #include "audio.h"
+#include "../audio/engine.h"
 
 //  Audio interfaces.
 

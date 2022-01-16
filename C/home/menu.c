@@ -488,7 +488,7 @@ void CopyNameFromMenu(void){
 
 void YesNoBox(void){
     SET_PC(0x1C3FU);
-    LD_BC((SCREEN_WIDTH - 6 << 8) | 7);  // lb bc, SCREEN_WIDTH - 6, 7
+    LD_BC(((SCREEN_WIDTH - 6) << 8) | 7);  // lb bc, SCREEN_WIDTH - 6, 7
 
     return PlaceYesNoBox();
 }
