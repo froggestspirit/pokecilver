@@ -99,7 +99,7 @@ void UpdateChannels(void){
 }
 
 void UpdateChannels_Channel1_LowHealth(void){
-    if(!(gb_read(wLowHealthAlarm) | (1 << DANGER_ON_F))) UpdateChannels_Channel1();
+    if(!(gb_read(wLowHealthAlarm) & (1 << DANGER_ON_F))) UpdateChannels_Channel1();
 }
 
 void UpdateChannels_Channel1(void){
