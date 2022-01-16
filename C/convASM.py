@@ -354,7 +354,8 @@ def main():
         asm.append("}")
     if not os.path.exists(args.fileName.replace(".asm", ".c")):
         with open(args.fileName.replace(".asm", ".c"), "w") as cFile:
-            cFile.write('#include "../constants.h"\n\n')
+            cFile.write('#include "../constants.h"\n')
+            cFile.write(f"#include \"{args.fileName.replace('.asm', '.h')}\"\n\n")
             for ln, line in enumerate(asm):
                 ln = f"{line}{comment[ln]}".strip(" ")
                 cFile.write(f"{ln.replace('\t', '    ')}\n")

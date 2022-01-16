@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "pokemon.h"
 
 void DrawBattleHPBar(void){
 //  Draw an HP bar d tiles long at hl

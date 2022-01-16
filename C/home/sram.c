@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "sram.h"
 
 void OpenSRAM(void){
 //  switch to sram bank a

@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "math.h"
 
 void SimpleMultiply(void){
 //  Return a * c.

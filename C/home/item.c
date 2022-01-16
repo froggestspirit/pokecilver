@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "item.h"
 
 void DoItemEffect(void){
     SET_PC(0x3053U);

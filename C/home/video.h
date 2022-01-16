@@ -1,6 +1,13 @@
 void UpdateBGMapBuffer(void);
 void WaitTop(void);
 void UpdateBGMap(void);
+void UpdateBGMap_Attr(void);
+void UpdateBGMap_Tiles(void);
+void UpdateBGMap_update(void);
+void UpdateBGMap_start(void);
+void UpdateBGMap_middle(void);
+void UpdateBGMap_top(void);
+void UpdateBGMap_row(void);
 void Serve1bppRequest(void);
 void Serve2bppRequest(void);
 void AnimateTileset(void);

@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "string.h"
 
 void InitString(void){
 //  Init a string of length c.

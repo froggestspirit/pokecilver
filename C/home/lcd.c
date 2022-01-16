@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "lcd.h"
 
 //  LCD handling
 

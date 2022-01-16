@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "sprite_updates.h"
 
 void DisableSpriteUpdates(void){
     XOR_A_A;  // xor a

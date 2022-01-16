@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "stone_queue.h"
 
 void HandleStoneQueue(void){
     SET_PC(0x37A8U);

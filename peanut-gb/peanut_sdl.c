@@ -22,7 +22,7 @@
 
 struct gb_s gb;
 #define ROM_SIZE 0x200000
-int (*func[ROM_SIZE])();
+void (*func[ROM_SIZE])(void);
 #include "peanut_gb.h"
 
 /**
@@ -528,7 +528,178 @@ void gb_write(const uint_fast16_t addr, const uint8_t val)
     (gb.gb_error)(GB_INVALID_WRITE, addr);
 }
 
-#if ENABLE_LCD
+void finish_gb_cycle(){
+    uint8_t inst_cycles;
+    inst_cycles = 4; // make this static to remove a dependancy on it
+    /* DIV register timing */
+    gb.counter.div_count += inst_cycles;
+
+    if(gb.counter.div_count >= DIV_CYCLES)
+    {
+        gb.gb_reg.DIV++;
+        gb.counter.div_count -= DIV_CYCLES;
+    }
+
+    /* Check serial transmission. */
+    if(gb.gb_reg.SC & SERIAL_SC_TX_START)
+    {
+        /* If new transfer, call TX function. */
+        if(gb.counter.serial_count == 0 && gb.gb_serial_tx != NULL)
+            (gb.gb_serial_tx)(gb.gb_reg.SB);
+
+        gb.counter.serial_count += inst_cycles;
+
+        /* If it's time to receive byte, call RX function. */
+        if(gb.counter.serial_count >= SERIAL_CYCLES)
+        {
+            /* If RX can be done, do it. */
+            /* If RX failed, do not change SB if using external
+             * clock, or set to 0xFF if using internal clock. */
+            uint8_t rx;
+
+            if(gb.gb_serial_rx != NULL &&
+                (gb.gb_serial_rx(&rx) ==
+                     GB_SERIAL_RX_SUCCESS))
+            {
+                gb.gb_reg.SB = rx;
+
+                /* Inform game of serial TX/RX completion. */
+                gb.gb_reg.SC &= 0x01;
+                gb.gb_reg.IF |= SERIAL_INTR;
+            }
+            else if(gb.gb_reg.SC & SERIAL_SC_CLOCK_SRC)
+            {
+                /* If using internal clock, and console is not
+                 * attached to any external peripheral, shifted
+                 * bits are replaced with logic 1. */
+                gb.gb_reg.SB = 0xFF;
+
+                /* Inform game of serial TX/RX completion. */
+                gb.gb_reg.SC &= 0x01;
+                gb.gb_reg.IF |= SERIAL_INTR;
+            }
+            else
+            {
+                /* If using external clock, and console is not
+                 * attached to any external peripheral, bits are
+                 * not shifted, so SB is not modified. */
+            }
+
+            gb.counter.serial_count = 0;
+        }
+    }
+
+    /* TIMA register timing */
+    /* TODO: Change tac_enable to struct of TAC timer control bits. */
+    if(gb.gb_reg.tac_enable)
+    {
+        static const uint_fast16_t TAC_CYCLES[4] = {1024, 16, 64, 256};
+
+        gb.counter.tima_count += inst_cycles;
+
+        while(gb.counter.tima_count >= TAC_CYCLES[gb.gb_reg.tac_rate])
+        {
+            gb.counter.tima_count -= TAC_CYCLES[gb.gb_reg.tac_rate];
+
+            if(++gb.gb_reg.TIMA == 0)
+            {
+                gb.gb_reg.IF |= TIMER_INTR;
+                /* On overflow, set TMA to TIMA. */
+                gb.gb_reg.TIMA = gb.gb_reg.TMA;
+            }
+        }
+    }
+
+
+    /* TODO Check behaviour of LCD during LCD power off state. */
+    /* If LCD is off, don't update LCD state. */
+    if((gb.gb_reg.LCDC & LCDC_ENABLE) == 0)
+        return;
+
+    /* LCD Timing */
+    gb.counter.lcd_count += inst_cycles;
+
+    /* New Scanline */
+    if(gb.counter.lcd_count > LCD_LINE_CYCLES)
+    {
+        gb.counter.lcd_count -= LCD_LINE_CYCLES;
+
+        /* LYC Update */
+        if(gb.gb_reg.LY == gb.gb_reg.LYC)
+        {
+            gb.gb_reg.STAT |= STAT_LYC_COINC;
+
+            if(gb.gb_reg.STAT & STAT_LYC_INTR)
+                gb.gb_reg.IF |= LCDC_INTR;
+        }
+        else
+            gb.gb_reg.STAT &= 0xFB;
+
+        /* Next line */
+        //gb.gb_reg.LY = (gb.gb_reg.LY + 1) % LCD_VERT_LINES;
+
+        /* VBLANK Start */
+        if(gb.gb_reg.LY == LCD_HEIGHT)
+        {
+            gb.lcd_mode = LCD_VBLANK;
+            //gb.gb_frame = 1;
+            gb.gb_reg.IF |= VBLANK_INTR;
+
+            if(gb.gb_reg.STAT & STAT_MODE_1_INTR)
+                gb.gb_reg.IF |= LCDC_INTR;
+
+            /* If frame skip is activated, check if we need to draw
+             * the frame or skip it. */
+            if(gb.direct.frame_skip)
+            {
+                gb.display.frame_skip_count =
+                    !gb.display.frame_skip_count;
+            }
+
+            /* If interlaced is activated, change which lines get
+             * updated. Also, only update lines on frames that are
+             * actually drawn when frame skip is enabled. */
+            if(gb.direct.interlace &&
+                    (!gb.direct.frame_skip ||
+                     gb.display.frame_skip_count))
+            {
+                gb.display.interlace_count =
+                    !gb.display.interlace_count;
+            }
+        }
+        /* Normal Line */
+        else if(gb.gb_reg.LY < LCD_HEIGHT)
+        {
+            if(gb.gb_reg.LY == 0)
+            {
+                /* Clear Screen */
+                gb.display.WY = gb.gb_reg.WY;
+                gb.display.window_clear = 0;
+            }
+
+            gb.lcd_mode = LCD_HBLANK;
+
+            if(gb.gb_reg.STAT & STAT_MODE_0_INTR)
+                gb.gb_reg.IF |= LCDC_INTR;
+        }
+    }
+    /* OAM access */
+    else if(gb.lcd_mode == LCD_HBLANK
+            && gb.counter.lcd_count >= LCD_MODE_2_CYCLES)
+    {
+        gb.lcd_mode = LCD_SEARCH_OAM;
+
+        if(gb.gb_reg.STAT & STAT_MODE_2_INTR)
+            gb.gb_reg.IF |= LCDC_INTR;
+    }
+    /* Update LCD */
+    else if(gb.lcd_mode == LCD_SEARCH_OAM
+            && gb.counter.lcd_count >= LCD_MODE_3_CYCLES)
+    {
+        gb.lcd_mode = LCD_TRANSFER;
+    }
+}
+
 void gb_draw_line()
 {
     finish_gb_cycle();
@@ -774,7 +945,6 @@ void gb_draw_line()
 
     gb.display.lcd_draw_line(pixels, gb.gb_reg.LY);
 }
-#endif
 
 /**
  * Internal function used to step the CPU.
@@ -782,7 +952,6 @@ void gb_draw_line()
 
 #include "../C/macros.h"
 #include "../C/functions.h"
-extern int (*func[ROM_SIZE])();
 
 void gb_step_cpu()
 {
@@ -1320,182 +1489,6 @@ void gb_step_cpu()
     }
 }
 
-void finish_gb_cycle(){
-    uint8_t inst_cycles;
-    inst_cycles = 4; // make this static to remove a dependancy on it
-    /* DIV register timing */
-    gb.counter.div_count += inst_cycles;
-
-    if(gb.counter.div_count >= DIV_CYCLES)
-    {
-        gb.gb_reg.DIV++;
-        gb.counter.div_count -= DIV_CYCLES;
-    }
-
-    /* Check serial transmission. */
-    if(gb.gb_reg.SC & SERIAL_SC_TX_START)
-    {
-        /* If new transfer, call TX function. */
-        if(gb.counter.serial_count == 0 && gb.gb_serial_tx != NULL)
-            (gb.gb_serial_tx)(gb.gb_reg.SB);
-
-        gb.counter.serial_count += inst_cycles;
-
-        /* If it's time to receive byte, call RX function. */
-        if(gb.counter.serial_count >= SERIAL_CYCLES)
-        {
-            /* If RX can be done, do it. */
-            /* If RX failed, do not change SB if using external
-             * clock, or set to 0xFF if using internal clock. */
-            uint8_t rx;
-
-            if(gb.gb_serial_rx != NULL &&
-                (gb.gb_serial_rx(&rx) ==
-                     GB_SERIAL_RX_SUCCESS))
-            {
-                gb.gb_reg.SB = rx;
-
-                /* Inform game of serial TX/RX completion. */
-                gb.gb_reg.SC &= 0x01;
-                gb.gb_reg.IF |= SERIAL_INTR;
-            }
-            else if(gb.gb_reg.SC & SERIAL_SC_CLOCK_SRC)
-            {
-                /* If using internal clock, and console is not
-                 * attached to any external peripheral, shifted
-                 * bits are replaced with logic 1. */
-                gb.gb_reg.SB = 0xFF;
-
-                /* Inform game of serial TX/RX completion. */
-                gb.gb_reg.SC &= 0x01;
-                gb.gb_reg.IF |= SERIAL_INTR;
-            }
-            else
-            {
-                /* If using external clock, and console is not
-                 * attached to any external peripheral, bits are
-                 * not shifted, so SB is not modified. */
-            }
-
-            gb.counter.serial_count = 0;
-        }
-    }
-
-    /* TIMA register timing */
-    /* TODO: Change tac_enable to struct of TAC timer control bits. */
-    if(gb.gb_reg.tac_enable)
-    {
-        static const uint_fast16_t TAC_CYCLES[4] = {1024, 16, 64, 256};
-
-        gb.counter.tima_count += inst_cycles;
-
-        while(gb.counter.tima_count >= TAC_CYCLES[gb.gb_reg.tac_rate])
-        {
-            gb.counter.tima_count -= TAC_CYCLES[gb.gb_reg.tac_rate];
-
-            if(++gb.gb_reg.TIMA == 0)
-            {
-                gb.gb_reg.IF |= TIMER_INTR;
-                /* On overflow, set TMA to TIMA. */
-                gb.gb_reg.TIMA = gb.gb_reg.TMA;
-            }
-        }
-    }
-
-
-    /* TODO Check behaviour of LCD during LCD power off state. */
-    /* If LCD is off, don't update LCD state. */
-    if((gb.gb_reg.LCDC & LCDC_ENABLE) == 0)
-        return;
-
-    /* LCD Timing */
-    gb.counter.lcd_count += inst_cycles;
-
-    /* New Scanline */
-    if(gb.counter.lcd_count > LCD_LINE_CYCLES)
-    {
-        gb.counter.lcd_count -= LCD_LINE_CYCLES;
-
-        /* LYC Update */
-        if(gb.gb_reg.LY == gb.gb_reg.LYC)
-        {
-            gb.gb_reg.STAT |= STAT_LYC_COINC;
-
-            if(gb.gb_reg.STAT & STAT_LYC_INTR)
-                gb.gb_reg.IF |= LCDC_INTR;
-        }
-        else
-            gb.gb_reg.STAT &= 0xFB;
-
-        /* Next line */
-        //gb.gb_reg.LY = (gb.gb_reg.LY + 1) % LCD_VERT_LINES;
-
-        /* VBLANK Start */
-        if(gb.gb_reg.LY == LCD_HEIGHT)
-        {
-            gb.lcd_mode = LCD_VBLANK;
-            //gb.gb_frame = 1;
-            gb.gb_reg.IF |= VBLANK_INTR;
-
-            if(gb.gb_reg.STAT & STAT_MODE_1_INTR)
-                gb.gb_reg.IF |= LCDC_INTR;
-
-#if ENABLE_LCD
-
-            /* If frame skip is activated, check if we need to draw
-             * the frame or skip it. */
-            if(gb.direct.frame_skip)
-            {
-                gb.display.frame_skip_count =
-                    !gb.display.frame_skip_count;
-            }
-
-            /* If interlaced is activated, change which lines get
-             * updated. Also, only update lines on frames that are
-             * actually drawn when frame skip is enabled. */
-            if(gb.direct.interlace &&
-                    (!gb.direct.frame_skip ||
-                     gb.display.frame_skip_count))
-            {
-                gb.display.interlace_count =
-                    !gb.display.interlace_count;
-            }
-
-#endif
-        }
-        /* Normal Line */
-        else if(gb.gb_reg.LY < LCD_HEIGHT)
-        {
-            if(gb.gb_reg.LY == 0)
-            {
-                /* Clear Screen */
-                gb.display.WY = gb.gb_reg.WY;
-                gb.display.window_clear = 0;
-            }
-
-            gb.lcd_mode = LCD_HBLANK;
-
-            if(gb.gb_reg.STAT & STAT_MODE_0_INTR)
-                gb.gb_reg.IF |= LCDC_INTR;
-        }
-    }
-    /* OAM access */
-    else if(gb.lcd_mode == LCD_HBLANK
-            && gb.counter.lcd_count >= LCD_MODE_2_CYCLES)
-    {
-        gb.lcd_mode = LCD_SEARCH_OAM;
-
-        if(gb.gb_reg.STAT & STAT_MODE_2_INTR)
-            gb.gb_reg.IF |= LCDC_INTR;
-    }
-    /* Update LCD */
-    else if(gb.lcd_mode == LCD_SEARCH_OAM
-            && gb.counter.lcd_count >= LCD_MODE_3_CYCLES)
-    {
-        gb.lcd_mode = LCD_TRANSFER;
-    }
-}
-
 void gb_run_frame()
 {
     gb.gb_frame = 0;
@@ -1722,7 +1715,6 @@ const char* gb_get_rom_name(char *title_str)
     return title_start;
 }
 
-#if ENABLE_LCD
 void gb_init_lcd(
         void (*lcd_draw_line)(
             const uint8_t *pixels,
@@ -1740,8 +1732,6 @@ void gb_init_lcd(
 
     return;
 }
-#endif
-
 
 struct priv_t
 {
@@ -1929,7 +1919,6 @@ void auto_assign_palette(struct priv_t *priv, uint8_t game_checksum)
         memcpy(priv->selected_palette, palette, palette_bytes);
 }
 
-#if ENABLE_LCD
 /**
  * Draws scanline into framebuffer.
  */
@@ -1945,7 +1934,6 @@ void lcd_draw_line(const uint8_t pixels[160],
                     [pixels[x] & 3];
     }
 }
-#endif
 
 int get_input(){
     static SDL_Event event;
@@ -2320,10 +2308,7 @@ int main(int argc, char **argv)
         SDL_PauseAudioDevice(dev, 0);
     }
 #endif
-
-#if ENABLE_LCD
     gb_init_lcd(&lcd_draw_line);
-#endif
 
     /* Allow the joystick input even if game is in background. */
     SDL_SetHint(SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS, "1");
@@ -2450,8 +2435,6 @@ int main(int argc, char **argv)
         /* Process audio. */
         audio_frame();
 #endif
-
-#if ENABLE_LCD
         /* Copy frame buffer to SDL screen. */
         SDL_UpdateTexture(texture, NULL, &priv.fb, LCD_WIDTH * sizeof(uint16_t));
         SDL_RenderClear(renderer);
@@ -2460,8 +2443,6 @@ int main(int argc, char **argv)
 
         if(dump_bmp)
             save_lcd_bmp(priv.fb);
-
-#endif
 
         /* Use a delay that will draw the screen at a rate of 59.7275 Hz. */
         new_ticks = SDL_GetTicks();

@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "printer.h"
 
 void PrinterReceive(void){
     SET_PC(0x1EB1U);

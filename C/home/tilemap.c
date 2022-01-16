@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "tilemap.h"
 
 void ClearBGPalettes(void){
     SET_PC(0x3445U);

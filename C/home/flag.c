@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "flag.h"
 
 void ResetMapBufferEventFlags(void){
     XOR_A_A;  // xor a

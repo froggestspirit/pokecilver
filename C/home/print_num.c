@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "print_num.h"
 
 void PrintNum(void){
     SET_PC(0x3239U);

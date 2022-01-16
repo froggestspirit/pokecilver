@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "delay.h"
 
 void DelayFrame(void){
     SET_PC(0x032EU);

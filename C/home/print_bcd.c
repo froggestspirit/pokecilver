@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "print_bcd.h"
 
 void PrintBCDNumber(void){
     SET_PC(0x3ADAU);

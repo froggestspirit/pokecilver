@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "window.h"
 
 void RefreshScreen(void){
     SET_PC(0x2E7EU);

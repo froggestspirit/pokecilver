@@ -32,13 +32,13 @@ def analyze(fileName):
                     currentFunc = None
                     currentFuncs = []
                     fallthrough = False
-            elif line[:7] == "\treturn" and "[" not in line and currentFunc not in convertedFuncs:
+            elif prevLine[:7] == "\treturn" and "[" not in line and currentFunc not in convertedFuncs:
                 fallthrough = True
             elif line[0] == "\t":
                 op = line.strip("\t").split("(")[0].split(" ")[0]
                 if op in ("CALL", "CALL_Z", "CALL_NZ", "CALL_C", "CALL_NC",
-                                "JP", "JP_Z", "JP_NZ", "JP_C", "JP_NC",
-                                "JR", "JR_Z", "JR_NZ", "JR_C", "JR_NC", "RST"):
+                          "JP", "JP_Z", "JP_NZ", "JP_C", "JP_NC",
+                          "JR", "JR_Z", "JR_NZ", "JR_C", "JR_NC", "RST"):
                     routine = line.split(";")[0].replace(op, "", 1).strip("\t() ")[1:]
                     if routine not in containedFuncs and routine not in convertedFuncs:
                         currentFunc = None
@@ -49,6 +49,7 @@ def analyze(fileName):
                     currentFunc = None
                     currentFuncs = []
                     fallthrough = False
+            prevLine = line
     with open(contained, "w") as outFile:
         outFile.write("\n".join(containedFuncs))
 
@@ -90,14 +91,14 @@ def update(fileName):
                                 if len(op) > 2:  # Op is either call or rst
                                     line = f"\t{condition}{routine}();{comment}"
                                 else:
-                                    line = f"\t{condition}return {routine}();{comment}"
+                                    line = f"\t{condition}{{\n\t\t{routine}();{comment}\n\t\treturn;\n\t}}"
                                 print(f"{printFile}{lineNum + 1}: {line}")
                                 printFile = ""
                         elif routine in containedFuncs:
                             if len(op) > 2:  # Op is either call or rst
                                 line = f"\t{condition}CCALL(a{routine});{comment}"
                             else:
-                                line = f"\t{condition}return {routine}();{comment}"
+                                line = f"\t{condition}{{\n\t\t{routine}();{comment}\n\t\treturn;\n\t}}"
                             print(f"{printFile}{lineNum + 1}: {line}")
                             printFile = ""
             if not skipLine:

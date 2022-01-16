@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "sprite_anims.h"
 
 void InitSpriteAnimStruct(void){
     SET_PC(0x3D27U);

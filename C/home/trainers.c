@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "trainers.h"
 
 void CheckTrainerBattle(void){
     LDH_A_addr(hROMBank);  // ldh a, [hROMBank]

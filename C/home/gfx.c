@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "gfx.h"
 
 #define TILES_PER_CYCLE 8
 

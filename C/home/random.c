@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "random.h"
 
 void Random(void){
 //  A simple hardware-based random number generator (RNG).

@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "queue_script.h"
 
 void QueueScript(void){
 //  Push pointer hl in the current bank to wQueuedScriptBank.

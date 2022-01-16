@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "time.h"
 
 //  Functions relating to the timer interrupt and the real-time-clock.
 

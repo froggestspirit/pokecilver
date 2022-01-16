@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "palettes.h"
 
 //  Functions dealing with palettes.
 

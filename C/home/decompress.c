@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "decompress.h"
 
 void FarDecompress(void){
     SET_PC(0x0AEEU);

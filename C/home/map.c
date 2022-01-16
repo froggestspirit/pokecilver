@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "map.h"
 
 //  Functions dealing with rendering and interacting with maps.
 

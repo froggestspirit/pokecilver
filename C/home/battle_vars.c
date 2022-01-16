@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "battle_vars.h"
 
 void GetBattleVar(void){
     PUSH_HL;  // push hl

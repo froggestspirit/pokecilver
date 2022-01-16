@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "call_regs.h"
 
 //  Register aliases
 

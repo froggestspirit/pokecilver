@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "time_palettes.h"
 
 void UpdateTimeAndPals(void){
     SET_PC(0x0343U);

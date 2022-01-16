@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "map_objects.h"
 
 //  Functions handling map objects.
 

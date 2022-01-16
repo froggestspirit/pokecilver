@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "warp_connection.h"
 
 void HandleNewMap(void){
     SET_PC(0x2084U);

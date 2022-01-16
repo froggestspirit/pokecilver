@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "video.h"
 
 void UpdateBGMapBuffer(void){
 //  Copy [hBGMapTileCount] 16x8 tiles from wBGMapBuffer

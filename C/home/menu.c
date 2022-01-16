@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "menu.h"
 
 void Load2DMenuData(void){
     PUSH_HL;  // push hl

@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "scrolling_menu.h"
 
 void ScrollingMenu(void){
     SET_PC(0x374DU);

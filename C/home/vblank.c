@@ -1,5 +1,8 @@
 #include "../constants.h"
 #include "vblank.h"
+#include "../audio/engine.h"
+#include "palettes.h"
+
 //  VBlank is the interrupt responsible for updating VRAM.
 
 //  In Pokemon Gold and Silver, VBlank has been hijacked to act as the
@@ -22,14 +25,14 @@ wait:
 
 void VBlank(void){
     SET_PC(0x0150U);
-    static int (*VBlanks[8])() = {VBlank0,
-                                VBlank1,
-                                VBlank2,
-                                VBlank3,
-                                VBlank4,
-                                VBlank5,
-                                VBlank0,
-                                VBlank0};
+    static void (*VBlanks[8])(void) = {VBlank0,
+                                       VBlank1,
+                                       VBlank2,
+                                       VBlank3,
+                                       VBlank4,
+                                       VBlank5,
+                                       VBlank0,
+                                       VBlank0};
     PUSH_AF;  // push af
     PUSH_BC;  // push bc
     PUSH_DE;  // push de
@@ -37,8 +40,8 @@ void VBlank(void){
 
     LD_DE(mVBlank_return);  // ld de, .return
     PUSH_DE;  // push de
-    return VBlanks[gb_read(hVBlank)]();
-
+    VBlanks[gb_read(hVBlank)]();
+    return;
 
 l_return:
     SET_PC(0x0168U);

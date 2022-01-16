@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "copy.h"
 
 void CopyBytes(void){
 //  copy bc bytes from hl to de

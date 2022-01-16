@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "game_time.h"
 
 void ResetGameTime(void){
     XOR_A_A;  // xor a

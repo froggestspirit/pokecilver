@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "names.h"
 
 void NamesPointers(void){
 //  entries correspond to GetName constants (see constants/text_constants.asm)

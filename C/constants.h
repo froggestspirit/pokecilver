@@ -1,11 +1,12 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
-extern int (*func[])();
+extern void (*func[])(void);
 #include "../peanut-gb/peanut_gb.h"
 
 //#include "charmap.h"
 #include "macros.h"
 #include "global.h"
+#include "home/header.h"
 
 #include "constants/hardware_constants.h"
 #include "constants/deco_constants.h"

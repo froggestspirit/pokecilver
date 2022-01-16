@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "pokedex_flags.h"
 
 void CountSetBits(void){
 //  Count the number of set bits in b bytes starting from hl.

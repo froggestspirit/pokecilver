@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "copy_name.h"
 
 void CopyName1(void){
 //  Copies the name from de to wStringBuffer2

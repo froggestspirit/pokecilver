@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "text.h"
 
 void ClearBox(void){
 //  Fill a c*b box at hl with blank tiles.
@@ -647,7 +648,7 @@ linkbattle:
     CALL(mText_WaitBGMap);  // call Text_WaitBGMap
     CALL(mPromptButton);  // call PromptButton
     hlcoord(TEXTBOX_INNERX, TEXTBOX_INNERY, wTilemap);  // hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY
-    LD_BC((TEXTBOX_INNERH - 1 << 8) | TEXTBOX_INNERW);  // lb bc, TEXTBOX_INNERH - 1, TEXTBOX_INNERW
+    LD_BC(((TEXTBOX_INNERH - 1) << 8) | TEXTBOX_INNERW);  // lb bc, TEXTBOX_INNERH - 1, TEXTBOX_INNERW
     CCALL(aClearBox);  // call ClearBox
     CCALL(aUnloadBlinkingCursor);  // call UnloadBlinkingCursor
     LD_C(20);  // ld c, 20

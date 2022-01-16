@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "joypad.h"
 
 void Joypad(void){
 //  Replaced by UpdateJoypad, called from VBlank instead of the useless

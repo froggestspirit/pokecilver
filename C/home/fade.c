@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "fade.h"
 
 //  Functions to fade the screen in and out.
 

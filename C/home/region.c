@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "region.h"
 
 void IsInJohto(void){
 //  Return 0 if the player is in Johto, and 1 in Kanto.

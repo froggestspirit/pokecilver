@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "compare.h"
 
 void CompareBytes(void){
 //  Compare c bytes at de and hl.

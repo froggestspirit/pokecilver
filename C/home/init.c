@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "init.h"
 
 void Reset(void){
     SET_PC(0x05B0U);

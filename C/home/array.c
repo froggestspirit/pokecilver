@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "array.h"
 
 void IsInArray(void){
 //  Find value a for every de bytes in array hl.

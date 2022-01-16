@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "movement.h"
 
 void InitMovementBuffer(void){
     LD_addr_A(wMovementBufferObject);  // ld [wMovementBufferObject], a

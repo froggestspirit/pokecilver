@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "print_text.h"
 
 void PrintLetterDelay(void){
     SET_PC(0x31E0U);

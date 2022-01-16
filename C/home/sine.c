@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "sine.h"
 
 void Cosine(void){
     SET_PC(0x19AAU);

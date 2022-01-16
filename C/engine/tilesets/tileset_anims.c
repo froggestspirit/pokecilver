@@ -1,4 +1,5 @@
 #include "../../constants.h"
+#include "tileset_anims.h"
 
 void DummyPredef3A_DummyData(void){
     SET_PC(0xFC000U);

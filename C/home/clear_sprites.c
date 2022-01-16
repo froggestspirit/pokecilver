@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "clear_sprites.h"
 
 void ClearSprites(void){
 //  Erase OAM data

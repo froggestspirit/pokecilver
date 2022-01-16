@@ -1,4 +1,5 @@
 #include "../constants.h"
+#include "serial.h"
 
 void Serial(void){
     SET_PC(0x06AAU);
