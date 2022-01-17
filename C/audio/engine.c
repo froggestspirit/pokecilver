@@ -250,255 +250,117 @@ void FadeMusic(void){
 }
 
 void LoadNote(void){
-// wait for pitch slide to finish
-    LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(SOUND_PITCH_SLIDE);  // bit SOUND_PITCH_SLIDE, [hl]
-    IF_Z return;
-// get note duration
-    LD_HL(CHANNEL_NOTE_DURATION);  // ld hl, CHANNEL_NOTE_DURATION
-    ADD_HL_BC;  // add hl, bc
-    LD_A_hl;  // ld a, [hl]
-    LD_HL(wCurNoteDuration);  // ld hl, wCurNoteDuration
-    SUB_A_hl;  // sub [hl]
-    IF_NC goto ok;  // jr nc, .ok
-    LD_A(1);  // ld a, 1
-
-ok:
-    LD_hl_A;  // ld [hl], a
-// get frequency
-    LD_HL(CHANNEL_FREQUENCY);  // ld hl, CHANNEL_FREQUENCY
-    ADD_HL_BC;  // add hl, bc
-    LD_E_hl;  // ld e, [hl]
-    INC_HL;  // inc hl
-    LD_D_hl;  // ld d, [hl]
-// get direction of pitch slide
-    LD_HL(CHANNEL_PITCH_SLIDE_TARGET);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET
-    ADD_HL_BC;  // add hl, bc
-    LD_A_E;  // ld a, e
-    SUB_A_hl;  // sub [hl]
-    LD_E_A;  // ld e, a
-    LD_A_D;  // ld a, d
-    SBC_A(0);  // sbc 0
-    LD_D_A;  // ld d, a
-    LD_HL(CHANNEL_PITCH_SLIDE_TARGET + 1);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET + 1
-    ADD_HL_BC;  // add hl, bc
-    SUB_A_hl;  // sub [hl]
-    IF_NC goto greater_than;  // jr nc, .greater_than
-    LD_HL(CHANNEL_FLAGS3);  // ld hl, CHANNEL_FLAGS3
-    ADD_HL_BC;  // add hl, bc
-    SET_hl(SOUND_PITCH_SLIDE_DIR);  // set SOUND_PITCH_SLIDE_DIR, [hl]
-// get frequency
-    LD_HL(CHANNEL_FREQUENCY);  // ld hl, CHANNEL_FREQUENCY
-    ADD_HL_BC;  // add hl, bc
-    LD_E_hl;  // ld e, [hl]
-    INC_HL;  // inc hl
-    LD_D_hl;  // ld d, [hl]
-// ????
-    LD_HL(CHANNEL_PITCH_SLIDE_TARGET);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET
-    ADD_HL_BC;  // add hl, bc
-    LD_A_hl;  // ld a, [hl]
-    SUB_A_E;  // sub e
-    LD_E_A;  // ld e, a
-    LD_A_D;  // ld a, d
-    SBC_A(0);  // sbc 0
-    LD_D_A;  // ld d, a
-// ????
-    LD_HL(CHANNEL_PITCH_SLIDE_TARGET + 1);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET + 1
-    ADD_HL_BC;  // add hl, bc
-    LD_A_hl;  // ld a, [hl]
-    SUB_A_D;  // sub d
-    LD_D_A;  // ld d, a
-    goto resume;  // jr .resume
-
-
-greater_than:
-    LD_HL(CHANNEL_FLAGS3);  // ld hl, CHANNEL_FLAGS3
-    ADD_HL_BC;  // add hl, bc
-    RES_hl(SOUND_PITCH_SLIDE_DIR);  // res SOUND_PITCH_SLIDE_DIR, [hl]
-// get frequency
-    LD_HL(CHANNEL_FREQUENCY);  // ld hl, CHANNEL_FREQUENCY
-    ADD_HL_BC;  // add hl, bc
-    LD_E_hl;  // ld e, [hl]
-    INC_HL;  // inc hl
-    LD_D_hl;  // ld d, [hl]
-// get distance from pitch slide target
-    LD_HL(CHANNEL_PITCH_SLIDE_TARGET);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET
-    ADD_HL_BC;  // add hl, bc
-    LD_A_E;  // ld a, e
-    SUB_A_hl;  // sub [hl]
-    LD_E_A;  // ld e, a
-    LD_A_D;  // ld a, d
-    SBC_A(0);  // sbc 0
-    LD_D_A;  // ld d, a
-    LD_HL(CHANNEL_PITCH_SLIDE_TARGET + 1);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET + 1
-    ADD_HL_BC;  // add hl, bc
-    SUB_A_hl;  // sub [hl]
-    LD_D_A;  // ld d, a
-
-resume:
-// de = x * [wCurNoteDuration] + y
-// x + 1 -> d
-// y -> a
-    PUSH_BC;  // push bc
-    LD_HL(wCurNoteDuration);  // ld hl, wCurNoteDuration
-    LD_B(0);  // ld b, 0 ; quotient
-
-loop:
-    INC_B;  // inc b
-    LD_A_E;  // ld a, e
-    SUB_A_hl;  // sub [hl]
-    LD_E_A;  // ld e, a
-    IF_NC goto loop;  // jr nc, .loop
-    LD_A_D;  // ld a, d
-    AND_A_A;  // and a
-    IF_Z goto quit;  // jr z, .quit
-    DEC_D;  // dec d
-    goto loop;  // jr .loop
-
-
-quit:
-    LD_A_E;  // ld a, e ; remainder
-    ADD_A_hl;  // add [hl]
-    LD_D_B;  // ld d, b ; quotient
-    POP_BC;  // pop bc
-    LD_HL(CHANNEL_PITCH_SLIDE_AMOUNT);  // ld hl, CHANNEL_PITCH_SLIDE_AMOUNT
-    ADD_HL_BC;  // add hl, bc
-    LD_hl_D;  // ld [hl], d ; quotient
-    LD_HL(CHANNEL_PITCH_SLIDE_AMOUNT_FRACTION);  // ld hl, CHANNEL_PITCH_SLIDE_AMOUNT_FRACTION
-    ADD_HL_BC;  // add hl, bc
-    LD_hl_A;  // ld [hl], a ; remainder
-    LD_HL(CHANNEL_FIELD25);  // ld hl, CHANNEL_FIELD25
-    ADD_HL_BC;  // add hl, bc
-    XOR_A_A;  // xor a
-    LD_hl_A;  // ld [hl], a
-    return;
+    if(curChan->pitchSlide){  // wait for pitch slide to finish
+        int16_t noteDuration = curChan->noteDuration - gb_read(wCurNoteDuration);  // get note duration
+        if(noteDuration < 0) noteDuration = 1;  // Oversight? This could allow a division by 0
+        gb_write(wCurNoteDuration, noteDuration);
+        uint16_t freqDiff;
+        if(curChan->frequency > curChan->pitchSlideTarget){  // get direction of pitch slide
+            curChan->pitchSlideDir = 0;
+            freqDiff = curChan->frequency - curChan->pitchSlideTarget;
+        }else{
+            curChan->pitchSlideDir = 1;
+            freqDiff = curChan->pitchSlideTarget - curChan->frequency;
+        }
+        curChan->pitchSlideAmount = freqDiff / noteDuration;
+        curChan->pitchSlideAmountFraction = freqDiff % noteDuration;
+        curChan->field25 = 0;
+    }
 }
 
-void HandleTrackVibrato(void){
-//  handle duty, cry pitch, and vibrato
+void HandleTrackVibrato(void){  // handle duty, cry pitch, and vibrato
     REG_BC = channelPointers[curChannel];
-    LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(SOUND_DUTY_LOOP);  // bit SOUND_DUTY_LOOP, [hl] ; duty cycle looping
-    IF_Z goto next;  // jr z, .next
-    LD_HL(CHANNEL_DUTY_CYCLE_PATTERN);  // ld hl, CHANNEL_DUTY_CYCLE_PATTERN
-    ADD_HL_BC;  // add hl, bc
-    LD_A_hl;  // ld a, [hl]
-    RLCA;  // rlca
-    RLCA;  // rlca
-    LD_hl_A;  // ld [hl], a
-    AND_A(0xc0);  // and $c0
-    LD_addr_A(wCurTrackDuty);  // ld [wCurTrackDuty], a
-    LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
-    ADD_HL_BC;  // add hl, bc
-    SET_hl(NOTE_DUTY_OVERRIDE);  // set NOTE_DUTY_OVERRIDE, [hl]
+    if(curChan->dutyLoop){  // duty cycle looping
+        LD_HL(CHANNEL_DUTY_CYCLE_PATTERN);  // ld hl, CHANNEL_DUTY_CYCLE_PATTERN
+        ADD_HL_BC;  // add hl, bc
+        LD_A_hl;  // ld a, [hl]
+        RLCA;  // rlca
+        RLCA;  // rlca
+        LD_hl_A;  // ld [hl], a
+        AND_A(0xc0);  // and $c0
+        LD_addr_A(wCurTrackDuty);  // ld [wCurTrackDuty], a
+        LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
+        ADD_HL_BC;  // add hl, bc
+        SET_hl(NOTE_DUTY_OVERRIDE);  // set NOTE_DUTY_OVERRIDE, [hl]
+    }
+    if(curChan->pitchOffsetEnabled){
+        LD_HL(CHANNEL_PITCH_OFFSET);  // ld hl, CHANNEL_PITCH_OFFSET
+        ADD_HL_BC;  // add hl, bc
+        LD_E_hl;  // ld e, [hl]
+        INC_HL;  // inc hl
+        LD_D_hl;  // ld d, [hl]
+        LD_HL(wCurTrackFrequency);  // ld hl, wCurTrackFrequency
+        LD_A_hli;  // ld a, [hli]
+        LD_H_hl;  // ld h, [hl]
+        LD_L_A;  // ld l, a
+        ADD_HL_DE;  // add hl, de
+        LD_E_L;  // ld e, l
+        LD_D_H;  // ld d, h
+        LD_HL(wCurTrackFrequency);  // ld hl, wCurTrackFrequency
+        LD_hl_E;  // ld [hl], e
+        INC_HL;  // inc hl
+        LD_hl_D;  // ld [hl], d
+    }
+    if(curChan->vibrato){  // is vibrato on?
+        if(curChan->vibratoDelayCount){  // is vibrato active for this note yet?
+            curChan->vibratoDelayCount--;
+            return;
+        }
+        if(!curChan->vibratoExtent) return;  // is the extent nonzero?
+    // save it for later
+        REG_D = curChan->vibratoExtent;
+        if(curChan->vibratoRate & 0xF){  // is it time to toggle vibrato up/down?
+            curChan->vibratoRate--;
+            return;
+        }
+    // refresh count
+        LD_HL(CHANNEL_VIBRATO_RATE);  // ld hl, CHANNEL_VIBRATO_RATE
+        ADD_HL_BC;  // add hl, bc
+        LD_A_hl;  // ld a, [hl]
+        SWAP_hl;  // swap [hl]
+        OR_A_hl;  // or [hl]
+        LD_hl_A;  // ld [hl], a
+    // ????
+        LD_A_addr(wCurTrackFrequency);  // ld a, [wCurTrackFrequency]
+        LD_E_A;  // ld e, a
+    // toggle vibrato up/down
+        LD_HL(CHANNEL_FLAGS3);  // ld hl, CHANNEL_FLAGS3
+        ADD_HL_BC;  // add hl, bc
+        BIT_hl(SOUND_VIBRATO_DIR);  // bit SOUND_VIBRATO_DIR, [hl] ; vibrato up/down
+        IF_Z goto down;  // jr z, .down
+    //  up
+    // vibrato down
+        RES_hl(SOUND_VIBRATO_DIR);  // res SOUND_VIBRATO_DIR, [hl]
+    // get the delay
+        LD_A_D;  // ld a, d
+        AND_A(0xf);  // and $f ; lo
+    // ;
+        LD_D_A;  // ld d, a
+        LD_A_E;  // ld a, e
+        SUB_A_D;  // sub d
+        IF_NC goto no_carry;  // jr nc, .no_carry
+        LD_A(0);  // ld a, 0
+        goto no_carry;  // jr .no_carry
 
-next:
-    LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(SOUND_PITCH_OFFSET);  // bit SOUND_PITCH_OFFSET, [hl]
-    IF_Z goto vibrato;  // jr z, .vibrato
-    LD_HL(CHANNEL_PITCH_OFFSET);  // ld hl, CHANNEL_PITCH_OFFSET
-    ADD_HL_BC;  // add hl, bc
-    LD_E_hl;  // ld e, [hl]
-    INC_HL;  // inc hl
-    LD_D_hl;  // ld d, [hl]
-    LD_HL(wCurTrackFrequency);  // ld hl, wCurTrackFrequency
-    LD_A_hli;  // ld a, [hli]
-    LD_H_hl;  // ld h, [hl]
-    LD_L_A;  // ld l, a
-    ADD_HL_DE;  // add hl, de
-    LD_E_L;  // ld e, l
-    LD_D_H;  // ld d, h
-    LD_HL(wCurTrackFrequency);  // ld hl, wCurTrackFrequency
-    LD_hl_E;  // ld [hl], e
-    INC_HL;  // inc hl
-    LD_hl_D;  // ld [hl], d
+    down:
+    // vibrato up
+        SET_hl(SOUND_VIBRATO_DIR);  // set SOUND_VIBRATO_DIR, [hl]
+    // get the delay
+        LD_A_D;  // ld a, d
+        AND_A(0xf0);  // and $f0 ; hi
+        SWAP_A;  // swap a ; move it to lo
+    // ;
+        ADD_A_E;  // add e
+        IF_NC goto no_carry;  // jr nc, .no_carry
+        LD_A(0xff);  // ld a, $ff
 
-vibrato:
-// is vibrato on?
-    LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(SOUND_VIBRATO);  // bit SOUND_VIBRATO, [hl] ; vibrato
-    IF_Z goto quit;  // jr z, .quit
-// is vibrato active for this note yet?
-// is the delay over?
-    LD_HL(CHANNEL_VIBRATO_DELAY_COUNT);  // ld hl, CHANNEL_VIBRATO_DELAY_COUNT
-    ADD_HL_BC;  // add hl, bc
-    LD_A_hl;  // ld a, [hl]
-    AND_A_A;  // and a
-    IF_NZ goto subexit;  // jr nz, .subexit
-// is the extent nonzero?
-    LD_HL(CHANNEL_VIBRATO_EXTENT);  // ld hl, CHANNEL_VIBRATO_EXTENT
-    ADD_HL_BC;  // add hl, bc
-    LD_A_hl;  // ld a, [hl]
-    AND_A_A;  // and a
-    IF_Z goto quit;  // jr z, .quit
-// save it for later
-    LD_D_A;  // ld d, a
-// is it time to toggle vibrato up/down?
-    LD_HL(CHANNEL_VIBRATO_RATE);  // ld hl, CHANNEL_VIBRATO_RATE
-    ADD_HL_BC;  // add hl, bc
-    LD_A_hl;  // ld a, [hl]
-    AND_A(0xf);  // and $f ; count
-    IF_Z goto toggle;  // jr z, .toggle
-
-subexit:
-    DEC_hl;  // dec [hl]
-    goto quit;  // jr .quit
-
-
-toggle:
-// refresh count
-    LD_A_hl;  // ld a, [hl]
-    SWAP_hl;  // swap [hl]
-    OR_A_hl;  // or [hl]
-    LD_hl_A;  // ld [hl], a
-// ????
-    LD_A_addr(wCurTrackFrequency);  // ld a, [wCurTrackFrequency]
-    LD_E_A;  // ld e, a
-// toggle vibrato up/down
-    LD_HL(CHANNEL_FLAGS3);  // ld hl, CHANNEL_FLAGS3
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(SOUND_VIBRATO_DIR);  // bit SOUND_VIBRATO_DIR, [hl] ; vibrato up/down
-    IF_Z goto down;  // jr z, .down
-//  up
-// vibrato down
-    RES_hl(SOUND_VIBRATO_DIR);  // res SOUND_VIBRATO_DIR, [hl]
-// get the delay
-    LD_A_D;  // ld a, d
-    AND_A(0xf);  // and $f ; lo
-// ;
-    LD_D_A;  // ld d, a
-    LD_A_E;  // ld a, e
-    SUB_A_D;  // sub d
-    IF_NC goto no_carry;  // jr nc, .no_carry
-    LD_A(0);  // ld a, 0
-    goto no_carry;  // jr .no_carry
-
-
-down:
-// vibrato up
-    SET_hl(SOUND_VIBRATO_DIR);  // set SOUND_VIBRATO_DIR, [hl]
-// get the delay
-    LD_A_D;  // ld a, d
-    AND_A(0xf0);  // and $f0 ; hi
-    SWAP_A;  // swap a ; move it to lo
-// ;
-    ADD_A_E;  // add e
-    IF_NC goto no_carry;  // jr nc, .no_carry
-    LD_A(0xff);  // ld a, $ff
-
-no_carry:
-    LD_addr_A(wCurTrackFrequency);  // ld [wCurTrackFrequency], a
-// ;
-    LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
-    ADD_HL_BC;  // add hl, bc
-    SET_hl(NOTE_VIBRATO_OVERRIDE);  // set NOTE_VIBRATO_OVERRIDE, [hl]
-
-quit:
-    return;
+    no_carry:
+        LD_addr_A(wCurTrackFrequency);  // ld [wCurTrackFrequency], a
+    // ;
+        LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
+        ADD_HL_BC;  // add hl, bc
+        SET_hl(NOTE_VIBRATO_OVERRIDE);  // set NOTE_VIBRATO_OVERRIDE, [hl]
+    }
 }
 
 void ApplyPitchSlide(void){
