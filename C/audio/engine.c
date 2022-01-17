@@ -269,37 +269,15 @@ void LoadNote(void){
 }
 
 void HandleTrackVibrato(void){  // handle duty, cry pitch, and vibrato
-    REG_BC = channelPointers[curChannel];
+    uint16_t freq;
     if(curChan->dutyLoop){  // duty cycle looping
-        LD_HL(CHANNEL_DUTY_CYCLE_PATTERN);  // ld hl, CHANNEL_DUTY_CYCLE_PATTERN
-        ADD_HL_BC;  // add hl, bc
-        LD_A_hl;  // ld a, [hl]
-        RLCA;  // rlca
-        RLCA;  // rlca
-        LD_hl_A;  // ld [hl], a
-        AND_A(0xc0);  // and $c0
-        LD_addr_A(wCurTrackDuty);  // ld [wCurTrackDuty], a
-        LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
-        ADD_HL_BC;  // add hl, bc
-        SET_hl(NOTE_DUTY_OVERRIDE);  // set NOTE_DUTY_OVERRIDE, [hl]
+        curChan->dutyCyclePattern = (curChan->dutyCyclePattern << 2) | (curChan->dutyCyclePattern >> 6);
+        gb_write(wCurTrackDuty, (curChan->dutyCyclePattern & 0xC0));
+        curChan->dutyOverride = 1;
     }
     if(curChan->pitchOffsetEnabled){
-        LD_HL(CHANNEL_PITCH_OFFSET);  // ld hl, CHANNEL_PITCH_OFFSET
-        ADD_HL_BC;  // add hl, bc
-        LD_E_hl;  // ld e, [hl]
-        INC_HL;  // inc hl
-        LD_D_hl;  // ld d, [hl]
-        LD_HL(wCurTrackFrequency);  // ld hl, wCurTrackFrequency
-        LD_A_hli;  // ld a, [hli]
-        LD_H_hl;  // ld h, [hl]
-        LD_L_A;  // ld l, a
-        ADD_HL_DE;  // add hl, de
-        LD_E_L;  // ld e, l
-        LD_D_H;  // ld d, h
-        LD_HL(wCurTrackFrequency);  // ld hl, wCurTrackFrequency
-        LD_hl_E;  // ld [hl], e
-        INC_HL;  // inc hl
-        LD_hl_D;  // ld [hl], d
+        freq = gb_read16(wCurTrackFrequency);
+        gb_write16(wCurTrackFrequency, freq + curChan->pitchOffset);
     }
     if(curChan->vibrato){  // is vibrato on?
         if(curChan->vibratoDelayCount){  // is vibrato active for this note yet?
@@ -307,59 +285,31 @@ void HandleTrackVibrato(void){  // handle duty, cry pitch, and vibrato
             return;
         }
         if(!curChan->vibratoExtent) return;  // is the extent nonzero?
-    // save it for later
-        REG_D = curChan->vibratoExtent;
         if(curChan->vibratoRate & 0xF){  // is it time to toggle vibrato up/down?
             curChan->vibratoRate--;
             return;
         }
-    // refresh count
-        LD_HL(CHANNEL_VIBRATO_RATE);  // ld hl, CHANNEL_VIBRATO_RATE
-        ADD_HL_BC;  // add hl, bc
-        LD_A_hl;  // ld a, [hl]
-        SWAP_hl;  // swap [hl]
-        OR_A_hl;  // or [hl]
-        LD_hl_A;  // ld [hl], a
-    // ????
-        LD_A_addr(wCurTrackFrequency);  // ld a, [wCurTrackFrequency]
-        LD_E_A;  // ld e, a
-    // toggle vibrato up/down
-        LD_HL(CHANNEL_FLAGS3);  // ld hl, CHANNEL_FLAGS3
-        ADD_HL_BC;  // add hl, bc
-        BIT_hl(SOUND_VIBRATO_DIR);  // bit SOUND_VIBRATO_DIR, [hl] ; vibrato up/down
-        IF_Z goto down;  // jr z, .down
-    //  up
-    // vibrato down
-        RES_hl(SOUND_VIBRATO_DIR);  // res SOUND_VIBRATO_DIR, [hl]
-    // get the delay
-        LD_A_D;  // ld a, d
-        AND_A(0xf);  // and $f ; lo
-    // ;
-        LD_D_A;  // ld d, a
-        LD_A_E;  // ld a, e
-        SUB_A_D;  // sub d
-        IF_NC goto no_carry;  // jr nc, .no_carry
-        LD_A(0);  // ld a, 0
-        goto no_carry;  // jr .no_carry
-
-    down:
-    // vibrato up
-        SET_hl(SOUND_VIBRATO_DIR);  // set SOUND_VIBRATO_DIR, [hl]
-    // get the delay
-        LD_A_D;  // ld a, d
-        AND_A(0xf0);  // and $f0 ; hi
-        SWAP_A;  // swap a ; move it to lo
-    // ;
-        ADD_A_E;  // add e
-        IF_NC goto no_carry;  // jr nc, .no_carry
-        LD_A(0xff);  // ld a, $ff
-
-    no_carry:
-        LD_addr_A(wCurTrackFrequency);  // ld [wCurTrackFrequency], a
-    // ;
-        LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
-        ADD_HL_BC;  // add hl, bc
-        SET_hl(NOTE_VIBRATO_OVERRIDE);  // set NOTE_VIBRATO_OVERRIDE, [hl]
+        curChan->vibratoRate |= curChan->vibratoRate >> 4;  // refresh count
+        uint8_t vibExt = curChan->vibratoExtent;
+        freq = gb_read16(wCurTrackFrequency) & 0xFF;  // Only the lower 8-bits are needed (which seems odd)
+        curChan->vibratoDir ^= 1;
+        if(curChan->vibratoDir){  // toggle vibrato up/down
+            vibExt &= 0xF0;
+            vibExt = vibExt >> 4;
+            if(vibExt + freq > 0xFF)
+                freq = 0xFF;
+            else
+                freq += vibExt;
+        }else{
+            vibExt &= 0xF;
+            if(vibExt > freq)
+                freq = 0;
+            else
+                freq -= vibExt;
+        }
+        freq |= gb_read16(wCurTrackFrequency) & 0xFF00;  // get the upper byte back (since the math dealt with the lower byte)
+        gb_write16(wCurTrackFrequency, freq);
+        curChan->vibratoOverride = 1;
     }
 }
 
@@ -2151,14 +2101,14 @@ void LoadChannel(void){
     INC_DE;  // inc de
     maskbits(NUM_CHANNELS, 0);  // maskbits NUM_CHANNELS
     LD_addr_A(wCurChannel);  // ld [wCurChannel], a
-    LD_C_A;  // ld c, a
-    LD_B(0);  // ld b, 0
-    LD_HL(mChannelPointers);  // ld hl, ChannelPointers
-    ADD_HL_BC;  // add hl, bc
-    ADD_HL_BC;  // add hl, bc
-    LD_C_hl;  // ld c, [hl]
-    INC_HL;  // inc hl
-    LD_B_hl;  // ld b, [hl] ; bc = channel pointer
+    //LD_C_A;  // ld c, a
+    //LD_B(0);  // ld b, 0
+    REG_BC = channelPointers[gb_read(wCurChannel)];  // ld hl, ChannelPointers
+    //ADD_HL_BC;  // add hl, bc
+    //ADD_HL_BC;  // add hl, bc
+    //LD_C_hl;  // ld c, [hl]
+    //INC_HL;  // inc hl
+    //LD_B_hl;  // ld b, [hl] ; bc = channel pointer
     LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
     ADD_HL_BC;  // add hl, bc
     RES_hl(SOUND_CHANNEL_ON);  // res SOUND_CHANNEL_ON, [hl] ; channel off
@@ -2260,43 +2210,13 @@ void StereoTracks(void){
     //db ['0x11', '0x22', '0x44', '0x88'];  // db $11, $22, $44, $88
 }
 
-void ChannelPointers(void){
-    //table_width ['2', 'ChannelPointers']  // table_width 2, ChannelPointers
-//  music channels
-    //dw ['wChannel1'];  // dw wChannel1
-    //dw ['wChannel2'];  // dw wChannel2
-    //dw ['wChannel3'];  // dw wChannel3
-    //dw ['wChannel4'];  // dw wChannel4
-    //assert_table_length ['NUM_MUSIC_CHANS']  // assert_table_length NUM_MUSIC_CHANS
-//  sfx channels
-    //dw ['wChannel5'];  // dw wChannel5
-    //dw ['wChannel6'];  // dw wChannel6
-    //dw ['wChannel7'];  // dw wChannel7
-    //dw ['wChannel8'];  // dw wChannel8
-    //assert_table_length ['NUM_CHANNELS']  // assert_table_length NUM_CHANNELS
-}
-
 void ClearChannels(void){
 //  runs ClearChannel for all 4 channels
 //  doesn't seem to be used, but functionally identical to InitSound
     static uint16_t noiseReg[4] = {rNR10,
-                                    rNR20,
-                                    rNR30,
-                                    rNR40};
-    /*LD_HL(rNR50);  // ld hl, rNR50
-    XOR_A_A;  // xor a
-    LD_hli_A;  // ld [hli], a
-    LD_hli_A;  // ld [hli], a
-    LD_A(0x80);  // ld a, $80
-    LD_hli_A;  // ld [hli], a
-    LD_HL(rNR10);  // ld hl, rNR10
-    LD_E(NUM_MUSIC_CHANS);  // ld e, NUM_MUSIC_CHANS
-
-loop:
-    ClearChannel();
-    DEC_E;  // dec e
-    IF_NZ goto loop;  // jr nz, .loop
-    return;*/
+                                   rNR20,
+                                   rNR30,
+                                   rNR40};
     gb_write(rNR50, 0);
     gb_write(rNR51, 0);
     gb_write(rNR52, 0x80);
@@ -2308,16 +2228,6 @@ void ClearChannel(uint16_t nReg){
 //  output: 00 00 80 00 80
 
 //    sound channel   1      2      3      4
-    /*XOR_A_A;  // xor a
-    LD_hli_A;  // ld [hli], a ; rNR10, rNR20, rNR30, rNR40 ; sweep = 0
-
-    LD_hli_A;  // ld [hli], a ; rNR11, rNR21, rNR31, rNR41 ; length/wavepattern = 0
-    LD_A(0x8);  // ld a, $8
-    LD_hli_A;  // ld [hli], a ; rNR12, rNR22, rNR32, rNR42 ; envelope = 0
-    XOR_A_A;  // xor a
-    LD_hli_A;  // ld [hli], a ; rNR13, rNR23, rNR33, rNR43 ; frequency lo = 0
-    LD_A(0x80);  // ld a, $80
-    LD_hli_A;  // ld [hli], a ; rNR14, rNR24, rNR34, rNR44 ; restart sound (freq hi = 0)*/
     gb_write(nReg++, 0);  // rNR10, rNR20, rNR30, rNR40 ; sweep = 0
     gb_write(nReg++, 0);  // rNR11, rNR21, rNR31, rNR41 ; length/wavepattern = 0
     gb_write(nReg++, 8);  // rNR12, rNR22, rNR32, rNR42 ; envelope = 0
