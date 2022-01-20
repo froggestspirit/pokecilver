@@ -314,156 +314,47 @@ void HandleTrackVibrato(void){  // handle duty, cry pitch, and vibrato
 }
 
 void ApplyPitchSlide(void){
-// quit if pitch slide inactive
-    REG_BC = channelPointers[curChannel];
-    LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(SOUND_PITCH_SLIDE);  // bit SOUND_PITCH_SLIDE, [hl]
-    IF_Z return;
-// de = Frequency
-    LD_HL(CHANNEL_FREQUENCY);  // ld hl, CHANNEL_FREQUENCY
-    ADD_HL_BC;  // add hl, bc
-    LD_E_hl;  // ld e, [hl]
-    INC_HL;  // inc hl
-    LD_D_hl;  // ld d, [hl]
-// check whether pitch slide is going up or down
-    LD_HL(CHANNEL_FLAGS3);  // ld hl, CHANNEL_FLAGS3
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(SOUND_PITCH_SLIDE_DIR);  // bit SOUND_PITCH_SLIDE_DIR, [hl]
-    IF_Z goto decreasing;  // jr z, .decreasing
-// frequency += [Channel*PitchSlideAmount]
-    LD_HL(CHANNEL_PITCH_SLIDE_AMOUNT);  // ld hl, CHANNEL_PITCH_SLIDE_AMOUNT
-    ADD_HL_BC;  // add hl, bc
-    LD_L_hl;  // ld l, [hl]
-    LD_H(0);  // ld h, 0
-    ADD_HL_DE;  // add hl, de
-    LD_D_H;  // ld d, h
-    LD_E_L;  // ld e, l
-// [Channel*Field25] += [Channel*PitchSlideAmountFraction]
-// if rollover: Frequency += 1
-    LD_HL(CHANNEL_PITCH_SLIDE_AMOUNT_FRACTION);  // ld hl, CHANNEL_PITCH_SLIDE_AMOUNT_FRACTION
-    ADD_HL_BC;  // add hl, bc
-    LD_A_hl;  // ld a, [hl]
-    LD_HL(CHANNEL_FIELD25);  // ld hl, CHANNEL_FIELD25
-    ADD_HL_BC;  // add hl, bc
-    ADD_A_hl;  // add [hl]
-    LD_hl_A;  // ld [hl], a
-// could have done "jr nc, .no_rollover / inc de / .no_rollover"
-    LD_A(0);  // ld a, 0
-    ADC_A_E;  // adc e
-    LD_E_A;  // ld e, a
-    LD_A(0);  // ld a, 0
-    ADC_A_D;  // adc d
-    LD_D_A;  // ld d, a
-// Compare the dw at [Channel*PitchSlideTarget] to de.
-// If frequency is greater, we're finished.
-// Otherwise, load the frequency and set two flags.
-    LD_HL(CHANNEL_PITCH_SLIDE_TARGET + 1);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET + 1
-    ADD_HL_BC;  // add hl, bc
-    LD_A_hl;  // ld a, [hl]
-    CP_A_D;  // cp d
-    IF_C return ApplyPitchSlide_finished_pitch_slide();  // jp c, .finished_pitch_slide
-    IF_NZ return ApplyPitchSlide_continue_pitch_slide();  // jr nz, .continue_pitch_slide
-    LD_HL(CHANNEL_PITCH_SLIDE_TARGET);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET
-    ADD_HL_BC;  // add hl, bc
-    LD_A_hl;  // ld a, [hl]
-    CP_A_E;  // cp e
-    IF_C return ApplyPitchSlide_finished_pitch_slide();  // jp c, .finished_pitch_slide
-    return ApplyPitchSlide_continue_pitch_slide();  // jr .continue_pitch_slide
-
-decreasing:
-// frequency -= [Channel*PitchSlideAmount]
-    LD_A_E;  // ld a, e
-    LD_HL(CHANNEL_PITCH_SLIDE_AMOUNT);  // ld hl, CHANNEL_PITCH_SLIDE_AMOUNT
-    ADD_HL_BC;  // add hl, bc
-    LD_E_hl;  // ld e, [hl]
-    SUB_A_E;  // sub e
-    LD_E_A;  // ld e, a
-    LD_A_D;  // ld a, d
-    SBC_A(0);  // sbc 0
-    LD_D_A;  // ld d, a
-// [Channel*Field25] *= 2
-// if rollover: Frequency -= 1
-    LD_HL(CHANNEL_PITCH_SLIDE_AMOUNT_FRACTION);  // ld hl, CHANNEL_PITCH_SLIDE_AMOUNT_FRACTION
-    ADD_HL_BC;  // add hl, bc
-    LD_A_hl;  // ld a, [hl]
-    ADD_A_A;  // add a
-    LD_hl_A;  // ld [hl], a
-// could have done "jr nc, .no_rollover / dec de / .no_rollover"
-    LD_A_E;  // ld a, e
-    SBC_A(0);  // sbc 0
-    LD_E_A;  // ld e, a
-    LD_A_D;  // ld a, d
-    SBC_A(0);  // sbc 0
-    LD_D_A;  // ld d, a
-// Compare the dw at [Channel*PitchSlideTarget] to de.
-// If frequency is lower, we're finished.
-// Otherwise, load the frequency and set two flags.
-    LD_HL(CHANNEL_PITCH_SLIDE_TARGET + 1);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET + 1
-    ADD_HL_BC;  // add hl, bc
-    LD_A_D;  // ld a, d
-    CP_A_hl;  // cp [hl]
-    IF_C return ApplyPitchSlide_finished_pitch_slide();  // jr c, .finished_pitch_slide
-    IF_NZ return ApplyPitchSlide_continue_pitch_slide();  // jr nz, .continue_pitch_slide
-    LD_HL(CHANNEL_PITCH_SLIDE_TARGET);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET
-    ADD_HL_BC;  // add hl, bc
-    LD_A_E;  // ld a, e
-    CP_A_hl;  // cp [hl]
-    IF_NC return ApplyPitchSlide_continue_pitch_slide();  // jr nc, .continue_pitch_slide
-    return ApplyPitchSlide_finished_pitch_slide();
-}
-
-void ApplyPitchSlide_finished_pitch_slide(void){
-    LD_HL(CHANNEL_FLAGS2);  // ld hl, CHANNEL_FLAGS2
-    ADD_HL_BC;  // add hl, bc
-    RES_hl(SOUND_PITCH_SLIDE);  // res SOUND_PITCH_SLIDE, [hl]
-    LD_HL(CHANNEL_FLAGS3);  // ld hl, CHANNEL_FLAGS3
-    ADD_HL_BC;  // add hl, bc
-    RES_hl(SOUND_PITCH_SLIDE_DIR);  // res SOUND_PITCH_SLIDE_DIR, [hl]
-    return;
-}
-
-void ApplyPitchSlide_continue_pitch_slide(void){
-    LD_HL(CHANNEL_FREQUENCY);  // ld hl, CHANNEL_FREQUENCY
-    ADD_HL_BC;  // add hl, bc
-    LD_hl_E;  // ld [hl], e
-    INC_HL;  // inc hl
-    LD_hl_D;  // ld [hl], d
-    LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
-    ADD_HL_BC;  // add hl, bc
-    SET_hl(NOTE_FREQ_OVERRIDE);  // set NOTE_FREQ_OVERRIDE, [hl]
-    SET_hl(NOTE_DUTY_OVERRIDE);  // set NOTE_DUTY_OVERRIDE, [hl]
-    return;
+    if(curChan->pitchSlide){  // quit if pitch slide inactive
+        uint16_t freq = curChan->frequency;
+        if(curChan->pitchSlideDir){  // check whether pitch slide is going up or down
+            freq += curChan->pitchSlideAmount;
+            if(curChan->field25 + curChan->pitchSlideAmountFraction >= 0x100) freq++;
+            curChan->field25 += curChan->pitchSlideAmountFraction;
+            if(freq > curChan->pitchSlideTarget){  // are we done?
+                curChan->pitchSlide = 0;
+                curChan->pitchSlideDir = 0;
+            }else{
+                curChan->frequency = freq;
+                curChan->freqOverride = 1;
+                curChan->dutyOverride = 1;
+            }
+        }else{
+            freq -= curChan->pitchSlideAmount;
+            if(curChan->field25 + curChan->field25 >= 0x100) freq--;
+            curChan->field25 += curChan->field25;
+            if(freq < curChan->pitchSlideTarget){  // are we done?
+                curChan->pitchSlide = 0;
+                curChan->pitchSlideDir = 0;
+            }else{
+                curChan->frequency = freq;
+                curChan->freqOverride = 1;
+                curChan->dutyOverride = 1;
+            }
+        }
+    }
 }
 
 void HandleNoise(void){
-// is noise sampling on?
-    REG_BC = channelPointers[curChannel];
-    LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(SOUND_NOISE);  // bit SOUND_NOISE, [hl] ; noise sampling
-    IF_Z return;
-// are we in a sfx channel?
-    LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
-    BIT_A(NOISE_CHAN_F);  // bit NOISE_CHAN_F, a
-    IF_NZ goto next;  // jr nz, .next
-// is ch8 on? (noise)
-    LD_HL(wChannel8Flags1);  // ld hl, wChannel8Flags1
-    BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl] ; on?
-    IF_Z goto next;  // jr z, .next
-// is ch8 playing noise?
-    BIT_hl(SOUND_NOISE);  // bit SOUND_NOISE, [hl]
-    IF_NZ return;
-// ;
-
-next:
-    LD_A_addr(wNoiseSampleDelay);  // ld a, [wNoiseSampleDelay]
-    AND_A_A;  // and a
-    IF_Z return ReadNoiseSample();  // jr z, ReadNoiseSample
-    DEC_A;  // dec a
-    LD_addr_A(wNoiseSampleDelay);  // ld [wNoiseSampleDelay], a
-    return;
-
+    if(curChan->noise){  // is noise sampling on?
+        if((gb_read(wCurChannel) & (1 << NOISE_CHAN_F))
+        || (!chan[CHAN8]->channelOn)
+        || (!chan[CHAN8]->noise)){
+            if(!gb_read(wNoiseSampleDelay))
+                ReadNoiseSample();
+            else
+                gb_write(wNoiseSampleDelay, gb_read(wNoiseSampleDelay) - 1);
+        }
+    }
 }
 
 void ReadNoiseSample(void){
@@ -473,48 +364,18 @@ void ReadNoiseSample(void){
 //     x: duration
 //     zz: volume envelope
 //        yy: frequency
-
-// de = [wNoiseSampleAddress]
-    LD_HL(wNoiseSampleAddress);  // ld hl, wNoiseSampleAddress
-    LD_E_hl;  // ld e, [hl]
-    INC_HL;  // inc hl
-    LD_D_hl;  // ld d, [hl]
-
-// is it empty?
-    LD_A_E;  // ld a, e
-    OR_A_D;  // or d
-    IF_Z goto quit;  // jr z, .quit
-
-    LD_A_de;  // ld a, [de]
-    INC_DE;  // inc de
-
-    CP_A(sound_ret_cmd);  // cp sound_ret_cmd
-    IF_Z goto quit;  // jr z, .quit
-
-    AND_A(0xf);  // and $f
-    INC_A;  // inc a
-    LD_addr_A(wNoiseSampleDelay);  // ld [wNoiseSampleDelay], a
-    LD_A_de;  // ld a, [de]
-    INC_DE;  // inc de
-    LD_addr_A(wCurTrackVolumeEnvelope);  // ld [wCurTrackVolumeEnvelope], a
-    LD_A_de;  // ld a, [de]
-    INC_DE;  // inc de
-    LD_addr_A(wCurTrackFrequency);  // ld [wCurTrackFrequency], a
-    XOR_A_A;  // xor a
-    LD_addr_A(wCurTrackFrequency + 1);  // ld [wCurTrackFrequency + 1], a
-
-    LD_HL(wNoiseSampleAddress);  // ld hl, wNoiseSampleAddress
-    LD_hl_E;  // ld [hl], e
-    INC_HL;  // inc hl
-    LD_hl_D;  // ld [hl], d
-
-    LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
-    ADD_HL_BC;  // add hl, bc
-    SET_hl(NOTE_NOISE_SAMPLING);  // set NOTE_NOISE_SAMPLING, [hl]
-    return;
-
-quit:
-    return;
+    int noiseSampleAddress = gb_read16(wNoiseSampleAddress);
+    if(noiseSampleAddress){
+        uint8_t cmd = gb_read(noiseSampleAddress++);
+        if(cmd != sound_ret_cmd){
+            gb_write(wNoiseSampleDelay, (cmd & 0xF) + 1);
+            gb_write(wCurTrackVolumeEnvelope, gb_read(noiseSampleAddress++));
+            gb_write16(wCurTrackFrequency, gb_read(noiseSampleAddress));
+            noiseSampleAddress++;
+            gb_write16(wNoiseSampleAddress, noiseSampleAddress);
+            curChan->noiseSampling = 1;
+        }
+    }
 }
 
 void ParseMusic(void){
