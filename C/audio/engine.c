@@ -73,8 +73,7 @@ void v_UpdateSound(void){  // called once per frame
                     }
                 }    
             }
-            if((curChannel >= NUM_MUSIC_CHANS)
-            || (!chan[curChannel + NUM_MUSIC_CHANS]->channelOn)){  // are we in a sfx channel right now?
+            if((curChannel >= NUM_MUSIC_CHANS) || (!chan[curChannel + NUM_MUSIC_CHANS]->channelOn)){  // are we in a sfx channel right now?
                 UpdateChannels();
                 gb_write(wSoundOutput, gb_read(wSoundOutput) | curChan->tracks);
             }
@@ -346,9 +345,7 @@ void ApplyPitchSlide(void){
 
 void HandleNoise(void){
     if(curChan->noise){  // is noise sampling on?
-        if((gb_read(wCurChannel) & (1 << NOISE_CHAN_F))
-        || (!chan[CHAN8]->channelOn)
-        || (!chan[CHAN8]->noise)){
+        if((gb_read(wCurChannel) & (1 << NOISE_CHAN_F)) || (!chan[CHAN8]->channelOn) || (!chan[CHAN8]->noise)){
             if(!gb_read(wNoiseSampleDelay))
                 ReadNoiseSample();
             else
@@ -382,10 +379,8 @@ void ParseMusic(void){
     uint8_t cmd;
     while(1){  // parses until a note is read or the song is ended
         cmd = GetMusicByte();
-        if((cmd == sound_ret_cmd)
-        && (!curChan->subroutine)){  // song end
-            if((curChannel >= NUM_MUSIC_CHANS)
-            || (!chan[curChannel + NUM_MUSIC_CHANS]->channelOn)){
+        if((cmd == sound_ret_cmd) && (!curChan->subroutine)){  // song end
+            if((curChannel >= NUM_MUSIC_CHANS) || (!chan[curChannel + NUM_MUSIC_CHANS]->channelOn)){
                 if(curChan->cry) RestoreVolume();
                 if(curChannel == CHAN5) gb_write(rNR10, 0);
             }
@@ -421,23 +416,13 @@ void ParseMusic(void){
 }
 
 void RestoreVolume(void){
-// ch5 only
-    LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
-    CP_A(CHAN5);  // cp CHAN5
-    IF_NZ return;
-    XOR_A_A;  // xor a
-    LD_HL(wChannel6PitchOffset);  // ld hl, wChannel6PitchOffset
-    LD_hli_A;  // ld [hli], a
-    LD_hl_A;  // ld [hl], a
-    LD_HL(wChannel8PitchOffset);  // ld hl, wChannel8PitchOffset
-    LD_hli_A;  // ld [hli], a
-    LD_hl_A;  // ld [hl], a
-    LD_A_addr(wLastVolume);  // ld a, [wLastVolume]
-    LD_addr_A(wVolume);  // ld [wVolume], a
-    XOR_A_A;  // xor a
-    LD_addr_A(wLastVolume);  // ld [wLastVolume], a
-    LD_addr_A(wSFXPriority);  // ld [wSFXPriority], a
-    return;
+    if(curChannel == CHAN5){  // ch5 only
+        chan[CHAN6]->pitchOffset = 0;
+        chan[CHAN8]->pitchOffset = 0;
+        gb_write(wVolume, gb_read(wLastVolume));
+        gb_write(wLastVolume, 0);
+        gb_write(wSFXPriority, 0);
+    }
 }
 
 void ParseSFXOrCry(void){
