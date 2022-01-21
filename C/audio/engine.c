@@ -379,116 +379,45 @@ void ReadNoiseSample(void){
 }
 
 void ParseMusic(void){
-//  parses until a note is read or the song is ended
-    REG_BC = channelPointers[curChannel];
-    GetMusicByte(); // store next byte in a
-    CP_A(sound_ret_cmd);  // cp sound_ret_cmd
-    IF_Z goto sound_ret;  // jr z, .sound_ret
-    CP_A(FIRST_MUSIC_CMD);  // cp FIRST_MUSIC_CMD
-    IF_C goto readnote;  // jr c, .readnote
-
-readcommand:
-    ParseMusicCommand();  // call ParseMusicCommand
-    return ParseMusic();  // jr ParseMusic ; start over
-
-readnote:
-//  wCurMusicByte contains current note
-//  special notes
-    LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(SOUND_SFX);  // bit SOUND_SFX, [hl]
-    IF_NZ return ParseSFXOrCry();  // jp nz, ParseSFXOrCry
-    BIT_hl(SOUND_CRY);  // bit SOUND_CRY, [hl]
-    IF_NZ return ParseSFXOrCry();  // jp nz, ParseSFXOrCry
-    BIT_hl(SOUND_NOISE);  // bit SOUND_NOISE, [hl]
-    IF_NZ return GetNoiseSample();  // jp nz, GetNoiseSample
-//  normal note
-// set note duration (bottom nybble)
-    LD_A_addr(wCurMusicByte);  // ld a, [wCurMusicByte]
-    AND_A(0xf);  // and $f
-    //return 0x45F1 + 24;
-    SetNoteDuration();
-// get note pitch (top nybble)
-    LD_A_addr(wCurMusicByte);  // ld a, [wCurMusicByte]
-    SWAP_A;  // swap a
-    AND_A(0xf);  // and $f
-    IF_Z goto rest;  // jr z, .rest ; pitch 0 -> rest
-// update pitch
-    LD_HL(CHANNEL_PITCH);  // ld hl, CHANNEL_PITCH
-    ADD_HL_BC;  // add hl, bc
-    LD_hl_A;  // ld [hl], a
-// store pitch in e
-    LD_E_A;  // ld e, a
-// store octave in d
-    LD_HL(CHANNEL_OCTAVE);  // ld hl, CHANNEL_OCTAVE
-    ADD_HL_BC;  // add hl, bc
-    LD_D_hl;  // ld d, [hl]
-// update frequency
-    GetFrequency();
-    LD_HL(CHANNEL_FREQUENCY);  // ld hl, CHANNEL_FREQUENCY
-    ADD_HL_BC;  // add hl, bc
-    LD_hl_E;  // ld [hl], e
-    INC_HL;  // inc hl
-    LD_hl_D;  // ld [hl], d
-// ????
-    LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
-    ADD_HL_BC;  // add hl, bc
-    SET_hl(NOTE_NOISE_SAMPLING);  // set NOTE_NOISE_SAMPLING, [hl]
-    return LoadNote();
-
-rest:
-//  note = rest
-    LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
-    ADD_HL_BC;  // add hl, bc
-    SET_hl(NOTE_REST);  // set NOTE_REST, [hl] ; Rest
-    return;
-
-sound_ret:
-//  $ff is reached in music data
-    LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(SOUND_SUBROUTINE);  // bit SOUND_SUBROUTINE, [hl] ; in a subroutine?
-    IF_NZ goto readcommand;  // jr nz, .readcommand ; execute
-    LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
-    CP_A(CHAN5);  // cp CHAN5
-    IF_NC goto chan_5to8;  // jr nc, .chan_5to8
-// ????
-    LD_HL(CHANNEL_STRUCT_LENGTH * NUM_MUSIC_CHANS + CHANNEL_FLAGS1);  // ld hl, CHANNEL_STRUCT_LENGTH * NUM_MUSIC_CHANS + CHANNEL_FLAGS1
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(SOUND_CHANNEL_ON);  // bit SOUND_CHANNEL_ON, [hl]
-    IF_NZ goto ok;  // jr nz, .ok
-
-chan_5to8:
-    LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
-    ADD_HL_BC;  // add hl, bc
-    BIT_hl(SOUND_CRY);  // bit SOUND_CRY, [hl]
-    IF_NZ RestoreVolume();
-// end music
-    LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
-    CP_A(CHAN5);  // cp CHAN5
-    IF_NZ goto ok;  // jr nz, .ok
-// ????
-    XOR_A_A;  // xor a
-    LDH_addr_A(rNR10);  // ldh [rNR10], a ; sweep = 0
-
-ok:
-//  stop playing
-// turn channel off
-    LD_HL(CHANNEL_FLAGS1);  // ld hl, CHANNEL_FLAGS1
-    ADD_HL_BC;  // add hl, bc
-    RES_hl(SOUND_CHANNEL_ON);  // res SOUND_CHANNEL_ON, [hl]
-// note = rest
-    LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
-    ADD_HL_BC;  // add hl, bc
-    SET_hl(NOTE_REST);  // set NOTE_REST, [hl]
-// clear music id & bank
-    LD_HL(CHANNEL_MUSIC_ID);  // ld hl, CHANNEL_MUSIC_ID
-    ADD_HL_BC;  // add hl, bc
-    XOR_A_A;  // xor a
-    LD_hli_A;  // ld [hli], a ; id hi
-    LD_hli_A;  // ld [hli], a ; id lo
-    LD_hli_A;  // ld [hli], a ; bank
-    return;
+    uint8_t cmd;
+    while(1){  // parses until a note is read or the song is ended
+        cmd = GetMusicByte();
+        if((cmd == sound_ret_cmd)
+        && (!curChan->subroutine)){  // song end
+            if((curChannel >= NUM_MUSIC_CHANS)
+            || (!chan[curChannel + NUM_MUSIC_CHANS]->channelOn)){
+                if(curChan->cry) RestoreVolume();
+                if(curChannel == CHAN5) gb_write(rNR10, 0);
+            }
+            curChan->channelOn = 0;  // turn channel off
+            curChan->rest = 1;  // note = rest
+            curChan->musicId = 0;  // clear music id & bank
+            curChan->musicBank = 0;
+            return;
+        }else if(cmd < FIRST_MUSIC_CMD){  // note
+            if(curChan->sfx){
+                ParseSFXOrCry();
+            }else if(curChan->cry){
+                ParseSFXOrCry();
+            }else if(curChan->noise){
+                GetNoiseSample();
+            }else{
+                SetNoteDuration(gb_read(wCurMusicByte) & 0xF);  // set note duration (bottom nybble)
+                uint8_t note = gb_read(wCurMusicByte) >> 4;  // get note pitch (top nybble)
+                if(note){
+                    curChan->pitch = note;  // update pitch
+                    curChan->frequency = GetFrequency(note, curChan->octave);  // update frequency
+                    curChan->noiseSampling = 1;
+                    LoadNote();
+                }else{
+                    curChan->rest = 1;
+                }
+            }
+            return;
+        }else{  // not a note or end, keep parsing
+            ParseMusicCommand();
+        }
+    }
 }
 
 void RestoreVolume(void){
@@ -512,13 +441,14 @@ void RestoreVolume(void){
 }
 
 void ParseSFXOrCry(void){
+    REG_BC = channelPointers[curChannel];
 // turn noise sampling on
     LD_HL(CHANNEL_NOTE_FLAGS);  // ld hl, CHANNEL_NOTE_FLAGS
     ADD_HL_BC;  // add hl, bc
     SET_hl(NOTE_NOISE_SAMPLING);  // set NOTE_NOISE_SAMPLING, [hl] ; noise sample
 // update note duration
     LD_A_addr(wCurMusicByte);  // ld a, [wCurMusicByte]
-    SetNoteDuration();  // top nybble doesnt matter?
+    SetNoteDuration(REG_A);  // top nybble doesnt matter?
 // update volume envelope from next param
     GetMusicByte();
     LD_HL(CHANNEL_VOLUME_ENVELOPE);  // ld hl, CHANNEL_VOLUME_ENVELOPE
@@ -543,6 +473,7 @@ void ParseSFXOrCry(void){
 }
 
 void GetNoiseSample(void){
+    REG_BC = channelPointers[curChannel];
 //  load ptr to sample header in wNoiseSampleAddress
 // are we on the last channel?
     LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
@@ -553,7 +484,7 @@ void GetNoiseSample(void){
 // update note duration
     LD_A_addr(wCurMusicByte);  // ld a, [wCurMusicByte]
     AND_A(0xf);  // and $f
-    SetNoteDuration();
+    SetNoteDuration(REG_A);
 // check current channel
     LD_A_addr(wCurChannel);  // ld a, [wCurChannel]
     BIT_A(NOISE_CHAN_F);  // bit NOISE_CHAN_F, a
@@ -1004,7 +935,7 @@ void Music_PitchSlide(void){
     SWAP_A;  // swap a
     AND_A(0xf);  // and $f
     LD_D_A;  // ld d, a
-    GetFrequency();
+    REG_DE = GetFrequency(REG_E, REG_D);
     LD_HL(CHANNEL_PITCH_SLIDE_TARGET);  // ld hl, CHANNEL_PITCH_SLIDE_TARGET
     ADD_HL_BC;  // add hl, bc
     LD_hl_E;  // ld [hl], e
@@ -1363,10 +1294,11 @@ void Music_NewSong(void){
     return;
 }
 
-void GetMusicByte(void){
+uint8_t GetMusicByte(void){
 //  returns byte from current address in a
 //  advances to next byte in music data
 //  input: bc = start of current channel
+    REG_BC = channelPointers[curChannel];
     PUSH_HL;  // push hl
     PUSH_DE;  // push de
     LD_HL(CHANNEL_MUSIC_ADDRESS);  // ld hl, CHANNEL_MUSIC_ADDRESS
@@ -1387,10 +1319,10 @@ void GetMusicByte(void){
     POP_DE;  // pop de
     POP_HL;  // pop hl
     LD_A_addr(wCurMusicByte);  // ld a, [wCurMusicByte]
-    return;
+    return REG_A;
 }
 
-void GetFrequency(void){
+uint16_t GetFrequency(uint8_t note, uint8_t octave){
 //  generate frequency
 //  input:
 //      d: octave
@@ -1400,6 +1332,9 @@ void GetFrequency(void){
 
 //  get octave
 // get starting octave
+    REG_BC = channelPointers[curChannel];
+    REG_D = octave;
+    REG_E = note;
     LD_HL(CHANNEL_TRANSPOSITION);  // ld hl, CHANNEL_TRANSPOSITION
     ADD_HL_BC;  // add hl, bc
     LD_A_hl;  // ld a, [hl]
@@ -1442,12 +1377,14 @@ ok:
     LD_A_D;  // ld a, d
     AND_A(0x7);  // and $7 ; top 3 bits for frequency (11 total)
     LD_D_A;  // ld d, a
-    return;
+    return REG_DE;
 }
 
-void SetNoteDuration(void){
+void SetNoteDuration(uint8_t duration){
+    REG_BC = channelPointers[curChannel];
 //  input: a = note duration in 16ths
 // store delay units in de
+    REG_A = duration;
     INC_A;  // inc a
     LD_E_A;  // ld e, a
     LD_D(0);  // ld d, 0
