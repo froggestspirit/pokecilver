@@ -34,6 +34,7 @@ ENDM*/
     dw \4 // frequency
 ENDM*/
 
+#define noise_note(len, vol, fade, freq) len, (vol << 4) | (fade < 0 ? (8 | (fade * -1)) : fade), freq
 /*noise_note: MACRO
     db \1 // length
     if \3 < 0
@@ -312,6 +313,7 @@ ENDM*/
 ENDM*/
 
 #define sound_ret_cmd 0xff
+#define sound_ret 0xff
 /*sound_ret: MACRO
     db sound_ret_cmd
 ENDM*/
