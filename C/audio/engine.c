@@ -453,8 +453,8 @@ void GetNoiseSample(void) {                                //  load ptr to sampl
     if ((curChannel == CHAN4) || (curChannel == CHAN8)) {  // are we on the last channel?
         SetNoteDuration(gb_read(wCurMusicByte) & 0xF);     // update note duration
         uint8_t sample;
-        if (!curChannel & (1 << NOISE_CHAN_F)) {  // check current channel
-            if (chan[CHAN8]->channelOn) return;   // is ch8 on? (noise)
+        if (!(curChannel & (1 << NOISE_CHAN_F))) {  // check current channel
+            if (chan[CHAN8]->channelOn) return;     // is ch8 on? (noise)
             sample = gb_read(wMusicNoiseSampleSet);
         } else {
             sample = gb_read(wMusicNoiseSampleSet);
