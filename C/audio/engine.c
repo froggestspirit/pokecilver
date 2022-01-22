@@ -461,7 +461,7 @@ void GetNoiseSample(void) {                                //  load ptr to sampl
         }
         uint8_t note = gb_read(wCurMusicByte) >> 4;
         if (note) {
-            noiseSampleAddress = Drumkits[sample][gb_read(wCurMusicByte) >> 4];
+            noiseSampleAddress = Drumkits[sample][note];
             gb_write(wNoiseSampleDelay, 0);
         }
     }
