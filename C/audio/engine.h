@@ -1,29 +1,29 @@
-struct Channel{
+struct Channel {
     uint16_t musicId;
     uint8_t musicBank;
-    
+
     union {
-        struct{
-            uint8_t channelOn:1;
-            uint8_t subroutine:1;
-            uint8_t looping:1;
-            uint8_t sfx:1;
-            uint8_t noise:1;
-            uint8_t cry:1;
-            uint8_t unused1:2;
+        struct {
+            uint8_t channelOn : 1;
+            uint8_t subroutine : 1;
+            uint8_t looping : 1;
+            uint8_t sfx : 1;
+            uint8_t noise : 1;
+            uint8_t cry : 1;
+            uint8_t unused1 : 2;
 
-            uint8_t vibrato:1;
-            uint8_t pitchSlide:1;
-            uint8_t dutyLoop:1;
-            uint8_t unkn0B:1;
-            uint8_t pitchOffsetEnabled:1;
-            uint8_t unkn0D:1;
-            uint8_t unkn0E:1;
-            uint8_t unkn0F:1;
+            uint8_t vibrato : 1;
+            uint8_t pitchSlide : 1;
+            uint8_t dutyLoop : 1;
+            uint8_t unused2 : 1;
+            uint8_t pitchOffsetEnabled : 1;
+            uint8_t unkn0D : 1;  // unused
+            uint8_t unkn0E : 1;  // unused
+            uint8_t unkn0F : 1;
 
-            uint8_t vibratoDir:1;
-            uint8_t pitchSlideDir:1;
-            uint8_t unused2:6;
+            uint8_t vibratoDir : 1;
+            uint8_t pitchSlideDir : 1;
+            uint8_t unused3 : 6;
         };
         uint8_t flags[3];
     };
@@ -33,15 +33,15 @@ struct Channel{
     uint16_t unused;
 
     union {
-        struct{
-                uint8_t dutyOverride:1;
-                uint8_t freqOverride:1;
-                uint8_t unused3:1;
-                uint8_t pitchSweep:1;
-                uint8_t noiseSampling:1;
-                uint8_t rest:1;
-                uint8_t vibratoOverride:1;
-                uint8_t unused4:1;
+        struct {
+            uint8_t dutyOverride : 1;
+            uint8_t freqOverride : 1;
+            uint8_t unused4 : 1;
+            uint8_t pitchSweep : 1;
+            uint8_t noiseSampling : 1;
+            uint8_t rest : 1;
+            uint8_t vibratoOverride : 1;
+            uint8_t unused5 : 1;
         };
         uint8_t noteFlags;
     };
@@ -54,7 +54,7 @@ struct Channel{
     uint8_t octave;
     uint8_t transposition;
     uint8_t noteDuration;
-    uint16_t field16;
+    uint16_t field16;  // noteDurationFraction
 
     uint8_t loopCount;
     uint16_t tempo;
@@ -70,9 +70,9 @@ struct Channel{
     uint16_t field25;
 
     uint16_t pitchOffset;
-    uint8_t field29;
-    uint16_t field2a;
-    uint8_t field2c;
+    uint8_t field29;   //unused
+    uint16_t field2a;  //unused
+    uint8_t field2c;   //unused
     uint8_t noteLength;
     uint8_t field2e;
     uint8_t field2f;
@@ -115,7 +115,6 @@ void Music_Loop(void);
 void Music_SetCondition(void);
 void Music_JumpIf(void);
 void MusicEE(void);
-void MusicF9(void);
 void MusicE2(void);
 void Music_Vibrato(void);
 void Music_PitchSlide(void);
@@ -145,7 +144,7 @@ uint8_t GetMusicByte(void);
 uint16_t GetFrequency(uint8_t, uint8_t);
 void SetNoteDuration(uint8_t);
 void SetNoteDuration_Multiply(void);
-void SetGlobalTempo(void);
+void SetGlobalTempo(uint16_t);
 void Tempo(void);
 void StartChannel(void);
 void SetLRTracks(void);
@@ -153,7 +152,7 @@ void v_PlayMusic(uint16_t);
 void v_PlayCry(void);
 void v_PlaySFX(void);
 void PlayStereoSFX(void);
-void LoadChannel(void);
+void LoadChannel(uint16_t);
 void ChannelInit(void);
 void LoadMusicByte(void);
 void GetLRTracks(void);

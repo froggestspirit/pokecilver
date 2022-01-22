@@ -1,5 +1,9 @@
 #include "../macros/scripts/audio.h"
 
+// noise_note([xy], [envelope volume], [envelope fade], [frequency])
+// x = 2 or 3?
+// y = length - 1
+
 static uint8_t Drum00[] = {
     noise_note(32, 1, 1, 0),
     sound_ret,

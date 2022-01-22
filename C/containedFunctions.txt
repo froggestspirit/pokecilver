@@ -3,7 +3,6 @@ SkipNames
 AddNTimes
 InitSound
 UpdateSound
-v_LoadMusicByte
 PlayMusic
 PlayCry
 PlaySFX

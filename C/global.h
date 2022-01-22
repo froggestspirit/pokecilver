@@ -8780,7 +8780,7 @@
 #define wPitchSweep 0xc19c
 #define wMusicID 0xc19d
 #define wMusicBank 0xc19f
-#define wNoiseSampleAddress 0xc1a0
+//#define wNoiseSampleAddress 0xc1a0
 #define wNoiseSampleDelay 0xc1a2
 #define wMusicNoiseSampleSet 0xc1a4
 #define wSFXNoiseSampleSet 0xc1a5
@@ -8791,12 +8791,12 @@
 #define wCryPitch 0xc1b0
 #define wCryLength 0xc1b2
 #define wLastVolume 0xc1b4
-#define wUnusedMusicF9Flag 0xc1b5
+//#define wUnusedMusicF9Flag 0xc1b5
 #define wSFXPriority 0xc1b6
-#define wChannel1JumpCondition 0xc1b8
-#define wChannel2JumpCondition 0xc1b9
-#define wChannel3JumpCondition 0xc1ba
-#define wChannel4JumpCondition 0xc1bb
+//#define wChannel1JumpCondition 0xc1b8
+//#define wChannel2JumpCondition 0xc1b9
+//#define wChannel3JumpCondition 0xc1ba
+//#define wChannel4JumpCondition 0xc1bb
 #define wStereoPanningMask 0xc1bc
 #define wCryTracks 0xc1bd
 #define wSFXDuration 0xc1be

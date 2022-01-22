@@ -7,11 +7,11 @@
 // b{name} rom bank of the address
 // m{name} address the function would appear as when loaded (0x0000-0x3FFF for home, 0x4000-0x7FFF for everything elseU)
 
-#define FUNCMAP(x, y)     enum {\
-                            a##x = y,\
-                            b##x = (y >> 14),\
-                            m##x = (y < 0x4000 ? y : ((y & 0x3FFF) | 0x4000)),\
-                        };
+#define FUNCMAP(x, y) enum {                           \
+    a##x = y,                                          \
+    b##x = (y >> 14),                                  \
+    m##x = (y < 0x4000 ? y : ((y & 0x3FFF) | 0x4000)), \
+};
 
 FUNCMAP(FarCall, 0x0008U)
 FUNCMAP(Bankswitch, 0x0010U)
@@ -1189,7 +1189,6 @@ FUNCMAP(InitSpriteAnimStruct, 0x3D27U)
 FUNCMAP(ReinitSpriteAnimFrame, 0x3D39U)
 FUNCMAP(InitSound, 0x3D4BU)
 FUNCMAP(UpdateSound, 0x3D67U)
-FUNCMAP(v_LoadMusicByte, 0x3D83U)
 FUNCMAP(PlayMusic, 0x3D94U)
 FUNCMAP(PlayMusic_nomusic, 0x3DABU)
 FUNCMAP(PlayMusic_end, 0x3DAEU)
@@ -1228,7 +1227,6 @@ FUNCMAP(PlaceBCDNumberSprite_max, 0x3F93U)
 FUNCMAP(CheckSFX, 0x3F9CU)
 FUNCMAP(CheckSFX_playing, 0x3FBAU)
 FUNCMAP(TerminateExpBarSound, 0x3FBCU)
-
 
 FUNCMAP(PlaceWaitingText, 0x4000U)
 FUNCMAP(PlaceWaitingText_notinbattle, 0x4012U)
@@ -1993,7 +1991,6 @@ FUNCMAP(HappinessData_YoungerHaircutBrother, 0x74FCU)
 FUNCMAP(HappinessData_DaisysGrooming, 0x7505U)
 FUNCMAP(CopyPokemonName_Buffer1_Buffer3, 0x7508U)
 
-
 FUNCMAP(v_SwapTextboxPalettes, 0x8000U)
 FUNCMAP(v_SwapTextboxPalettes_loop, 0x8008U)
 FUNCMAP(v_SwapTextboxPalettes_innerloop, 0x800AU)
@@ -2481,7 +2478,6 @@ FUNCMAP(GSTitleOBPals, 0xBB5EU)
 FUNCMAP(PokegearPals, 0xBB6EU)
 FUNCMAP(BetaPokerPals, 0xBB9EU)
 FUNCMAP(SlotMachinePals, 0xBBBEU)
-
 
 FUNCMAP(CheckTime, 0xC000U)
 FUNCMAP(CheckTime_TimeOfDayTable, 0xC012U)
@@ -3586,7 +3582,6 @@ FUNCMAP(KnowsMove_loop, 0xFA26U)
 FUNCMAP(KnowsMove_knows_move, 0xFA2FU)
 FUNCMAP(KnowsMove_KnowsMoveText, 0xFA37U)
 
-
 FUNCMAP(DoPlayerMovement, 0x10000U)
 FUNCMAP(DoPlayerMovement_GetDPad, 0x10017U)
 FUNCMAP(DoPlayerMovement_TranslateIntoMovement, 0x1002DU)
@@ -4508,7 +4503,6 @@ FUNCMAP(ContestReturnMons, 0x13DEDU)
 FUNCMAP(ContestReturnMons_loop, 0x13DF6U)
 FUNCMAP(ContestReturnMons_done, 0x13DFEU)
 
-
 FUNCMAP(StopRTC, 0x14000U)
 FUNCMAP(StartRTC, 0x14019U)
 FUNCMAP(GetTimeOfDay, 0x14032U)
@@ -5392,7 +5386,6 @@ FUNCMAP(DayCareMonCompatibilityText_BreedShowsInterestText, 0x17834U)
 FUNCMAP(DayCareMonPrintEmptyString, 0x17839U)
 FUNCMAP(DayCareMonPrintEmptyString_string, 0x1783DU)
 
-
 FUNCMAP(TilesetKantoMeta, 0x18000U)
 FUNCMAP(TilesetKantoColl, 0x18800U)
 FUNCMAP(Tileset0GFX, 0x18A00U)
@@ -5409,7 +5402,6 @@ FUNCMAP(UnusedTilesetJohtoColl, 0x1B20CU)
 FUNCMAP(TilesetTraditionalHouseGFX, 0x1B40CU)
 FUNCMAP(TilesetTraditionalHouseMeta, 0x1B8BCU)
 FUNCMAP(TilesetTraditionalHouseColl, 0x1BCBCU)
-
 
 FUNCMAP(LoadMapGroupRoof, 0x1C000U)
 FUNCMAP(MapGroupRoofs, 0x1C021U)
@@ -5459,7 +5451,6 @@ FUNCMAP(Music_Credits_Ch4_loop2, 0x1FEF6U)
 FUNCMAP(Music_Credits_Ch4_loop3, 0x1FF22U)
 FUNCMAP(Music_Credits_Ch4_sub1, 0x1FF7DU)
 FUNCMAP(Music_Credits_Ch4_sub2, 0x1FF9DU)
-
 
 FUNCMAP(RestartClock_GetWraparoundTime, 0x20000U)
 FUNCMAP(RestartClock_GetWraparoundTime_WrapAroundTimes, 0x20015U)
@@ -5617,7 +5608,6 @@ FUNCMAP(MagbyEggMoves, 0x23E2DU)
 FUNCMAP(MiltankEggMoves, 0x23E32U)
 FUNCMAP(LarvitarEggMoves, 0x23E36U)
 FUNCMAP(NoEggMoves, 0x23E3CU)
-
 
 FUNCMAP(StringBufferPointers, 0x24000U)
 FUNCMAP(v_2DMenu_, 0x2400EU)
@@ -6323,7 +6313,6 @@ FUNCMAP(Thunder, 0x27B94U)
 FUNCMAP(Teleport, 0x27BA8U)
 FUNCMAP(BeatUp, 0x27BADU)
 FUNCMAP(DefenseCurl, 0x27BC6U)
-
 
 FUNCMAP(LinkCommunications, 0x28000U)
 FUNCMAP(Gen2ToGen1LinkComms, 0x28055U)
@@ -7063,7 +7052,6 @@ FUNCMAP(SwarmGrassWildMons__def_grass_wildmons_MOUNT_MORTAR_1F_OUTSIDE, 0x2BEA9U
 FUNCMAP(SwarmWaterWildMons, 0x2BED9U)
 FUNCMAP(SwarmWaterWildMons__def_water_wildmons_MOUNT_MORTAR_1F_OUTSIDE, 0x2BED9U)
 
-
 FUNCMAP(PrintItemDescription, 0x2C000U)
 FUNCMAP(PrintItemDescription_not_a_tm, 0x2C019U)
 FUNCMAP(BattleStart_TrainerHuds, 0x2C033U)
@@ -7234,7 +7222,6 @@ FUNCMAP(ConvertBerriesToBerryJuice_partyMonLoop, 0x2CA11U)
 FUNCMAP(ConvertBerriesToBerryJuice_loopMon, 0x2CA21U)
 FUNCMAP(ConvertBerriesToBerryJuice_convertToJuice, 0x2CA2BU)
 
-
 FUNCMAP(TilesetEliteFourRoomGFX, 0x30000U)
 FUNCMAP(TilesetEliteFourRoomMeta, 0x304E0U)
 FUNCMAP(TilesetEliteFourRoomColl, 0x308E0U)
@@ -7255,7 +7242,6 @@ FUNCMAP(TilesetIcePathMeta, 0x331D0U)
 FUNCMAP(TilesetIcePathColl, 0x335D0U)
 FUNCMAP(TilesetDarkCaveGFX, 0x336D0U)
 FUNCMAP(TilesetForestGFX, 0x33A10U)
-
 
 FUNCMAP(DoPlayerTurn, 0x34000U)
 FUNCMAP(DoEnemyTurn, 0x34019U)
@@ -8196,7 +8182,6 @@ FUNCMAP(DisappearUser, 0x37F8BU)
 FUNCMAP(AppearUserLowerSub, 0x37F92U)
 FUNCMAP(AppearUserRaiseSub, 0x37F99U)
 
-
 FUNCMAP(AI_SwitchOrTryItem, 0x38000U)
 FUNCMAP(DontSwitch, 0x3803BU)
 FUNCMAP(SwitchOften, 0x3803FU)
@@ -8663,7 +8648,6 @@ FUNCMAP(RedGroup, 0x3B5D5U)
 FUNCMAP(BlueGroup, 0x3B5FFU)
 FUNCMAP(OfficerGroup, 0x3B62AU)
 FUNCMAP(GruntFGroup, 0x3B63FU)
-
 
 FUNCMAP(DoBattle, 0x3C000U)
 FUNCMAP(DoBattle_loop, 0x3C019U)
@@ -9417,7 +9401,6 @@ FUNCMAP(ShowLinkBattleParticipants_ok, 0x3FD0EU)
 FUNCMAP(IsLinkBattle, 0x3FD30U)
 FUNCMAP(BattleCommandPointers, 0x3FD3DU)
 
-
 FUNCMAP(Pokedex, 0x40000U)
 FUNCMAP(Pokedex_main, 0x40029U)
 FUNCMAP(Pokedex_exit, 0x4003BU)
@@ -10001,7 +9984,6 @@ FUNCMAP(LugiaEvosAttacks, 0x43E18U)
 FUNCMAP(HoOhEvosAttacks, 0x43E2EU)
 FUNCMAP(CelebiEvosAttacks, 0x43E44U)
 
-
 FUNCMAP(FruitTreeScript, 0x44000U)
 FUNCMAP(FruitTreeScript_fruit, 0x44021U)
 FUNCMAP(FruitTreeScript_packisfull, 0x4403AU)
@@ -10123,7 +10105,6 @@ FUNCMAP(MailboxPC_TopMenuData, 0x44A5FU)
 FUNCMAP(MailboxPC_SubMenuHeader, 0x44A6FU)
 FUNCMAP(MailboxPC_SubMenuData, 0x44A77U)
 
-
 FUNCMAP(PokemonPicPointers, 0x48000U)
 FUNCMAP(MachampFrontpic, 0x485E2U)
 FUNCMAP(HoOhFrontpic, 0x488A0U)
@@ -10149,8 +10130,6 @@ FUNCMAP(ArbokFrontpic, 0x4B77BU)
 FUNCMAP(SeakingFrontpic, 0x4B9C4U)
 FUNCMAP(MeganiumFrontpic, 0x4BC0CU)
 FUNCMAP(LassPic, 0x4BE54U)
-
-
 
 FUNCMAP(SelectMonFromParty, 0x50000U)
 FUNCMAP(SelectTradeOrDayCareMon, 0x5001DU)
@@ -10541,7 +10520,6 @@ FUNCMAP(BaseData, 0x51B09U)
 FUNCMAP(BetaMonPicBanks, 0x53A69U)
 FUNCMAP(EggPic, 0x53A81U)
 
-
 FUNCMAP(GirafarigFrontpic, 0x54000U)
 FUNCMAP(AzumarillFrontpic, 0x541DDU)
 FUNCMAP(ButterfreeFrontpic, 0x543BAU)
@@ -10578,7 +10556,6 @@ FUNCMAP(SunfloraFrontpic, 0x579F5U)
 FUNCMAP(GuitaristPic, 0x57BB8U)
 FUNCMAP(VenomothBackpic, 0x57D7BU)
 FUNCMAP(DiglettBackpic, 0x57F3DU)
-
 
 FUNCMAP(PokefanfPic, 0x58000U)
 FUNCMAP(ClairPic, 0x581C2U)
@@ -10618,7 +10595,6 @@ FUNCMAP(ElekidBackpic, 0x5B9B9U)
 FUNCMAP(FarfetchDFrontpic, 0x5BB5EU)
 FUNCMAP(AriadosFrontpic, 0x5BD03U)
 FUNCMAP(MurkrowBackpic, 0x5BEA8U)
-
 
 FUNCMAP(DrowzeeFrontpic, 0x5C000U)
 FUNCMAP(CelebiBackpic, 0x5C1A4U)
@@ -10660,7 +10636,6 @@ FUNCMAP(QuilavaBackpic, 0x5F9C9U)
 FUNCMAP(SandshrewBackpic, 0x5FB59U)
 FUNCMAP(BeautyPic, 0x5FCE6U)
 FUNCMAP(SailorPic, 0x5FE72U)
-
 
 FUNCMAP(ChanseyFrontpic, 0x60000U)
 FUNCMAP(ShellderBackpic, 0x6018BU)
@@ -10704,7 +10679,6 @@ FUNCMAP(TeacherPic, 0x639DAU)
 FUNCMAP(WigglytuffFrontpic, 0x63B58U)
 FUNCMAP(EeveeBackpic, 0x63CD5U)
 FUNCMAP(PonytaBackpic, 0x63E51U)
-
 
 FUNCMAP(MarowakFrontpic, 0x64000U)
 FUNCMAP(OnixBackpic, 0x6417BU)
@@ -10750,7 +10724,6 @@ FUNCMAP(CooltrainermPic, 0x67A34U)
 FUNCMAP(BlastoiseBackpic, 0x67B9FU)
 FUNCMAP(MisdreavusBackpic, 0x67D0AU)
 FUNCMAP(SnubbullFrontpic, 0x67E74U)
-
 
 FUNCMAP(ScizorBackpic, 0x68000U)
 FUNCMAP(PupitarFrontpic, 0x68169U)
@@ -10799,7 +10772,6 @@ FUNCMAP(PsychicTPic, 0x6BB46U)
 FUNCMAP(SlowbroBackpic, 0x6BC9CU)
 FUNCMAP(GolduckBackpic, 0x6BDF2U)
 FUNCMAP(JynxBackpic, 0x6BF47U)
-
 
 FUNCMAP(WeezingBackpic, 0x6C000U)
 FUNCMAP(SneaselBackpic, 0x6C154U)
@@ -10851,7 +10823,6 @@ FUNCMAP(PicnickerPic, 0x6FB7DU)
 FUNCMAP(MeowthBackpic, 0x6FCBFU)
 FUNCMAP(LickitungBackpic, 0x6FE01U)
 FUNCMAP(UnownCFrontpic, 0x6FF42U)
-
 
 FUNCMAP(SuperNerdPic, 0x70000U)
 FUNCMAP(Porygon2Backpic, 0x70141U)
@@ -10906,7 +10877,6 @@ FUNCMAP(BlainePic, 0x73B66U)
 FUNCMAP(TyrogueFrontpic, 0x73C91U)
 FUNCMAP(RattataFrontpic, 0x73DBBU)
 FUNCMAP(ParasFrontpic, 0x73EE5U)
-
 
 FUNCMAP(LarvitarBackpic, 0x74000U)
 FUNCMAP(SunkernBackpic, 0x7412AU)
@@ -10966,7 +10936,6 @@ FUNCMAP(BlisseyBackpic, 0x77C12U)
 FUNCMAP(ZubatFrontpic, 0x77D1EU)
 FUNCMAP(StarmieBackpic, 0x77E29U)
 FUNCMAP(OddishFrontpic, 0x77F34U)
-
 
 FUNCMAP(IgglybuffFrontpic, 0x78000U)
 FUNCMAP(SpearowFrontpic, 0x78109U)
@@ -11039,7 +11008,6 @@ FUNCMAP(GolbatBackpic, 0x7BDF8U)
 FUNCMAP(UnownHBackpic, 0x7BEA8U)
 FUNCMAP(SnorlaxBackpic, 0x7BF58U)
 
-
 FUNCMAP(UnownPicPointers, 0x7C000U)
 FUNCMAP(SuicuneFrontpic, 0x7C09CU)
 FUNCMAP(BlastoiseFrontpic, 0x7C2E4U)
@@ -11071,7 +11039,6 @@ FUNCMAP(BrunoPic, 0x7F859U)
 FUNCMAP(PrimeapeFrontpic, 0x7FA62U)
 FUNCMAP(ScytherFrontpic, 0x7FC6AU)
 FUNCMAP(DragonairFrontpic, 0x7FE71U)
-
 
 FUNCMAP(TrainerPicPointers, 0x80000U)
 FUNCMAP(HoundoomFrontpic, 0x800C6U)
@@ -11107,7 +11074,6 @@ FUNCMAP(AmpharosFrontpic, 0x83983U)
 FUNCMAP(MachampBackpic, 0x83B66U)
 FUNCMAP(FlareonFrontpic, 0x83D48U)
 FUNCMAP(SpinarakFrontpic, 0x83F27U)
-
 
 FUNCMAP(Printer_StartTransmission, 0x84000U)
 FUNCMAP(PrinterJumptableIteration, 0x84022U)
@@ -11378,8 +11344,6 @@ FUNCMAP(CreditsElekidGFX, 0x87336U)
 FUNCMAP(CreditsSentretGFX, 0x87636U)
 FUNCMAP(CreditsScript, 0x87A36U)
 FUNCMAP(CreditsStringsPointers, 0x87B65U)
-
-
 
 FUNCMAP(SaveMenu_CopyTilemapAtOnce, 0x8C000U)
 FUNCMAP(SaveMenu_CopyTilemapAtOnce_wait, 0x8C012U)
@@ -12014,7 +11978,6 @@ FUNCMAP(InitDisplayForHallOfFame, 0x8FDA4U)
 FUNCMAP(InitDisplayForHallOfFame_SavingRecordText, 0x8FDE0U)
 FUNCMAP(InitDisplayForRedCredits, 0x8FDE5U)
 FUNCMAP(InitDisplayForRedCredits_load_white_palettes, 0x8FE11U)
-
 
 FUNCMAP(AddPhoneNumber, 0x90000U)
 FUNCMAP(AddPhoneNumber_cant_add, 0x9000DU)
@@ -12867,7 +12830,6 @@ FUNCMAP(SlotsTilemap, 0x938B2U)
 FUNCMAP(Slots1LZ, 0x939A2U)
 FUNCMAP(Slots2LZ, 0x93B22U)
 FUNCMAP(Slots3LZ, 0x93D82U)
-
 
 FUNCMAP(MapScenes, 0x94000U)
 FUNCMAP(MapGroupPointers, 0x940EDU)
@@ -13740,14 +13702,9 @@ FUNCMAP(SeenByTrainerScript, 0x97D72U)
 FUNCMAP(StartBattleWithMapTrainerScript, 0x97D87U)
 FUNCMAP(AlreadyBeatenTrainerScript, 0x97D95U)
 
-
 FUNCMAP(TitleScreenGFX1, 0x98000U)
 FUNCMAP(TitleScreenGFX2, 0x98498U)
 FUNCMAP(TitleScreenTilemap, 0x9862AU)
-
-
-
-
 
 FUNCMAP(Route32_Blocks, 0xA8000U)
 FUNCMAP(Route40_Blocks, 0xA81C2U)
@@ -13905,7 +13862,6 @@ FUNCMAP(Route1_Blocks, 0xABCDBU)
 FUNCMAP(Route5_Blocks, 0xABD8FU)
 FUNCMAP(Route9_Blocks, 0xABDE9U)
 FUNCMAP(Route22_Blocks, 0xABEF7U)
-
 
 FUNCMAP(Route14_Blocks, 0xAC000U)
 FUNCMAP(BetaSproutTower8_Blocks, 0xAC0B4U)
@@ -14094,9 +14050,6 @@ FUNCMAP(OlivineLighthouse3F_Blocks, 0xAFDF2U)
 FUNCMAP(OlivineLighthouse4F_Blocks, 0xAFE4CU)
 FUNCMAP(OlivineLighthouse5F_Blocks, 0xAFEA6U)
 FUNCMAP(OlivineLighthouse6F_Blocks, 0xAFF00U)
-
-
-
 
 FUNCMAP(UnownGFrontpic, 0xB8000U)
 FUNCMAP(UnownHFrontpic, 0xB80ACU)
@@ -14511,8 +14464,6 @@ FUNCMAP(PortraitMailBorderGFX, 0xBBAC5U)
 FUNCMAP(ItemIsMail, 0xBBAEDU)
 FUNCMAP(MailItems, 0xBBAF7U)
 
-
-
 FUNCMAP(ChrisSpriteGFX, 0xC0000U)
 FUNCMAP(ChrisBikeSpriteGFX, 0xC0180U)
 FUNCMAP(GameboyKidSpriteGFX, 0xC0300U)
@@ -14557,7 +14508,6 @@ FUNCMAP(TeacherSpriteGFX, 0xC39C0U)
 FUNCMAP(BeautySpriteGFX, 0xC3B40U)
 FUNCMAP(SuperNerdSpriteGFX, 0xC3CC0U)
 FUNCMAP(RockerSpriteGFX, 0xC3E40U)
-
 
 FUNCMAP(PokefanMSpriteGFX, 0xC4000U)
 FUNCMAP(PokefanFSpriteGFX, 0xC4180U)
@@ -14642,7 +14592,6 @@ FUNCMAP(CheckPartyFullAfterContest_BoxFull, 0xC7CC0U)
 FUNCMAP(CheckPartyFullAfterContest_DidntCatchAnything, 0xC7CCAU)
 FUNCMAP(GiveANickname_YesNo, 0xC7CD0U)
 FUNCMAP(CaughtAskNicknameText, 0xC7CD9U)
-
 
 FUNCMAP(ExecuteBGEffects, 0xC8000U)
 FUNCMAP(ExecuteBGEffects_loop, 0xC8005U)
@@ -15465,7 +15414,6 @@ FUNCMAP(LoadPoisonBGPals_convert_pals, 0xCBC90U)
 FUNCMAP(LoadPoisonBGPals_cgb, 0xCBC9FU)
 FUNCMAP(LoadPoisonBGPals_loop, 0xCBCA4U)
 FUNCMAP(TheEndGFX, 0xCBCBDU)
-
 
 FUNCMAP(DisplayCaughtContestMonStats, 0xCC000U)
 FUNCMAP(DisplayCaughtContestMonStats_Health, 0xCC0A7U)
@@ -16388,11 +16336,7 @@ FUNCMAP(Music_PostCredits_Ch1_mainloop, 0xCFCF5U)
 FUNCMAP(Music_PostCredits_Ch2, 0xCFD8BU)
 FUNCMAP(Music_PostCredits_Ch2_mainloop, 0xCFD9DU)
 
-
-
-
 FUNCMAP(FontInversed, 0xD8000U)
-
 
 FUNCMAP(BetaSlowpokeWell1F_Blocks, 0xDC000U)
 FUNCMAP(SlowpokeWellB1F_Blocks, 0xDC023U)
@@ -16481,7 +16425,6 @@ FUNCMAP(TilesetPlayersRoomGFX, 0xDF3D3U)
 FUNCMAP(TilesetPlayersRoomMeta, 0xDF893U)
 FUNCMAP(TilesetPlayersRoomColl, 0xDFC93U)
 FUNCMAP(TilesetForestColl, 0xDFD93U)
-
 
 FUNCMAP(AnimateUnusedPikachu, 0xE0000U)
 FUNCMAP(AnimateUnusedPikachu2, 0xE0001U)
@@ -17047,7 +16990,6 @@ FUNCMAP(BillsPC_PlaceEmptyBoxString_SFX, 0xE3F39U)
 FUNCMAP(BillsPC_PlaceEmptyBoxString_SFX_NoMonString, 0xE3F4EU)
 FUNCMAP(BillsPC_PlaceChangeBoxString, 0xE3F5EU)
 
-
 FUNCMAP(CopyrightGFX, 0xE4000U)
 FUNCMAP(TitleScreenGFX3, 0xE41E0U)
 FUNCMAP(TitleScreenGFX4, 0xE4220U)
@@ -17286,7 +17228,6 @@ FUNCMAP(Intro_FireGFX1, 0xE6750U)
 FUNCMAP(Intro_FireGFX2, 0xE6C90U)
 FUNCMAP(Intro_FireGFX3, 0xE7010U)
 
-
 FUNCMAP(v_InitSound, 0xE8000U)
 FUNCMAP(v_InitSound_clearsound, 0xE8015U)
 FUNCMAP(v_InitSound_clearaudio, 0xE8029U)
@@ -17396,7 +17337,6 @@ FUNCMAP(Music_JumpIf, 0xE8817U)
 FUNCMAP(Music_JumpIf_jump, 0xE882EU)
 FUNCMAP(MusicEE, 0xE883EU)
 FUNCMAP(MusicEE_jump, 0xE885BU)
-FUNCMAP(MusicF9, 0xE886DU)
 FUNCMAP(MusicE2, 0xE8873U)
 FUNCMAP(Music_Vibrato, 0xE8882U)
 FUNCMAP(Music_PitchSlide, 0xE88BDU)
@@ -17816,7 +17756,6 @@ FUNCMAP(Music_TrainerVictory_Ch3, 0xEBF58U)
 FUNCMAP(Music_TrainerVictory_Ch3_loop1, 0xEBF68U)
 FUNCMAP(Music_TrainerVictory_Ch3_mainloop, 0xEBF68U)
 FUNCMAP(Music_TrainerVictory_Ch3_sub1, 0xEBFA5U)
-
 
 FUNCMAP(Music_Route1, 0xEC000U)
 FUNCMAP(Music_Route1_Ch1, 0xEC00AU)
@@ -18247,7 +18186,6 @@ FUNCMAP(Music_Route30_Ch4_sub2, 0xEFEC1U)
 FUNCMAP(Music_Route30_Ch4_sub3, 0xEFECDU)
 FUNCMAP(Music_Route30_Ch4_sub4, 0xEFED7U)
 FUNCMAP(Music_Route30_Ch4_sub5, 0xEFEE1U)
-
 
 FUNCMAP(Music_VioletCity, 0xF0000U)
 FUNCMAP(Music_VioletCity_Ch1, 0xF000CU)
@@ -19138,7 +19076,6 @@ FUNCMAP(Cry_Rattata_Ch5, 0xF3F43U)
 FUNCMAP(Cry_Rattata_Ch6, 0xF3F56U)
 FUNCMAP(Cry_Rattata_Ch8, 0xF3F69U)
 
-
 FUNCMAP(Music_ViridianCity, 0xF4000U)
 FUNCMAP(Music_ViridianCity_Ch1, 0xF400CU)
 FUNCMAP(Music_ViridianCity_Ch1_mainloop, 0xF4039U)
@@ -19640,7 +19577,6 @@ FUNCMAP(Music_BugCatchingContest_Ch4_loop1, 0xF7EAFU)
 FUNCMAP(Music_BugCatchingContest_Ch4_mainloop, 0xF7EAFU)
 FUNCMAP(Music_BugCatchingContest_Ch4_sub1, 0xF7EE2U)
 
-
 FUNCMAP(v_LoadStandardFont, 0xF8000U)
 FUNCMAP(v_LoadFontsExtra, 0xF800CU)
 FUNCMAP(v_LoadFontsBattleExtra, 0xF8032U)
@@ -19804,7 +19740,6 @@ FUNCMAP(DoBadgeTypeBoosts_done_min, 0xFBF71U)
 FUNCMAP(DoBadgeTypeBoosts_Update, 0xFBF77U)
 FUNCMAP(DoBadgeTypeBoosts_done, 0xFBF7FU)
 FUNCMAP(BadgeTypeBoosts, 0xFBF82U)
-
 
 FUNCMAP(DummyPredef3A_DummyData, 0xFC000U)
 FUNCMAP(DummyPredef3A, 0xFC001U)
@@ -20131,7 +20066,6 @@ FUNCMAP(DebugTileset_PlaceCursor_place_cursor, 0xFDDE1U)
 FUNCMAP(DebugTileset_PlaceCursor_placesprite, 0xFDE07U)
 FUNCMAP(DebugTileset_PlaceCursor_clearsprites, 0xFDE1BU)
 FUNCMAP(DebugTileset_PlaceCursor_dummy, 0xFDE1FU)
-
 
 FUNCMAP(StdScripts, 0x100000U)
 FUNCMAP(PokecenterNurseScriptStdScript, 0x100000U)
@@ -20529,7 +20463,6 @@ FUNCMAP(BeatUpAttackText, 0x1021E2U)
 FUNCMAP(PresentFailedText, 0x1021F0U)
 FUNCMAP(IgnoredOrders2Text, 0x10220AU)
 
-
 FUNCMAP(UnusedPhoneScript, 0x104000U)
 FUNCMAP(MomPhoneCalleeScript, 0x104004U)
 FUNCMAP(MomPhoneCalleeScript_started_quest, 0x10401FU)
@@ -20823,7 +20756,6 @@ FUNCMAP(IrwinRocketTakeoverRumorText, 0x105FA4U)
 FUNCMAP(GinaRocketTakeoverRumorText, 0x106014U)
 FUNCMAP(BikeShopPhoneCallerText, 0x10608DU)
 
-
 FUNCMAP(SproutTower1F_MapScripts, 0x108000U)
 FUNCMAP(SproutTower1FSage1Script, 0x108002U)
 FUNCMAP(SproutTower1FSage2Script, 0x108005U)
@@ -21042,7 +20974,6 @@ FUNCMAP(VictoryRoadRivalDefeatText, 0x109B65U)
 FUNCMAP(VictoryRoadRivalAfterText, 0x109BF6U)
 FUNCMAP(VictoryRoadRivalVictoryText, 0x109CD2U)
 FUNCMAP(VictoryRoad_MapEvents, 0x109D2AU)
-
 
 FUNCMAP(NationalPark_MapScripts, 0x10C000U)
 FUNCMAP(NationalParkLassScript, 0x10C002U)
@@ -21372,7 +21303,6 @@ FUNCMAP(BenText, 0x10F0E3U)
 FUNCMAP(RadioTower5FDirectorsOfficeSignText, 0x10F105U)
 FUNCMAP(RadioTower5FStudio1SignText, 0x10F11EU)
 FUNCMAP(RadioTower5F_MapEvents, 0x10F12BU)
-
 
 FUNCMAP(RuinsOfAlphOutside_MapScripts, 0x110000U)
 FUNCMAP(RuinsOfAlphOutside_MapScripts_DummyScene0, 0x11000DU)
@@ -21728,7 +21658,6 @@ FUNCMAP(AmphyBreathingLaboredText, 0x113055U)
 FUNCMAP(AmphyPaluPaluluText, 0x113079U)
 FUNCMAP(OlivineLighthouse6F_MapEvents, 0x11308FU)
 
-
 FUNCMAP(MahoganyMart1F_MapScripts, 0x114000U)
 FUNCMAP(MahoganyMart1F_MapScripts_DummyScene0, 0x11400DU)
 FUNCMAP(MahoganyMart1F_MapScripts_LanceUncoversStaircase, 0x11400EU)
@@ -22057,7 +21986,6 @@ FUNCMAP(IlexForestSignpostText, 0x116D97U)
 FUNCMAP(Text_IlexForestShrine, 0x116E11U)
 FUNCMAP(IlexForest_MapEvents, 0x116E4DU)
 
-
 FUNCMAP(GoldenrodUnderground_MapScripts, 0x118000U)
 FUNCMAP(GoldenrodUnderground_MapScripts_ResetSwitches, 0x11800BU)
 FUNCMAP(GoldenrodUnderground_MapScripts_CheckBasementKey, 0x11803EU)
@@ -22379,7 +22307,6 @@ FUNCMAP(IcePathB3FNevermeltice, 0x11A329U)
 FUNCMAP(IcePathB3FRock, 0x11A32BU)
 FUNCMAP(IcePathB3F_MapEvents, 0x11A32EU)
 
-
 FUNCMAP(WhirlIslandNW_MapScripts, 0x11C000U)
 FUNCMAP(WhirlIslandNW_MapEvents, 0x11C002U)
 FUNCMAP(WhirlIslandNE_MapScripts, 0x11C01CU)
@@ -22486,7 +22413,6 @@ FUNCMAP(DragonsDenB1F_MapEvents, 0x11C9DAU)
 FUNCMAP(TohjoFalls_MapScripts, 0x11CA20U)
 FUNCMAP(TohjoFallsMoonStone, 0x11CA22U)
 FUNCMAP(TohjoFalls_MapEvents, 0x11CA24U)
-
 
 FUNCMAP(NewBarkTown_MapScripts, 0x120000U)
 FUNCMAP(NewBarkTown_MapScripts_DummyScene0, 0x12000DU)
@@ -22765,7 +22691,6 @@ FUNCMAP(GoldenrodCityUndergroundSignNorthText, 0x122435U)
 FUNCMAP(GoldenrodCityUndergroundSignSouthText, 0x12244BU)
 FUNCMAP(GoldenrodCity_MapEvents, 0x122461U)
 
-
 FUNCMAP(OlivineCity_MapScripts, 0x124000U)
 FUNCMAP(OlivineCity_MapScripts_DummyScene0, 0x12400DU)
 FUNCMAP(OlivineCity_MapScripts_DummyScene1, 0x12400EU)
@@ -22992,7 +22917,6 @@ FUNCMAP(MtSilverSign, 0x125F21U)
 FUNCMAP(SilverCaveOutsideHiddenFullRestore, 0x125F24U)
 FUNCMAP(MtSilverSignText, 0x125F27U)
 FUNCMAP(SilverCaveOutside_MapEvents, 0x125F32U)
-
 
 FUNCMAP(Route26_MapScripts, 0x128000U)
 FUNCMAP(TrainerCooltrainermJake, 0x128002U)
@@ -23281,7 +23205,6 @@ FUNCMAP(Route31YoungsterText, 0x129EFAU)
 FUNCMAP(Route31SignText, 0x129F6AU)
 FUNCMAP(DarkCaveSignText, 0x129F93U)
 FUNCMAP(Route31_MapEvents, 0x129F9EU)
-
 
 FUNCMAP(Route32_MapScripts, 0x12C000U)
 FUNCMAP(Route32_MapScripts_DummyScene0, 0x12C011U)
@@ -23674,7 +23597,6 @@ FUNCMAP(Route36TrainerTips1Text, 0x12E818U)
 FUNCMAP(Route36TrainerTips2Text, 0x12E8BAU)
 FUNCMAP(Route36_MapEvents, 0x12E932U)
 
-
 FUNCMAP(Route37_MapScripts, 0x130000U)
 FUNCMAP(Route37_MapScripts_Sunny, 0x130005U)
 FUNCMAP(Route37_MapScripts_SunnyAppears, 0x13000EU)
@@ -23950,7 +23872,6 @@ FUNCMAP(MtMortarSign1Text, 0x131E16U)
 FUNCMAP(MtMortarSign2Text, 0x131E3AU)
 FUNCMAP(Route42Sign2Text, 0x131E5EU)
 FUNCMAP(Route42_MapEvents, 0x131E86U)
-
 
 FUNCMAP(Route43_MapScripts, 0x134000U)
 FUNCMAP(Route43_MapScripts_CheckIfRockets, 0x134005U)
@@ -24234,7 +24155,6 @@ FUNCMAP(Route2SignText, 0x135D80U)
 FUNCMAP(Route2DiglettsCaveSignText, 0x135DA5U)
 FUNCMAP(Route2_MapEvents, 0x135DB5U)
 
-
 FUNCMAP(ViridianCity_MapScripts, 0x138000U)
 FUNCMAP(ViridianCity_MapScripts_FlyPoint, 0x138005U)
 FUNCMAP(ViridianCityCoffeeGramps, 0x138009U)
@@ -24493,7 +24413,6 @@ FUNCMAP(Route7LockedDoor, 0x13A07EU)
 FUNCMAP(Route7UndergroundPathSignText, 0x13A081U)
 FUNCMAP(Route7LockedDoorText, 0x13A14FU)
 FUNCMAP(Route7_MapEvents, 0x13A15CU)
-
 
 FUNCMAP(Route15_MapScripts, 0x13C000U)
 FUNCMAP(TrainerTeacherColette, 0x13C002U)
@@ -24791,7 +24710,6 @@ FUNCMAP(CeruleanCapeSignText, 0x13E403U)
 FUNCMAP(CeruleanLockedDoorText, 0x13E418U)
 FUNCMAP(CeruleanCity_MapEvents, 0x13E425U)
 
-
 FUNCMAP(Route9_MapScripts, 0x140000U)
 FUNCMAP(TrainerCamperDean, 0x140002U)
 FUNCMAP(TrainerCamperDean_Script, 0x14000EU)
@@ -24998,7 +24916,6 @@ FUNCMAP(IndigoPlateauSign, 0x14188CU)
 FUNCMAP(IndigoPlateauSignText, 0x14188FU)
 FUNCMAP(Route23_MapEvents, 0x1418CEU)
 
-
 FUNCMAP(OlivinePokecenter1F_MapScripts, 0x144000U)
 FUNCMAP(OlivinePokecenter1FNurseScript, 0x144002U)
 FUNCMAP(OlivinePokecenter1FFishingGuruScript, 0x144005U)
@@ -25201,7 +25118,6 @@ FUNCMAP(Route42EcruteakGateOfficerScript, 0x145D85U)
 FUNCMAP(Route42EcruteakGateOfficerText, 0x145D88U)
 FUNCMAP(Route42EcruteakGate_MapEvents, 0x145DCAU)
 
-
 FUNCMAP(EcruteakTinTowerEntrance_MapScripts, 0x148000U)
 FUNCMAP(EcruteakTinTowerEntrance_MapScripts_DummyScene0, 0x14800AU)
 FUNCMAP(EcruteakTinTowerEntrance_MapScripts_DummyScene1, 0x14800BU)
@@ -25356,7 +25272,6 @@ FUNCMAP(EcruteakHistoryBookText, 0x149AB6U)
 FUNCMAP(EcruteakTwoTowersText, 0x149ADCU)
 FUNCMAP(EcruteakThreeMonText, 0x149B92U)
 FUNCMAP(EcruteakItemfinderHouse_MapEvents, 0x149C85U)
-
 
 FUNCMAP(BlackthornGym1F_MapScripts, 0x14C000U)
 FUNCMAP(BlackthornGym1F_MapScripts_Boulders, 0x14C005U)
@@ -25558,7 +25473,6 @@ FUNCMAP(Text_ReceivedTM30, 0x14DDEDU)
 FUNCMAP(OfficerText_AvoidGrass, 0x14DDFFU)
 FUNCMAP(Route43Gate_MapEvents, 0x14DE2DU)
 
-
 FUNCMAP(CeruleanGymBadgeSpeechHouse_MapScripts, 0x150000U)
 FUNCMAP(CeruleanGymBadgeSpeechHousePokefanMScript, 0x150002U)
 FUNCMAP(CeruleanGymBadgeSpeechHousePokefanMText, 0x150005U)
@@ -25736,7 +25650,6 @@ FUNCMAP(BillsGrandpaVulpixText, 0x15199BU)
 FUNCMAP(BillsGrandpaPichuText, 0x1519F5U)
 FUNCMAP(BillsHouse_MapEvents, 0x151A86U)
 
-
 FUNCMAP(AzaleaPokecenter1F_MapScripts, 0x154000U)
 FUNCMAP(AzaleaPokecenter1F_MapScripts_DummyScene, 0x154006U)
 FUNCMAP(AzaleaPokecenter1FNurseScript, 0x154007U)
@@ -25876,7 +25789,6 @@ FUNCMAP(TwinsAmyandmay2AfterBattleText, 0x1553CFU)
 FUNCMAP(AzaleaGymGuideText, 0x1553FCU)
 FUNCMAP(AzaleaGymGuideWinText, 0x1554BFU)
 FUNCMAP(AzaleaGym_MapEvents, 0x155532U)
-
 
 FUNCMAP(VioletMart_MapScripts, 0x158000U)
 FUNCMAP(VioletMartClerkScript, 0x158002U)
@@ -26204,7 +26116,6 @@ FUNCMAP(UnusedBugCatchingContestExplanationText, 0x15B433U)
 FUNCMAP(Route36NationalParkGateOfficer1WellHoldPrizeText, 0x15B4DDU)
 FUNCMAP(Route36NationalParkGateOfficer1HeresThePrizeText, 0x15B54CU)
 FUNCMAP(Route36NationalParkGate_MapEvents, 0x15B579U)
-
 
 FUNCMAP(GoldenrodGym_MapScripts, 0x15C000U)
 FUNCMAP(GoldenrodGym_MapScripts_DummyScene0, 0x15C00AU)
@@ -26582,8 +26493,6 @@ FUNCMAP(DayCareBookshelf, 0x15F1B5U)
 FUNCMAP(Text_GrampsLookingForYou, 0x15F1B8U)
 FUNCMAP(DayCare_MapEvents, 0x15F1D5U)
 
-
-
 FUNCMAP(VermilionFishingSpeechHouse_MapScripts, 0x164000U)
 FUNCMAP(FishingDude, 0x164002U)
 FUNCMAP(FishingDudesHousePhoto, 0x164005U)
@@ -26762,7 +26671,6 @@ FUNCMAP(OaksLabTrashcanText, 0x165E40U)
 FUNCMAP(OaksLabPCText, 0x165E59U)
 FUNCMAP(OaksLab_MapEvents, 0x165F33U)
 
-
 FUNCMAP(PewterNidoranSpeechHouse_MapScripts, 0x168000U)
 FUNCMAP(PewterNidoranSpeechHouseSuperNerdScript, 0x168002U)
 FUNCMAP(PewterNidoran, 0x168005U)
@@ -26938,7 +26846,6 @@ FUNCMAP(HallOfFame_WalkUpWithLance, 0x169D44U)
 FUNCMAP(HallOfFame_SlowlyApproachMachine, 0x169D4FU)
 FUNCMAP(HallOfFame_LanceText, 0x169D51U)
 FUNCMAP(HallOfFame_MapEvents, 0x169F1FU)
-
 
 FUNCMAP(OlivinePort_MapScripts, 0x16C000U)
 FUNCMAP(OlivinePort_MapScripts_DummyScene0, 0x16C00AU)
@@ -27308,7 +27215,6 @@ FUNCMAP(TinTowerHoOh_Silver, 0x16E930U)
 FUNCMAP(HoOhText, 0x16E93BU)
 FUNCMAP(TinTowerRoof_MapEvents, 0x16E945U)
 
-
 FUNCMAP(FuchsiaMart_MapScripts, 0x170000U)
 FUNCMAP(FuchsiaMartClerkScript, 0x170002U)
 FUNCMAP(FuchsiaMartFisherScript, 0x170009U)
@@ -27528,7 +27434,6 @@ FUNCMAP(TimeCapsuleFriendScript, 0x1715B7U)
 FUNCMAP(TimeCapsuleFriendScript_FriendReadyText, 0x1715BEU)
 FUNCMAP(TimeCapsule_MapEvents, 0x1715D5U)
 
-
 FUNCMAP(LavenderPokecenter1F_MapScripts, 0x174000U)
 FUNCMAP(LavenderPokecenter1FNurseScript, 0x174002U)
 FUNCMAP(LavenderPokecenter1FGentlemanScript, 0x174005U)
@@ -27723,7 +27628,6 @@ FUNCMAP(CianwoodLugiaSpeechHouseTeacherText, 0x175CB8U)
 FUNCMAP(CianwoodLugiaSpeechHouseLassText, 0x175D3BU)
 FUNCMAP(CianwoodLugiaSpeechHouseTwinText, 0x175DA5U)
 FUNCMAP(CianwoodLugiaSpeechHouse_MapEvents, 0x175DECU)
-
 
 FUNCMAP(CeladonDeptStore1F_MapScripts, 0x178000U)
 FUNCMAP(CeladonDeptStore1FReceptionistScript, 0x178002U)
@@ -28048,7 +27952,6 @@ FUNCMAP(Route17Route18GateOfficerText, 0x17AA0AU)
 FUNCMAP(Route17Route18GateCannotPassText, 0x17AA2BU)
 FUNCMAP(Route17Route18Gate_MapEvents, 0x17AA94U)
 
-
 FUNCMAP(ViridianGym_MapScripts, 0x17C000U)
 FUNCMAP(ViridianGymBlueScript, 0x17C002U)
 FUNCMAP(ViridianGymBlueScript_FightDone, 0x17C02DU)
@@ -28161,7 +28064,6 @@ FUNCMAP(VictoryRoadGateEightBadgesText, 0x17D093U)
 FUNCMAP(VictoryRoadGateLeftBlackBeltText, 0x17D0D0U)
 FUNCMAP(VictoryRoadGateRightBlackBeltText, 0x17D116U)
 FUNCMAP(VictoryRoadGate_MapEvents, 0x17D17AU)
-
 
 FUNCMAP(ElmsLab_MapScripts, 0x180000U)
 FUNCMAP(ElmsLab_MapScripts_MeetElm, 0x18001AU)
@@ -28416,7 +28318,6 @@ FUNCMAP(Route29Route46GateOfficerText, 0x18257FU)
 FUNCMAP(Route29Route46GateYoungsterText, 0x1825CBU)
 FUNCMAP(Route29Route46Gate_MapEvents, 0x182632U)
 
-
 FUNCMAP(FightingDojo_MapScripts, 0x184000U)
 FUNCMAP(FightingDojoBlackBelt, 0x184002U)
 FUNCMAP(FightingDojoSign1, 0x184005U)
@@ -28578,7 +28479,6 @@ FUNCMAP(Route5CleanseTagHouseGrannyText2, 0x185851U)
 FUNCMAP(Route5CleanseTagHouseTeacherText, 0x185888U)
 FUNCMAP(Route5CleanseTagHouse_MapEvents, 0x1858EEU)
 
-
 FUNCMAP(CherrygroveMart_MapScripts, 0x188000U)
 FUNCMAP(CherrygroveMartClerkScript, 0x188002U)
 FUNCMAP(CherrygroveMartClerkScript_PokeBallsInStock, 0x18800FU)
@@ -28669,8 +28569,6 @@ FUNCMAP(Route31VioletGateCooltrainerFScript, 0x188E26U)
 FUNCMAP(Route31VioletGateOfficerText, 0x188E29U)
 FUNCMAP(Route31VioletGateCooltrainerFText, 0x188E4FU)
 FUNCMAP(Route31VioletGate_MapEvents, 0x188E7AU)
-
-
 
 FUNCMAP(v_FruitBearingTreeText, 0x190000U)
 FUNCMAP(v_HeyItsFruitText, 0x19001CU)
@@ -28968,7 +28866,6 @@ FUNCMAP(v_CutNothingText, 0x1920F2U)
 FUNCMAP(v_BlindingFlashText, 0x19210FU)
 FUNCMAP(v_UsedSurfText, 0x192135U)
 
-
 FUNCMAP(v_CantSurfText, 0x194000U)
 FUNCMAP(v_AlreadySurfingText, 0x194015U)
 FUNCMAP(v_AskSurfText, 0x19402DU)
@@ -29224,7 +29121,6 @@ FUNCMAP(v_MartAskMoreText, 0x196071U)
 FUNCMAP(v_MartBoughtText, 0x196092U)
 FUNCMAP(v_SlotsBetHowManyCoinsText, 0x1960ADU)
 
-
 FUNCMAP(v_SlotsStartText, 0x198000U)
 FUNCMAP(v_SlotsNotEnoughCoinsText, 0x198008U)
 FUNCMAP(v_SlotsRanOutOfCoinsText, 0x19801BU)
@@ -29320,8 +29216,6 @@ FUNCMAP(v_TimesetNotDSTText, 0x19899CU)
 FUNCMAP(v_TimesetAskAdjustDSTText, 0x1989BCU)
 FUNCMAP(v_MomLostGearBookletText, 0x1989F8U)
 
-
-
 FUNCMAP(BulbasaurPokedexEntry, 0x1A0000U)
 FUNCMAP(IvysaurPokedexEntry, 0x1A0068U)
 FUNCMAP(VenusaurPokedexEntry, 0x1A00D5U)
@@ -29386,7 +29280,6 @@ FUNCMAP(PoliwhirlPokedexEntry, 0x1A19E6U)
 FUNCMAP(PoliwrathPokedexEntry, 0x1A1A4DU)
 FUNCMAP(AbraPokedexEntry, 0x1A1AB8U)
 FUNCMAP(KadabraPokedexEntry, 0x1A1B22U)
-
 
 FUNCMAP(AlakazamPokedexEntry, 0x1A4000U)
 FUNCMAP(MachopPokedexEntry, 0x1A4064U)
@@ -29453,7 +29346,6 @@ FUNCMAP(MagmarPokedexEntry, 0x1A5A80U)
 FUNCMAP(PinsirPokedexEntry, 0x1A5AECU)
 FUNCMAP(TaurosPokedexEntry, 0x1A5B54U)
 
-
 FUNCMAP(MagikarpPokedexEntry, 0x1A8000U)
 FUNCMAP(GyaradosPokedexEntry, 0x1A8077U)
 FUNCMAP(LaprasPokedexEntry, 0x1A80EDU)
@@ -29519,7 +29411,6 @@ FUNCMAP(AipomPokedexEntry, 0x1A9A75U)
 FUNCMAP(SunkernPokedexEntry, 0x1A9AE8U)
 FUNCMAP(SunfloraPokedexEntry, 0x1A9B5DU)
 
-
 FUNCMAP(YanmaPokedexEntry, 0x1AC000U)
 FUNCMAP(WooperPokedexEntry, 0x1AC070U)
 FUNCMAP(QuagsirePokedexEntry, 0x1AC0D5U)
@@ -29580,12 +29471,10 @@ FUNCMAP(LugiaPokedexEntry, 0x1AD82BU)
 FUNCMAP(HoOhPokedexEntry, 0x1AD89AU)
 FUNCMAP(CelebiPokedexEntry, 0x1AD90CU)
 
-
 FUNCMAP(ItemNames, 0x1B0000U)
 FUNCMAP(TrainerClassNames, 0x1B0955U)
 FUNCMAP(PokemonNames, 0x1B0B74U)
 FUNCMAP(MoveNames, 0x1B1574U)
-
 
 FUNCMAP(MoveDescriptions, 0x1B4000U)
 FUNCMAP(MoveFCDescription, 0x1B4200U)
@@ -29845,7 +29734,6 @@ FUNCMAP(RockSmashDescription, 0x1B6195U)
 FUNCMAP(WhirlpoolDescription, 0x1B61B7U)
 FUNCMAP(BeatUpDescription, 0x1B61D4U)
 
-
 FUNCMAP(ItemDescriptions, 0x1B8000U)
 FUNCMAP(MasterBallDesc, 0x1B8200U)
 FUNCMAP(UltraBallDesc, 0x1B8220U)
@@ -30045,8 +29933,6 @@ FUNCMAP(TeruSama34Desc, 0x1B953CU)
 FUNCMAP(TeruSama35Desc, 0x1B953EU)
 FUNCMAP(TeruSama36Desc, 0x1B9540U)
 FUNCMAP(TeruSama37Desc, 0x1B9542U)
-
-
 
 FUNCMAP(PrintPage1, 0x1C0000U)
 FUNCMAP(PrintPage1_column_loop, 0x1C005AU)

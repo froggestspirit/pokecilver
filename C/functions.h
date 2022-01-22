@@ -4,10 +4,9 @@
 #include "audio/engine.h"
 #include "engine/tilesets/tileset_anims.h"
 
+void init_function_pointers() {
+    for (int i = 0; i < ROM_SIZE; i++) func[i] = NULL;
 
-void init_function_pointers(){
-    for(int i = 0; i < ROM_SIZE; i++) func[i] = NULL;
-    
     // home/init.c
     REDIRECT(Reset);
     REDIRECT(v_Start);
@@ -20,7 +19,6 @@ void init_function_pointers(){
     // home/audio.c
     REDIRECT(InitSound);
     REDIRECT(UpdateSound);
-    REDIRECT(v_LoadMusicByte);
     REDIRECT(PlayMusic);
     REDIRECT(PlayMusic2);
     REDIRECT(PlayCry);
@@ -753,10 +751,8 @@ void init_function_pointers(){
     REDIRECT(CopyWarpData);
     REDIRECT(EnterMapWarp);
 
-
     // audio/engine.c
     REDIRECT(PlayTrainerEncounterMusic);
-
 
     // engine/tilesets/tileset_anims.c
     REDIRECT(DummyPredef3A_DummyData);
@@ -848,5 +844,4 @@ void init_function_pointers(){
     REDIRECT(WhirlpoolTiles3);
     REDIRECT(WhirlpoolTiles4);
     REDIRECT(TilesetAnims_DummyFunction);
-
 }
