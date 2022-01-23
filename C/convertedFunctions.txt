@@ -85,3 +85,5 @@ ChannelPointers
 ClearChannels
 ClearChannel
 LCD
+WaitSFX
+WaitPressAorB_BlinkCursor

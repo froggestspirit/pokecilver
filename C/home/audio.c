@@ -2,6 +2,8 @@
 #include "audio.h"
 #include "../audio/engine.h"
 
+extern struct Channel *chan[8];
+
 //  Audio interfaces.
 
 void InitSound(void) {
@@ -195,32 +197,28 @@ done:
 }
 
 void WaitPlaySFX(void) {
-    CCALL(aWaitSFX);  // call WaitSFX
+    WaitSFX();
     CCALL(aPlaySFX);  // call PlaySFX
     RET;              // ret
 }
 
-void WaitSFX(void) {
-    //  infinite loop until sfx is done playing
-
-    PUSH_HL;  // push hl
-
-wait:
-    // ;(port fix)ld hl, wChannel5Flags1
-    // ;(port fix)bit 0, [hl]
-    // ;(port fix)jr nz, .wait
-    // ;(port fix)ld hl, wChannel6Flags1
-    // ;(port fix)bit 0, [hl]
-    // ;(port fix)jr nz, .wait
-    // ;(port fix)ld hl, wChannel7Flags1
-    // ;(port fix)bit 0, [hl]
-    // ;(port fix)jr nz, .wait
-    // ;(port fix)ld hl, wChannel8Flags1
-    // ;(port fix)bit 0, [hl]
-    // ;(port fix)jr nz, .wait
-
-    POP_HL;  // pop hl
-    RET;     // ret
+void WaitSFX(void) {  // infinite loop until sfx is done playing
+    PUSH_AF;
+    PUSH_BC;
+    PUSH_DE;
+    PUSH_HL;
+    while (1) {
+        if ((!chan[CHAN5]->channelOn) &&
+            (!chan[CHAN6]->channelOn) &&
+            (!chan[CHAN7]->channelOn) &&
+            (!chan[CHAN8]->channelOn)) break;
+        gb_finish_frame();
+        CCALL(aVBlank0);
+    }
+    POP_HL;
+    POP_DE;
+    POP_BC;
+    POP_AF;
 }
 
 void MaxVolume(void) {

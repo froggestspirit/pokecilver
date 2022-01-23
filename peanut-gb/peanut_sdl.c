@@ -26,6 +26,28 @@ void (*func[ROM_SIZE])(void);
 #include "peanut_gb.h"
 #include "../C/home/lcd.h"
 
+struct priv_t {
+    /* Pointer to allocated memory holding GB file. */
+    uint8_t *rom;
+    /* Pointer to allocated memory holding save file. */
+    uint8_t *cart_ram;
+
+    /* Colour palette for each BG, OBJ0, and OBJ1. */
+    uint16_t selected_palette[3][4];
+    uint16_t fb[LCD_HEIGHT][LCD_WIDTH];
+};
+
+struct priv_t priv =
+    {
+        .rom = NULL,
+        .cart_ram = NULL};
+
+/* Must be freed */
+SDL_Renderer *renderer;
+SDL_Texture *texture;
+char *rom_file_name = "rom.gbc";
+char *save_file_name = NULL;
+
 /**
  * Tick the internal RTC by one second.
  * This was taken from SameBoy, which is released under MIT Licence.
@@ -2617,15 +2639,20 @@ void gb_step_cpu() {
     }
 }
 
-void gb_run_frame() {
-    gb.gb_frame = 0;
-
-    while (!gb.gb_frame) gb_step_cpu();
+int gb_finish_frame(void) {
     for (int line = 0; line < 144; line++) {
         gb.gb_reg.LY = line;
         LCD();
         gb_draw_line();
     }
+    return sdl_loop();
+}
+
+int gb_run_frame(void) {
+    gb.gb_frame = 0;
+
+    while (!gb.gb_frame) gb_step_cpu();
+    return gb_finish_frame();
 }
 
 /**
@@ -2846,17 +2873,6 @@ void gb_init_lcd(
 
     return;
 }
-
-struct priv_t {
-    /* Pointer to allocated memory holding GB file. */
-    uint8_t *rom;
-    /* Pointer to allocated memory holding save file. */
-    uint8_t *cart_ram;
-
-    /* Colour palette for each BG, OBJ0, and OBJ1. */
-    uint16_t selected_palette[3][4];
-    uint16_t fb[LCD_HEIGHT][LCD_WIDTH];
-};
 
 /**
  * Returns a byte from the ROM file at the given address.
@@ -3157,27 +3173,99 @@ int get_input() {
     return 1;
 }
 
-int main(int argc, char **argv) {
-    struct priv_t priv =
-        {
-            .rom = NULL,
-            .cart_ram = NULL};
+int sdl_loop(void) {
+    int delay;
+    static unsigned int rtc_timer = 0;
+    static uint_fast32_t new_ticks, old_ticks;
     const double target_speed_ms = 1000.0 / VERTICAL_SYNC;
     double speed_compensation = 0.0;
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    SDL_Texture *texture;
-    SDL_Event event;
-    SDL_GameController *controller = NULL;
-    uint_fast32_t new_ticks, old_ticks;
-    enum gb_init_error_e gb_ret;
-    unsigned int fast_mode = 1;
-    unsigned int fast_mode_timer = 1;
+
     /* Record save file every 60 seconds. */
     int save_timer = 60;
-    /* Must be freed */
-    char *rom_file_name = "rom.gbc";
-    char *save_file_name = NULL;
+    /* Calculate the time taken to draw frame, then later add a
+    * delay to cap at 60 fps. */
+    old_ticks = SDL_GetTicks();
+
+    /* Get joypad input. */
+    if (!get_input()) return 1;
+    /* Tick the internal RTC when 1 second has passed. */
+    rtc_timer += target_speed_ms;
+
+    if (rtc_timer >= 1000) {
+        rtc_timer -= 1000;
+        gb_tick_rtc();
+    }
+
+    /* Copy frame buffer to SDL screen. */
+    SDL_UpdateTexture(texture, NULL, &priv.fb, LCD_WIDTH * sizeof(uint16_t));
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
+    SDL_RenderPresent(renderer);
+
+    /* Use a delay that will draw the screen at a rate of 59.7275 Hz. */
+    new_ticks = SDL_GetTicks();
+
+    /* Since we can only delay for a maximum resolution of 1ms, we
+        * can accumulate the error and compensate for the delay
+        * accuracy when the delay compensation surpasses 1ms. */
+    speed_compensation += target_speed_ms - (new_ticks - old_ticks);
+
+    /* We cast the delay compensation value to an integer, since it
+        * is the type used by SDL_Delay. This is where delay accuracy
+        * is lost. */
+    delay = (int)(speed_compensation);
+
+    /* We then subtract the actual delay value by the requested
+        * delay value. */
+    speed_compensation -= delay;
+
+    /* Only run delay logic if required. */
+    if (delay > 0) {
+        uint_fast32_t delay_ticks = SDL_GetTicks();
+        uint_fast32_t after_delay_ticks;
+
+        /* Tick the internal RTC when 1 second has passed. */
+        rtc_timer += delay;
+
+        if (rtc_timer >= 1000) {
+            rtc_timer -= 1000;
+            gb_tick_rtc();
+
+            /* If 60 seconds has passed, record save file.
+                * We do this because the external audio library
+                * used contains asserts that will abort the
+                * program without save.
+                * TODO: Remove use of assert in audio library
+                * in release build. */
+            /* TODO: Remove all workarounds due to faulty
+                * external libraries. */
+            --save_timer;
+
+            if (!save_timer) {
+                write_cart_ram_file(save_file_name,
+                                    &priv.cart_ram,
+                                    gb_get_save_size());
+                save_timer = 60;
+            }
+        }
+
+        /* This will delay for at least the number of
+            * milliseconds requested, so we have to compensate for
+            * error here too. */
+        SDL_Delay(delay);
+
+        after_delay_ticks = SDL_GetTicks();
+        speed_compensation += (double)delay -
+                              (int)(after_delay_ticks - delay_ticks);
+    }
+    return 0;
+}
+
+int main(int argc, char **argv) {
+    SDL_Window *window;
+    SDL_Event event;
+    SDL_GameController *controller = NULL;
+    enum gb_init_error_e gb_ret;
     int ret = EXIT_SUCCESS;
 
 #if defined(_WIN32)
@@ -3462,111 +3550,8 @@ int main(int argc, char **argv) {
     auto_assign_palette(&priv, gb_colour_hash());
 
     while (SDL_QuitRequested() == SDL_FALSE) {
-        int delay;
-        static unsigned int rtc_timer = 0;
-
-        /* Calculate the time taken to draw frame, then later add a
-         * delay to cap at 60 fps. */
-        old_ticks = SDL_GetTicks();
-
-        /* Get joypad input. */
-        if (!get_input()) goto quit;
-
         /* Execute CPU cycles until the screen has to be redrawn. */
-        gb_run_frame();
-
-        /* Tick the internal RTC when 1 second has passed. */
-        rtc_timer += target_speed_ms / fast_mode;
-
-        if (rtc_timer >= 1000) {
-            rtc_timer -= 1000;
-            gb_tick_rtc();
-        }
-
-        /* Skip frames during fast mode. */
-        if (fast_mode_timer > 1) {
-            fast_mode_timer--;
-            /* We continue here since the rest of the logic in the
-             * loop is for drawing the screen and delaying. */
-            continue;
-        }
-
-        fast_mode_timer = fast_mode;
-
-#if ENABLE_SOUND_BLARGG
-        /* Process audio. */
-        audio_frame();
-#endif
-        /* Copy frame buffer to SDL screen. */
-        SDL_UpdateTexture(texture, NULL, &priv.fb, LCD_WIDTH * sizeof(uint16_t));
-        SDL_RenderClear(renderer);
-        SDL_RenderCopy(renderer, texture, NULL, NULL);
-        SDL_RenderPresent(renderer);
-
-        /* Use a delay that will draw the screen at a rate of 59.7275 Hz. */
-        new_ticks = SDL_GetTicks();
-
-        /* Since we can only delay for a maximum resolution of 1ms, we
-         * can accumulate the error and compensate for the delay
-         * accuracy when the delay compensation surpasses 1ms. */
-        speed_compensation += target_speed_ms - (new_ticks - old_ticks);
-
-        /* We cast the delay compensation value to an integer, since it
-         * is the type used by SDL_Delay. This is where delay accuracy
-         * is lost. */
-        delay = (int)(speed_compensation);
-
-        /* We then subtract the actual delay value by the requested
-         * delay value. */
-        speed_compensation -= delay;
-
-        /* Only run delay logic if required. */
-        if (delay > 0) {
-            uint_fast32_t delay_ticks = SDL_GetTicks();
-            uint_fast32_t after_delay_ticks;
-
-            /* Tick the internal RTC when 1 second has passed. */
-            rtc_timer += delay;
-
-            if (rtc_timer >= 1000) {
-                rtc_timer -= 1000;
-                gb_tick_rtc();
-
-                /* If 60 seconds has passed, record save file.
-                 * We do this because the external audio library
-                 * used contains asserts that will abort the
-                 * program without save.
-                 * TODO: Remove use of assert in audio library
-                 * in release build. */
-                /* TODO: Remove all workarounds due to faulty
-                 * external libraries. */
-                --save_timer;
-
-                if (!save_timer) {
-#if ENABLE_SOUND_BLARGG
-                    /* Locking the audio thread to reduce
-                     * possibility of abort during save. */
-                    SDL_LockAudioDevice(dev);
-#endif
-                    write_cart_ram_file(save_file_name,
-                                        &priv.cart_ram,
-                                        gb_get_save_size());
-#if ENABLE_SOUND_BLARGG
-                    SDL_UnlockAudioDevice(dev);
-#endif
-                    save_timer = 60;
-                }
-            }
-
-            /* This will delay for at least the number of
-             * milliseconds requested, so we have to compensate for
-             * error here too. */
-            SDL_Delay(delay);
-
-            after_delay_ticks = SDL_GetTicks();
-            speed_compensation += (double)delay -
-                                  (int)(after_delay_ticks - delay_ticks);
-        }
+        if (gb_run_frame()) break;
     }
 
 quit:
@@ -3575,9 +3560,6 @@ quit:
     SDL_DestroyTexture(texture);
     SDL_GameControllerClose(controller);
     SDL_Quit();
-#ifdef ENABLE_SOUND_BLARGG
-    audio_cleanup();
-#endif
 
     /* Record save file. */
     write_cart_ram_file(save_file_name, &priv.cart_ram, gb_get_save_size());

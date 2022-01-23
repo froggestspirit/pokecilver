@@ -37,7 +37,7 @@ wait:                 // hack to avoid hanging
     POP_HL;           // pop hl
     POP_AF;           // pop af
     CALL(mVBlank);    // call VBlank
-    //CALL(aLCD);       // call LCD
+    //CALL(mLCD);       // call LCD
     CALL(mSerial);   // call Serial
     CCALL(aJoypad);  // call Joypad
     RET;             // ret

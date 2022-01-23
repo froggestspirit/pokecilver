@@ -1,550 +1,520 @@
 #include "../constants.h"
 #include "joypad.h"
 
-void Joypad(void){
-//  Replaced by UpdateJoypad, called from VBlank instead of the useless
-//  joypad interrupt.
+void Joypad(void) {
+    //  Replaced by UpdateJoypad, called from VBlank instead of the useless
+    //  joypad interrupt.
 
-//  This is a placeholder in case the interrupt is somehow enabled.
+    //  This is a placeholder in case the interrupt is somehow enabled.
     RET;  // ret
-
 }
 
-void ClearJoypad(void){
-    XOR_A_A;  // xor a
-//  Pressed this frame (delta)
+void ClearJoypad(void) {
+    XOR_A_A;                  // xor a
+                              //  Pressed this frame (delta)
     LDH_addr_A(hJoyPressed);  // ldh [hJoyPressed], a
-//  Currently pressed
-    LDH_addr_A(hJoyDown);  // ldh [hJoyDown], a
-    RET;  // ret
-
+                              //  Currently pressed
+    LDH_addr_A(hJoyDown);     // ldh [hJoyDown], a
+    RET;                      // ret
 }
 
-void UpdateJoypad(void){
-//  This is called automatically every frame in VBlank.
-//  Read the joypad register and translate it to something more
-//  workable for use in-game. There are 8 buttons, so we can use
-//  one byte to contain all player input.
+void UpdateJoypad(void) {
+    //  This is called automatically every frame in VBlank.
+    //  Read the joypad register and translate it to something more
+    //  workable for use in-game. There are 8 buttons, so we can use
+    //  one byte to contain all player input.
 
-//  Updates:
+    //  Updates:
 
-//  hJoypadReleased: released this frame (delta)
-//  hJoypadPressed: pressed this frame (delta)
-//  hJoypadDown: currently pressed
-//  hJoypadSum: pressed so far
+    //  hJoypadReleased: released this frame (delta)
+    //  hJoypadPressed: pressed this frame (delta)
+    //  hJoypadDown: currently pressed
+    //  hJoypadSum: pressed so far
 
-//  Any of these three bits can be used to disable input.
-    LD_A_addr(wJoypadDisable);  // ld a, [wJoypadDisable]
+    //  Any of these three bits can be used to disable input.
+    LD_A_addr(wJoypadDisable);                                                                   // ld a, [wJoypadDisable]
     AND_A((1 << JOYPAD_DISABLE_MON_FAINT_F) | (1 << JOYPAD_DISABLE_SGB_TRANSFER_F) | (1 << 4));  // and (1 << JOYPAD_DISABLE_MON_FAINT_F) | (1 << JOYPAD_DISABLE_SGB_TRANSFER_F) | (1 << 4)
-    RET_NZ ;  // ret nz
+    RET_NZ;                                                                                      // ret nz
 
-//  If we're saving, input is disabled.
+    //  If we're saving, input is disabled.
     LD_A_addr(wGameLogicPaused);  // ld a, [wGameLogicPaused]
-    AND_A_A;  // and a
-    RET_NZ ;  // ret nz
+    AND_A_A;                      // and a
+    RET_NZ;                       // ret nz
 
-//  We can only get four inputs at a time.
-//  We take d-pad first for no particular reason.
-    LD_A(R_DPAD);  // ld a, R_DPAD
+    //  We can only get four inputs at a time.
+    //  We take d-pad first for no particular reason.
+    LD_A(R_DPAD);       // ld a, R_DPAD
     LDH_addr_A(rJOYP);  // ldh [rJOYP], a
-//  Read twice to give the request time to take.
+                        //  Read twice to give the request time to take.
     LDH_A_addr(rJOYP);  // ldh a, [rJOYP]
     LDH_A_addr(rJOYP);  // ldh a, [rJOYP]
 
-//  The Joypad register output is in the lo nybble (inversed).
-//  We make the hi nybble of our new container d-pad input.
-    CPL;  // cpl
+    //  The Joypad register output is in the lo nybble (inversed).
+    //  We make the hi nybble of our new container d-pad input.
+    CPL;         // cpl
     AND_A(0xf);  // and $f
-    SWAP_A;  // swap a
+    SWAP_A;      // swap a
 
-//  We'll keep this in b for now.
+    //  We'll keep this in b for now.
     LD_B_A;  // ld b, a
 
-//  Buttons make 8 total inputs (A, B, Select, Start).
-//  We can fit this into one byte.
-    LD_A(R_BUTTONS);  // ld a, R_BUTTONS
+    //  Buttons make 8 total inputs (A, B, Select, Start).
+    //  We can fit this into one byte.
+    LD_A(R_BUTTONS);    // ld a, R_BUTTONS
     LDH_addr_A(rJOYP);  // ldh [rJOYP], a
-//  Wait for input to stabilize.
-    for(int rept = 0; rept < 6; rept++){
-    LDH_A_addr(rJOYP);  // ldh a, [rJOYP]
+                        //  Wait for input to stabilize.
+    for (int rept = 0; rept < 6; rept++) {
+        LDH_A_addr(rJOYP);  // ldh a, [rJOYP]
     }
-//  Buttons take the lo nybble.
-    CPL;  // cpl
+    //  Buttons take the lo nybble.
+    CPL;         // cpl
     AND_A(0xf);  // and $f
-    OR_A_B;  // or b
-    LD_B_A;  // ld b, a
+    OR_A_B;      // or b
+    LD_B_A;      // ld b, a
 
-//  Reset the joypad register since we're done with it.
-    LD_A(0x30);  // ld a, $30
+    //  Reset the joypad register since we're done with it.
+    LD_A(0x30);         // ld a, $30
     LDH_addr_A(rJOYP);  // ldh [rJOYP], a
 
-//  To get the delta we xor the last frame's input with the new one.
-    LDH_A_addr(hJoypadDown);  // ldh a, [hJoypadDown] ; last frame
-    LD_E_A;  // ld e, a
-    XOR_A_B;  // xor b
-    LD_D_A;  // ld d, a
-//  Released this frame:
-    AND_A_E;  // and e
+    //  To get the delta we xor the last frame's input with the new one.
+    LDH_A_addr(hJoypadDown);      // ldh a, [hJoypadDown] ; last frame
+    LD_E_A;                       // ld e, a
+    XOR_A_B;                      // xor b
+    LD_D_A;                       // ld d, a
+                                  //  Released this frame:
+    AND_A_E;                      // and e
     LDH_addr_A(hJoypadReleased);  // ldh [hJoypadReleased], a
-//  Pressed this frame:
-    LD_A_D;  // ld a, d
-    AND_A_B;  // and b
-    LDH_addr_A(hJoypadPressed);  // ldh [hJoypadPressed], a
+                                  //  Pressed this frame:
+    LD_A_D;                       // ld a, d
+    AND_A_B;                      // and b
+    LDH_addr_A(hJoypadPressed);   // ldh [hJoypadPressed], a
 
-//  Add any new presses to the list of collective presses:
-    LD_C_A;  // ld c, a
+    //  Add any new presses to the list of collective presses:
+    LD_C_A;                  // ld c, a
     LDH_A_addr(hJoypadSum);  // ldh a, [hJoypadSum]
-    OR_A_C;  // or c
+    OR_A_C;                  // or c
     LDH_addr_A(hJoypadSum);  // ldh [hJoypadSum], a
 
-//  Currently pressed:
-    LD_A_B;  // ld a, b
+    //  Currently pressed:
+    LD_A_B;                   // ld a, b
     LDH_addr_A(hJoypadDown);  // ldh [hJoypadDown], a
 
-//  Now that we have the input, we can do stuff with it.
+    //  Now that we have the input, we can do stuff with it.
 
-//  For example, soft reset:
+    //  For example, soft reset:
     //AND_A(A_BUTTON | B_BUTTON | SELECT | START);  // and A_BUTTON | B_BUTTON | SELECT | START
     //CP_A(A_BUTTON | B_BUTTON | SELECT | START);  // cp  A_BUTTON | B_BUTTON | SELECT | START
     //JP_Z (mReset);  // jp z, Reset
     RET;  // ret
 }
 
-void GetJoypad(void){
-//  Update mirror joypad input from hJoypadDown (real input)
+void GetJoypad(void) {
+    //  Update mirror joypad input from hJoypadDown (real input)
 
-//  hJoyReleased: released this frame (delta)
-//  hJoyPressed: pressed this frame (delta)
-//  hJoyDown: currently pressed
+    //  hJoyReleased: released this frame (delta)
+    //  hJoyPressed: pressed this frame (delta)
+    //  hJoyDown: currently pressed
 
-//  bit 0 A
-//      1 B
-//      2 SELECT
-//      3 START
-//      4 RIGHT
-//      5 LEFT
-//      6 UP
-//      7 DOWN
+    //  bit 0 A
+    //      1 B
+    //      2 SELECT
+    //      3 START
+    //      4 RIGHT
+    //      5 LEFT
+    //      6 UP
+    //      7 DOWN
 
     PUSH_AF;  // push af
     PUSH_HL;  // push hl
     PUSH_DE;  // push de
     PUSH_BC;  // push bc
 
-//  The player input can be automated using an input stream.
-//  See more below.
+    //  The player input can be automated using an input stream.
+    //  See more below.
     LD_A_addr(wInputType);  // ld a, [wInputType]
-    CP_A(AUTO_INPUT);  // cp AUTO_INPUT
-    IF_Z goto l_auto;  // jr z, .auto
+    CP_A(AUTO_INPUT);       // cp AUTO_INPUT
+    IF_Z goto l_auto;       // jr z, .auto
 
-//  To get deltas, take this and last frame's input.
+    //  To get deltas, take this and last frame's input.
     LDH_A_addr(hJoypadDown);  // ldh a, [hJoypadDown] ; real input
-    LD_B_A;  // ld b, a
-    LDH_A_addr(hJoyDown);  // ldh a, [hJoyDown] ; last frame mirror
-    LD_E_A;  // ld e, a
+    LD_B_A;                   // ld b, a
+    LDH_A_addr(hJoyDown);     // ldh a, [hJoyDown] ; last frame mirror
+    LD_E_A;                   // ld e, a
 
-//  Released this frame:
-    XOR_A_B;  // xor b
-    LD_D_A;  // ld d, a
-    AND_A_E;  // and e
+    //  Released this frame:
+    XOR_A_B;                   // xor b
+    LD_D_A;                    // ld d, a
+    AND_A_E;                   // and e
     LDH_addr_A(hJoyReleased);  // ldh [hJoyReleased], a
 
-//  Pressed this frame:
-    LD_A_D;  // ld a, d
-    AND_A_B;  // and b
+    //  Pressed this frame:
+    LD_A_D;                   // ld a, d
+    AND_A_B;                  // and b
     LDH_addr_A(hJoyPressed);  // ldh [hJoyPressed], a
 
-//  It looks like the collective presses got commented out here.
+    //  It looks like the collective presses got commented out here.
     LD_C_A;  // ld c, a
 
-//  Currently pressed:
-    LD_A_B;  // ld a, b
+    //  Currently pressed:
+    LD_A_B;                // ld a, b
     LDH_addr_A(hJoyDown);  // ldh [hJoyDown], a ; frame input
-
 
 quit:
     POP_BC;  // pop bc
     POP_DE;  // pop de
     POP_HL;  // pop hl
     POP_AF;  // pop af
-    RET;  // ret
-
+    RET;     // ret
 
 l_auto:
-//  Use a predetermined input stream (used in the catching tutorial).
+    //  Use a predetermined input stream (used in the catching tutorial).
 
-//  Stream format: [input][duration]
-//  A value of $ff will immediately end the stream.
+    //  Stream format: [input][duration]
+    //  A value of $ff will immediately end the stream.
 
-//  Read from the input stream.
-    LDH_A_addr(hROMBank);  // ldh a, [hROMBank]
-    PUSH_AF;  // push af
+    //  Read from the input stream.
+    LDH_A_addr(hROMBank);       // ldh a, [hROMBank]
+    PUSH_AF;                    // push af
     LD_A_addr(wAutoInputBank);  // ld a, [wAutoInputBank]
-    Bankswitch();  // rst Bankswitch
+    Bankswitch();               // rst Bankswitch
 
     LD_HL(wAutoInputAddress);  // ld hl, wAutoInputAddress
-    LD_A_hli;  // ld a, [hli]
-    LD_H_hl;  // ld h, [hl]
-    LD_L_A;  // ld l, a
+    LD_A_hli;                  // ld a, [hli]
+    LD_H_hl;                   // ld h, [hl]
+    LD_L_A;                    // ld l, a
 
-//  We only update when the input duration has expired.
+    //  We only update when the input duration has expired.
     LD_A_addr(wAutoInputLength);  // ld a, [wAutoInputLength]
-    AND_A_A;  // and a
-    IF_Z goto updateauto;  // jr z, .updateauto
+    AND_A_A;                      // and a
+    IF_Z goto updateauto;         // jr z, .updateauto
 
-//  Until then, don't change anything.
-    DEC_A;  // dec a
+    //  Until then, don't change anything.
+    DEC_A;                        // dec a
     LD_addr_A(wAutoInputLength);  // ld [wAutoInputLength], a
-    POP_AF;  // pop af
-    Bankswitch();  // rst Bankswitch
-    goto quit;  // jr .quit
-
+    POP_AF;                       // pop af
+    Bankswitch();                 // rst Bankswitch
+    goto quit;                    // jr .quit
 
 updateauto:
-//  An input of $ff will end the stream.
-    LD_A_hli;  // ld a, [hli]
-    CP_A(-1);  // cp -1
+    //  An input of $ff will end the stream.
+    LD_A_hli;            // ld a, [hli]
+    CP_A(-1);            // cp -1
     IF_Z goto stopauto;  // jr z, .stopauto
-    LD_B_A;  // ld b, a
+    LD_B_A;              // ld b, a
 
-//  A duration of $ff will end the stream indefinitely.
-    LD_A_hli;  // ld a, [hli]
+    //  A duration of $ff will end the stream indefinitely.
+    LD_A_hli;                     // ld a, [hli]
     LD_addr_A(wAutoInputLength);  // ld [wAutoInputLength], a
-    CP_A(-1);  // cp -1
-    IF_NZ goto next;  // jr nz, .next
+    CP_A(-1);                     // cp -1
+    IF_NZ goto next;              // jr nz, .next
 
-//  The current input is overwritten.
-    DEC_HL;  // dec hl
-    DEC_HL;  // dec hl
-    LD_B(NO_INPUT);  // ld b, NO_INPUT
+    //  The current input is overwritten.
+    DEC_HL;           // dec hl
+    DEC_HL;           // dec hl
+    LD_B(NO_INPUT);   // ld b, NO_INPUT
     goto finishauto;  // jr .finishauto
-
 
 next:
-//  On to the next input...
-    LD_A_L;  // ld a, l
-    LD_addr_A(wAutoInputAddress);  // ld [wAutoInputAddress], a
-    LD_A_H;  // ld a, h
+    //  On to the next input...
+    LD_A_L;                            // ld a, l
+    LD_addr_A(wAutoInputAddress);      // ld [wAutoInputAddress], a
+    LD_A_H;                            // ld a, h
     LD_addr_A(wAutoInputAddress + 1);  // ld [wAutoInputAddress + 1], a
-    goto finishauto;  // jr .finishauto
-
+    goto finishauto;                   // jr .finishauto
 
 stopauto:
     CCALL(aStopAutoInput);  // call StopAutoInput
-    LD_B(NO_INPUT);  // ld b, NO_INPUT
-
+    LD_B(NO_INPUT);         // ld b, NO_INPUT
 
 finishauto:
-    POP_AF;  // pop af
-    Bankswitch();  // rst Bankswitch
-    LD_A_B;  // ld a, b
+    POP_AF;                   // pop af
+    Bankswitch();             // rst Bankswitch
+    LD_A_B;                   // ld a, b
     LDH_addr_A(hJoyPressed);  // ldh [hJoyPressed], a ; pressed
-    LDH_addr_A(hJoyDown);  // ldh [hJoyDown], a ; input
-    goto quit;  // jr .quit
+    LDH_addr_A(hJoyDown);     // ldh [hJoyDown], a ; input
+    goto quit;                // jr .quit
 
     return StartAutoInput();
 }
 
-void StartAutoInput(void){
-//  Start reading automated input stream at a:hl.
+void StartAutoInput(void) {
+    //  Start reading automated input stream at a:hl.
 
-    LD_addr_A(wAutoInputBank);  // ld [wAutoInputBank], a
-    LD_A_L;  // ld a, l
-    LD_addr_A(wAutoInputAddress);  // ld [wAutoInputAddress], a
-    LD_A_H;  // ld a, h
+    LD_addr_A(wAutoInputBank);         // ld [wAutoInputBank], a
+    LD_A_L;                            // ld a, l
+    LD_addr_A(wAutoInputAddress);      // ld [wAutoInputAddress], a
+    LD_A_H;                            // ld a, h
     LD_addr_A(wAutoInputAddress + 1);  // ld [wAutoInputAddress + 1], a
-//  Start reading the stream immediately.
-    XOR_A_A;  // xor a
-    LD_addr_A(wAutoInputLength);  // ld [wAutoInputLength], a
-//  Reset input mirrors.
-    XOR_A_A;  // xor a
-    LDH_addr_A(hJoyPressed);  // ldh [hJoyPressed], a ; pressed this frame
-    LDH_addr_A(hJoyReleased);  // ldh [hJoyReleased], a ; released this frame
-    LDH_addr_A(hJoyDown);  // ldh [hJoyDown], a ; currently pressed
+                                       //  Start reading the stream immediately.
+    XOR_A_A;                           // xor a
+    LD_addr_A(wAutoInputLength);       // ld [wAutoInputLength], a
+                                       //  Reset input mirrors.
+    XOR_A_A;                           // xor a
+    LDH_addr_A(hJoyPressed);           // ldh [hJoyPressed], a ; pressed this frame
+    LDH_addr_A(hJoyReleased);          // ldh [hJoyReleased], a ; released this frame
+    LDH_addr_A(hJoyDown);              // ldh [hJoyDown], a ; currently pressed
 
-    LD_A(AUTO_INPUT);  // ld a, AUTO_INPUT
+    LD_A(AUTO_INPUT);       // ld a, AUTO_INPUT
     LD_addr_A(wInputType);  // ld [wInputType], a
-    RET;  // ret
-
+    RET;                    // ret
 }
 
-void StopAutoInput(void){
-//  Clear variables related to automated input.
-    XOR_A_A;  // xor a
-    LD_addr_A(wAutoInputBank);  // ld [wAutoInputBank], a
-    LD_addr_A(wAutoInputAddress);  // ld [wAutoInputAddress], a
+void StopAutoInput(void) {
+    //  Clear variables related to automated input.
+    XOR_A_A;                           // xor a
+    LD_addr_A(wAutoInputBank);         // ld [wAutoInputBank], a
+    LD_addr_A(wAutoInputAddress);      // ld [wAutoInputAddress], a
     LD_addr_A(wAutoInputAddress + 1);  // ld [wAutoInputAddress + 1], a
-    LD_addr_A(wAutoInputLength);  // ld [wAutoInputLength], a
-//  Back to normal input.
-    LD_addr_A(wInputType);  // ld [wInputType], a
-    RET;  // ret
-
+    LD_addr_A(wAutoInputLength);       // ld [wAutoInputLength], a
+                                       //  Back to normal input.
+    LD_addr_A(wInputType);             // ld [wInputType], a
+    RET;                               // ret
 }
 
-void JoyTitleScreenInput(void){
+void JoyTitleScreenInput(void) {
     SET_PC(0x09CCU);
-//  //  unreferenced
+    //  //  unreferenced
 
 loop:
     SET_PC(0x09CCU);
     CALL(mDelayFrame);  // call DelayFrame
 
-    PUSH_BC;  // push bc
+    PUSH_BC;               // push bc
     CCALL(aJoyTextDelay);  // call JoyTextDelay
-    POP_BC;  // pop bc
+    POP_BC;                // pop bc
 
-//  Save data can be deleted by pressing Up + B + Select.
-    LDH_A_addr(hJoyDown);  // ldh a, [hJoyDown]
+    //  Save data can be deleted by pressing Up + B + Select.
+    LDH_A_addr(hJoyDown);            // ldh a, [hJoyDown]
     CP_A(D_UP | SELECT | B_BUTTON);  // cp D_UP | SELECT | B_BUTTON
-    IF_Z goto keycombo;  // jr z, .keycombo
+    IF_Z goto keycombo;              // jr z, .keycombo
 
-//  Press Start or A to start the game.
-    LDH_A_addr(hJoyLast);  // ldh a, [hJoyLast]
+    //  Press Start or A to start the game.
+    LDH_A_addr(hJoyLast);     // ldh a, [hJoyLast]
     AND_A(START | A_BUTTON);  // and START | A_BUTTON
-    IF_NZ goto keycombo;  // jr nz, .keycombo
+    IF_NZ goto keycombo;      // jr nz, .keycombo
 
-    DEC_C;  // dec c
+    DEC_C;            // dec c
     IF_NZ goto loop;  // jr nz, .loop
 
     AND_A_A;  // and a
-    RET;  // ret
-
+    RET;      // ret
 
 keycombo:
     SET_PC(0x09E5U);
     SCF;  // scf
     RET;  // ret
-
 }
 
-void JoyWaitAorB(void){
+void JoyWaitAorB(void) {
     SET_PC(0x09E7U);
 
 loop:
     SET_PC(0x09E7U);
-    CALL(mDelayFrame);  // call DelayFrame
-    CCALL(aGetJoypad);  // call GetJoypad
-    LDH_A_addr(hJoyPressed);  // ldh a, [hJoyPressed]
+    CALL(mDelayFrame);           // call DelayFrame
+    CCALL(aGetJoypad);           // call GetJoypad
+    LDH_A_addr(hJoyPressed);     // ldh a, [hJoyPressed]
     AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
-    RET_NZ ;  // ret nz
-    CALL(mUpdateTimeAndPals);  // call UpdateTimeAndPals
-    goto loop;  // jr .loop
-
+    RET_NZ;                      // ret nz
+    CALL(mUpdateTimeAndPals);    // call UpdateTimeAndPals
+    goto loop;                   // jr .loop
 }
 
-void WaitButton(void){
+void WaitButton(void) {
     SET_PC(0x09F7U);
     LDH_A_addr(hOAMUpdate);  // ldh a, [hOAMUpdate]
-    PUSH_AF;  // push af
-    LD_A(1);  // ld a, 1
+    PUSH_AF;                 // push af
+    LD_A(1);                 // ld a, 1
     LDH_addr_A(hOAMUpdate);  // ldh [hOAMUpdate], a
-    CALL(mWaitBGMap);  // call WaitBGMap
-    CALL(mJoyWaitAorB);  // call JoyWaitAorB
-    POP_AF;  // pop af
+    CALL(mWaitBGMap);        // call WaitBGMap
+    CALL(mJoyWaitAorB);      // call JoyWaitAorB
+    POP_AF;                  // pop af
     LDH_addr_A(hOAMUpdate);  // ldh [hOAMUpdate], a
-    RET;  // ret
-
+    RET;                     // ret
 }
 
-void JoyTextDelay(void){
-    CCALL(aGetJoypad);  // call GetJoypad
-    LDH_A_addr(hInMenu);  // ldh a, [hInMenu]
-    AND_A_A;  // and a
+void JoyTextDelay(void) {
+    CCALL(aGetJoypad);        // call GetJoypad
+    LDH_A_addr(hInMenu);      // ldh a, [hInMenu]
+    AND_A_A;                  // and a
     LDH_A_addr(hJoyPressed);  // ldh a, [hJoyPressed]
-    IF_Z goto ok;  // jr z, .ok
-    LDH_A_addr(hJoyDown);  // ldh a, [hJoyDown]
+    IF_Z goto ok;             // jr z, .ok
+    LDH_A_addr(hJoyDown);     // ldh a, [hJoyDown]
 
 ok:
-    LDH_addr_A(hJoyLast);  // ldh [hJoyLast], a
-    LDH_A_addr(hJoyPressed);  // ldh a, [hJoyPressed]
-    AND_A_A;  // and a
-    IF_Z goto checkframedelay;  // jr z, .checkframedelay
-    LD_A(15);  // ld a, 15
+    LDH_addr_A(hJoyLast);         // ldh [hJoyLast], a
+    LDH_A_addr(hJoyPressed);      // ldh a, [hJoyPressed]
+    AND_A_A;                      // and a
+    IF_Z goto checkframedelay;    // jr z, .checkframedelay
+    LD_A(15);                     // ld a, 15
     LD_addr_A(wTextDelayFrames);  // ld [wTextDelayFrames], a
-    RET;  // ret
-
+    RET;                          // ret
 
 checkframedelay:
     LD_A_addr(wTextDelayFrames);  // ld a, [wTextDelayFrames]
-    AND_A_A;  // and a
+    AND_A_A;                      // and a
     IF_Z goto restartframedelay;  // jr z, .restartframedelay
-    XOR_A_A;  // xor a
-    LDH_addr_A(hJoyLast);  // ldh [hJoyLast], a
-    RET;  // ret
-
+    XOR_A_A;                      // xor a
+    LDH_addr_A(hJoyLast);         // ldh [hJoyLast], a
+    RET;                          // ret
 
 restartframedelay:
-    LD_A(5);  // ld a, 5
+    LD_A(5);                      // ld a, 5
     LD_addr_A(wTextDelayFrames);  // ld [wTextDelayFrames], a
-    RET;  // ret
-
+    RET;                          // ret
 }
 
-void WaitPressAorB_BlinkCursor(void){
-//  Show a blinking cursor in the lower right-hand
-//  corner of a textbox and wait until A or B is
-//  pressed.
-//
-//  NOTE: The cursor has to be shown before calling
-//  this function or no cursor will be shown at all.
-    LDH_A_addr(hMapObjectIndex);  // ldh a, [hMapObjectIndex]
-    PUSH_AF;  // push af
+void WaitPressAorB_BlinkCursor(void) {
+    //  Show a blinking cursor in the lower right-hand
+    //  corner of a textbox and wait until A or B is
+    //  pressed.
+    //
+    //  NOTE: The cursor has to be shown before calling
+    //  this function or no cursor will be shown at all.
+    LDH_A_addr(hMapObjectIndex);     // ldh a, [hMapObjectIndex]
+    PUSH_AF;                         // push af
     LDH_A_addr(hObjectStructIndex);  // ldh a, [hObjectStructIndex]
-    PUSH_AF;  // push af
-    XOR_A_A;  // xor a
-    LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
-    LD_A(6);  // ld a, 6
+    PUSH_AF;                         // push af
+    XOR_A_A;                         // xor a
+    LDH_addr_A(hMapObjectIndex);     // ldh [hMapObjectIndex], a
+    LD_A(6);                         // ld a, 6
     LDH_addr_A(hObjectStructIndex);  // ldh [hObjectStructIndex], a
 
-
 loop:
-    PUSH_HL;  // push hl
-    hlcoord(18, 17, wTilemap);  // hlcoord 18, 17
-    CCALL(aBlinkCursor);  // call BlinkCursor
-    POP_HL;  // pop hl
+    while (1) {
+        PUSH_HL;                    // push hl
+        hlcoord(18, 17, wTilemap);  // hlcoord 18, 17
+        CCALL(aBlinkCursor);        // call BlinkCursor
+        POP_HL;                     // pop hl
 
-    CCALL(aJoyTextDelay);  // call JoyTextDelay
-    LDH_A_addr(hJoyLast);  // ldh a, [hJoyLast]
-    AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
-// ;(port fix)jr z, .loop
+        CCALL(aJoyTextDelay);  // call JoyTextDelay
+        if (!(gb_read(hJoyLast) & (A_BUTTON | B_BUTTON))) break;
+        gb_finish_frame();
+        CCALL(aVBlank0);
+    }
 
-    POP_AF;  // pop af
+    POP_AF;                          // pop af
     LDH_addr_A(hObjectStructIndex);  // ldh [hObjectStructIndex], a
-    POP_AF;  // pop af
-    LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
-    RET;  // ret
-
+    POP_AF;                          // pop af
+    LDH_addr_A(hMapObjectIndex);     // ldh [hMapObjectIndex], a
 }
 
-void SimpleWaitPressAorB(void){
-
+void SimpleWaitPressAorB(void) {
 loop:
-    CCALL(aJoyTextDelay);  // call JoyTextDelay
-    LDH_A_addr(hJoyLast);  // ldh a, [hJoyLast]
+    CCALL(aJoyTextDelay);        // call JoyTextDelay
+    LDH_A_addr(hJoyLast);        // ldh a, [hJoyLast]
     AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
-    IF_Z goto loop;  // jr z, .loop
-    RET;  // ret
-
+    IF_Z goto loop;              // jr z, .loop
+    RET;                         // ret
 }
 
-void PromptButton(void){
+void PromptButton(void) {
     SET_PC(0x0A5EU);
-//  Show a blinking cursor in the lower right-hand
-//  corner of a textbox and wait until A or B is
-//  pressed, afterwards, play a sound.
-    LD_A_addr(wLinkMode);  // ld a, [wLinkMode]
-    AND_A_A;  // and a
-    IF_NZ goto link;  // jr nz, .link
+    //  Show a blinking cursor in the lower right-hand
+    //  corner of a textbox and wait until A or B is
+    //  pressed, afterwards, play a sound.
+    LD_A_addr(wLinkMode);            // ld a, [wLinkMode]
+    AND_A_A;                         // and a
+    IF_NZ goto link;                 // jr nz, .link
     CALL(mPromptButton_wait_input);  // call .wait_input
-    PUSH_DE;  // push de
-    LD_DE(SFX_READ_TEXT_2);  // ld de, SFX_READ_TEXT_2
-    CCALL(aPlaySFX);  // call PlaySFX
-    POP_DE;  // pop de
-    RET;  // ret
-
+    PUSH_DE;                         // push de
+    LD_DE(SFX_READ_TEXT_2);          // ld de, SFX_READ_TEXT_2
+    CCALL(aPlaySFX);                 // call PlaySFX
+    POP_DE;                          // pop de
+    RET;                             // ret
 
 link:
     SET_PC(0x0A70U);
-    LD_C(65);  // ld c, 65
+    LD_C(65);          // ld c, 65
     JP(mDelayFrames);  // jp DelayFrames
-
 
 wait_input:
     SET_PC(0x0A75U);
-    LDH_A_addr(hOAMUpdate);  // ldh a, [hOAMUpdate]
-    PUSH_AF;  // push af
-    LD_A(0x1);  // ld a, $1
-    LDH_addr_A(hOAMUpdate);  // ldh [hOAMUpdate], a
-    LD_A_addr(wInputType);  // ld a, [wInputType]
-    OR_A_A;  // or a
-    IF_Z goto input_wait_loop;  // jr z, .input_wait_loop
+    LDH_A_addr(hOAMUpdate);       // ldh a, [hOAMUpdate]
+    PUSH_AF;                      // push af
+    LD_A(0x1);                    // ld a, $1
+    LDH_addr_A(hOAMUpdate);       // ldh [hOAMUpdate], a
+    LD_A_addr(wInputType);        // ld a, [wInputType]
+    OR_A_A;                       // or a
+    IF_Z goto input_wait_loop;    // jr z, .input_wait_loop
     FARCALL(av_DudeAutoInput_A);  // farcall _DudeAutoInput_A
-
 
 input_wait_loop:
     SET_PC(0x0A88U);
     CALL(mPromptButton_blink_cursor);  // call .blink_cursor
-    CCALL(aJoyTextDelay);  // call JoyTextDelay
-    LDH_A_addr(hJoyPressed);  // ldh a, [hJoyPressed]
-    AND_A(A_BUTTON | B_BUTTON);  // and A_BUTTON | B_BUTTON
-    IF_NZ goto received_input;  // jr nz, .received_input
-    CALL(mUpdateTimeAndPals);  // call UpdateTimeAndPals
-    LD_A(0x1);  // ld a, $1
-    LDH_addr_A(hBGMapMode);  // ldh [hBGMapMode], a
-    CALL(mDelayFrame);  // call DelayFrame
-    goto input_wait_loop;  // jr .input_wait_loop
-
+    CCALL(aJoyTextDelay);              // call JoyTextDelay
+    LDH_A_addr(hJoyPressed);           // ldh a, [hJoyPressed]
+    AND_A(A_BUTTON | B_BUTTON);        // and A_BUTTON | B_BUTTON
+    IF_NZ goto received_input;         // jr nz, .received_input
+    CALL(mUpdateTimeAndPals);          // call UpdateTimeAndPals
+    LD_A(0x1);                         // ld a, $1
+    LDH_addr_A(hBGMapMode);            // ldh [hBGMapMode], a
+    CALL(mDelayFrame);                 // call DelayFrame
+    goto input_wait_loop;              // jr .input_wait_loop
 
 received_input:
     SET_PC(0x0AA0U);
-    POP_AF;  // pop af
+    POP_AF;                  // pop af
     LDH_addr_A(hOAMUpdate);  // ldh [hOAMUpdate], a
-    RET;  // ret
-
+    RET;                     // ret
 
 blink_cursor:
     SET_PC(0x0AA4U);
     LDH_A_addr(hVBlankCounter);  // ldh a, [hVBlankCounter]
-    AND_A(0b00010000);  // and %00010000 ; bit 4, a
-    IF_Z goto cursor_off;  // jr z, .cursor_off
-    LD_A(0xee);  // ld a, "▼"
-    goto load_cursor_state;  // jr .load_cursor_state
-
+    AND_A(0b00010000);           // and %00010000 ; bit 4, a
+    IF_Z goto cursor_off;        // jr z, .cursor_off
+    LD_A(0xee);                  // ld a, "▼"
+    goto load_cursor_state;      // jr .load_cursor_state
 
 cursor_off:
     SET_PC(0x0AAEU);
     LD_A(0x7a);  // ld a, "─"
 
-
 load_cursor_state:
     SET_PC(0x0AB0U);
     ldcoord_a(18, 17, wTilemap);  // ldcoord_a 18, 17
-    RET;  // ret
-
+    RET;                          // ret
 }
 
-void BlinkCursor(void){
-    PUSH_BC;  // push bc
-    LD_A_hl;  // ld a, [hl]
-    LD_B_A;  // ld b, a
-    LD_A(0xee);  // ld a, "▼"
-    CP_A_B;  // cp b
-    POP_BC;  // pop bc
-    IF_NZ goto place_arrow;  // jr nz, .place_arrow
-    LDH_A_addr(hMapObjectIndex);  // ldh a, [hMapObjectIndex]
-    DEC_A;  // dec a
-    LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
-    RET_NZ ;  // ret nz
+void BlinkCursor(void) {
+    PUSH_BC;                         // push bc
+    LD_A_hl;                         // ld a, [hl]
+    LD_B_A;                          // ld b, a
+    LD_A(0xee);                      // ld a, "▼"
+    CP_A_B;                          // cp b
+    POP_BC;                          // pop bc
+    IF_NZ goto place_arrow;          // jr nz, .place_arrow
+    LDH_A_addr(hMapObjectIndex);     // ldh a, [hMapObjectIndex]
+    DEC_A;                           // dec a
+    LDH_addr_A(hMapObjectIndex);     // ldh [hMapObjectIndex], a
+    RET_NZ;                          // ret nz
     LDH_A_addr(hObjectStructIndex);  // ldh a, [hObjectStructIndex]
-    DEC_A;  // dec a
+    DEC_A;                           // dec a
     LDH_addr_A(hObjectStructIndex);  // ldh [hObjectStructIndex], a
-    RET_NZ ;  // ret nz
-    LD_A(0x7a);  // ld a, "─"
-    LD_hl_A;  // ld [hl], a
-    LD_A(-1);  // ld a, -1
-    LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
-    LD_A(6);  // ld a, 6
+    RET_NZ;                          // ret nz
+    LD_A(0x7a);                      // ld a, "─"
+    LD_hl_A;                         // ld [hl], a
+    LD_A(-1);                        // ld a, -1
+    LDH_addr_A(hMapObjectIndex);     // ldh [hMapObjectIndex], a
+    LD_A(6);                         // ld a, 6
     LDH_addr_A(hObjectStructIndex);  // ldh [hObjectStructIndex], a
-    RET;  // ret
-
+    RET;                             // ret
 
 place_arrow:
-    LDH_A_addr(hMapObjectIndex);  // ldh a, [hMapObjectIndex]
-    AND_A_A;  // and a
-    RET_Z ;  // ret z
-    DEC_A;  // dec a
-    LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
-    RET_NZ ;  // ret nz
-    DEC_A;  // dec a
-    LDH_addr_A(hMapObjectIndex);  // ldh [hMapObjectIndex], a
+    LDH_A_addr(hMapObjectIndex);     // ldh a, [hMapObjectIndex]
+    AND_A_A;                         // and a
+    RET_Z;                           // ret z
+    DEC_A;                           // dec a
+    LDH_addr_A(hMapObjectIndex);     // ldh [hMapObjectIndex], a
+    RET_NZ;                          // ret nz
+    DEC_A;                           // dec a
+    LDH_addr_A(hMapObjectIndex);     // ldh [hMapObjectIndex], a
     LDH_A_addr(hObjectStructIndex);  // ldh a, [hObjectStructIndex]
-    DEC_A;  // dec a
+    DEC_A;                           // dec a
     LDH_addr_A(hObjectStructIndex);  // ldh [hObjectStructIndex], a
-    RET_NZ ;  // ret nz
-    LD_A(6);  // ld a, 6
+    RET_NZ;                          // ret nz
+    LD_A(6);                         // ld a, 6
     LDH_addr_A(hObjectStructIndex);  // ldh [hObjectStructIndex], a
-    LD_A(0xee);  // ld a, "▼"
-    LD_hl_A;  // ld [hl], a
-    RET;  // ret
-
+    LD_A(0xee);                      // ld a, "▼"
+    LD_hl_A;                         // ld [hl], a
+    RET;                             // ret
 }

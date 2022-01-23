@@ -24,7 +24,6 @@ void init_function_pointers() {
     REDIRECT(PlayCry);
     REDIRECT(PlaySFX);
     REDIRECT(WaitPlaySFX);
-    REDIRECT(WaitSFX);
     REDIRECT(MaxVolume);
     REDIRECT(LowVolume);
     REDIRECT(MinVolume);
@@ -317,7 +316,6 @@ void init_function_pointers() {
     REDIRECT(JoyWaitAorB);
     REDIRECT(WaitButton);
     REDIRECT(JoyTextDelay);
-    REDIRECT(WaitPressAorB_BlinkCursor);
     REDIRECT(SimpleWaitPressAorB);
     REDIRECT(PromptButton);
     REDIRECT(BlinkCursor);

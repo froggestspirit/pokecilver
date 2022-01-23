@@ -7,7 +7,6 @@ PlayMusic
 PlayCry
 PlaySFX
 WaitPlaySFX
-WaitSFX
 MaxVolume
 LowVolume
 MinVolume
@@ -81,7 +80,6 @@ GetJoypad
 StartAutoInput
 StopAutoInput
 JoyTextDelay
-WaitPressAorB_BlinkCursor
 SimpleWaitPressAorB
 BlinkCursor
 DisableLCD
