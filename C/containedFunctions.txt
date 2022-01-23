@@ -84,7 +84,6 @@ JoyTextDelay
 WaitPressAorB_BlinkCursor
 SimpleWaitPressAorB
 BlinkCursor
-LCD
 DisableLCD
 EnableLCD
 ClearUnusedMapBuffer

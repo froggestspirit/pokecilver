@@ -24,6 +24,7 @@ struct gb_s gb;
 #define ROM_SIZE 0x200000
 void (*func[ROM_SIZE])(void);
 #include "peanut_gb.h"
+#include "../C/home/lcd.h"
 
 /**
  * Tick the internal RTC by one second.
@@ -2622,6 +2623,7 @@ void gb_run_frame() {
     while (!gb.gb_frame) gb_step_cpu();
     for (int line = 0; line < 144; line++) {
         gb.gb_reg.LY = line;
+        LCD();
         gb_draw_line();
     }
 }

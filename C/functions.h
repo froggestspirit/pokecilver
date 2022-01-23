@@ -165,7 +165,6 @@ void init_function_pointers() {
     REDIRECT(CheckItem);
 
     // home/lcd.c
-    REDIRECT(LCD);
     REDIRECT(DisableLCD);
     REDIRECT(EnableLCD);
 
