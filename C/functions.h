@@ -341,7 +341,6 @@ void init_function_pointers() {
     // home/video.c
     REDIRECT(UpdateBGMapBuffer);
     REDIRECT(WaitTop);
-    REDIRECT(UpdateBGMap);
     REDIRECT(Serve1bppRequest);
     REDIRECT(Serve2bppRequest);
     REDIRECT(AnimateTileset);
