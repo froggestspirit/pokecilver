@@ -1,5 +1,7 @@
 # Pokémon Gold and Silver [![Build Status][ci-badge]][ci]
 
+I'm no longer activly working on this project, it's recommended to switch over to https://github.com/froggestspirit/suiCune, although I will leave this repo up.
+
 This is an attempt at a PC port of Pokemon Gold and Silver. It currently runs, but is not recommended to be used until completed.
 
 The goal is to get assets to load from outside files, and to be able to rewrite parts of the game in C. The game currently relies on a modified rom (Not provided, but can be compiled). Eventually, this requirement should be phased out.
